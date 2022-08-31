@@ -65,8 +65,6 @@ export default function Header(): JSX.Element {
     setIsOpen2(false);
   }
 
-  const hideRecruitment = true;
-
   return (
     <>
       <Modal
@@ -295,19 +293,17 @@ export default function Header(): JSX.Element {
                 </MDBNavbarLink>
               </MDBNavbarItem>
 
-              {!hideRecruitment && (
-                <MDBNavbarItem>
-                  <MDBNavbarLink
-                    active
-                    aria-current="page"
-                    href="/recruitment"
-                    className="mr-2"
-                    style={navbarTextStyle}
-                  >
-                    Recruitment
-                  </MDBNavbarLink>
-                </MDBNavbarItem>
-              )}
+              <MDBNavbarItem>
+                <MDBNavbarLink
+                  active
+                  aria-current="page"
+                  href="/recruitment"
+                  className="mr-2"
+                  style={navbarTextStyle}
+                >
+                  Recruitment
+                </MDBNavbarLink>
+              </MDBNavbarItem>
 
               <MDBNavbarItem>
                 <MDBNavbarLink
