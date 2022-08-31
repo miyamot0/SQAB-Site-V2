@@ -14,7 +14,7 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
 import Bylaws from './../../assets/administration/SQAB_Bylaws_June2018.pdf';
 
-import boardJson from './../../assets/board.json';
+import boardJson from './../../assets/json/board.json';
 
 import './ExecutiveBoard.css';
 

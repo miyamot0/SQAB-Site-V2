@@ -19,7 +19,7 @@ import {
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import resourcesJson from './../../assets/resources.json';
+import resourcesJson from './../../assets/json/resources.json';
 
 import './Resources.css';
 

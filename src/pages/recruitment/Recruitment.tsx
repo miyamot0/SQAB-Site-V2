@@ -11,7 +11,7 @@ import {
   MDBTableBody
 } from 'mdb-react-ui-kit';
 
-import recruitmentJson from './../../assets/recruitment.json';
+import recruitmentJson from './../../assets/json/recruitment.json';
 
 import './Recruitment.css';
 
@@ -22,7 +22,7 @@ export default function Recruitment(): JSX.Element {
         <MDBCol sm="11">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Graduate Student Recruitment</MDBCardTitle>
+              <MDBCardTitle>Current and Upcoming Graduate Student Opportunities</MDBCardTitle>
 
               <MDBTable responsive>
                 <MDBTableHead>

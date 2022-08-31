@@ -21,7 +21,7 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper'
 
 import './BeProcInformation.css'
 
-import specialIssueJson from './../../assets/specialissues.json'
+import specialIssueJson from './../../assets/json/specialissues.json'
 
 export default function BeProcInformation(): JSX.Element {
   return (

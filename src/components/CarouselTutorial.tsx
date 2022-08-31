@@ -8,19 +8,19 @@
 
 import React from 'react';
 
-import Tut1 from './../assets/tut-1.jpeg';
-import Tut2 from './../assets/tut-2.jpeg';
-import Tut3 from './../assets/tut-3.jpeg';
-import Tut4 from './../assets/tut-4.jpeg';
-import Tut5 from './../assets/tut-5.jpeg';
-import Tut6 from './../assets/tut-6.jpeg';
-import Tut7 from './../assets/tut-7.jpeg';
-import Tut8 from './../assets/tut-8.jpeg';
-import Tut9 from './../assets/tut-9.jpeg';
-import Tut10 from './../assets/tut-10.jpeg';
-import Tut11 from './../assets/tut-11.jpeg';
-import Tut12 from './../assets/tut-12.jpeg';
-import Tut13 from './../assets/tut-13.jpeg';
+import Tut1 from './../assets/img/tut-1.jpeg';
+import Tut2 from './../assets/img/tut-2.jpeg';
+import Tut3 from './../assets/img/tut-3.jpeg';
+import Tut4 from './../assets/img/tut-4.jpeg';
+import Tut5 from './../assets/img/tut-5.jpeg';
+import Tut6 from './../assets/img/tut-6.jpeg';
+import Tut7 from './../assets/img/tut-7.jpeg';
+import Tut8 from './../assets/img/tut-8.jpeg';
+import Tut9 from './../assets/img/tut-9.jpeg';
+import Tut10 from './../assets/img/tut-10.jpeg';
+import Tut11 from './../assets/img/tut-11.jpeg';
+import Tut12 from './../assets/img/tut-12.jpeg';
+import Tut13 from './../assets/img/tut-13.jpeg';
 
 import { MDBCarousel, MDBCarouselItem } from 'mdb-react-ui-kit';
 

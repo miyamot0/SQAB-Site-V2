@@ -22,7 +22,7 @@ import {
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import tutorialJson from './../../assets/tutorials.json';
+import tutorialJson from './../../assets/json/tutorials.json';
 
 import './Tutorials.css';
 import IframeResizer from 'iframe-resizer-react';
