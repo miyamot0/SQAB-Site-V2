@@ -15,9 +15,7 @@ The SQAB repository is an openly-shared collection of information and software d
 
 The SQAB website uses the following open source projects to function properly:
 
-- Twitter Bootstrap - Copyright 2019, TWBS - [MIT Licensed](https://v4-alpha.getbootstrap.com/)
-- Twitter Material Bootstrap - Copyright 2015-2016, Federico Zivolo and contributors - [MIT Licensed](http://fezvrasta.github.io/bootstrap-material-design/)
-- jQuery - Copyright JS Foundation and other contributors - [MIT Licensed](https://js.foundation/)
+- Material Design Bootstrap - Copyright 2022, MDBootstrap - [MIT Licensed](https://mdbootstrap.com/general/license/#license-free)
 
 ### Referenced Works (Featured Software)
 
@@ -35,4 +33,4 @@ See individual sections
 
 ---
 
-Copyright 2018-2019, Shawn P. Gilroy/Louisiana State University. MIT
+Copyright 2018-Current, Shawn P. Gilroy/Louisiana State University. MIT

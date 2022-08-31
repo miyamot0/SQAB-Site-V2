@@ -1,8 +1,15 @@
 import React from 'react';
 
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
-import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBRow,
+  MDBCol,
+  MDBTable,
+  MDBTableHead,
+  MDBTableBody
+} from 'mdb-react-ui-kit';
 
 import recruitmentJson from './../../assets/recruitment.json';
 
@@ -41,7 +48,7 @@ export default function Recruitment(): JSX.Element {
                   {recruitmentJson.map((recr) => {
                     return (
                       <tr className="recruitment-table-tr">
-                        <td scope="row">
+                        <td>
                           <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
                             {recr.Mentor}
                           </a>
