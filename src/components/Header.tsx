@@ -45,7 +45,6 @@ const customStyles = {
 const navbarTextStyle = { color: 'white' };
 
 export default function Header(): JSX.Element {
-  const [showBasic, setShowBasic] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
 
@@ -221,12 +220,11 @@ export default function Header(): JSX.Element {
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
-            onClick={() => setShowBasic(!showBasic)}
           >
             <MDBIcon icon="bars" fas />
           </MDBNavbarToggler>
 
-          <MDBCollapse navbar show={showBasic}>
+          <MDBCollapse navbar show>
             <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
               <MDBNavbarItem>
                 <MDBDropdown style={navbarTextStyle}>
