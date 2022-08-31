@@ -19,17 +19,24 @@ import tutorialJson from './../../assets/tutorials.json';
 import './Tutorials.css';
 import IframeResizer from 'iframe-resizer-react';
 
+interface VideoInformation {
+  Index: number;
+  Title: string;
+  Summary: string;
+  Video: string;
+}
+
 export default function Tutorials(): JSX.Element {
-  const { id } = useParams<{ id?: string }>();
+  const { id } = useParams<{ id: string }>();
 
   const showDirectory = id === undefined || parseInt(id) < 0 ? true : false;
 
-  const videoInfo = !showDirectory ? tutorialJson.Tutorials[id] : null;
+  const videoInfo: VideoInformation | null = !showDirectory ? tutorialJson.Tutorials[parseInt(id)] : null;
 
   console.log(showDirectory);
 
-  const prevVideoId: number = parseInt(id) > 0 ? parseInt(id) + 1 : null;
-  const nextVideoId: number = parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
+  const prevVideoId: number | null = parseInt(id) > 0 ? parseInt(id) + 1 : null;
+  const nextVideoId: number | null = parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
 
   return (
     <>
@@ -83,7 +90,7 @@ export default function Tutorials(): JSX.Element {
         </MDBRow>
       )}
 
-      {!showDirectory && (
+      {!showDirectory && videoInfo !== null && (
         <>
           <MDBRow center className="row-eq-height">
             <MDBCol sm="8">
