@@ -28,6 +28,7 @@ import Resources from './pages/resources/Resources';
 import Recruitment from './pages/recruitment/Recruitment';
 
 import AnalyticPmax from './pages/tools/AnalyticPmax';
+import DemandCurveAnalyzer from './pages/tools/DemandCurveAnalyzer';
 
 const pageTitle = 'SQAB';
 
@@ -87,6 +88,9 @@ function App() {
             </Route>
             <Route path="/pmax">
               <AnalyticPmax />
+            </Route>
+            <Route path="/demand">
+              <DemandCurveAnalyzer />
             </Route>
           </Switch>
         </div>
