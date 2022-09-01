@@ -32,9 +32,7 @@ function beginLooper(obj) {
       yValues = yValues.map(Math.log10);
 
       if (obj.KFit === 'Fit as Parameter') {
-        boundsU = [hiQ * 2, 
-          Math.pow(10, -1), 
-          Math.log10(hiQ)];
+        boundsU = [hiQ * 2, Math.pow(10, -1), Math.log10(hiQ)];
         boundsL = [1, Math.pow(10, -10), 0.5];
 
         Optimize(costFunctionExponentialWithK);
@@ -87,7 +85,7 @@ function beginLooper(obj) {
       boundsU = [hiQ * 2, Math.pow(10, -1)];
       boundsL = [1, Math.pow(10, -10)];
 
-      Optimize(costFunctionIHS2);      
+      Optimize(costFunctionIHS2);
       break;
     default:
       return;
@@ -99,7 +97,7 @@ function beginLooper(obj) {
   result.SetK = setK;
   result.Params = GetBestAgent();
 
-  if (obj.KFit === "Fit as Parameter") {
+  if (obj.KFit === 'Fit as Parameter') {
     result.SetK = result.Params[2];
   }
 
@@ -107,7 +105,7 @@ function beginLooper(obj) {
   result.Alpha = result.Params[1];
   result.K = result.SetK;
 
-  if (obj.model === "Zero-bounded Model (no K)") {
+  if (obj.model === 'Zero-bounded Model (no K)') {
     result.K = undefined;
   }
 
@@ -127,9 +125,9 @@ function beginLooper(obj) {
     case 'Exponential Model':
       if (obj.KFit === 'Fit as Parameter') {
         result.K = result.Params[2];
-        result.OmaxA = costFunctionExponential(result.Params, result.PmaxA)
+        result.OmaxA = costFunctionExponential(result.Params, result.PmaxA);
       } else {
-        result.OmaxA = costFunctionExponential([...result.Params, setK], result.PmaxA)
+        result.OmaxA = costFunctionExponential([...result.Params, setK], result.PmaxA);
       }
 
       result.OmaxA = Math.pow(10, result.OmaxA) * result.PmaxA;
@@ -138,9 +136,9 @@ function beginLooper(obj) {
     case 'Exponentiated Model':
       if (obj.KFit === 'Fit as Parameter') {
         result.K = result.Params[2];
-        result.OmaxA = costFunctionExponentiated(result.Params, result.PmaxA)
+        result.OmaxA = costFunctionExponentiated(result.Params, result.PmaxA);
       } else {
-        result.OmaxA = costFunctionExponentiatedWithK([...result.Params, setK], result.PmaxA)
+        result.OmaxA = costFunctionExponentiatedWithK([...result.Params, setK], result.PmaxA);
       }
 
       result.OmaxA = result.OmaxA * result.PmaxA;
@@ -149,23 +147,22 @@ function beginLooper(obj) {
     case 'Zero-bounded Model (with K)':
       if (obj.KFit === 'Fit as Parameter') {
         result.K = result.Params[2];
-        result.OmaxA = costFunctionIHS3(result.Params, result.PmaxA)
+        result.OmaxA = costFunctionIHS3(result.Params, result.PmaxA);
       } else {
-        result.OmaxA = costFunctionIHS3WithK([...result.Params, setK], result.PmaxA)
+        result.OmaxA = costFunctionIHS3WithK([...result.Params, setK], result.PmaxA);
       }
 
       result.OmaxA = unIHS(result.OmaxA) * result.PmaxA;
 
       break;
     case 'Zero-bounded Model (no K)':
-      result.OmaxA = costFunctionIHS2(result.Params, result.PmaxA)
+      result.OmaxA = costFunctionIHS2(result.Params, result.PmaxA);
       result.OmaxA = unIHS(result.OmaxA) * result.PmaxA;
 
       break;
     default:
       return;
   }
-
 
   postMessage({
     done: true,

@@ -128,7 +128,7 @@ function beginWork() {
       // Hursh approx
       oldPmax = renderOriginalPmax(Q, A, K);
 
-      // Gilroy et al, (In testing)
+      // Gilroy et al,
       var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, K)));
 
       sheetData[currentRow][3] = (-lambertResult.val / (A * Q)).toFixed(8);

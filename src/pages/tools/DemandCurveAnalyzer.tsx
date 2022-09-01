@@ -19,8 +19,8 @@ import {
 } from 'mdb-react-ui-kit';
 import { HotColumn, HotTable } from '@handsontable/react';
 import Select from 'react-select';
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import './Tools.css';
@@ -56,11 +56,11 @@ const ModelOptions: SingleOptionType[] = [
 ];
 
 function unIHS(x: number): number {
-  return 1/Math.pow(10, (1 * x))*(Math.pow(10, (2 * x))-1);
+  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
 }
 
 function ihsTransform(x: number): number {
-  return Math.log(0.5*x + Math.sqrt((Math.pow(0.5, 2)) * (Math.pow(x, 2))+1))/Math.log(10);
+  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
 }
 
 export default function DemandCurveAnalyzer(): JSX.Element {
@@ -70,7 +70,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   const [kOptionsAvailable, setKOptionsAvailable] = useState<SingleOptionType[]>([
     { label: 'Log Range', value: 'Log Range' },
     { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-    { label: 'Custom', value: 'Custom' }
+    { label: 'Custom', value: 'Custom' },
   ]);
 
   const [modelOption, setModelOption] = useState<SingleOptionType>({
@@ -109,20 +109,19 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   }, []);
 
   /** constructExponentialChart
-   * 
+   *
    * Create visual for Exponential model
-   * 
-   * @param {DemandResult} obj 
+   *
+   * @param {DemandResult} obj
    */
-  function constructExponentialChart(obj: DemandResult): void
-  {
+  function constructExponentialChart(obj: DemandResult): void {
     const lowestPrice = Math.min(...obj.X);
     const highestPrice = Math.max(...obj.X) + 1;
     const density = 100;
     const rangeP = highestPrice - lowestPrice;
     const delta = rangeP / density;
 
-    const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
+    const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
     let dataForPlotting: any[] = [];
     let dataPointsForPlotting: any[] = [];
@@ -130,96 +129,96 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     let lowestDemand = -1;
 
     newPrices.forEach((price) => {
-      const demand = renderExponentialDemand(obj.Q0, obj.Alpha, obj.K, price)
+      const demand = renderExponentialDemand(obj.Q0, obj.Alpha, obj.K, price);
 
       lowestDemand = demand;
 
       dataForPlotting.push({
         Price: price,
-        Demand: demand
-      })
+        Demand: demand,
+      });
     });
 
     obj.X.forEach((x, index) => {
       dataPointsForPlotting.push({
         x: x,
-        y: obj.Y[index]
-      })
+        y: obj.Y[index],
+      });
     });
 
     setChartOptions({
       chart: {
-        height: "600px",
+        height: '600px',
       },
       title: {
-        text: "Demand Curve Modeling",
+        text: 'Demand Curve Modeling',
       },
-      series: [{
-        name: "Predicted Demand",
-        data: dataForPlotting.map((obj) => {
-          return {
-            x: obj.Price,
-            y: obj.Demand
-          };
-        }),
-        type: "line",
-      },
-      {
-        name: "Consumption",
-        data: dataPointsForPlotting,
-        label: 'Raw Data',
-        fill: false,
-        lineTension: 0,
-        backgroundColor: "rgba(0,0,0,1)",
-        borderColor: "rgba(0,0,0,0)",
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderColor: "rgba(0,0,0,1)",
-        pointBackgroundColor: "#000",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(0,0,0,1)",
-        pointHoverBorderColor: "rgba(0,0,0,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 5,
-        pointHitRadius: 10,
-        spanGaps: false,
-        lineWidth: 0,
-        lineWidthPlus: 0,
-        states: {
-          hover: {
-              enabled: false
-          }
-        }
-      }    
-    ],
+      series: [
+        {
+          name: 'Predicted Demand',
+          data: dataForPlotting.map((obj) => {
+            return {
+              x: obj.Price,
+              y: obj.Demand,
+            };
+          }),
+          type: 'line',
+        },
+        {
+          name: 'Consumption',
+          data: dataPointsForPlotting,
+          label: 'Raw Data',
+          fill: false,
+          lineTension: 0,
+          backgroundColor: 'rgba(0,0,0,1)',
+          borderColor: 'rgba(0,0,0,0)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderWidth: 1,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointBackgroundColor: '#000',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+          pointHoverBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 5,
+          pointHitRadius: 10,
+          spanGaps: false,
+          lineWidth: 0,
+          lineWidthPlus: 0,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
       yAxis: {
         title: {
-          text: "Demand (Log Scale)",
+          text: 'Demand (Log Scale)',
         },
         type: 'logarithmic',
         min: lowestDemand - 0.1,
       },
       xAxis: {
         title: {
-          text: "Unit Price"
+          text: 'Unit Price',
         },
         type: 'logarithmic',
-      }
+      },
     });
   }
 
   /** constructExponentiatedChart
-   * 
+   *
    * Create visual for Exponentiated model
-   * 
-   * @param {DemandResult} obj 
+   *
+   * @param {DemandResult} obj
    */
-  function constructExponentiatedChart(obj: DemandResult)
-  {
+  function constructExponentiatedChart(obj: DemandResult) {
     const lowestPrice = Math.min(...obj.X);
     const lowestConsumption = Math.min(...obj.Y);
     const highestPrice = Math.max(...obj.X) + 1;
@@ -227,7 +226,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const rangeP = highestPrice - lowestPrice;
     const delta = rangeP / density;
 
-    const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
+    const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
     let dataForPlotting: any[] = [];
     let dataPointsForPlotting: any[] = [];
@@ -235,14 +234,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     let lowestDemand = -1;
 
     newPrices.forEach((price) => {
-      const demand = renderExponentiatedDemand(obj.Q0, obj.Alpha, obj.K, price)
+      const demand = renderExponentiatedDemand(obj.Q0, obj.Alpha, obj.K, price);
 
       lowestDemand = demand;
 
       dataForPlotting.push({
         Price: price,
-        Demand: demand
-      })
+        Demand: demand,
+      });
     });
 
     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
@@ -250,285 +249,286 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     obj.X.forEach((x, index) => {
       dataPointsForPlotting.push({
         x: x,
-        y: obj.Y[index]
-      })
+        y: obj.Y[index],
+      });
     });
 
     setChartOptions({
       chart: {
-        height: "600px",
+        height: '600px',
       },
       title: {
-        text: "Demand Curve Modeling (Exponentiated)",
+        text: 'Demand Curve Modeling (Exponentiated)',
       },
-      series: [{
-        name: "Predicted Demand",
-        data: dataForPlotting.map((obj) => {
-          return {
-            x: obj.Price,
-            y: obj.Demand
-          };
-        }),
-        type: "line",
-      },
-      {
-        name: "Consumption",
-        data: dataPointsForPlotting,
-        label: 'Raw Data',
-        fill: false,
-        lineTension: 0,
-        backgroundColor: "rgba(0,0,0,1)",
-        borderColor: "rgba(0,0,0,0)",
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderColor: "rgba(0,0,0,1)",
-        pointBackgroundColor: "#000",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(0,0,0,1)",
-        pointHoverBorderColor: "rgba(0,0,0,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 5,
-        pointHitRadius: 10,
-        spanGaps: false,
-        lineWidth: 0,
-        lineWidthPlus: 0,
-        states: {
-          hover: {
-              enabled: false
-          }
-        }
-      }    
-    ],
+      series: [
+        {
+          name: 'Predicted Demand',
+          data: dataForPlotting.map((obj) => {
+            return {
+              x: obj.Price,
+              y: obj.Demand,
+            };
+          }),
+          type: 'line',
+        },
+        {
+          name: 'Consumption',
+          data: dataPointsForPlotting,
+          label: 'Raw Data',
+          fill: false,
+          lineTension: 0,
+          backgroundColor: 'rgba(0,0,0,1)',
+          borderColor: 'rgba(0,0,0,0)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderWidth: 1,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointBackgroundColor: '#000',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+          pointHoverBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 5,
+          pointHitRadius: 10,
+          spanGaps: false,
+          lineWidth: 0,
+          lineWidthPlus: 0,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
       yAxis: {
         title: {
-          text: "Demand (Linear Scale)",
+          text: 'Demand (Linear Scale)',
         },
         min: lowestDemand,
       },
       xAxis: {
         title: {
-          text: "Unit Price"
+          text: 'Unit Price',
         },
         type: 'logarithmic',
-      }
+      },
     });
   }
 
   /** constructIHS3Chart
-   * 
+   *
    * Create visual for Exponentiated model
-   * 
-   * @param {DemandResult} obj 
+   *
+   * @param {DemandResult} obj
    */
-   function constructIHS3Chart(obj: DemandResult)
-   {
-     const lowestPrice = Math.min(...obj.X);
-     const lowestConsumption = Math.min(...obj.Y);
-     const highestPrice = Math.max(...obj.X) + 1;
-     const density = 100;
-     const rangeP = highestPrice - lowestPrice;
-     const delta = rangeP / density;
- 
-     const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
- 
-     let dataForPlotting: any[] = [];
-     let dataPointsForPlotting: any[] = [];
- 
-     let lowestDemand = -1;
- 
-     newPrices.forEach((price) => {
-       const demand = unIHS(renderIHS3Demand(obj.Q0, obj.Alpha, obj.K, price));
- 
-       lowestDemand = demand;
- 
-       dataForPlotting.push({
-         Price: price,
-         Demand: demand
-       })
-     });
+  function constructIHS3Chart(obj: DemandResult) {
+    const lowestPrice = Math.min(...obj.X);
+    const lowestConsumption = Math.min(...obj.Y);
+    const highestPrice = Math.max(...obj.X) + 1;
+    const density = 100;
+    const rangeP = highestPrice - lowestPrice;
+    const delta = rangeP / density;
 
-     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
- 
-     obj.X.forEach((x, index) => {
-       dataPointsForPlotting.push({
-         x: x,
-         y: unIHS(obj.Y[index])
-       })
-     });
- 
-     setChartOptions({
-       chart: {
-         height: "600px",
-       },
-       title: {
-         text: "Demand Curve Modeling (ZBE)",
-       },
-       series: [{
-         name: "Predicted Demand",
-         data: dataForPlotting.map((obj) => {
-           return {
-             x: obj.Price,
-             y: obj.Demand
-           };
-         }),
-         type: "line",
-       },
-       {
-         name: "Consumption",
-         data: dataPointsForPlotting,
-         label: 'Raw Data',
-         fill: false,
-         lineTension: 0,
-         backgroundColor: "rgba(0,0,0,1)",
-         borderColor: "rgba(0,0,0,0)",
-         borderCapStyle: 'butt',
-         borderDash: [],
-         borderDashOffset: 0.0,
-         borderWidth: 1,
-         borderJoinStyle: 'miter',
-         pointBorderColor: "rgba(0,0,0,1)",
-         pointBackgroundColor: "#000",
-         pointBorderWidth: 1,
-         pointHoverRadius: 5,
-         pointHoverBackgroundColor: "rgba(0,0,0,1)",
-         pointHoverBorderColor: "rgba(0,0,0,1)",
-         pointHoverBorderWidth: 2,
-         pointRadius: 5,
-         pointHitRadius: 10,
-         spanGaps: false,
-         lineWidth: 0,
-         lineWidthPlus: 0,
-         states: {
-           hover: {
-               enabled: false
-           }
-         }
-       }    
-     ],
-       yAxis: {
-         title: {
-           text: "Demand (IHS Scale)",
-         },
-         min: lowestDemand,
-       },
-       xAxis: {
-         title: {
-           text: "Unit Price"
-         },
-         type: 'logarithmic',
-       }
-     });
-   }
+    const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
+
+    let dataForPlotting: any[] = [];
+    let dataPointsForPlotting: any[] = [];
+
+    let lowestDemand = -1;
+
+    newPrices.forEach((price) => {
+      const demand = unIHS(renderIHS3Demand(obj.Q0, obj.Alpha, obj.K, price));
+
+      lowestDemand = demand;
+
+      dataForPlotting.push({
+        Price: price,
+        Demand: demand,
+      });
+    });
+
+    lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
+
+    obj.X.forEach((x, index) => {
+      dataPointsForPlotting.push({
+        x: x,
+        y: unIHS(obj.Y[index]),
+      });
+    });
+
+    setChartOptions({
+      chart: {
+        height: '600px',
+      },
+      title: {
+        text: 'Demand Curve Modeling (ZBE)',
+      },
+      series: [
+        {
+          name: 'Predicted Demand',
+          data: dataForPlotting.map((obj) => {
+            return {
+              x: obj.Price,
+              y: obj.Demand,
+            };
+          }),
+          type: 'line',
+        },
+        {
+          name: 'Consumption',
+          data: dataPointsForPlotting,
+          label: 'Raw Data',
+          fill: false,
+          lineTension: 0,
+          backgroundColor: 'rgba(0,0,0,1)',
+          borderColor: 'rgba(0,0,0,0)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderWidth: 1,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointBackgroundColor: '#000',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+          pointHoverBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 5,
+          pointHitRadius: 10,
+          spanGaps: false,
+          lineWidth: 0,
+          lineWidthPlus: 0,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
+      yAxis: {
+        title: {
+          text: 'Demand (IHS Scale)',
+        },
+        min: lowestDemand,
+      },
+      xAxis: {
+        title: {
+          text: 'Unit Price',
+        },
+        type: 'logarithmic',
+      },
+    });
+  }
 
   /** constructIHS32hart
-   * 
+   *
    * Create visual for Exponentiated model
-   * 
-   * @param {DemandResult} obj 
+   *
+   * @param {DemandResult} obj
    */
-   function constructIHS2Chart(obj: DemandResult)
-   {
-     const lowestPrice = Math.min(...obj.X);
-     const lowestConsumption = Math.min(...obj.Y);
-     const highestPrice = Math.max(...obj.X) + 1;
-     const density = 100;
-     const rangeP = highestPrice - lowestPrice;
-     const delta = rangeP / density;
- 
-     const newPrices = Array.from({length:density},(v,k)=>k+delta)
- 
-     let dataForPlotting: any[] = [];
-     let dataPointsForPlotting: any[] = [];
- 
-     let lowestDemand = -1;
- 
-     newPrices.forEach((price) => {
-       const demand = unIHS(renderIHS2Demand(obj.Q0, obj.Alpha, price));
- 
-       lowestDemand = demand;
- 
-       dataForPlotting.push({
-         Price: price,
-         Demand: demand
-       })
-     });
- 
-     obj.X.forEach((x, index) => {
-       dataPointsForPlotting.push({
-         x: x,
-         y: unIHS(obj.Y[index])
-       })
-     });
+  function constructIHS2Chart(obj: DemandResult) {
+    const lowestPrice = Math.min(...obj.X);
+    const lowestConsumption = Math.min(...obj.Y);
+    const highestPrice = Math.max(...obj.X) + 1;
+    const density = 100;
+    const rangeP = highestPrice - lowestPrice;
+    const delta = rangeP / density;
 
-     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
- 
-     setChartOptions({
-       chart: {
-         height: "600px",
-       },
-       title: {
-         text: "Demand Curve Modeling (ZBE)",
-       },
-       series: [{
-         name: "Predicted Demand",
-         data: dataForPlotting.map((obj) => {
-           return {
-             x: obj.Price,
-             y: obj.Demand
-           };
-         }),
-         type: "line",
-       },
-       {
-         name: "Consumption",
-         data: dataPointsForPlotting,
-         label: 'Raw Data',
-         fill: false,
-         lineTension: 0,
-         backgroundColor: "rgba(0,0,0,1)",
-         borderColor: "rgba(0,0,0,0)",
-         borderCapStyle: 'butt',
-         borderDash: [],
-         borderDashOffset: 0.0,
-         borderWidth: 1,
-         borderJoinStyle: 'miter',
-         pointBorderColor: "rgba(0,0,0,1)",
-         pointBackgroundColor: "#000",
-         pointBorderWidth: 1,
-         pointHoverRadius: 5,
-         pointHoverBackgroundColor: "rgba(0,0,0,1)",
-         pointHoverBorderColor: "rgba(0,0,0,1)",
-         pointHoverBorderWidth: 2,
-         pointRadius: 5,
-         pointHitRadius: 10,
-         spanGaps: false,
-         lineWidth: 0,
-         lineWidthPlus: 0,
-         states: {
-           hover: {
-               enabled: false
-           }
-         }
-       }    
-     ],
-       yAxis: {
-         title: {
-           text: "Demand (IHS Scale)",
-         },
-         min: lowestDemand,
-       },
-       xAxis: {
-         title: {
-           text: "Unit Price"
-         },
-         type: 'logarithmic',
-       }
-     });
-   }
+    const newPrices = Array.from({ length: density }, (v, k) => k + delta);
+
+    let dataForPlotting: any[] = [];
+    let dataPointsForPlotting: any[] = [];
+
+    let lowestDemand = -1;
+
+    newPrices.forEach((price) => {
+      const demand = unIHS(renderIHS2Demand(obj.Q0, obj.Alpha, price));
+
+      lowestDemand = demand;
+
+      dataForPlotting.push({
+        Price: price,
+        Demand: demand,
+      });
+    });
+
+    obj.X.forEach((x, index) => {
+      dataPointsForPlotting.push({
+        x: x,
+        y: unIHS(obj.Y[index]),
+      });
+    });
+
+    lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
+
+    setChartOptions({
+      chart: {
+        height: '600px',
+      },
+      title: {
+        text: 'Demand Curve Modeling (ZBE)',
+      },
+      series: [
+        {
+          name: 'Predicted Demand',
+          data: dataForPlotting.map((obj) => {
+            return {
+              x: obj.Price,
+              y: obj.Demand,
+            };
+          }),
+          type: 'line',
+        },
+        {
+          name: 'Consumption',
+          data: dataPointsForPlotting,
+          label: 'Raw Data',
+          fill: false,
+          lineTension: 0,
+          backgroundColor: 'rgba(0,0,0,1)',
+          borderColor: 'rgba(0,0,0,0)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderWidth: 1,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointBackgroundColor: '#000',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+          pointHoverBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 5,
+          pointHitRadius: 10,
+          spanGaps: false,
+          lineWidth: 0,
+          lineWidthPlus: 0,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
+      yAxis: {
+        title: {
+          text: 'Demand (IHS Scale)',
+        },
+        min: lowestDemand,
+      },
+      xAxis: {
+        title: {
+          text: 'Unit Price',
+        },
+        type: 'logarithmic',
+      },
+    });
+  }
 
   /**
    * loadExampleData
@@ -552,9 +552,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   }
 
   /** isValidNumber
-   * 
+   *
    * Confirm that values are legit numbers
-   * 
+   *
    * @param {string} num number string
    * @returns {boolean} is a valid num or no
    */
@@ -572,7 +572,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   /** calculateDemand
    *
    * Fire off worker
-   * 
+   *
    */
   function calculateDemand(): void {
     if (worker !== undefined) {
@@ -589,7 +589,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
       const passCheck = isValidNumber(temp[0]) && isValidNumber(temp[1]);
 
-      if (modelOption.value === "Exponential Model" && parseFloat(temp[1]) <= 0) {
+      if (modelOption.value === 'Exponential Model' && parseFloat(temp[1]) <= 0) {
         continue;
       }
 
@@ -598,7 +598,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         mY.push(temp[1]);
       }
     }
-
 
     if (mX.length < 3 || mY.length < 3) {
       alert('Please enter more prices.');
@@ -622,7 +621,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   }
 
   /** handleWorkerOutput
-   * 
+   *
    * Receiver from worker
    *
    * @param {WorkerOutput} obj
@@ -641,22 +640,21 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       setResultsSummary(generateSummaryFromResults(data));
 
       switch (data.Model) {
-        case "Exponential Model":
+        case 'Exponential Model':
           constructExponentialChart(data);
           break;
 
-        case "Exponentiated Model":
+        case 'Exponentiated Model':
           constructExponentiatedChart(data);
           break;
 
-        case "Zero-bounded Model (with K)":
+        case 'Zero-bounded Model (with K)':
           constructIHS3Chart(data);
           break;
 
-        case "Zero-bounded Model (no K)":
+        case 'Zero-bounded Model (no K)':
           constructIHS2Chart(data);
           break;
-          
       }
 
       return;
@@ -687,8 +685,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    * @param {number} x pmax
    * @returns {number} projected level of demand
    */
-   function renderExponentiatedDemand(Q: number, A: number, K: number, x: number): number {
-    return Q * Math.pow(10, (K * (Math.exp(-A * Q * x) - 1)));
+  function renderExponentiatedDemand(Q: number, A: number, K: number, x: number): number {
+    return Q * Math.pow(10, K * (Math.exp(-A * Q * x) - 1));
   }
 
   /** renderIHS3Demand
@@ -701,7 +699,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    * @param {number} x pmax
    * @returns {number} projected level of demand
    */
-   function renderIHS3Demand(Q: number, A: number, K: number, x: number): number {
+  function renderIHS3Demand(Q: number, A: number, K: number, x: number): number {
     return ihsTransform(Q) + K * (Math.exp(-A * Q * x) - 1);
   }
 
@@ -714,26 +712,30 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    * @param {number} x pmax
    * @returns {number} projected level of demand
    */
-   function renderIHS2Demand(Q: number, A: number, x: number): number {
-    return ihsTransform(Q) * (Math.exp(-(A/ihsTransform(Q)) * Q * x));
+  function renderIHS2Demand(Q: number, A: number, x: number): number {
+    return ihsTransform(Q) * Math.exp(-(A / ihsTransform(Q)) * Q * x);
   }
 
   /** reportKNumbers
-   * 
+   *
    * @param {DemandResult} data results
-   * @returns 
+   * @returns
    */
   function reportKNumbers(data: DemandResult): JSX.Element {
-    if ( data.Model !== "Zero-bounded Model (no K)") {
-      return <><b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br /></>;
+    if (data.Model !== 'Zero-bounded Model (no K)') {
+      return (
+        <>
+          <b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br />
+        </>
+      );
     }
     return <></>;
   }
 
   /** generateSummaryFromResults
-   *  
+   *
    * Construct text output
-   * 
+   *
    * @param {DemandResult} data message from worker
    * @returns {JSX.Element}
    */
@@ -743,8 +745,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         <b>Alpha:</b> {data.Params[1].toFixed(8)} <br />
         <b>Q0:</b> {data.Params[0].toFixed(8)} <br />
         {reportKNumbers(data)}
-        <b>P<sub>MAX</sub> (Analytic):</b> {data.PmaxA.toFixed(3)} <br />
-        <b>O<sub>MAX</sub> (Analytic):</b> {data.OmaxA.toFixed(3)} <br />
+        <b>
+          P<sub>MAX</sub> (Analytic):
+        </b>{' '}
+        {data.PmaxA.toFixed(3)} <br />
+        <b>
+          O<sub>MAX</sub> (Analytic):
+        </b>{' '}
+        {data.OmaxA.toFixed(3)} <br />
         <b>RMS Error:</b> {data.MSE.toFixed(8)} <br />
         <b>Avg Error:</b> {data.RMSE.toFixed(8)}
       </p>
@@ -793,7 +801,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
             <MDBCardBody>
               <MDBCardTitle>Demand Curve Analyzer</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}>
-                This web-app automates the fitting of the Exponential, Exponentiated, and the Zero-bounded Exponential models of operant demand (with the Exponential model as the default). <br />
+                This web-app automates the fitting of the Exponential, Exponentiated, and the
+                Zero-bounded Exponential models of operant demand (with the Exponential model as the
+                default). <br />
                 <br />
                 Demand curve analysis is performed by providing least 3 pairs (x and y) of Pricing
                 and Consumption data in the control below. At least three pairs of data are
@@ -842,17 +852,17 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                   onChange={(option) => {
                     setModelOption(option!);
 
-                    if (option!.value.includes("Zero")){
+                    if (option!.value.includes('Zero')) {
                       setKOptionsAvailable([
                         { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-                      ])
+                      ]);
 
-                      setKOption({ label: 'Fit as Parameter', value: 'Fit as Parameter' })
+                      setKOption({ label: 'Fit as Parameter', value: 'Fit as Parameter' });
                     } else {
                       setKOptionsAvailable([
                         { label: 'Log Range', value: 'Log Range' },
                         { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-                      ])
+                      ]);
                     }
                   }}
                   value={modelOption}

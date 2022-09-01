@@ -71,11 +71,9 @@ function CalculateBIC(result) {
 }
 
 function CalculatePmax(result) {
-  if (result.Model === "Zero-bounded Model (with K)") {
-
+  if (result.Model === 'Zero-bounded Model (with K)') {
     const floor = result.Q0 - result.SetK;
-    lamba = function(x) 
-    { 
+    lamba = function (x) {
       var demand = costFunctionIHS3([result.Q0, result.Alpha], x);
       var demLessFloor = unIHS(demand - floor);
 
@@ -98,21 +96,12 @@ function CalculatePmax(result) {
     }
     */
 
-    var result2 = numeric.uncmin(lamba, 
-      [0.01], 
-      1e-5,
-      undefined, 
-      1000,
-      undefined,
-      undefined);
+    var result2 = numeric.uncmin(lamba, [0.01], 1e-5, undefined, 1000, undefined, undefined);
 
     result.PmaxA = result2.solution[0];
-
   } else if (result.Model === 'Zero-bounded Model (no K)') {
-
-    lamba = function(x) 
-    { 
-      var dem = unIHS(costFunctionIHS2([result.Q0, result.Alpha], x))
+    lamba = function (x) {
+      var dem = unIHS(costFunctionIHS2([result.Q0, result.Alpha], x));
 
       return -(dem * x);
     };
@@ -135,16 +124,9 @@ function CalculatePmax(result) {
 
     */
 
-    var result2 = numeric.uncmin(lamba, 
-      [0.1], 
-      1e-5,
-      undefined, 
-      1000,
-      undefined,
-      undefined);
+    var result2 = numeric.uncmin(lamba, [0.1], 1e-5, undefined, 1000, undefined, undefined);
 
     result.PmaxA = result2.solution[0];
-
   } else {
     // Gilroy et al,
     var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, result.K)));

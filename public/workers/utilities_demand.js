@@ -17,11 +17,11 @@
 */
 
 function unIHS(x) {
-  return 1/Math.pow(10, (1 * x))*(Math.pow(10, (2 * x))-1);
+  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
 }
 
 function ihsTransform(x) {
-  return Math.log(0.5*x + Math.sqrt((Math.pow(0.5, 2)) * (Math.pow(x, 2))+1))/Math.log(10);
+  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
 }
 
 function costFunctionExponential(inputs, cost) {
@@ -50,7 +50,7 @@ function costFunctionIHS3WithK(inputs, cost) {
 
 function costFunctionIHS2(inputs, cost) {
   const tQ = ihsTransform(inputs[0]);
-  return tQ * (Math.exp((-inputs[1]/tQ) * inputs[0] * cost))
+  return tQ * Math.exp((-inputs[1] / tQ) * inputs[0] * cost);
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/
