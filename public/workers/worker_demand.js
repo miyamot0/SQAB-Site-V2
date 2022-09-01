@@ -21,7 +21,7 @@ function setKValue(obj) {
 }
 
 function transformIHS(x) {
-  Math.log((x * 0.5 + ((0.5 ^ 2) * (x ^ 2) + 1)) ^ 0.5) / Math.log(10);
+  return Math.log(Math.pow((x * 0.5 + (Math.pow(0.5, 2) * Math.pow(x, 2) + 1)), 0.5)) / Math.log(10);
 }
 
 function beginLooper(obj) {
@@ -33,7 +33,9 @@ function beginLooper(obj) {
       yValues = yValues.map(Math.log10);
 
       if (obj.KFit === 'Fit as Parameter') {
-        boundsU = [hiQ * 2, Math.pow(10, -1), Math.log10(hiQ)];
+        boundsU = [hiQ * 2, 
+          Math.pow(10, -1), 
+          Math.log10(hiQ)];
         boundsL = [1, Math.pow(10, -10), 0.5];
 
         Optimize(costFunctionExponentialWithK);
@@ -60,6 +62,25 @@ function beginLooper(obj) {
       break;
     case 'Zero-bounded Model (with K)':
       yValues = yValues.map(transformIHS);
+
+      if (obj.KFit === 'Fit as Parameter') {
+        boundsU = [hiQ * 2, Math.pow(10, -1), Math.log10(hiQ)];
+        boundsL = [1, Math.pow(10, -10), 0.5];
+
+        Optimize(costFunctionIHS3WithK);
+      } else {
+        if (obj.FitK === 'Log Range') {
+          setK = transformIHS(hiQ) - transformIHS(loQ) + 0.5;
+        } else if (obj.FitK === 'Custom') {
+          setK = parseFloat(obj.KValue);
+        }
+
+        boundsU = [hiQ * 2, Math.pow(10, -1)];
+        boundsL = [1, Math.pow(10, -10)];
+
+        Optimize(costFunctionIHS3);
+      }
+
       break;
     case 'Zero-bounded Model (no K)':
       yValues = yValues.map(transformIHS);
@@ -74,7 +95,9 @@ function beginLooper(obj) {
   result.SetK = setK;
   result.Params = GetBestAgent();
 
-  //TODO: Conditional
+  if (obj.KFit === "Fit as Parameter") {
+    result.SetK = result.Params[2];
+  }
 
   result.Q0 = result.Params[0];
   result.Alpha = result.Params[1];
@@ -117,6 +140,15 @@ function beginLooper(obj) {
 
       break;
     case 'Zero-bounded Model (with K)':
+      if (obj.KFit === 'Fit as Parameter') {
+        result.K = result.Params[2];
+        result.OmaxA = costFunctionIHS3(result.Params, result.PmaxA)
+      } else {
+        result.OmaxA = costFunctionIHS3WithK([...result.Params, setK], result.PmaxA)
+      }
+
+      result.OmaxA = unIHS(result.OmaxA) * result.PmaxA;
+
       break;
     case 'Zero-bounded Model (no K)':
       break;
@@ -153,18 +185,6 @@ onmessage = function (passer) {
   });
 
   loQ = Math.min(...nonZeroValues);
-
-  /*
-  postMessage({
-    done: false,
-    msg: 'Fitting Demand Model',
-    yValues,
-    xValues,
-    hiQ,
-    loQ,
-    nonZeroValues,
-  });
-  */
 
   beginLooper(passer.data);
 };

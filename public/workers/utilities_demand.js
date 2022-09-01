@@ -16,6 +16,14 @@
    along with Demand Curve Analyzer.  If not, see http://www.gnu.org/licenses/.
 */
 
+function ihsTransform(x) {
+  return Math.log(Math.pow((x * 0.5 + (Math.pow(0.5, 2) * Math.pow(x, 2) + 1)), 0.5)) / Math.log(10);
+}
+
+function unIHS(x) {
+  return (Math.pow(1/10,(1*x))) * ((Math.pow(10,(2*x)))-1);
+}
+
 function costFunctionExponential(inputs, cost) {
   return Math.log10(inputs[0]) + setK * (Math.exp(-inputs[1] * inputs[0] * cost) - 1);
 }
@@ -30,6 +38,14 @@ function costFunctionExponentiated(inputs, cost) {
 
 function costFunctionExponentiatedWithK(inputs, cost) {
   return inputs[0] * Math.pow(10, inputs[2] * (Math.exp(-inputs[1] * inputs[0] * cost) - 1));
+}
+
+function costFunctionIHS3(inputs, cost) {
+  return ihsTransform(inputs[0]) + setK * (Math.exp(-inputs[1] * inputs[0] * cost) - 1);
+}
+
+function costFunctionIHS3WithK(inputs, cost) {
+  return ihsTransform(inputs[0]) + inputs[2] * (Math.exp(-inputs[1] * inputs[0] * cost) - 1);
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/

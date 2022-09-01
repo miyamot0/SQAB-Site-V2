@@ -39,6 +39,8 @@ var lowestLossIndex = 0;
 var xValues, yValues, yValuesBak;
 var maxits;
 
+var lambda = null;
+
 var boundsU = [];
 var boundsL = [];
 
@@ -69,10 +71,31 @@ function CalculateBIC(result) {
 }
 
 function CalculatePmax(result) {
-  // Gilroy et al,
-  var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, result.K)));
 
-  result.PmaxA = -lambertResult.val / (result.Alpha * result.Q0);
+  if (result.model === "Zero-bounded Model (with K)") {
+
+    lamba = function(x) 
+    { 
+      var dem = costFunctionIHS3([result.Q0, result.Alpha], x)
+
+      return -(dem * x);
+    };
+
+    result = numeric.uncmin(lamba, 
+      [0.01], 
+      1e-20,
+      undefined, 
+      1000,
+      undefined,
+      undefined);
+
+    result.PmaxA = result.solution[0];
+
+  } else {
+    // Gilroy et al,
+    var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, result.K)));
+    result.PmaxA = -lambertResult.val / (result.Alpha * result.Q0);
+  }
 }
 
 /* Shell of fx for calculating model costs */
