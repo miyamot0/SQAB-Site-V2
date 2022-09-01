@@ -33,6 +33,7 @@ export default function AnalyticPmax(): JSX.Element {
 
     const [hotData, setHotData] = useState<any[][]>();
     const [hotData2, setHotData2] = useState<any[][]>();
+    const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
 
     let worker: Worker | undefined = undefined;
 
@@ -105,6 +106,9 @@ export default function AnalyticPmax(): JSX.Element {
             worker = undefined;
             setHotData(data.sheet);
             setHotData2(data.sheet);
+
+
+            setRunningCalculation(false);
             return;
         }
     }
@@ -208,9 +212,13 @@ export default function AnalyticPmax(): JSX.Element {
                             </MDBCardText>
 
                             <MDBBtn noRipple
-                                style={{ width: "100%" }}
+                                style={{
+                                    width: "100%",
+                                    marginBottom: '25px'
+                                }}
                                 tag="a"
                                 href="#!"
+                                disabled={runningCalculation}
                                 onClick={() => loadExampleData()}
                             >
                                 Load Example Data
@@ -241,10 +249,17 @@ export default function AnalyticPmax(): JSX.Element {
                             </HotTable>
 
                             <MDBBtn noRipple
-                                style={{ width: "100%" }}
+                                style={{
+                                    width: "100%",
+                                    marginTop: '25px'
+                                }}
                                 tag="a"
                                 href="#!"
-                                onClick={() => calculatePmax()}
+                                disabled={runningCalculation}
+                                onClick={() => {
+                                    setRunningCalculation(true);
+                                    calculatePmax();
+                                }}
                             >
                                 Calculate
                             </MDBBtn>
