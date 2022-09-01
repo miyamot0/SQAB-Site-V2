@@ -29,6 +29,7 @@ import Recruitment from './pages/recruitment/Recruitment';
 
 import AnalyticPmax from './pages/tools/AnalyticPmax';
 import DemandCurveAnalyzer from './pages/tools/DemandCurveAnalyzer';
+import DiscountingModelSelector from './pages/tools/DiscountingModelSelector';
 
 const pageTitle = 'SQAB';
 
@@ -91,6 +92,9 @@ function App() {
             </Route>
             <Route path="/demand">
               <DemandCurveAnalyzer />
+            </Route>
+            <Route path="/discounting">
+              <DiscountingModelSelector />
             </Route>
           </Switch>
         </div>
