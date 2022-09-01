@@ -52,32 +52,26 @@ const ModelOptions: SingleOptionType[] = [
   { label: 'Exponential Model', value: 'Exponential Model' },
   { label: 'Exponentiated Model', value: 'Exponentiated Model' },
   { label: 'Zero-bounded Model (with K)', value: 'Zero-bounded Model (with K)' },
-  // Stubbed for now
-  //{ label: 'Zero-bounded Model (no K)', value: 'Zero-bounded Model (no K)' },
-];
-
-const ZeroOptions: SingleOptionType[] = [
-  { label: 'Keep Zeroes', value: 'Keep Zeroes' },
-  { label: 'Drop Zeroes', value: 'Drop Zeroes' },
-];
-
-const SpanOptions: SingleOptionType[] = [
-  { label: 'Log Range', value: 'Log Range' },
-  { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-  { label: 'Custom', value: 'Custom' },
+  { label: 'Zero-bounded Model (no K)', value: 'Zero-bounded Model (no K)' },
 ];
 
 function unIHS(x: number): number {
-  return (Math.pow(1/10, (1 * x))) * ((Math.pow(10, (2 * x))) - 1);
+  return 1/Math.pow(10, (1 * x))*(Math.pow(10, (2 * x))-1);
 }
 
 function ihsTransform(x: number): number {
-  return Math.log(Math.pow((x * 0.5 + (Math.pow(0.5, 2) * Math.pow(x, 2) + 1)), 0.5)) / Math.log(10);
+  return Math.log(0.5*x + Math.sqrt((Math.pow(0.5, 2)) * (Math.pow(x, 2))+1))/Math.log(10);
 }
 
 export default function DemandCurveAnalyzer(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
+
+  const [kOptionsAvailable, setKOptionsAvailable] = useState<SingleOptionType[]>([
+    { label: 'Log Range', value: 'Log Range' },
+    { label: 'Fit as Parameter', value: 'Fit as Parameter' },
+    { label: 'Custom', value: 'Custom' }
+  ]);
 
   const [modelOption, setModelOption] = useState<SingleOptionType>({
     label: 'Exponential Model',
@@ -95,8 +89,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   });
 
   const [resultsSummary, setResultsSummary] = useState<JSX.Element | null>(null);
-  const [kCustomShown, setKCustomShown] = useState<boolean>(false);
-  const [kCustomValue, setKCustomValue] = useState<number>(1.5);
   const [chartOptions, setChartOptions] = useState({});
 
   let worker: Worker | undefined = undefined;
@@ -135,7 +127,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const rangeP = highestPrice - lowestPrice;
     const delta = rangeP / density;
 
-    const newPrices = Array.from({length:density},(v,k)=>k+delta)
+    const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
 
     let dataForPlotting: any[] = [];
     let dataPointsForPlotting: any[] = [];
@@ -234,12 +226,13 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   function constructExponentiatedChart(obj: DemandResult)
   {
     const lowestPrice = Math.min(...obj.X);
+    const lowestConsumption = Math.min(...obj.Y);
     const highestPrice = Math.max(...obj.X) + 1;
     const density = 100;
     const rangeP = highestPrice - lowestPrice;
     const delta = rangeP / density;
 
-    const newPrices = Array.from({length:density},(v,k)=>k+delta)
+    const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
 
     let dataForPlotting: any[] = [];
     let dataPointsForPlotting: any[] = [];
@@ -256,6 +249,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         Demand: demand
       })
     });
+
+    lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
 
     obj.X.forEach((x, index) => {
       dataPointsForPlotting.push({
@@ -317,7 +312,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         title: {
           text: "Demand (Linear Scale)",
         },
-        min: lowestDemand - (lowestDemand * 0.1),
+        min: lowestDemand,
       },
       xAxis: {
         title: {
@@ -337,12 +332,13 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    function constructIHS3Chart(obj: DemandResult)
    {
      const lowestPrice = Math.min(...obj.X);
+     const lowestConsumption = Math.min(...obj.Y);
      const highestPrice = Math.max(...obj.X) + 1;
      const density = 100;
      const rangeP = highestPrice - lowestPrice;
      const delta = rangeP / density;
  
-     const newPrices = Array.from({length:density},(v,k)=>k+delta)
+     const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
  
      let dataForPlotting: any[] = [];
      let dataPointsForPlotting: any[] = [];
@@ -359,6 +355,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
          Demand: demand
        })
      });
+
+     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
  
      obj.X.forEach((x, index) => {
        dataPointsForPlotting.push({
@@ -420,7 +418,115 @@ export default function DemandCurveAnalyzer(): JSX.Element {
          title: {
            text: "Demand (IHS Scale)",
          },
-         min: lowestDemand - (lowestDemand * 0.1),
+         min: lowestDemand,
+       },
+       xAxis: {
+         title: {
+           text: "Unit Price"
+         },
+         type: 'logarithmic',
+       }
+     });
+   }
+
+  /** constructIHS32hart
+   * 
+   * Create visual for Exponentiated model
+   * 
+   * @param {DemandResult} obj 
+   */
+   function constructIHS2Chart(obj: DemandResult)
+   {
+     const lowestPrice = Math.min(...obj.X);
+     const lowestConsumption = Math.min(...obj.Y);
+     const highestPrice = Math.max(...obj.X) + 1;
+     const density = 100;
+     const rangeP = highestPrice - lowestPrice;
+     const delta = rangeP / density;
+ 
+     const newPrices = Array.from({length:density},(v,k)=>k+delta)
+ 
+     let dataForPlotting: any[] = [];
+     let dataPointsForPlotting: any[] = [];
+ 
+     let lowestDemand = -1;
+ 
+     newPrices.forEach((price) => {
+       const demand = unIHS(renderIHS2Demand(obj.Q0, obj.Alpha, price));
+ 
+       lowestDemand = demand;
+ 
+       dataForPlotting.push({
+         Price: price,
+         Demand: demand
+       })
+     });
+ 
+     obj.X.forEach((x, index) => {
+       dataPointsForPlotting.push({
+         x: x,
+         y: unIHS(obj.Y[index])
+       })
+     });
+
+     console.log(dataPointsForPlotting)
+
+     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
+ 
+     setChartOptions({
+       chart: {
+         height: "600px",
+       },
+       title: {
+         text: "Demand Curve Modeling (ZBE)",
+       },
+       series: [{
+         name: "Predicted Demand",
+         data: dataForPlotting.map((obj) => {
+           return {
+             x: obj.Price,
+             y: obj.Demand
+           };
+         }),
+         type: "line",
+       },
+       {
+         name: "Consumption",
+         data: dataPointsForPlotting,
+         label: 'Raw Data',
+         fill: false,
+         lineTension: 0,
+         backgroundColor: "rgba(0,0,0,1)",
+         borderColor: "rgba(0,0,0,0)",
+         borderCapStyle: 'butt',
+         borderDash: [],
+         borderDashOffset: 0.0,
+         borderWidth: 1,
+         borderJoinStyle: 'miter',
+         pointBorderColor: "rgba(0,0,0,1)",
+         pointBackgroundColor: "#000",
+         pointBorderWidth: 1,
+         pointHoverRadius: 5,
+         pointHoverBackgroundColor: "rgba(0,0,0,1)",
+         pointHoverBorderColor: "rgba(0,0,0,1)",
+         pointHoverBorderWidth: 2,
+         pointRadius: 5,
+         pointHitRadius: 10,
+         spanGaps: false,
+         lineWidth: 0,
+         lineWidthPlus: 0,
+         states: {
+           hover: {
+               enabled: false
+           }
+         }
+       }    
+     ],
+       yAxis: {
+         title: {
+           text: "Demand (IHS Scale)",
+         },
+         min: lowestDemand,
        },
        xAxis: {
          title: {
@@ -436,19 +542,19 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    */
   function loadExampleData(): void {
     setHotData([
-      ['0.0', '1000'],
-      ['0.5', '1000'],
-      ['1.0', '1000'],
+      ['0.1', '1000'],
+      ['0.5', '900'],
+      ['1.0', '850'],
       ['1.5', '800'],
-      ['2.0', '800'],
-      ['2.5', '700'],
-      ['3.0', '600'],
-      ['4.0', '500'],
-      ['5.0', '400'],
-      ['10.0', '300'],
-      ['15.0', '100'],
-      ['', ''],
-      ['', ''],
+      ['2.0', '750'],
+      ['2.5', '600'],
+      ['3.0', '500'],
+      ['4.0', '400'],
+      ['5.0', '300'],
+      ['10.0', '200'],
+      ['15.0', '150'],
+      ['20.0', '100'],
+      ['50.0', '0'],
     ]);
   }
 
@@ -460,6 +566,13 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    * @returns {boolean} is a valid num or no
    */
   function isValidNumber(num: string): boolean {
+    // get rid of empties
+    if (num.trim().length === 0) return false;
+
+    if (parseFloat(num.trim()) < 0) return false;
+
+    if (parseFloat(num.trim()) === 0) return true;
+
     return num.trim().length > 1 && !isNaN(parseFloat(num));
   }
 
@@ -481,7 +594,13 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     for (var i = 0; i < thing!.length; i++) {
       var temp = thing![i];
 
-      if (isValidNumber(temp[0]) && isValidNumber(temp[1])) {
+      const passCheck = isValidNumber(temp[0]) && isValidNumber(temp[1]);
+
+      if (modelOption.value === "Exponential Model" && parseFloat(temp[1]) <= 0) {
+        continue;
+      }
+
+      if (passCheck) {
         if (parseFloat(temp[0]) < 0) {
           alert('Please enter prices.');
 
@@ -493,6 +612,10 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       }
     }
 
+    console.log(hotData);
+    console.log(mX);
+    console.log(mY);
+
     worker = new Worker('./workers/worker_demand.js');
     worker.onmessage = handleWorkerOutput;
 
@@ -502,7 +625,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       y: mY,
       model: modelOption.value,
       KFit: kOption.value,
-      KValue: kCustomValue,
+      KValue: -1,
     });
   }
 
@@ -535,6 +658,11 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         case "Zero-bounded Model (with K)":
           constructIHS3Chart(data);
           break;
+
+        case "Zero-bounded Model (no K)":
+          constructIHS2Chart(data);
+          break;
+          
       }
 
       return;
@@ -583,6 +711,31 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     return ihsTransform(Q) + K * (Math.exp(-A * Q * x) - 1);
   }
 
+  /** renderIHS3Demand
+   *
+   * Project demand at instance
+   *
+   * @param {number} Q q0
+   * @param {number} A a
+   * @param {number} x pmax
+   * @returns {number} projected level of demand
+   */
+   function renderIHS2Demand(Q: number, A: number, x: number): number {
+    return ihsTransform(Q) * (Math.exp(-(A/ihsTransform(Q)) * Q * x));
+  }
+
+  /** reportKNumbers
+   * 
+   * @param {DemandResult} data results
+   * @returns 
+   */
+  function reportKNumbers(data: DemandResult): JSX.Element {
+    if ( data.Model !== "Zero-bounded Model (no K)") {
+      return <><b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br /></>;
+    }
+    return <></>;
+  }
+
   /** generateSummaryFromResults
    *  
    * Construct text output
@@ -595,7 +748,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       <p>
         <b>Alpha:</b> {data.Params[1].toFixed(8)} <br />
         <b>Q0:</b> {data.Params[0].toFixed(8)} <br />
-        <b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br />
+        {reportKNumbers(data)}
         <b>P<sub>MAX</sub> (Analytic):</b> {data.PmaxA.toFixed(3)} <br />
         <b>O<sub>MAX</sub> (Analytic):</b> {data.OmaxA.toFixed(3)} <br />
         <b>RMS Error:</b> {data.MSE.toFixed(8)} <br />
@@ -693,24 +846,23 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 <span>Modeling Option:</span>
                 <Select
                   options={ModelOptions}
-                  onChange={(option) => setModelOption(option!)}
-                  value={modelOption}
-                  styles={{
-                    menu: (base) => ({
-                      ...base,
-                      width: 'max-content',
-                      minWidth: '100%',
-                    }),
-                  }}
-                />
-              </label>
+                  onChange={(option) => {
+                    setModelOption(option!);
 
-              <label style={{ width: '100%' }}>
-                <span>Manage Consumption values at Zero:</span>
-                <Select
-                  options={ZeroOptions}
-                  onChange={(option) => setZeroOption(option!)}
-                  value={zeroOption}
+                    if (option!.value.includes("Zero")){
+                      setKOptionsAvailable([
+                        { label: 'Fit as Parameter', value: 'Fit as Parameter' },
+                      ])
+
+                      setKOption({ label: 'Fit as Parameter', value: 'Fit as Parameter' })
+                    } else {
+                      setKOptionsAvailable([
+                        { label: 'Log Range', value: 'Log Range' },
+                        { label: 'Fit as Parameter', value: 'Fit as Parameter' },
+                      ])
+                    }
+                  }}
+                  value={modelOption}
                   styles={{
                     menu: (base) => ({
                       ...base,
@@ -724,9 +876,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
               <label style={{ width: '100%' }}>
                 <span>Scaling parameter (K) Value:</span>
                 <Select
-                  options={SpanOptions}
+                  options={kOptionsAvailable}
                   onChange={(option) => {
-                    setKCustomShown(option?.value === 'Custom');
                     setKOption(option!);
                   }}
                   value={kOption}
@@ -734,21 +885,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                   menuPosition="fixed"
                 />
               </label>
-
-              {kCustomShown && (
-                <label className="numberInput" style={{ width: '100%' }}>
-                  <span>Custom K Value:</span>
-                  <input
-                    type="number"
-                    min={1.5}
-                    className="numberInput"
-                    onChange={(change: React.ChangeEvent<HTMLInputElement>): void => {
-                      return setKCustomValue(parseFloat(change.currentTarget.value));
-                    }}
-                    value={kCustomValue}
-                  ></input>
-                </label>
-              )}
 
               <MDBBtn
                 noRipple

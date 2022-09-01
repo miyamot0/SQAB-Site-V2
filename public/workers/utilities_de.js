@@ -91,6 +91,25 @@ function CalculatePmax(result) {
 
     result.PmaxA = result.solution[0];
 
+  } else if (result.model === "Zero-bounded Model (no K)") {
+
+    lamba = function(x) 
+    { 
+      var dem = costFunctionIHS2([result.Q0, result.Alpha], x)
+
+      return -(dem * x);
+    };
+
+    result = numeric.uncmin(lamba, 
+      [0.01], 
+      1e-20,
+      undefined, 
+      1000,
+      undefined,
+      undefined);
+
+    result.PmaxA = result.solution[0];
+
   } else {
     // Gilroy et al,
     var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, result.K)));

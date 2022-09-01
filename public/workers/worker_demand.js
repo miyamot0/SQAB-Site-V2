@@ -20,10 +20,6 @@ function setKValue(obj) {
   }
 }
 
-function transformIHS(x) {
-  return Math.log(Math.pow((x * 0.5 + (Math.pow(0.5, 2) * Math.pow(x, 2) + 1)), 0.5)) / Math.log(10);
-}
-
 function beginLooper(obj) {
   setKValue(obj);
 
@@ -61,7 +57,7 @@ function beginLooper(obj) {
       }
       break;
     case 'Zero-bounded Model (with K)':
-      yValues = yValues.map(transformIHS);
+      yValues = yValues.map(ihsTransform);
 
       if (obj.KFit === 'Fit as Parameter') {
         boundsU = [hiQ * 2, Math.pow(10, -1), Math.log10(hiQ)];
@@ -70,7 +66,7 @@ function beginLooper(obj) {
         Optimize(costFunctionIHS3WithK);
       } else {
         if (obj.FitK === 'Log Range') {
-          setK = transformIHS(hiQ) - transformIHS(loQ) + 0.5;
+          setK = ihsTransform(hiQ) - ihsTransform(loQ) + 1;
         } else if (obj.FitK === 'Custom') {
           setK = parseFloat(obj.KValue);
         }
@@ -83,7 +79,12 @@ function beginLooper(obj) {
 
       break;
     case 'Zero-bounded Model (no K)':
-      yValues = yValues.map(transformIHS);
+      yValues = yValues.map(ihsTransform);
+
+      boundsU = [hiQ * 2, Math.pow(10, -1)];
+      boundsL = [1, Math.pow(10, -10)];
+
+      Optimize(costFunctionIHS2);      
       break;
     default:
       return;
@@ -102,14 +103,17 @@ function beginLooper(obj) {
   result.Q0 = result.Params[0];
   result.Alpha = result.Params[1];
   result.K = result.SetK;
+
+  if (obj.model === "Zero-bounded Model (no K)") {
+    result.K = undefined;
+  }
+
   result.MSE = GetBestCost();
   result.RMSE = Math.sqrt(GetBestCost());
   result.Y = yValues;
   result.X = xValues;
   result.HQ = hiQ;
   result.LQ = loQ;
-  //result.pmax
-  //result.omax
 
   CalculateAIC(result);
   CalculateBIC(result);
@@ -151,6 +155,9 @@ function beginLooper(obj) {
 
       break;
     case 'Zero-bounded Model (no K)':
+      result.OmaxA = costFunctionIHS2(result.Params, result.PmaxA)
+      result.OmaxA = unIHS(result.OmaxA) * result.PmaxA;
+
       break;
     default:
       return;
