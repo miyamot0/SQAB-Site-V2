@@ -69,18 +69,49 @@ function beginLooper(obj) {
   }
 
   result.Model = obj.model;
+
   result.FitK = obj.KFit;
   result.SetK = setK;
   result.Params = GetBestAgent();
+
+  //TODO: Conditional
+
+  result.Q0 = result.Params[0];
+  result.Alpha = result.Params[1];
+  result.K = result.SetK;
   result.MSE = GetBestCost();
   result.RMSE = Math.sqrt(GetBestCost());
   result.Y = yValues;
   result.X = xValues;
   result.HQ = hiQ;
   result.LQ = loQ;
+  //result.pmax
+  //result.omax
 
   CalculateAIC(result);
   CalculateBIC(result);
+
+  // generate preds
+  switch (obj.model) {
+    case 'Exponential Model':
+      if (obj.KFit === 'Fit as Parameter') {
+      } else {
+      }
+
+      break;
+    case 'Exponentiated Model':
+      if (obj.KFit === 'Fit as Parameter') {
+      }
+      break;
+    case 'Zero-bounded Model (with K)':
+      break;
+    case 'Zero-bounded Model (no K)':
+      break;
+    default:
+      return;
+  }
+
+  CalculatePmax(result);
 
   postMessage({
     done: true,

@@ -80,6 +80,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     value: 'Log Range',
   });
 
+  const [resultsSummary, setResultsSummary] = useState<JSX.Element | null>(null);
   const [kCustomShown, setKCustomShown] = useState<boolean>(false);
   const [kCustomValue, setKCustomValue] = useState<number>(1.5);
 
@@ -170,12 +171,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       KValue: kCustomValue,
     });
 
-    //$('p.clearHelper').empty();
-    //$('h4.hiddenTitles').hide();
-
-    //$('#scoreBtn').attr('disabled', 'disabled');
-    //$('#scoreBtn').text('Please Wait...');
-
     /*
     var isExponential = $('#selectModel').prop('selectedIndex') == 0;
     var isExponentiated = $('#selectModel').prop('selectedIndex') == 1;
@@ -211,12 +206,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   function handleWorkerOutput(obj: any): void {
     const data = obj.data as DemandResult;
 
-    console.log(obj);
+    console.log(data);
 
     if (data.done) {
       worker = undefined;
 
       setRunningCalculation(false);
+      setResultsSummary(generateSummaryFromResults(data));
+
       return;
     }
   }
@@ -293,6 +290,20 @@ export default function DemandCurveAnalyzer(): JSX.Element {
           {noteString}{' '}
         </p>
       </div>
+    );
+  }
+
+  function generateSummaryFromResults(data: DemandResult): JSX.Element {
+    return (
+      <p>
+        <b>Alpha:</b> {data.Params[1].toFixed(8)} <br />
+        <b>Q0:</b> {data.Params[0].toFixed(8)} <br />
+        <b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br />
+        <b>Omaxd:</b> TODO <br />
+        <b>Pmaxd:</b> TODO <br />
+        <b>RMS Error:</b> {data.MSE.toFixed(8)} <br />
+        <b>Avg Error:</b> {data.RMSE.toFixed(8)}
+      </p>
     );
   }
 
@@ -464,7 +475,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
         <MDBCol md="4">
           <MDBCard className="outputPanel">
             <MDBCardBody>
+              <MDBCardTitle>Fitting Results</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}></MDBCardText>
+              {resultsSummary !== null && resultsSummary}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

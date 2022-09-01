@@ -68,6 +68,13 @@ function CalculateBIC(result) {
   result.BIC = N + N * Math.log(2 * M_PI) + N * Math.log(SSR / N) + Math.log(N) * DF;
 }
 
+function CalculatePmax(result) {
+  // Gilroy et al,
+  var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, result.K)));
+
+  result.PmaxA = -lambertResult.val / (result.Alpha * result.Q0);
+}
+
 /* Shell of fx for calculating model costs */
 function costFunctionShell(inputs, func) {
   var val = 0.0;
