@@ -78,11 +78,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     value: 'Exponential Model',
   });
 
-  const [zeroOption, setZeroOption] = useState<SingleOptionType>({
-    label: 'Keep Zeroes',
-    value: 'Keep Zeroes',
-  });
-
   const [kOption, setKOption] = useState<SingleOptionType>({
     label: 'Log Range',
     value: 'Log Range',
@@ -469,8 +464,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
        })
      });
 
-     console.log(dataPointsForPlotting)
-
      lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
  
      setChartOptions({
@@ -601,20 +594,19 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       }
 
       if (passCheck) {
-        if (parseFloat(temp[0]) < 0) {
-          alert('Please enter prices.');
-
-          return;
-        }
-
         mX.push(temp[0]);
         mY.push(temp[1]);
       }
     }
 
-    console.log(hotData);
-    console.log(mX);
-    console.log(mY);
+
+    if (mX.length < 3 || mY.length < 3) {
+      alert('Please enter more prices.');
+
+      setRunningCalculation(false);
+
+      return;
+    }
 
     worker = new Worker('./workers/worker_demand.js');
     worker.onmessage = handleWorkerOutput;
@@ -638,10 +630,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   function handleWorkerOutput(obj: any): void {
     const data = obj.data as DemandResult;
 
+    if (data == null) {
+      return;
+    }
+
     if (data.done) {
       worker = undefined;
-
-      console.log(data)
 
       setRunningCalculation(false);
       setResultsSummary(generateSummaryFromResults(data));
@@ -799,15 +793,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
             <MDBCardBody>
               <MDBCardTitle>Demand Curve Analyzer</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}>
-                This web-app automates the fitting of the Exponential and Exponentiated models of
-                operant demand (with the Exponential model as the default). <br />
+                This web-app automates the fitting of the Exponential, Exponentiated, and the Zero-bounded Exponential models of operant demand (with the Exponential model as the default). <br />
                 <br />
                 Demand curve analysis is performed by providing least 3 pairs (x and y) of Pricing
                 and Consumption data in the control below. At least three pairs of data are
                 necessary to perform any type of modeling (at the extreme minimum). <br />
                 <br />
                 Prices (x) and Consumption (y) values can be any positive real number (i.e., greater
-                or equal to 0).
+                or equal to 0), depending on model of course.
               </MDBCardText>
 
               <MDBBtn

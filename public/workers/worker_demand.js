@@ -3,6 +3,9 @@ self.importScripts('math.min.js');
 self.importScripts('utilities_demand.js');
 self.importScripts('utilities_de.js');
 
+// eslint-disable-next-line no-undef
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js');
+
 var boundUpper, boundLower, hiP, loP;
 
 var setK = null;
@@ -186,6 +189,8 @@ onmessage = function (passer) {
   yValues = yValues.map(Number);
 
   hiQ = Math.max(...yValues);
+
+  hiP = Math.max(...xValues);
 
   var nonZeroValues = yValues.filter(function (val) {
     return val > 0;

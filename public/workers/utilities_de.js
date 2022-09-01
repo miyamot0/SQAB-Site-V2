@@ -71,44 +71,79 @@ function CalculateBIC(result) {
 }
 
 function CalculatePmax(result) {
+  if (result.Model === "Zero-bounded Model (with K)") {
 
-  if (result.model === "Zero-bounded Model (with K)") {
-
+    const floor = result.Q0 - result.SetK;
     lamba = function(x) 
     { 
-      var dem = costFunctionIHS3([result.Q0, result.Alpha], x)
+      var demand = costFunctionIHS3([result.Q0, result.Alpha], x);
+      var demLessFloor = unIHS(demand - floor);
 
-      return -(dem * x);
+      return -(demLessFloor * x);
     };
 
-    result = numeric.uncmin(lamba, 
+    /*
+    var highestValue = 0;
+    var startingPrice = 0;
+
+    var preDemand;
+
+    for (var i = 0.1; i < hiP; i++) {
+      preDemand = unIHS(costFunctionIHS3([result.Q0, result.Alpha], i)) * i;
+
+      if (preDemand > highestValue) {
+        highestValue = preDemand;
+        startingPrice = i;
+      }
+    }
+    */
+
+    var result2 = numeric.uncmin(lamba, 
       [0.01], 
-      1e-20,
+      1e-5,
       undefined, 
       1000,
       undefined,
       undefined);
 
-    result.PmaxA = result.solution[0];
+    result.PmaxA = result2.solution[0];
 
-  } else if (result.model === "Zero-bounded Model (no K)") {
+  } else if (result.Model === 'Zero-bounded Model (no K)') {
 
     lamba = function(x) 
     { 
-      var dem = costFunctionIHS2([result.Q0, result.Alpha], x)
+      var dem = unIHS(costFunctionIHS2([result.Q0, result.Alpha], x))
 
       return -(dem * x);
     };
 
-    result = numeric.uncmin(lamba, 
-      [0.01], 
-      1e-20,
+    /*
+
+    var highestValue = 0;
+    var startingPrice = 0;
+
+    var preDemand;
+
+    for (var i = 0.1; i < hiP; i++) {
+      preDemand = unIHS(costFunctionIHS2([result.Q0, result.Alpha], i)) * i;
+
+      if (preDemand > highestValue) {
+        highestValue = preDemand;
+        startingPrice = i;
+      }
+    }
+
+    */
+
+    var result2 = numeric.uncmin(lamba, 
+      [0.1], 
+      1e-5,
       undefined, 
       1000,
       undefined,
       undefined);
 
-    result.PmaxA = result.solution[0];
+    result.PmaxA = result2.solution[0];
 
   } else {
     // Gilroy et al,
