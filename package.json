@@ -10,6 +10,8 @@
     "@types/jest": "^28.1.8",
     "@types/node": "^18.7.13",
     "handsontable": "^12.1.2",
+    "highcharts": "^10.2.1",
+    "highcharts-react-official": "^3.1.0",
     "iframe-resizer-react": "^1.1.0",
     "mdb-react-ui-kit": "^4.2.0",
     "mdbreact": "^5.2.0",

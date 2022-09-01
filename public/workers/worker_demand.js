@@ -90,18 +90,31 @@ function beginLooper(obj) {
 
   CalculateAIC(result);
   CalculateBIC(result);
+  CalculatePmax(result);
 
   // generate preds
   switch (obj.model) {
     case 'Exponential Model':
       if (obj.KFit === 'Fit as Parameter') {
+        result.K = result.Params[2];
+        result.OmaxA = costFunctionExponential(result.Params, result.PmaxA)
       } else {
+        result.OmaxA = costFunctionExponential([...result.Params, setK], result.PmaxA)
       }
+
+      result.OmaxA = Math.pow(10, result.OmaxA) * result.PmaxA;
 
       break;
     case 'Exponentiated Model':
       if (obj.KFit === 'Fit as Parameter') {
+        result.K = result.Params[2];
+        result.OmaxA = costFunctionExponentiated(result.Params, result.PmaxA)
+      } else {
+        result.OmaxA = costFunctionExponentiatedWithK([...result.Params, setK], result.PmaxA)
       }
+
+      result.OmaxA = result.OmaxA * result.PmaxA;
+
       break;
     case 'Zero-bounded Model (with K)':
       break;
@@ -111,7 +124,6 @@ function beginLooper(obj) {
       return;
   }
 
-  CalculatePmax(result);
 
   postMessage({
     done: true,

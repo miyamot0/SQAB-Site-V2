@@ -17,13 +17,13 @@ import {
   MDBCol,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-
 import { HotColumn, HotTable } from '@handsontable/react';
+import Select from 'react-select';
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-
 import './Tools.css';
-import Select from 'react-select';
 
 interface DemandResult {
   AIC: number;
@@ -32,12 +32,17 @@ interface DemandResult {
   SetK: number;
   HQ: number;
   LQ: number;
+  Q0: number;
+  Alpha: number;
+  K: number;
   Model: string;
   Params: number[];
+  PmaxA: number;
+  OmaxA: number;
   MSE: number;
   RMSE: number;
-  Y: number;
-  X: number;
+  Y: number[];
+  X: number[];
   done: boolean;
 }
 
@@ -46,8 +51,9 @@ type SingleOptionType = { label: string; value: string };
 const ModelOptions: SingleOptionType[] = [
   { label: 'Exponential Model', value: 'Exponential Model' },
   { label: 'Exponentiated Model', value: 'Exponentiated Model' },
-  { label: 'Zero-bounded Model (with K)', value: 'Zero-bounded Model (with K)' },
-  { label: 'Zero-bounded Model (no K)', value: 'Zero-bounded Model (no K)' },
+  // Stubbed for now
+  //{ label: 'Zero-bounded Model (with K)', value: 'Zero-bounded Model (with K)' },
+  //{ label: 'Zero-bounded Model (no K)', value: 'Zero-bounded Model (no K)' },
 ];
 
 const ZeroOptions: SingleOptionType[] = [
@@ -83,6 +89,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   const [resultsSummary, setResultsSummary] = useState<JSX.Element | null>(null);
   const [kCustomShown, setKCustomShown] = useState<boolean>(false);
   const [kCustomValue, setKCustomValue] = useState<number>(1.5);
+  const [chartOptions, setChartOptions] = useState({});
 
   let worker: Worker | undefined = undefined;
 
@@ -106,6 +113,213 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     ]);
   }, []);
 
+  /** constructExponentialChart
+   * 
+   * Create visual for Exponential model
+   * 
+   * @param {DemandResult} obj 
+   */
+  function constructExponentialChart(obj: DemandResult): void
+  {
+    const lowestPrice = Math.min(...obj.X);
+    const highestPrice = Math.max(...obj.X) + 1;
+    const density = 100;
+    const rangeP = highestPrice - lowestPrice;
+    const delta = rangeP / density;
+
+    const newPrices = Array.from({length:density},(v,k)=>k+delta)
+
+    let dataForPlotting: any[] = [];
+    let dataPointsForPlotting: any[] = [];
+
+    let lowestDemand = -1;
+
+    newPrices.forEach((price) => {
+      const demand = renderExponentialDemand(obj.Q0, obj.Alpha, obj.K, price)
+
+      lowestDemand = demand;
+
+      dataForPlotting.push({
+        Price: price,
+        Demand: demand
+      })
+    });
+
+    obj.X.forEach((x, index) => {
+      dataPointsForPlotting.push({
+        x: x,
+        y: obj.Y[index]
+      })
+    });
+
+    setChartOptions({
+      chart: {
+        height: "600px",
+      },
+      title: {
+        text: "Demand Curve Modeling",
+      },
+      series: [{
+        name: "Predicted Demand",
+        data: dataForPlotting.map((obj) => {
+          return {
+            x: obj.Price,
+            y: obj.Demand
+          };
+        }),
+        type: "line",
+      },
+      {
+        name: "Consumption",
+        data: dataPointsForPlotting,
+        label: 'Raw Data',
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "rgba(0,0,0,1)",
+        borderColor: "rgba(0,0,0,0)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(0,0,0,1)",
+        pointBackgroundColor: "#000",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(0,0,0,1)",
+        pointHoverBorderColor: "rgba(0,0,0,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 5,
+        pointHitRadius: 10,
+        spanGaps: false,
+        lineWidth: 0,
+        lineWidthPlus: 0,
+        states: {
+          hover: {
+              enabled: false
+          }
+        }
+      }    
+    ],
+      yAxis: {
+        title: {
+          text: "Demand (Log Scale)",
+        },
+        type: 'logarithmic',
+        min: lowestDemand - 0.1,
+      },
+      xAxis: {
+        title: {
+          text: "Unit Price"
+        },
+        type: 'logarithmic',
+      }
+    });
+  }
+
+  /** constructExponentiatedChart
+   * 
+   * Create visual for Exponentiated model
+   * 
+   * @param {DemandResult} obj 
+   */
+  function constructExponentiatedChart(obj: DemandResult)
+  {
+    const lowestPrice = Math.min(...obj.X);
+    const highestPrice = Math.max(...obj.X) + 1;
+    const density = 100;
+    const rangeP = highestPrice - lowestPrice;
+    const delta = rangeP / density;
+
+    const newPrices = Array.from({length:density},(v,k)=>k+delta)
+
+    let dataForPlotting: any[] = [];
+    let dataPointsForPlotting: any[] = [];
+
+    let lowestDemand = -1;
+
+    newPrices.forEach((price) => {
+      const demand = renderExponentiatedDemand(obj.Q0, obj.Alpha, obj.K, price)
+
+      lowestDemand = demand;
+
+      dataForPlotting.push({
+        Price: price,
+        Demand: demand
+      })
+    });
+
+    obj.X.forEach((x, index) => {
+      dataPointsForPlotting.push({
+        x: x,
+        y: obj.Y[index]
+      })
+    });
+
+    setChartOptions({
+      chart: {
+        height: "600px",
+      },
+      title: {
+        text: "Demand Curve Modeling (Exponentiated)",
+      },
+      series: [{
+        name: "Predicted Demand",
+        data: dataForPlotting.map((obj) => {
+          return {
+            x: obj.Price,
+            y: obj.Demand
+          };
+        }),
+        type: "line",
+      },
+      {
+        name: "Consumption",
+        data: dataPointsForPlotting,
+        label: 'Raw Data',
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "rgba(0,0,0,1)",
+        borderColor: "rgba(0,0,0,0)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(0,0,0,1)",
+        pointBackgroundColor: "#000",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(0,0,0,1)",
+        pointHoverBorderColor: "rgba(0,0,0,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 5,
+        pointHitRadius: 10,
+        spanGaps: false,
+        lineWidth: 0,
+        lineWidthPlus: 0,
+        states: {
+          hover: {
+              enabled: false
+          }
+        }
+      }    
+    ],
+      yAxis: {
+        title: {
+          text: "Demand (Linear Scale)",
+        },
+        min: lowestDemand - (lowestDemand * 0.1),
+      },
+      xAxis: {
+        title: {
+          text: "Unit Price"
+        },
+        type: 'logarithmic',
+      }
+    });
+  }
+
   /**
    * loadExampleData
    */
@@ -127,12 +341,21 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     ]);
   }
 
-  function isValidNumber(num: string) {
+  /** isValidNumber
+   * 
+   * Confirm that values are legit numbers
+   * 
+   * @param {string} num number string
+   * @returns {boolean} is a valid num or no
+   */
+  function isValidNumber(num: string): boolean {
     return num.trim().length > 1 && !isNaN(parseFloat(num));
   }
 
-  /** calculatePmax
+  /** calculateDemand
    *
+   * Fire off worker
+   * 
    */
   function calculateDemand(): void {
     if (worker !== undefined) {
@@ -170,49 +393,32 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       KFit: kOption.value,
       KValue: kCustomValue,
     });
-
-    /*
-    var isExponential = $('#selectModel').prop('selectedIndex') == 0;
-    var isExponentiated = $('#selectModel').prop('selectedIndex') == 1;
-
-    var kLogRange = $('#selectK').prop('selectedIndex') == 0;
-    var kFit = $('#selectK').prop('selectedIndex') == 1;
-    var kValue = $('#selectK').prop('selectedIndex') == 2;
-
-    if (isExponential) constructExponentialChart();
-    else constructExponentiatedChart();
-
-    clearChart();
-
-    $('#resultsTitle').empty();
-    $('#resultsBody').empty();
-
-    var kText = $('#customK').val();
-
-    isBusy = true;
-    */
-
-    /*
-    worker = new Worker('./workers/worker_pmax.js');
-    worker.onmessage = handleWorkerOutput;
-    worker.postMessage({ data: hotData });
-    */
   }
 
   /** handleWorkerOutput
+   * 
+   * Receiver from worker
    *
    * @param {WorkerOutput} obj
    */
   function handleWorkerOutput(obj: any): void {
     const data = obj.data as DemandResult;
 
-    console.log(data);
-
     if (data.done) {
       worker = undefined;
 
       setRunningCalculation(false);
       setResultsSummary(generateSummaryFromResults(data));
+
+      switch (data.Model) {
+        case "Exponential Model":
+          constructExponentialChart(data);
+          break;
+
+        case "Exponentiated Model":
+          constructExponentiatedChart(data);
+          break;
+      }
 
       return;
     }
@@ -229,78 +435,38 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    * @returns {number} projected level of demand
    */
   function renderExponentialDemand(Q: number, A: number, K: number, x: number): number {
-    return Math.log(Q) / Math.log(10) + K * (Math.exp(-A * Q * Math.pow(10, x)) - 1);
+    return Math.log(Q) / Math.log(10) + K * (Math.exp(-A * Q * x) - 1);
   }
 
-  /** generateStringOutput
+  /** renderExponentiatedDemand
    *
-   * Make output for side panel
+   * Project demand at instance
    *
-   * @param {string[]} row string array from table
-   * @param {number} index index
+   * @param {number} Q q0
+   * @param {number} A a
+   * @param {number} K k
+   * @param {number} x pmax
+   * @returns {number} projected level of demand
+   */
+   function renderExponentiatedDemand(Q: number, A: number, K: number, x: number): number {
+    return Q * Math.pow(10, (K * (Math.exp(-A * Q * x) - 1)));
+  }
+
+  /** generateSummaryFromResults
+   *  
+   * Construct text output
+   * 
+   * @param {DemandResult} data message from worker
    * @returns {JSX.Element}
    */
-  function generateStringOutput(row: string[], index: number): JSX.Element {
-    if (row[0].trim().length === 0) {
-      return <div key={index}></div>;
-    }
-
-    const rowInNumbers = row.map(Number);
-
-    var pDelta = 0.01;
-
-    // Scale prices into log units
-    const P1 = Math.log10(rowInNumbers[3] - pDelta);
-    const P2 = Math.log10(rowInNumbers[3] + pDelta * (1 + pDelta));
-
-    // Get consumption values (already in log units)
-    const Q1 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P1);
-    const Q2 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P2);
-
-    // Calculate deltas
-    const QD = Q2 - Q1;
-    const PD = P2 - P1;
-
-    const pmaxNew = parseFloat(row[3]).toFixed(5);
-    const pmaxOld = parseFloat(row[4]).toFixed(5);
-    const kValue = parseFloat(row[2]);
-
-    const noteString =
-      kValue <= Math.E / Math.log(10)
-        ? 'Note: Determined through exact solution using Lambert W function.'
-        : 'Note: Solved directly referencing empirical slope.';
-
-    return (
-      <div key={index}>
-        <h5>{`Row #${index + 1}`}</h5>
-        <p className="toolTextOutputStyle">
-          Analytical{' '}
-          <i>
-            P<sub>MAX</sub>
-          </i>{' '}
-          = {pmaxNew} <br />
-          Approxmiate{' '}
-          <i>
-            P<sub>MAX</sub>
-          </i>{' '}
-          = {pmaxOld} <br />
-          &Delta;Q/&Delta;P (Log/Log) +/- %1 Unit Price = {QD.toFixed(5)}/${PD.toFixed(5)} ={' '}
-          {(QD / PD).toFixed(2)}
-          <br />
-          {noteString}{' '}
-        </p>
-      </div>
-    );
-  }
-
   function generateSummaryFromResults(data: DemandResult): JSX.Element {
     return (
       <p>
         <b>Alpha:</b> {data.Params[1].toFixed(8)} <br />
         <b>Q0:</b> {data.Params[0].toFixed(8)} <br />
         <b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br />
-        <b>Omaxd:</b> TODO <br />
-        <b>Pmaxd:</b> TODO <br />
+        <b>P<sub>MAX</sub> (Analytic):</b> {data.PmaxA.toFixed(3)} <br />
+        <b>O<sub>MAX</sub> (Analytic):</b> {data.OmaxA.toFixed(3)} <br />
         <b>RMS Error:</b> {data.MSE.toFixed(8)} <br />
         <b>Avg Error:</b> {data.RMSE.toFixed(8)}
       </p>
@@ -478,6 +644,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
               <MDBCardTitle>Fitting Results</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}></MDBCardText>
               {resultsSummary !== null && resultsSummary}
+              <HighchartsReact highcharts={Highcharts} options={chartOptions} />
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
