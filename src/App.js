@@ -27,6 +27,8 @@ import ExecutiveBoard from './pages/eboard/ExecutiveBoard';
 import Resources from './pages/resources/Resources';
 import Recruitment from './pages/recruitment/Recruitment';
 
+import AnalyticPmax from './pages/tools/AnalyticPmax';
+
 const pageTitle = 'SQAB';
 
 function App() {
@@ -82,6 +84,9 @@ function App() {
             </Route>
             <Route path="/recruitment">
               <Recruitment />
+            </Route>
+            <Route path="/pmax">
+              <AnalyticPmax />
             </Route>
           </Switch>
         </div>

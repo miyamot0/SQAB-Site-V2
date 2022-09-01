@@ -1,0 +1,10 @@
+.outputPanel {
+  min-height: 600px;
+}
+
+.toolTextOutputStyle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #747373 !important;
+  margin-top: 0;
+}

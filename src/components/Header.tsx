@@ -259,7 +259,7 @@ export default function Header(): JSX.Element {
                   <MDBDropdownMenu>
                     <MDBDropdownItem link>Demand Curve Analyzer (Offline)</MDBDropdownItem>
                     <MDBDropdownItem link>Discounting Model Selector (Offline)</MDBDropdownItem>
-                    <MDBDropdownItem link>Exact Solution Pmax (Offline)</MDBDropdownItem>
+                    <MDBDropdownItem link href='/pmax'>Exact Solution P<sub>MAX</sub></MDBDropdownItem>
                     <MDBDropdownItem link href="/resources">
                       Resource Links
                     </MDBDropdownItem>

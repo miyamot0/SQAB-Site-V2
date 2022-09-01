@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom/client';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
+import 'handsontable/dist/handsontable.full.css';
 
 import App from './App';
 
