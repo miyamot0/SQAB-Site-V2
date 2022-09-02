@@ -23,7 +23,7 @@ self.importScripts('utilities_de.js');
 
 var boundedRachlin;
 
-function beginLooper(obj) {
+function beginLooper() {
   var returnArray = [];
 
   // Noise Model
@@ -231,5 +231,5 @@ onmessage = function (passer) {
 
   postMessage({ done: false, msg: 'Calculating Noise' });
 
-  beginLooper(passer.data);
+  beginLooper();
 };

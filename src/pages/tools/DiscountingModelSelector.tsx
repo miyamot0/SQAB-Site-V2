@@ -33,28 +33,19 @@ import {
   getRodriguezLogueProjection,
   getEbertPrelecProjection,
   getbleichrodtProjection,
+  getElementByModel,
 } from './helpers/DiscountingHelpers';
-import { DiscountingFit, PointArray, DiscountingResult } from './helpers/DiscountingTypes';
-
-type SingleOptionType = { label: string; value: string };
-
-const ModelOptions: SingleOptionType[] = [
-  { label: 'Do Not Bound', value: 'Do Not Bound' },
-  { label: 'Drop if S > 1', value: 'Drop if S > 1' },
-];
-
-function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | null {
-  var result = arr.filter(function (o) {
-    return o.Model === value;
-  });
-
-  return result ? result[0] : null;
-}
+import {
+  PointArray,
+  DiscountingResult,
+  SingleOptionType,
+  ModelOptions,
+} from './helpers/DiscountingTypes';
+import { isValidNumber } from './helpers/GeneralHelpers';
 
 export default function DiscountingModelSelector(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
-
   const [modelOption, setModelOption] = useState<SingleOptionType>({
     label: 'Do Not Bound',
     value: 'Do Not Bound',
@@ -320,27 +311,6 @@ export default function DiscountingModelSelector(): JSX.Element {
     ]);
   }
 
-  /** isValidNumber
-   *
-   * Confirm that values are legit numbers
-   *
-   * @param {string} num number string
-   * @returns {boolean} is a valid num or no
-   */
-  function isValidNumber(num: string): boolean {
-    // get rid of empties
-    if (num.trim().length === 0) return false;
-
-    // TODO: fix this logic
-    if (parseFloat(num.trim()) < 0) return false;
-
-    if (parseFloat(num.trim()) === 0) return true;
-
-    if (num.trim() === '0') return true;
-
-    return num.trim().length > 1 && !isNaN(parseFloat(num));
-  }
-
   /** calculateDemand
    *
    * Fire off worker
@@ -369,22 +339,15 @@ export default function DiscountingModelSelector(): JSX.Element {
 
     if (mX.length < 3 || mY.length < 3) {
       alert('Please enter more data.');
-
       setRunningCalculation(false);
-
       return;
     }
 
     worker = new Worker('./workers/worker_discounting.js');
     worker.onmessage = handleWorkerOutput;
 
-    var rachlinBounding = modelOption.value !== 'Do not Bound';
-
-    console.log(mX);
-    console.log(mY);
-
     worker.postMessage({
-      boundRachlin: rachlinBounding,
+      boundRachlin: modelOption.value !== 'Do not Bound',
       maxIterations: 500,
       x: mX,
       y: mY,
@@ -401,20 +364,18 @@ export default function DiscountingModelSelector(): JSX.Element {
     if (obj.data.done) {
       const data = obj.data as DiscountingResult;
 
-      console.log(obj);
+      const mFinalDelay = Math.max(...obj.data.x);
+      let plotLast = false;
 
-      var mFinalDelay = Math.max(...obj.data.x);
-      var plotLast = false;
-
-      var noiseElement = getElementByModel(data.results, 'Noise');
-      var expElement = getElementByModel(data.results, 'Exponential');
-      var hypElement = getElementByModel(data.results, 'Hyperbolic');
-      var bdElement = getElementByModel(data.results, 'Beta-Delta');
-      var mgElement = getElementByModel(data.results, 'Green-Myerson');
-      var rachElement = getElementByModel(data.results, 'Rachlin');
-      var lpElement = getElementByModel(data.results, 'Loewstein-Prelec');
-      var epElement = getElementByModel(data.results, 'Ebert-Prelec');
-      var belElement = getElementByModel(data.results, 'Beleichrodt');
+      const noiseElement = getElementByModel(data.results, 'Noise');
+      const expElement = getElementByModel(data.results, 'Exponential');
+      const hypElement = getElementByModel(data.results, 'Hyperbolic');
+      const bdElement = getElementByModel(data.results, 'Beta-Delta');
+      const mgElement = getElementByModel(data.results, 'Green-Myerson');
+      const rachElement = getElementByModel(data.results, 'Rachlin');
+      const lpElement = getElementByModel(data.results, 'Loewstein-Prelec');
+      const epElement = getElementByModel(data.results, 'Ebert-Prelec');
+      const belElement = getElementByModel(data.results, 'Beleichrodt');
 
       // Map points
       let temp = [];
@@ -801,7 +762,6 @@ export default function DiscountingModelSelector(): JSX.Element {
       });
 
       setResultsSummary(resArray);
-
       setButtonStatusMsg('Calculate');
       setRunningCalculation(false);
     } else {
