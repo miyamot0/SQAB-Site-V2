@@ -8,20 +8,18 @@
 
 import React from 'react';
 
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBRow,
-  MDBCol
-} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { useFirestore } from '../../firebase/useFirestore';
 
 import CarouselConference from '../../components/CarouselConference';
 
 export default function Submission(): JSX.Element {
+  const { addDocument, response } = useFirestore('submissions');
+
+  //TODO: add in submission functionality
+
   return (
     <>
       <MDBRow center className="row-eq-height">
