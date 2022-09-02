@@ -35,13 +35,9 @@ import {
   getbleichrodtProjection,
   getElementByModel,
 } from './helpers/DiscountingHelpers';
-import {
-  PointArray,
-  DiscountingResult,
-  SingleOptionType,
-  ModelOptions,
-} from './helpers/DiscountingTypes';
+import { PointArray, DiscountingResult, ModelOptions } from './helpers/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
+import { SingleOptionType } from './helpers/GeneralTypes';
 
 export default function DiscountingModelSelector(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();

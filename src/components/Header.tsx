@@ -260,7 +260,9 @@ export default function Header(): JSX.Element {
                     <MDBDropdownItem link href="/demand">
                       Demand Curve Analyzer
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href='/discounting'>Discounting Model Selector (Offline)</MDBDropdownItem>
+                    <MDBDropdownItem link href="/discounting">
+                      Discounting Model Selector
+                    </MDBDropdownItem>
                     <MDBDropdownItem link href="/pmax">
                       Exact Solution P<sub>MAX</sub>
                     </MDBDropdownItem>

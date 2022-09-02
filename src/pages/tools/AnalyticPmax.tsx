@@ -23,11 +23,8 @@ import { HotColumn, HotTable } from '@handsontable/react';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
 import './Tools.css';
-
-interface WorkerPmaxResult {
-  done: boolean;
-  sheet: any[][] | undefined;
-}
+import { WorkerPmaxResult } from './helpers/PmaxHelpers';
+import { renderExponentialDemand } from './helpers/DemandHelpers';
 
 export default function AnalyticPmax(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
@@ -107,20 +104,6 @@ export default function AnalyticPmax(): JSX.Element {
       setRunningCalculation(false);
       return;
     }
-  }
-
-  /** renderExponentialDemand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderExponentialDemand(Q: number, A: number, K: number, x: number): number {
-    return Math.log(Q) / Math.log(10) + K * (Math.exp(-A * Q * Math.pow(10, x)) - 1);
   }
 
   /** generateStringOutput

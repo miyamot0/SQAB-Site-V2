@@ -23,30 +23,18 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { DemandResult } from './helpers/DemandTypes';
+import { SingleOptionType } from './helpers/GeneralTypes';
+
 import './Tools.css';
-
-interface DemandResult {
-  AIC: number;
-  BIC: number;
-  FitK: string;
-  SetK: number;
-  HQ: number;
-  LQ: number;
-  Q0: number;
-  Alpha: number;
-  K: number;
-  Model: string;
-  Params: number[];
-  PmaxA: number;
-  OmaxA: number;
-  MSE: number;
-  RMSE: number;
-  Y: number[];
-  X: number[];
-  done: boolean;
-}
-
-type SingleOptionType = { label: string; value: string };
+import {
+  renderExponentialDemand,
+  renderExponentiatedDemand,
+  renderIHS2Demand,
+  renderIHS3Demand,
+  unIHS,
+} from './helpers/DemandHelpers';
+import { isValidNumber } from './helpers/GeneralHelpers';
 
 const ModelOptions: SingleOptionType[] = [
   { label: 'Exponential Model', value: 'Exponential Model' },
@@ -54,14 +42,6 @@ const ModelOptions: SingleOptionType[] = [
   { label: 'Zero-bounded Model (with K)', value: 'Zero-bounded Model (with K)' },
   { label: 'Zero-bounded Model (no K)', value: 'Zero-bounded Model (no K)' },
 ];
-
-function unIHS(x: number): number {
-  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
-}
-
-function ihsTransform(x: number): number {
-  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
-}
 
 export default function DemandCurveAnalyzer(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
@@ -551,24 +531,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     ]);
   }
 
-  /** isValidNumber
-   *
-   * Confirm that values are legit numbers
-   *
-   * @param {string} num number string
-   * @returns {boolean} is a valid num or no
-   */
-  function isValidNumber(num: string): boolean {
-    // get rid of empties
-    if (num.trim().length === 0) return false;
-
-    if (parseFloat(num.trim()) < 0) return false;
-
-    if (parseFloat(num.trim()) === 0) return true;
-
-    return num.trim().length > 1 && !isNaN(parseFloat(num));
-  }
-
   /** calculateDemand
    *
    * Fire off worker
@@ -659,61 +621,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
       return;
     }
-  }
-
-  /** renderExponentialDemand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderExponentialDemand(Q: number, A: number, K: number, x: number): number {
-    return Math.log(Q) / Math.log(10) + K * (Math.exp(-A * Q * x) - 1);
-  }
-
-  /** renderExponentiatedDemand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderExponentiatedDemand(Q: number, A: number, K: number, x: number): number {
-    return Q * Math.pow(10, K * (Math.exp(-A * Q * x) - 1));
-  }
-
-  /** renderIHS3Demand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderIHS3Demand(Q: number, A: number, K: number, x: number): number {
-    return ihsTransform(Q) + K * (Math.exp(-A * Q * x) - 1);
-  }
-
-  /** renderIHS3Demand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderIHS2Demand(Q: number, A: number, x: number): number {
-    return ihsTransform(Q) * Math.exp(-(A / ihsTransform(Q)) * Q * x);
   }
 
   /** reportKNumbers

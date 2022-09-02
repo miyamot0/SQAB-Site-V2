@@ -1,3 +1,5 @@
+import { SingleOptionType } from './GeneralTypes';
+
 export interface DiscountingFit {
   AIC: number;
   AUC: number;
@@ -22,8 +24,6 @@ export interface PointArray {
   x: number;
   y: number;
 }
-
-export type SingleOptionType = { label: string; value: string };
 
 export const ModelOptions: SingleOptionType[] = [
   { label: 'Do Not Bound', value: 'Do Not Bound' },
