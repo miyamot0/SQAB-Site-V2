@@ -8,12 +8,13 @@ import {
   MDBCol,
   MDBTable,
   MDBTableHead,
-  MDBTableBody
+  MDBTableBody,
 } from 'mdb-react-ui-kit';
 
 import recruitmentJson from './../../assets/json/recruitment.json';
 
 import './Recruitment.css';
+import moment from 'moment';
 
 export default function Recruitment(): JSX.Element {
   return (
@@ -45,22 +46,32 @@ export default function Recruitment(): JSX.Element {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {recruitmentJson.map((recr) => {
-                    return (
-                      <tr className="recruitment-table-tr">
-                        <td>
-                          <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
-                            {recr.Mentor}
-                          </a>
-                          <p className="text-muted mb-0">{recr.Institution}</p>
-                        </td>
-                        <td>{recr.Bio}</td>
-                        <td>{recr.Description}</td>
-                        <td>{recr.Cycle}</td>
-                        <td>{recr.Link.trim().length === 0 ? '' : <a href={recr.Link}>Link</a>}</td>
-                      </tr>
-                    );
-                  })}
+                  {recruitmentJson
+                    .sort((a, b) => {
+                      return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
+                        moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
+                      )
+                        ? 1
+                        : -1;
+                    })
+                    .map((recr) => {
+                      return (
+                        <tr key={recr.Contact} className="recruitment-table-tr">
+                          <td>
+                            <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
+                              {recr.Mentor}
+                            </a>
+                            <p className="text-muted mb-0">{recr.Institution}</p>
+                          </td>
+                          <td>{recr.Bio}</td>
+                          <td>{recr.Description}</td>
+                          <td>{recr.Cycle}</td>
+                          <td>
+                            {recr.Link.trim().length === 0 ? '' : <a href={recr.Link}>Link</a>}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </MDBTableBody>
               </MDBTable>
             </MDBCardBody>
