@@ -24,47 +24,17 @@ import HighchartsReact from 'highcharts-react-official';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import './Tools.css';
-
-interface DiscountingFit {
-  AIC: number;
-  AUC: number;
-  AUClog10: number;
-  BF: number;
-  BIC: number;
-  ED50: number;
-  MSE: number;
-  Model: string;
-  Params: number[];
-  Probability: number;
-  RMSE: number;
-  done: boolean;
-}
-
-interface DiscountingResult {
-  done: boolean;
-  results: DiscountingFit[];
-}
-
-/*
-    AIC: number;
-   BIC: number;
-   FitK: string;
-   SetK: number;
-   HQ: number;
-   LQ: number;
-   Q0: number;
-   Alpha: number;
-   K: number;
-   Model: string;
-   Params: number[];
-   PmaxA: number;
-   OmaxA: number;
-   MSE: number;
-   RMSE: number;
-   Y: number[];
-   X: number[];
-   done: boolean;
- */
+import {
+  getExponentialProjection,
+  getHyperbolicProjection,
+  getQuasiHyperbolicProjection,
+  getMyersonProjection,
+  getRachlinProjection,
+  getRodriguezLogueProjection,
+  getEbertPrelecProjection,
+  getbleichrodtProjection,
+} from './helpers/DiscountingHelpers';
+import { DiscountingFit, PointArray, DiscountingResult } from './helpers/DiscountingTypes';
 
 type SingleOptionType = { label: string; value: string };
 
@@ -73,12 +43,12 @@ const ModelOptions: SingleOptionType[] = [
   { label: 'Drop if S > 1', value: 'Drop if S > 1' },
 ];
 
-function unIHS(x: number): number {
-  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
-}
+function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | null {
+  var result = arr.filter(function (o) {
+    return o.Model === value;
+  });
 
-function ihsTransform(x: number): number {
-  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
+  return result ? result[0] : null;
 }
 
 export default function DiscountingModelSelector(): JSX.Element {
@@ -89,9 +59,224 @@ export default function DiscountingModelSelector(): JSX.Element {
     label: 'Do Not Bound',
     value: 'Do Not Bound',
   });
-
-  const [resultsSummary, setResultsSummary] = useState<JSX.Element | null>(null);
-  const [chartOptions, setChartOptions] = useState({});
+  const [buttonStatusMsg, setButtonStatusMsg] = useState<string>('Calculate');
+  const [resultsSummary, setResultsSummary] = useState<JSX.Element[]>([]);
+  const [chartOptions, setChartOptions] = useState({
+    chart: {
+      height: '600px',
+    },
+    title: {
+      text: 'Discounting Model Selection Procedure',
+    },
+    series: [
+      {
+        name: 'Noise',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(190,128,255,1)',
+        borderColor: 'rgba(190,128,255,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Exponential',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(12,21,42,1)',
+        borderColor: 'rgba(12,21,42,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Hyperbolic',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(152,36,56,1)',
+        borderColor: 'rgba(152,36,56,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Quasi-Hyperbolic',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(235,84,10,1)',
+        borderColor: 'rgba(235,84,10,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Green-Myerson',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(50,124,203,1)',
+        borderColor: 'rgba(50,124,203,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Rachlin',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(20,182,148,1)',
+        borderColor: 'rgba(20,182,148,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Loewenstein-Prelec',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(67,162,202,1)',
+        borderColor: 'rgba(67,162,202,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Ebert-Prelec',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(255,237,160,1)',
+        borderColor: 'rgba(255,237,160,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Bleichrodt et al.',
+        data: [] as PointArray[],
+        fill: false,
+        lineTension: 0,
+        backgroundColor: 'rgba(44,162,95,1)',
+        borderColor: 'rgba(44,162,95,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 1,
+        borderJoinStyle: 'miter',
+        pointBorderWidth: 0,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+        pointHoverBorderColor: 'rgba(0,0,0,0)',
+        pointHoverBorderWidth: 0,
+      },
+      {
+        name: 'Raw Data',
+        data: [] as PointArray[],
+        fill: false,
+        color: 'black',
+        lineTension: 0,
+        backgroundColor: 'rgba(0,0,0,1)',
+        borderColor: 'rgba(0,0,0,0)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderWidth: 3,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'rgba(0,0,0,1)',
+        pointBackgroundColor: '#000',
+        pointBorderWidth: 3,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+        pointHoverBorderColor: 'rgba(0,0,0,1)',
+        pointHoverBorderWidth: 4,
+        pointRadius: 20,
+        pointHitRadius: 10,
+        spanGaps: false,
+        lineWidth: 0,
+        lineWidthPlus: 0,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+    ],
+    yAxis: {
+      title: {
+        text: 'Subjective Value',
+      },
+      min: 0,
+      max: 1,
+    },
+    xAxis: {
+      title: {
+        text: 'Unit Price',
+      },
+      type: 'logarithmic',
+    },
+  });
 
   let worker: Worker | undefined = undefined;
 
@@ -114,112 +299,6 @@ export default function DiscountingModelSelector(): JSX.Element {
       ['', ''],
     ]);
   }, []);
-
-  /** constructExponentialChart
-   *
-   * Create visual for Exponential model
-   *
-   * @param {DemandResult} obj
-   */
-  /*
-   function constructExponentialChart(obj: DemandResult): void
-   {
-     const lowestPrice = Math.min(...obj.X);
-     const highestPrice = Math.max(...obj.X) + 1;
-     const density = 100;
-     const rangeP = highestPrice - lowestPrice;
-     const delta = rangeP / density;
- 
-     const newPrices = [0.1, ...Array.from({length:density},(v,k)=>k+delta)]
- 
-     let dataForPlotting: any[] = [];
-     let dataPointsForPlotting: any[] = [];
- 
-     let lowestDemand = -1;
- 
-     newPrices.forEach((price) => {
-       const demand = renderExponentialDemand(obj.Q0, obj.Alpha, obj.K, price)
- 
-       lowestDemand = demand;
- 
-       dataForPlotting.push({
-         Price: price,
-         Demand: demand
-       })
-     });
- 
-     obj.X.forEach((x, index) => {
-       dataPointsForPlotting.push({
-         x: x,
-         y: obj.Y[index]
-       })
-     });
- 
-     setChartOptions({
-       chart: {
-         height: "600px",
-       },
-       title: {
-         text: "Demand Curve Modeling",
-       },
-       series: [{
-         name: "Predicted Demand",
-         data: dataForPlotting.map((obj) => {
-           return {
-             x: obj.Price,
-             y: obj.Demand
-           };
-         }),
-         type: "line",
-       },
-       {
-         name: "Consumption",
-         data: dataPointsForPlotting,
-         label: 'Raw Data',
-         fill: false,
-         lineTension: 0,
-         backgroundColor: "rgba(0,0,0,1)",
-         borderColor: "rgba(0,0,0,0)",
-         borderCapStyle: 'butt',
-         borderDash: [],
-         borderDashOffset: 0.0,
-         borderWidth: 1,
-         borderJoinStyle: 'miter',
-         pointBorderColor: "rgba(0,0,0,1)",
-         pointBackgroundColor: "#000",
-         pointBorderWidth: 1,
-         pointHoverRadius: 5,
-         pointHoverBackgroundColor: "rgba(0,0,0,1)",
-         pointHoverBorderColor: "rgba(0,0,0,1)",
-         pointHoverBorderWidth: 2,
-         pointRadius: 5,
-         pointHitRadius: 10,
-         spanGaps: false,
-         lineWidth: 0,
-         lineWidthPlus: 0,
-         states: {
-           hover: {
-               enabled: false
-           }
-         }
-       }    
-     ],
-       yAxis: {
-         title: {
-           text: "Demand (Log Scale)",
-         },
-         type: 'logarithmic',
-         min: lowestDemand - 0.1,
-       },
-       xAxis: {
-         title: {
-           text: "Unit Price"
-         },
-         type: 'logarithmic',
-       }
-     });
-   }
-   */
 
   /**
    * loadExampleData
@@ -310,18 +389,6 @@ export default function DiscountingModelSelector(): JSX.Element {
       x: mX,
       y: mY,
     });
-    /*
- 
- 
-     worker.postMessage({
-       maxIterations: 1000,
-       x: mX,
-       y: mY,
-       model: modelOption.value,
-       KFit: kOption.value,
-       KValue: -1,
-     });
-     */
   }
 
   /** handleWorkerOutput
@@ -335,134 +402,411 @@ export default function DiscountingModelSelector(): JSX.Element {
       const data = obj.data as DiscountingResult;
 
       console.log(obj);
+
+      var mFinalDelay = Math.max(...obj.data.x);
+      var plotLast = false;
+
+      var noiseElement = getElementByModel(data.results, 'Noise');
+      var expElement = getElementByModel(data.results, 'Exponential');
+      var hypElement = getElementByModel(data.results, 'Hyperbolic');
+      var bdElement = getElementByModel(data.results, 'Beta-Delta');
+      var mgElement = getElementByModel(data.results, 'Green-Myerson');
+      var rachElement = getElementByModel(data.results, 'Rachlin');
+      var lpElement = getElementByModel(data.results, 'Loewstein-Prelec');
+      var epElement = getElementByModel(data.results, 'Ebert-Prelec');
+      var belElement = getElementByModel(data.results, 'Beleichrodt');
+
+      // Map points
+      let temp = [];
+      for (var k = 0; k < obj.data.x.length; k++) {
+        temp.push({
+          x: obj.data.x[k],
+          y: obj.data.y[k],
+        });
+      }
+
+      let tempN = [];
+      let tempE = [];
+      let tempH = [];
+      let tempBD = [];
+      let tempMG = [];
+      let tempR = [];
+      let tempLP = [];
+      let tempEP = [];
+      let tempB = [];
+
+      for (var i = 1; i <= mFinalDelay; ) {
+        tempN.push({
+          x: i,
+          y: noiseElement!.Params[0],
+        });
+
+        if (expElement) {
+          tempE.push({
+            x: i,
+            y: getExponentialProjection(i, expElement.Params),
+          });
+        }
+
+        if (hypElement) {
+          tempH.push({
+            x: i,
+            y: getHyperbolicProjection(i, hypElement.Params),
+          });
+        }
+
+        if (bdElement) {
+          tempBD.push({
+            x: i,
+            y: getQuasiHyperbolicProjection(i, bdElement.Params),
+          });
+        }
+
+        if (mgElement) {
+          tempMG.push({
+            x: i,
+            y: getMyersonProjection(i, mgElement.Params),
+          });
+        }
+
+        if (rachElement) {
+          tempR.push({
+            x: i,
+            y: getRachlinProjection(i, rachElement.Params),
+          });
+        }
+
+        if (lpElement) {
+          tempLP.push({
+            x: i,
+            y: getRodriguezLogueProjection(i, lpElement.Params),
+          });
+        }
+
+        if (epElement) {
+          tempEP.push({
+            x: i,
+            y: getEbertPrelecProjection(i, epElement.Params),
+          });
+        }
+
+        if (belElement) {
+          tempB.push({
+            x: i,
+            y: getbleichrodtProjection(i, belElement.Params),
+          });
+        }
+
+        if (i > 0 && i <= 10) i = i + 1;
+        else if (i > 10 && i <= 100) i = i + 10;
+        else if (i > 100 && i <= 1000) i = i + 100;
+        else if (i > 1000 && i <= 10000) i = i + 1000;
+        else if (i > 10000 && i <= 100000) i = i + 10000;
+        else if (i > 100000 && i <= 1000000) i = i + 100000;
+        else if (i > 1000000 && i <= 10000000) i = i + 1000000;
+
+        if (plotLast) {
+          i = mFinalDelay + 1;
+        } else if (i > mFinalDelay) {
+          i = mFinalDelay;
+          plotLast = true;
+        }
+      }
+
+      setChartOptions({
+        chart: {
+          height: '600px',
+        },
+        title: {
+          text: 'Discounting Model Selection Procedure',
+        },
+        series: [
+          {
+            name: 'Noise',
+            data: tempN,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(190,128,255,1)',
+            borderColor: 'rgba(190,128,255,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Exponential',
+            data: tempE,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(12,21,42,1)',
+            borderColor: 'rgba(12,21,42,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Hyperbolic',
+            data: tempH,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(152,36,56,1)',
+            borderColor: 'rgba(152,36,56,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Quasi-Hyperbolic',
+            data: tempBD,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(235,84,10,1)',
+            borderColor: 'rgba(235,84,10,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Green-Myerson',
+            data: tempMG,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(50,124,203,1)',
+            borderColor: 'rgba(50,124,203,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Rachlin',
+            data: tempR,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(20,182,148,1)',
+            borderColor: 'rgba(20,182,148,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Loewenstein-Prelec',
+            data: tempLP,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(67,162,202,1)',
+            borderColor: 'rgba(67,162,202,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Ebert-Prelec',
+            data: tempEP,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(255,237,160,1)',
+            borderColor: 'rgba(255,237,160,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Bleichrodt et al.',
+            data: tempB,
+            fill: false,
+            lineTension: 0,
+            backgroundColor: 'rgba(44,162,95,1)',
+            borderColor: 'rgba(44,162,95,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1,
+            borderJoinStyle: 'miter',
+            pointBorderWidth: 0,
+            pointHoverRadius: 0,
+            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
+            pointHoverBorderColor: 'rgba(0,0,0,0)',
+            pointHoverBorderWidth: 0,
+          },
+          {
+            name: 'Raw Data',
+            data: temp,
+            fill: false,
+            color: 'black',
+            lineTension: 0,
+            backgroundColor: 'rgba(0,0,0,1)',
+            borderColor: 'rgba(0,0,0,0)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 3,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(0,0,0,1)',
+            pointBackgroundColor: '#000',
+            pointBorderWidth: 3,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+            pointHoverBorderColor: 'rgba(0,0,0,1)',
+            pointHoverBorderWidth: 4,
+            pointRadius: 20,
+            pointHitRadius: 10,
+            spanGaps: false,
+            lineWidth: 0,
+            lineWidthPlus: 0,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
+          },
+        ],
+        yAxis: {
+          title: {
+            text: 'Subjective Value',
+          },
+          min: 0,
+          max: 1,
+        },
+        xAxis: {
+          title: {
+            text: 'Delay',
+          },
+          type: 'logarithmic',
+        },
+      });
+
+      const resArray: JSX.Element[] = data.results.map((res, index) => {
+        const out = res.Params.map((param, j) => {
+          return (
+            <>
+              <b>
+                {res.Model} Param[{j}]:
+              </b>{' '}
+              {param}
+              <br />
+            </>
+          );
+        });
+
+        const isTopRanked = index === 0;
+
+        let extraMetrics: JSX.Element | null = null;
+
+        if (isTopRanked && res.Model === 'noise') {
+          extraMetrics = (
+            <>
+              <b>
+                {res.Model} Area (Natural): {res.AUC.toFixed(6)}{' '}
+              </b>
+              <br />
+              <b>
+                {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
+              </b>
+              <br />
+            </>
+          );
+        } else if (isTopRanked) {
+          console.log(res);
+          extraMetrics = (
+            <>
+              <b>
+                {res.Model} ln(ED50): {Math.log(res.ED50).toFixed(6)}{' '}
+              </b>
+              <br />
+              <b>
+                {res.Model} Area (Natural): {res.AUC.toFixed(6)}{' '}
+              </b>
+              <br />
+              <b>
+                {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
+              </b>
+              <br />
+            </>
+          );
+        }
+
+        return (
+          <p key={res.Model}>
+            <b>Rank #{index + 1}</b>
+            <br />
+            {out}
+            <b>{res.Model} BIC:</b> {res.BIC.toFixed(6)}
+            <br />
+            <b>{res.Model} AIC:</b> {res.AIC.toFixed(6)}
+            <br />
+            <b>{res.Model} RMS Error:</b> {res.RMSE.toFixed(6)}
+            <br />
+            <b>{res.Model} Avg Error:</b> {res.MSE.toFixed(6)}
+            <br />
+            <b>{res.Model} Probability:</b> {res.Probability.toFixed(6)}
+            <br />
+            {extraMetrics !== null && extraMetrics}
+          </p>
+        );
+      });
+
+      setResultsSummary(resArray);
+
+      setButtonStatusMsg('Calculate');
+      setRunningCalculation(false);
+    } else {
+      setButtonStatusMsg(obj.data.msg);
     }
-
-    /*
-     const data = obj.data as DemandResult;
- 
-     if (data == null) {
-       return;
-     }
- 
-     if (data.done) {
-       worker = undefined;
- 
-       setRunningCalculation(false);
-       setResultsSummary(generateSummaryFromResults(data));
- 
-       switch (data.Model) {
-         case "Exponential Model":
-           constructExponentialChart(data);
-           break;
- 
-         case "Exponentiated Model":
-           constructExponentiatedChart(data);
-           break;
- 
-         case "Zero-bounded Model (with K)":
-           constructIHS3Chart(data);
-           break;
- 
-         case "Zero-bounded Model (no K)":
-           constructIHS2Chart(data);
-           break;
-           
-       }
- 
-       return;
-     }
-     */
-  }
-
-  /** renderExponentialDemand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderExponentialDemand(Q: number, A: number, K: number, x: number): number {
-    return Math.log(Q) / Math.log(10) + K * (Math.exp(-A * Q * x) - 1);
-  }
-
-  /** renderExponentiatedDemand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderExponentiatedDemand(Q: number, A: number, K: number, x: number): number {
-    return Q * Math.pow(10, K * (Math.exp(-A * Q * x) - 1));
-  }
-
-  /** renderIHS3Demand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} K k
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderIHS3Demand(Q: number, A: number, K: number, x: number): number {
-    return ihsTransform(Q) + K * (Math.exp(-A * Q * x) - 1);
-  }
-
-  /** renderIHS3Demand
-   *
-   * Project demand at instance
-   *
-   * @param {number} Q q0
-   * @param {number} A a
-   * @param {number} x pmax
-   * @returns {number} projected level of demand
-   */
-  function renderIHS2Demand(Q: number, A: number, x: number): number {
-    return ihsTransform(Q) * Math.exp(-(A / ihsTransform(Q)) * Q * x);
-  }
-
-  /** reportKNumbers
-   *
-   * @param {DemandResult} data results
-   * @returns
-   */
-  function reportKNumbers(data: DiscountingResult): JSX.Element {
-    //if ( data.Model !== "Zero-bounded Model (no K)") {
-    //  return <><b>K ({data.FitK}):</b> {data.SetK.toFixed(3)} <br /></>;
-    //}
-    return <></>;
-  }
-
-  /** generateSummaryFromResults
-   *
-   * Construct text output
-   *
-   * @param {DemandResult} data message from worker
-   * @returns {JSX.Element}
-   */
-  function generateSummaryFromResults(data: DiscountingResult): JSX.Element {
-    return <></>;
-    /*
-     return (
-       <p>
-         <b>Alpha:</b> {data.Params[1].toFixed(8)} <br />
-         <b>Q0:</b> {data.Params[0].toFixed(8)} <br />
-         {reportKNumbers(data)}
-         <b>P<sub>MAX</sub> (Analytic):</b> {data.PmaxA.toFixed(3)} <br />
-         <b>O<sub>MAX</sub> (Analytic):</b> {data.OmaxA.toFixed(3)} <br />
-         <b>RMS Error:</b> {data.MSE.toFixed(8)} <br />
-         <b>Avg Error:</b> {data.RMSE.toFixed(8)}
-       </p>
-     );
-     */
   }
 
   return (
@@ -592,7 +936,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                   calculateDiscounting();
                 }}
               >
-                Calculate
+                {buttonStatusMsg}
               </MDBBtn>
             </MDBCardBody>
           </MDBCard>
@@ -602,8 +946,8 @@ export default function DiscountingModelSelector(): JSX.Element {
             <MDBCardBody>
               <MDBCardTitle>Fitting Results</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}></MDBCardText>
-              {resultsSummary !== null && resultsSummary}
               <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+              {resultsSummary !== null && resultsSummary}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
