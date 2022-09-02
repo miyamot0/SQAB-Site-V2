@@ -11,6 +11,7 @@
  */
 
 import { useReducer, useEffect, useState } from 'react';
+import { PosterSubmission } from '../pages/submissions/types/SubmissionTypes';
 import { projectFirestore, timestamp } from './config';
 
 export enum FirestoreStates {
@@ -118,10 +119,10 @@ export function useFirestore(collection: string): UseFirestore {
    *
    * add a document
    *
-   * @param {any} doc document to upload
+   * @param {PosterSubmission} doc document to upload
    * @returns {Promise<void>}
    */
-  async function addDocument(doc: any): Promise<void> {
+  async function addDocument(doc: PosterSubmission): Promise<void> {
     dispatch({
       type: FirestoreStates.PENDING,
       payload: null,

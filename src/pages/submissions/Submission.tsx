@@ -18,10 +18,7 @@ import { useFirestore } from '../../firebase/useFirestore';
 
 import CarouselConference from '../../components/CarouselConference';
 import { SingleOptionType } from '../tools/helpers/GeneralTypes';
-
-const CreateFormStyle = {
-  maxWidth: '600px',
-};
+import { PosterSubmission } from './types/SubmissionTypes';
 
 const AuthorOptions: SingleOptionType[] = [{
   label: "I am interested.",
@@ -34,8 +31,10 @@ const AuthorOptions: SingleOptionType[] = [{
 
 export default function Submission(): JSX.Element {
   const { addDocument, response } = useFirestore('submissionsTemp');
-  const [formError, setFormError] = useState<string>();
 
+  const [setInformation, setShowInformation] = useState<boolean | null>(null);
+
+  const [formError, setFormError] = useState<string>();
   const [submittingAuthor, setSubmittingAuthor] = useState<string>("");
   const [posterTitle, setPosterTitle] = useState<string>("");
   const [posterAbstract, setPosterAbstract] = useState<string>("");
@@ -54,17 +53,20 @@ export default function Submission(): JSX.Element {
     e.preventDefault();
 
     if (submittingAuthor!.split(/\w\w+/).length - 1 < 2) {
+      console.log("1")
       setFormError("Please enter a full name (i.e., First and Last)!")
       return;
     } else if (posterTitle!.split(/\w\w+/).length - 1 < 2) {
+      console.log("1")
       setFormError("Please enter a full title (i.e., 3+ Words)!");
       return;
     } else if (posterAbstract!.split(/\w\w+/).length - 1 > 120) {
+      console.log("1")
       setFormError("Abstract is too long (i.e., over 120 words)!");
       return;
     }
 
-    var submissionData = {
+    const posterSubmission: PosterSubmission = {
       name: submittingAuthor,
       title: posterTitle,
       email: correspondingEmail,
@@ -74,10 +76,12 @@ export default function Submission(): JSX.Element {
       presenter: authorChoice.value === "I am interested.",
     };
 
-    await addDocument(submissionData);
+    await addDocument(posterSubmission);
 
     if (response.error) {
       alert(`There was an issue uploading your submission: ${response.error}`);
+    } else {
+      alert('Your submission has been received and is currently under consideration.');
     }
   }
 
@@ -87,23 +91,22 @@ export default function Submission(): JSX.Element {
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>TESTING: Submissions for Annual Conference</MDBCardTitle>
+              <MDBCardTitle><span onClick={() => setShowInformation(true)}>Submissions for Annual Conference</span></MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}>
-                Submissions for the 2022 annual conference (i.e., posters) can be submitted through
+                Submissions for the 2023 annual conference (i.e., posters) can be submitted through
                 our online form. The information necessary to submit is provided below.
               </MDBCardText>
               <MDBCardText style={CardBodyTextStyle}>
                 Students may choose to be considered for inclusion as a {" "}
-                <b>SQAB 2022 Tony Nevin Student Presenter</b>. If interested, you will need to (1)
+                <b>SQAB 2023 Tony Nevin Student Presenter</b>. If interested, you will need to (1)
                 confirm this in your submission and (2) upload your CV and a letter of
-                recommendation using a link that will be included in your submission confirmation
-                email.
+                recommendation using a link that will be included in a follow-up email.
               </MDBCardText>
               <MDBCardText style={CardBodyTextStyle}>
                 Once all areas are completed, please press the Submit button once to finalize the
                 submission.
               </MDBCardText>
-              <MDBCardText style={CardBodyTextStyle}>(TESTING) Time Remaining: ...</MDBCardText>
+              {setInformation && (<MDBCardText style={CardBodyTextStyle}>(TESTING) Time Remaining: ...</MDBCardText>)}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -122,8 +125,10 @@ export default function Submission(): JSX.Element {
         <MDBCol md="4">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Poster Submission Portal (TESTING)</MDBCardTitle>
-              <div style={CreateFormStyle}>
+              <MDBCardTitle>Poster Submission Portal</MDBCardTitle>
+              {setInformation === null ? (<p>Submissions are currently closed.</p>) : (<div style={{
+                maxWidth: '600px',
+              }}>
                 <form onSubmit={handleCreateStudentSubmit}>
                   <label>
                     <span>Submitting Author:</span>
@@ -178,7 +183,6 @@ export default function Submission(): JSX.Element {
                       onChange={(option: any) => setAuthorChoice(option)} />
                   </label>
 
-
                   <MDBBtn
                     noRipple
                     style={{
@@ -192,7 +196,7 @@ export default function Submission(): JSX.Element {
                   {formError && <p className="error">{formError}</p>}
                 </form>
                 <br></br>
-              </div>
+              </div>)}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
