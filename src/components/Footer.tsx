@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <MDBFooter
       className="text-center text-lg-left overall-footer"
-      style={{ backgroundColor: '#838383' }}
+      style={{ backgroundColor: '#838383', marginTop: '25px' }}
     >
       <MDBContainer className="p-4">
         <MDBRow>
@@ -23,9 +23,13 @@ export default function Footer() {
             <h5>About the SQAB website </h5>
 
             <p>
-              This site is built using Bootstrap Material Design and is hosted on Github Pages. This
-              site, along with all of the assets/code, is available for public inspection at the
-              GitHub account linked below in the repository "SQAB-ABAI.github.io" under a MIT
+              This site is built using Material Design for Bootstrap and React and is hosted on
+              Google's firebase service. This site, along with all of the assets/code, is available
+              for public inspection at the GitHub account linked below in the repository{' '}
+              <a href="https://github.com/miyamot0/SQAB-Site-V2">SQAB-Site-V2</a> under an{' '}
+              <a href="https://raw.githubusercontent.com/miyamot0/SQAB-Site-V2/master/LICENSE">
+                MIT
+              </a>{' '}
               license.
             </p>
           </MDBCol>

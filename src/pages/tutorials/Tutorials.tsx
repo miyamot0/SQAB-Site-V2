@@ -39,12 +39,15 @@ export default function Tutorials(): JSX.Element {
 
   const showDirectory = id === undefined || parseInt(id) < 0 ? true : false;
 
-  const videoInfo: VideoInformation | null = !showDirectory ? tutorialJson.Tutorials[parseInt(id)] : null;
+  const videoInfo: VideoInformation | null = !showDirectory
+    ? tutorialJson.Tutorials[parseInt(id)]
+    : null;
 
   console.log(showDirectory);
 
   const prevVideoId: number | null = parseInt(id) > 0 ? parseInt(id) + 1 : null;
-  const nextVideoId: number | null = parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
+  const nextVideoId: number | null =
+    parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
 
   return (
     <>
@@ -53,7 +56,7 @@ export default function Tutorials(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>SQAB Pre-eminent Tutorials</MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle}>
+              <MDBCardText style={CardBodyTextStyle} className="tutorials">
                 SQAB is committed to simplifying the transition to quantitative behavior analysis
                 for students as well as advanced researchers. These videos of presentations from
                 leaders in the field are at various levels and are appropriate for individual,

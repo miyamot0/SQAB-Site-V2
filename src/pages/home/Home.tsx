@@ -94,8 +94,8 @@ export default function Home(): JSX.Element {
                     non-human experimental research and both paper and poster sessions are offered.
                     <br />
                     <br />
-                    SQAB 2022 will take place May 26 &#38; 27 in Boston, MA.Additional information
-                    is be listed in the Annual Conference page.
+                    Details regarding SQAB 2023 have not yet been finalized. Additional information
+                    will be listed on the Annual Conference page in the future.
                   </MDBCardText>
                   <MDBBtn noRipple className="float-right" tag="a" href="/conference">
                     Learn More
