@@ -772,7 +772,7 @@ export default function DiscountingModelSelector(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Discounting Model Selector</MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle}>
+              <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
                 The Discounting Model Selector (Web) is a web-based tool for applying approximate
                 Bayesian model selection for delay discounting applications. This program allows
                 researchers and clinicians with to perform an empirical comparison of Discounting
@@ -782,23 +782,26 @@ export default function DiscountingModelSelector(): JSX.Element {
                 only one discounting series at a time.
                 <br />
                 <br />
-                <b>Published:</b>
+                <b>Based on the following works:</b>
                 <br />
-                Gilroy, S. P. & Hantula, D. A. (2018). Discounting model selection with area-based
-                measures: A case for numerical integration. Journal of the Experimental Analysis of
-                Behavior. <a href="https://doi.org/10.1002/jeab.318">doi: 10.1002/jeab.318</a>.
-                <br />
-                Gilroy, S. P., Franck, C. T. & Hantula, D. A. (2017). The discounting model
-                selector: Statistical software for delay discounting applications. Journal of the
-                Experimental Analysis of Behavior, 107(3), 388-401.{' '}
-                <a href="https://doi.org/10.1002/jeab.257">doi: 10.1002/jeab.257</a>.
-                <br />
-                Franck, C. T., Koffarnus, M. N., House, L. L., & Bickel, W. K. (2015). Accurate
+                Franck, C. T., Koffarnus, M. N., House, L. L., &#38; Bickel, W. K. (2015). Accurate
                 characterization of delay discounting: a multiple model approach using approximate
                 Bayesian model selection and a unified discounting measure. Journal of the
                 Experimental Analysis of Behavior, 103(1), 218-233.
                 https://doi.org/10.1002/jeab.128.{' '}
                 <a href="https://doi.org/10.1002/jeab.128">doi: 10.1002/jeab.128</a>.
+                <br />
+                <br />
+                Gilroy, S. P., Franck, C. T. &#38; Hantula, D. A. (2017). The discounting model
+                selector: Statistical software for delay discounting applications. Journal of the
+                Experimental Analysis of Behavior, 107(3), 388-401.{' '}
+                <a href="https://doi.org/10.1002/jeab.257">doi: 10.1002/jeab.257</a>.
+                <br />
+                <br />
+                Gilroy, S. P. &#38; Hantula, D. A. (2018). Discounting model selection with
+                area-based measures: A case for numerical integration. Journal of the Experimental
+                Analysis of Behavior.{' '}
+                <a href="https://doi.org/10.1002/jeab.318">doi: 10.1002/jeab.318</a>.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>

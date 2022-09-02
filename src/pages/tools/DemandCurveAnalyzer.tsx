@@ -673,7 +673,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Demand Curve Analyzer</MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle}>
+              <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
                 The Demand Curve Analyzer is designed to assist clinicians and researchers in
                 conducting behavior economic analyses while also providing more accessible options
                 for these calculations. Demand Curve Analyzer fits respective parameters using
@@ -684,12 +684,24 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 GPL-license (v3) and all source code is completely available.
                 <br />
                 <br />
-                <b>Published:</b>
+                <b>Based on the following works:</b>
                 <br />
                 Gilroy, S. P., Kaplan, B. A., Reed, D. D., Koffarnus, M. N. & Hantula, D. A. (2018).
                 The Demand Curve Analyzer: Behavioral economic software for applied researchers.
                 Journal of the Experimental Analysis of Behavior, 110(3), 553-568.{' '}
                 <a href="https://doi.org/10.1002/jeab.479">10.1002/jeab.479</a>.
+                <br />
+                <br />
+                Kaplan, B. A., Gilroy, S. P., Reed, D. D., Koffarnus, M. N., & Hursh, S. R. (2019).
+                The R package beezdemand: behavioral economic easy demand. Perspectives on Behavior
+                Science, 42(1), 163-180.{' '}
+                <a href="https://doi.org/10.1007/s40614-018-00187-7">10.1007/s40614-018-00187-7</a>.
+                <br />
+                <br />
+                Gilroy, S.P., Kaplan, B.A., Reed, D.D., Hantula, D.A., &#38; Hursh, S. R. (2019). An
+                Exact Solution for Unit Elasticity in the Exponential Model of Demand.{' '}
+                <i>Journal of Experimental and Clinical Psychopharmacology, 27(6)</i>, 588-597. doi:{' '}
+                <a href="https://psycnet.apa.org/doi/10.1037/pha0000268">10.1037/pha0000268</a>.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
