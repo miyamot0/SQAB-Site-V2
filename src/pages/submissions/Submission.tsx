@@ -8,25 +8,78 @@
 
 import React from 'react';
 import { useState } from 'react';
-import Select, { MultiValue } from 'react-select';
+import Select from 'react-select';
 import { timestamp } from '../../firebase/config';
 
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol, MDBBtn } from 'mdb-react-ui-kit';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirestore } from '../../firebase/useFirestore';
 
 import CarouselConference from '../../components/CarouselConference';
+import { SingleOptionType } from '../tools/helpers/GeneralTypes';
 
 const CreateFormStyle = {
   maxWidth: '600px',
 };
 
+const AuthorOptions: SingleOptionType[] = [{
+  label: "I am interested.",
+  value: "I am interested.",
+},
+{
+  label: "I am NOT interested.",
+  value: "I am NOT interested.",
+}]
+
 export default function Submission(): JSX.Element {
-  const { addDocument, response } = useFirestore('submissions');
+  const { addDocument, response } = useFirestore('submissionsTemp');
   const [formError, setFormError] = useState<string>();
 
-  //TODO: add in submission functionality
+  const [submittingAuthor, setSubmittingAuthor] = useState<string>("");
+  const [posterTitle, setPosterTitle] = useState<string>("");
+  const [posterAbstract, setPosterAbstract] = useState<string>("");
+  const [posterAuthorsFull, setPosterAuthorsFull] = useState<string>("");
+  const [correspondingEmail, setCorrespondingEmail] = useState<string>("");
+  const [authorChoice, setAuthorChoice] = useState<SingleOptionType>({
+    label: "I am interested.",
+    value: "I am interested.",
+  });
+
+  /** handleCreateStudentSubmit
+   * 
+   * @param {HTMLFormElement} e 
+   */
+  async function handleCreateStudentSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+    e.preventDefault();
+
+    if (submittingAuthor!.split(/\w\w+/).length - 1 < 2) {
+      setFormError("Please enter a full name (i.e., First and Last)!")
+      return;
+    } else if (posterTitle!.split(/\w\w+/).length - 1 < 2) {
+      setFormError("Please enter a full title (i.e., 3+ Words)!");
+      return;
+    } else if (posterAbstract!.split(/\w\w+/).length - 1 > 120) {
+      setFormError("Abstract is too long (i.e., over 120 words)!");
+      return;
+    }
+
+    var submissionData = {
+      name: submittingAuthor,
+      title: posterTitle,
+      email: correspondingEmail,
+      abstract: posterAbstract,
+      list: posterAuthorsFull,
+      time: timestamp.fromDate(new Date()),
+      presenter: authorChoice.value === "I am interested.",
+    };
+
+    await addDocument(submissionData);
+
+    if (response.error) {
+      alert(`There was an issue uploading your submission: ${response.error}`);
+    }
+  }
 
   return (
     <>
@@ -40,7 +93,7 @@ export default function Submission(): JSX.Element {
                 our online form. The information necessary to submit is provided below.
               </MDBCardText>
               <MDBCardText style={CardBodyTextStyle}>
-                Students may choose to be considered for inclusion as a
+                Students may choose to be considered for inclusion as a {" "}
                 <b>SQAB 2022 Tony Nevin Student Presenter</b>. If interested, you will need to (1)
                 confirm this in your submission and (2) upload your CV and a letter of
                 recommendation using a link that will be included in your submission confirmation
@@ -69,86 +122,73 @@ export default function Submission(): JSX.Element {
         <MDBCol md="4">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Submission Portal</MDBCardTitle>
+              <MDBCardTitle>Poster Submission Portal (TESTING)</MDBCardTitle>
               <div style={CreateFormStyle}>
-                <h2 className="global-page-title">Add a new student</h2>
-
                 <form onSubmit={handleCreateStudentSubmit}>
                   <label>
-                    <span>Student ID:</span>
+                    <span>Submitting Author:</span>
                     <input
                       required
                       type="text"
-                      onChange={(e) => setName(e.target.value)}
-                      value={name}
+                      onChange={(e) => setSubmittingAuthor(e.target.value)}
+                      placeholder={"Firstname Lastname"}
+                      value={submittingAuthor}
                     ></input>
                   </label>
                   <label>
-                    <span>Student Details:</span>
+                    <span>Poster Title:</span>
                     <textarea
                       required
-                      onChange={(e) => setDetails(e.target.value)}
-                      value={details}
+                      onChange={(e) => setPosterTitle(e.target.value)}
+                      placeholder={"Experimental comparison of..."}
+                      value={posterTitle}
                     ></textarea>
                   </label>
                   <label>
-                    <span>Next Benchmark Date:</span>
+                    <span>Corresponding Email:</span>
                     <input
                       required
-                      type="date"
-                      onChange={(e) => setDueDate(e.target.value)}
-                      value={dueDate}
+                      type="email"
+                      onChange={(e) => setCorrespondingEmail(e.target.value)}
+                      placeholder={"presenter@company.com"}
+                      value={correspondingEmail}
                     ></input>
                   </label>
                   <label>
-                    <span>Current Grade</span>
-                    <Select options={Grades} onChange={(option) => setCurrentGrade(option!)} />
+                    <span>Abstract (Maximum 120 Words):</span>
+                    <textarea
+                      required
+                      onChange={(e) => setPosterAbstract(e.target.value)}
+                      placeholder={"In this study..."}
+                      value={posterAbstract}
+                    ></textarea>
                   </label>
                   <label>
-                    <span>Target For Benchmarking</span>
-                    <Select
-                      options={CoreOperations}
-                      onChange={(option: MultiValue<SingleOptionType>) =>
-                        setCurrentBenchmarking(option)
-                      }
-                      value={currentBenchmarking}
-                      isMulti={true}
-                    />
+                    <span>Full Author List (One per line, please):</span>
+                    <textarea
+                      onChange={(e) => setPosterAuthorsFull(e.target.value)}
+                      placeholder={"Firstname Lastname (XYZ University)"}
+                      value={posterAuthorsFull}
+                    ></textarea>
                   </label>
                   <label>
-                    <span>Target For Intervention</span>
-                    <Select
-                      options={Operations}
-                      onChange={(option) => setCurrentTarget(option!)}
-                      value={currentTarget}
-                    />
-                  </label>
-                  <label>
-                    <span>Intervention Approach</span>
-                    <Select
-                      options={InterventionApproach}
-                      onChange={(option) => setCurrentApproach(option!)}
-                      value={currentApproach}
-                    />
-                  </label>
-                  <label>
-                    <span>Error Correction Procedures</span>
-                    <Select
-                      options={ErrorCorrection}
-                      onChange={(option) => setCurrentErrorApproach(option!)}
-                      value={currentErrorApproach}
-                    />
-                  </label>
-                  <label>
-                    <span>Reinforcement Procedures</span>
-                    <Select
-                      options={Contingencies}
-                      onChange={(option) => setCurrentSRApproach(option!)}
-                      value={currentSRApproach}
-                    />
+                    <span>Tony Nevin Student Presenter Award:</span>
+                    <Select options={AuthorOptions}
+                      value={authorChoice}
+                      onChange={(option: any) => setAuthorChoice(option)} />
                   </label>
 
-                  <button className="global-btn global-btn-light-red">Submit Application</button>
+
+                  <MDBBtn
+                    noRipple
+                    style={{
+                      width: '100%',
+                      marginTop: '25px',
+                    }}
+                  >
+                    Submit Application
+                  </MDBBtn>
+
                   {formError && <p className="error">{formError}</p>}
                 </form>
                 <br></br>
