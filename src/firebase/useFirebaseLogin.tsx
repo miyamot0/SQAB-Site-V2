@@ -11,7 +11,13 @@
  */
 
 import { useState, useEffect } from 'react';
-import { googleAuthProvider, githubAuthProvider, fbAuthProvider, projectAuth } from './config';
+import {
+  googleAuthProvider,
+  githubAuthProvider,
+  fbAuthProvider,
+  projectAuth,
+  twitterAuthProvider,
+} from './config';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
 import { AuthorizationStates } from '../context/AuthorizationContext';
 import { ProviderTypes } from './types/AccountTypes';
@@ -80,6 +86,14 @@ export function useFirebaseLogin(): FirebaseLogin {
             });
           });
           break;
+        case ProviderTypes.Twitter:
+          projectAuth.signInWithPopup(twitterAuthProvider).then((result) => {
+            dispatch({
+              type: AuthorizationStates.LOGIN,
+              payload: result.user,
+            });
+          });
+          break;
         default:
           break;
       }
@@ -89,6 +103,7 @@ export function useFirebaseLogin(): FirebaseLogin {
         setLoginError(undefined);
       }
     } catch (error: any) {
+      console.log(error);
       if (!loginCancelled) {
         setLoginError(error.message);
         setPending(false);

@@ -82,8 +82,6 @@ export default function SignIn(): JSX.Element {
               >
                 Authenticate via Google Account
               </MDBBtn>
-
-              {/**
               <br />
               <br />
               <MDBBtn
@@ -99,6 +97,8 @@ export default function SignIn(): JSX.Element {
               >
                 Authenticate via Facebook Account
               </MDBBtn>
+
+              {/**
               <br />
               <br />
               <MDBBtn
@@ -113,6 +113,21 @@ export default function SignIn(): JSX.Element {
                 }}
               >
                 Authenticate via GitHub Account
+              </MDBBtn>
+              <br />
+              <br />
+              <MDBBtn
+                noRipple
+                tag="a"
+                href="#!"
+                disabled={buttonStatus}
+                style={{ width: '100%' }}
+                className="button-fit-card"
+                onClick={() => {
+                  login(ProviderTypes.Twitter);
+                }}
+              >
+                Authenticate via Twitter Account
               </MDBBtn>
    */}
             </MDBCardBody>
