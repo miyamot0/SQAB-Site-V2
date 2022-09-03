@@ -839,6 +839,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 }}
                 tag="a"
                 href="#!"
+                className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => loadExampleData()}
               >
@@ -852,6 +853,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 height="auto"
                 stretchH="all"
                 columnSorting={false}
+                style={{ marginTop: '25px' }}
                 columns={[
                   { data: 0, type: 'string' },
                   { data: 1, type: 'string' },
@@ -889,6 +891,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 }}
                 tag="a"
                 href="#!"
+                className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => {
                   setRunningCalculation(true);

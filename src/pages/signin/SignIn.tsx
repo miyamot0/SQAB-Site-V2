@@ -32,9 +32,15 @@ export default function SignIn(): JSX.Element {
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Sign In</MDBCardTitle>
+              <MDBCardTitle>Site Authentication</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle} className="tutorials">
-                ...
+                The resources available through the SQAB website are generally publically available
+                to all. Certain functionality requires authentication to ensure that authorized
+                users have the ability to access and manage their data. Generally, authentication is
+                only necessary for those submitting materials for the conference or managing an
+                advertisement for graduate student recruitment.
+                <br />
+                <br />A range of authentication options are presented below:
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -47,21 +53,22 @@ export default function SignIn(): JSX.Element {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className="row-eq-height center">
+        <MDBCol sm="4">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>...</MDBCardTitle>
+              <MDBCardTitle></MDBCardTitle>
               <MDBBtn
                 noRipple
-                className="float-right"
                 tag="a"
                 href="#!"
+                style={{ width: '100%' }}
+                className="button-fit-card"
                 onClick={() => {
                   login();
                 }}
               >
-                Close
+                Authenticate via Google Account
               </MDBBtn>
             </MDBCardBody>
           </MDBCard>

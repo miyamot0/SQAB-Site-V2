@@ -736,10 +736,10 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 noRipple
                 style={{
                   width: '100%',
-                  marginBottom: '25px',
                 }}
                 tag="a"
                 href="#!"
+                className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => loadExampleData()}
               >
@@ -750,6 +750,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 data={hotData}
                 colHeaders={true}
                 rowHeaders={true}
+                style={{ marginTop: '25px' }}
                 height="auto"
                 stretchH="all"
                 columnSorting={false}
@@ -817,6 +818,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 tag="a"
                 href="#!"
                 disabled={runningCalculation}
+                className="button-fit-card"
                 onClick={() => {
                   setRunningCalculation(true);
                   calculateDemand();

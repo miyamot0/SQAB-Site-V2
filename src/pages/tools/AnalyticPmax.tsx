@@ -245,6 +245,7 @@ export default function AnalyticPmax(): JSX.Element {
                 }}
                 tag="a"
                 href="#!"
+                className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => loadExampleData()}
               >
@@ -257,6 +258,7 @@ export default function AnalyticPmax(): JSX.Element {
                 rowHeaders={true}
                 height="auto"
                 stretchH="all"
+                style={{ marginTop: '25px', marginBottom: '25px' }}
                 columnSorting={false}
                 columns={[
                   { data: 0, type: 'string' },
@@ -283,6 +285,7 @@ export default function AnalyticPmax(): JSX.Element {
                 }}
                 tag="a"
                 href="#!"
+                className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => {
                   setRunningCalculation(true);
