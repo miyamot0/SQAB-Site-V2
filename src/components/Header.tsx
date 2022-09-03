@@ -45,6 +45,7 @@ const customStyles = {
 const navbarTextStyle = { color: 'white' };
 
 export default function Header(): JSX.Element {
+  const [showBasic, setShowBasic] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
 
@@ -220,11 +221,12 @@ export default function Header(): JSX.Element {
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            onClick={() => setShowBasic(!showBasic)}
           >
             <MDBIcon icon="bars" fas />
           </MDBNavbarToggler>
 
-          <MDBCollapse navbar show>
+          <MDBCollapse navbar show={showBasic}>
             <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
               <MDBNavbarItem>
                 <MDBDropdown style={navbarTextStyle}>
@@ -269,20 +271,11 @@ export default function Header(): JSX.Element {
                     <MDBDropdownItem link href="/resources">
                       Resource Links
                     </MDBDropdownItem>
+                    <MDBDropdownItem link href="/behavioralprocesses">
+                      Behavioral Processes Issues
+                    </MDBDropdownItem>
                   </MDBDropdownMenu>
                 </MDBDropdown>
-              </MDBNavbarItem>
-
-              <MDBNavbarItem>
-                <MDBNavbarLink
-                  active
-                  aria-current="page"
-                  href="/behavioralprocesses"
-                  className="mr-2"
-                  style={navbarTextStyle}
-                >
-                  Behavioral Processes
-                </MDBNavbarLink>
               </MDBNavbarItem>
 
               <MDBNavbarItem>
@@ -293,7 +286,7 @@ export default function Header(): JSX.Element {
                   className="mr-2"
                   style={navbarTextStyle}
                 >
-                  Executive Board
+                  Leadership
                 </MDBNavbarLink>
               </MDBNavbarItem>
 
@@ -314,11 +307,11 @@ export default function Header(): JSX.Element {
                   active
                   aria-current="page"
                   href="#"
-                  onClick={() => openModal()}
+                  onClick={() => openModal2()}
                   className="mr-2"
                   style={navbarTextStyle}
                 >
-                  Privacy
+                  Listserv
                 </MDBNavbarLink>
               </MDBNavbarItem>
 
@@ -327,11 +320,11 @@ export default function Header(): JSX.Element {
                   active
                   aria-current="page"
                   href="#"
-                  onClick={() => openModal2()}
+                  onClick={() => openModal()}
                   className="mr-2"
                   style={navbarTextStyle}
                 >
-                  Listserv
+                  Privacy
                 </MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
