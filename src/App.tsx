@@ -32,11 +32,12 @@ import DemandCurveAnalyzer from './pages/tools/DemandCurveAnalyzer';
 import DiscountingModelSelector from './pages/tools/DiscountingModelSelector';
 import SignIn from './pages/signin/SignIn';
 import { useAuthorizationContext } from './context/useAuthorizationContext';
+import MentorPage from './pages/recruitment/MentorPage';
 
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, authIsReady, adminFlag } = useAuthorizationContext();
+  const { authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -90,8 +91,11 @@ function App(): JSX.Element {
                 <Route path="/resources">
                   <Resources />
                 </Route>
-                <Route path="/recruitment">
+                <Route exact path="/recruitment">
                   <Recruitment />
+                </Route>
+                <Route path="/recruitment/:id">
+                  <MentorPage />
                 </Route>
                 <Route path="/pmax">
                   <AnalyticPmax />

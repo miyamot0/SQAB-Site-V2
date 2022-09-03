@@ -15,3 +15,7 @@ export type RecruitmentAd = {
   PositionTitle: string;
   id: string;
 };
+
+export interface RoutedMentor {
+  id: string;
+}

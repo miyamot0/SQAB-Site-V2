@@ -31,19 +31,19 @@ export default function Recruitment(): JSX.Element {
                 <MDBTableHead>
                   <tr>
                     <th className="recruitment-table-th" scope="col">
-                      Mentor
+                      Mentor/Contact
                     </th>
                     <th className="recruitment-table-th" scope="col">
-                      Institution
+                      Mentor Information
                     </th>
                     <th className="recruitment-table-th" scope="col">
-                      Contact Information
+                      Description of Lab/Program
                     </th>
                     <th className="recruitment-table-th" scope="col">
-                      Summary of Mentory and Lab
+                      Cycle
                     </th>
                     <th className="recruitment-table-th" scope="col">
-                      Application Deadline
+                      Site
                     </th>
                   </tr>
                 </MDBTableHead>
@@ -60,18 +60,18 @@ export default function Recruitment(): JSX.Element {
                         .map((recr) => {
                           return (
                             <tr key={recr.Contact} className="recruitment-table-tr">
-                              <td>{recr.Mentor}</td>
-                              <td>{recr.Institution}</td>
                               <td>
-                                {' '}
                                 <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
-                                  {recr.Contact}
+                                  {recr.Mentor}
                                 </a>
+                                <p className="text-muted mb-0">{recr.Institution}</p>
                               </td>
-                              <td>
-                                <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
-                              </td>
+                              <td>{recr.Bio}</td>
+                              <td>{recr.Description}</td>
                               <td>{recr.Cycle}</td>
+                              <td>
+                                {recr.Link.trim().length === 0 ? '' : <a href={recr.Link}>Link</a>}
+                              </td>
                             </tr>
                           );
                         })
