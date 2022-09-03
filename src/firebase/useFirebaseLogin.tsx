@@ -24,7 +24,11 @@ import { ProviderTypes } from './types/AccountTypes';
 import firebase from 'firebase';
 
 interface FirebaseLogin {
-  login: (providerType: ProviderTypes, recaptchaV?: any) => Promise<void>;
+  login: (
+    providerType: ProviderTypes,
+    confirmResult?: firebase.auth.ConfirmationResult | undefined,
+    otpNumber?: string,
+  ) => Promise<void>;
   loginError: string | undefined;
   loginPending: boolean;
 }
@@ -48,69 +52,71 @@ export function useFirebaseLogin(): FirebaseLogin {
    *
    * @returns {Promise<void>}
    */
-  async function login(providerType: ProviderTypes, recaptchaV?: any): Promise<void> {
+  async function login(
+    providerType: ProviderTypes,
+    confirmResult?: firebase.auth.ConfirmationResult | undefined,
+    otpNumber?: string,
+  ): Promise<void> {
     setLoginError(undefined);
     setPending(true);
 
     try {
       switch (providerType) {
         case ProviderTypes.Google:
-          projectAuth.signInWithPopup(googleAuthProvider).then((result) => {
-            //var credential = result.credential;
-            //var user = result.user;
-
-            dispatch({
-              type: AuthorizationStates.LOGIN,
-              payload: result.user,
+          projectAuth
+            .signInWithPopup(googleAuthProvider)
+            .then((result: firebase.auth.UserCredential) => {
+              dispatch({
+                type: AuthorizationStates.LOGIN,
+                payload: result.user,
+              });
             });
-          });
           break;
         case ProviderTypes.Facebook:
-          projectAuth.signInWithPopup(fbAuthProvider).then((result) => {
-            //var credential = result.credential;
-            //var user = result.user;
-
-            dispatch({
-              type: AuthorizationStates.LOGIN,
-              payload: result.user,
+          projectAuth
+            .signInWithPopup(fbAuthProvider)
+            .then((result: firebase.auth.UserCredential) => {
+              dispatch({
+                type: AuthorizationStates.LOGIN,
+                payload: result.user,
+              });
             });
-          });
           break;
         case ProviderTypes.GitHub:
-          projectAuth.signInWithPopup(githubAuthProvider).then((result) => {
-            //var credential = result.credential;
-            //var user = result.user;
-
-            dispatch({
-              type: AuthorizationStates.LOGIN,
-              payload: result.user,
+          projectAuth
+            .signInWithPopup(githubAuthProvider)
+            .then((result: firebase.auth.UserCredential) => {
+              dispatch({
+                type: AuthorizationStates.LOGIN,
+                payload: result.user,
+              });
             });
-          });
           break;
         case ProviderTypes.Twitter:
-          projectAuth.signInWithPopup(twitterAuthProvider).then((result) => {
-            dispatch({
-              type: AuthorizationStates.LOGIN,
-              payload: result.user,
+          projectAuth
+            .signInWithPopup(twitterAuthProvider)
+            .then((result: firebase.auth.UserCredential) => {
+              dispatch({
+                type: AuthorizationStates.LOGIN,
+                payload: result.user,
+              });
             });
-          });
           break;
 
         case ProviderTypes.Phone:
-          /*
-          const phoneNumber = '+1 201-317-4098';
-          firebase
-            .auth()
-            .signInWithPhoneNumber(phoneNumber, recaptchaV)
-            .then((confirmationResult) => {
-              console.log(confirmationResult);
-              // SMS sent. Prompt user to type the code from the message, then sign the
-              // user in with confirmationResult.confirm(code).
-              //window.confirmationResult = confirmationResult;
-              // ...
-            });
-            */
+          confirmResult?.confirm(otpNumber!).then((result) => {
+            const credential: firebase.auth.AuthCredential =
+              firebase.auth.PhoneAuthProvider.credential(confirmResult!.verificationId, otpNumber!);
 
+            projectAuth
+              .signInWithCredential(credential)
+              .then((result: firebase.auth.UserCredential) => {
+                dispatch({
+                  type: AuthorizationStates.LOGIN,
+                  payload: result.user,
+                });
+              });
+          });
           break;
 
         default:
@@ -122,7 +128,6 @@ export function useFirebaseLogin(): FirebaseLogin {
         setLoginError(undefined);
       }
     } catch (error: any) {
-      console.log(error);
       if (!loginCancelled) {
         setLoginError(error.message);
         setPending(false);

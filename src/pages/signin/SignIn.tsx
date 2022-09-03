@@ -23,10 +23,13 @@ import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import Modal from 'react-modal';
+import PhoneInput from 'react-phone-number-input';
 import firebase from 'firebase';
-import { challengeTOP, setUpRecaptcha } from '../../context/AuthorizationContext';
+import { setUpRecaptcha } from '../../context/AuthorizationContext';
 
-const customStyles = {
+import 'react-phone-number-input/style.css';
+
+const modalStyle = {
   content: {
     top: '50%',
     left: '50%',
@@ -34,7 +37,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    minWidth: '50%',
+    minWidth: '400px',
     maxWidth: '50%',
     maxHeight: '50%',
   },
@@ -42,6 +45,7 @@ const customStyles = {
 
 export default function SignIn(): JSX.Element {
   const { login } = useFirebaseLogin();
+
   const { user, authIsReady } = useAuthorizationContext();
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [otpNumber, setOTPNumber] = useState<string>('');
@@ -49,9 +53,14 @@ export default function SignIn(): JSX.Element {
   const [showPhoneNumber, setShowPhoneNumber] = useState<boolean>(true);
   const [showOTP, setShowOTP] = useState<boolean>(false);
   const buttonStatus = user && authIsReady ? true : false;
+  const [confirmResult, setConfirmResult] = useState<firebase.auth.ConfirmationResult>();
 
-  let confirmationResult: any = null;
+  let recapchaVerifier: firebase.auth.RecaptchaVerifier;
 
+  /** generateStatusElement
+   *
+   * @returns
+   */
   function generateStatusElement(): JSX.Element {
     if (user && authIsReady) {
       return <>Authenticated</>;
@@ -60,18 +69,34 @@ export default function SignIn(): JSX.Element {
     return <>Not authenticated</>;
   }
 
-  async function getOTP(e: any) {
-    e.preventDefault();
-
-    // TODO: check phone #
-
-    setShowModal(true);
+  /**
+   * postPhoneEntryCall
+   */
+  async function postPhoneEntryCall() {
+    setShowPhoneNumber(false);
+    recapchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
 
     try {
-      confirmationResult = await setUpRecaptcha(phoneNumber);
-      console.log(confirmationResult);
+      setUpRecaptcha(phoneNumber, recapchaVerifier).then((confirmationResult) => {
+        setConfirmResult(confirmationResult);
+      });
+
+      setShowOTP(true);
     } catch (err) {
-      console.log(err);
+      alert(err);
+    }
+  }
+
+  /**
+   *
+   */
+  async function postOTPEntryCall() {
+    try {
+      await login(ProviderTypes.Phone, confirmResult, otpNumber);
+
+      setShowModal(false);
+    } catch (err) {
+      alert(err);
     }
   }
 
@@ -80,24 +105,36 @@ export default function SignIn(): JSX.Element {
       <Modal
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
-        shouldCloseOnOverlayClick={true}
+        shouldCloseOnOverlayClick={false}
         preventScroll={true}
-        style={customStyles}
+        style={modalStyle}
         contentLabel="Example Modal"
       >
-        <h2>SMS One Time Password (OTP)</h2>
+        <h2>Phone Login</h2>
+
+        <button
+          onClick={() => setShowModal(false)}
+          style={{ position: 'absolute', top: '10px', right: '10px', border: '0' }}
+        >
+          X
+        </button>
+
         <div className="navbar-modal">
-          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
+          <div
+            id="captcha-wrapper"
+            style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+          >
+            <div id="recaptcha-container"></div>
+          </div>
 
           <label hidden={!showPhoneNumber}>
             <span>Phone Number:</span>
-            <input
-              required
-              type="text"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder={'e.g., 123 456 7891'}
+            <PhoneInput
+              defaultCountry="US"
               value={phoneNumber}
-            ></input>
+              onChange={(e: string) => setPhoneNumber(e)}
+              placeholder="Enter phone number"
+            ></PhoneInput>
           </label>
 
           <label hidden={!showOTP}>
@@ -117,19 +154,7 @@ export default function SignIn(): JSX.Element {
             href="#!"
             style={{ width: '100%' }}
             hidden={!showPhoneNumber}
-            onClick={async () => {
-              setShowPhoneNumber(false);
-
-              try {
-                const response = await setUpRecaptcha('+1 201-317-4098');
-                console.log(response);
-
-                setShowOTP(true);
-              } catch (err) {
-                console.log(err);
-              }
-              //setShowModal(false);
-            }}
+            onClick={() => postPhoneEntryCall()}
           >
             Enter Number
           </MDBBtn>
@@ -140,14 +165,7 @@ export default function SignIn(): JSX.Element {
             href="#!"
             hidden={!showOTP}
             style={{ width: '100%' }}
-            onClick={async () => {
-              try {
-                const res = await challengeTOP(otpNumber, confirmationResult);
-                console.log(res);
-              } catch (err) {
-                console.log(err);
-              }
-            }}
+            onClick={() => postOTPEntryCall()}
           >
             Enter OTP
           </MDBBtn>
