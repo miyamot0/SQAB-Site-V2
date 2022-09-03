@@ -26,6 +26,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 import Modal from 'react-modal';
+import { useFirebaseLogout } from '../firebase/useFirebaseLogout';
+import { useAuthorizationContext } from '../context/useAuthorizationContext';
 
 Modal.setAppElement('#root');
 
@@ -48,6 +50,8 @@ export default function Header(): JSX.Element {
   const [showBasic, setShowBasic] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
+  const { logout, logoutPending } = useFirebaseLogout();
+  const { user } = useAuthorizationContext();
 
   function openModal(): void {
     setIsOpen(true);
@@ -329,15 +333,46 @@ export default function Header(): JSX.Element {
               </MDBNavbarItem>
 
               <MDBNavbarItem className="ml-auto">
-                <MDBNavbarLink
-                  active
-                  aria-current="page"
-                  href="/signin"
-                  className="mr-2"
-                  style={navbarTextStyle}
-                >
-                  Log In
-                </MDBNavbarLink>
+                {!user && (
+                  <MDBNavbarLink
+                    active
+                    aria-current="page"
+                    href="/signin"
+                    className="mr-2"
+                    style={navbarTextStyle}
+                  >
+                    Log In
+                  </MDBNavbarLink>
+                )}
+
+                {user && (
+                  <li>
+                    {!logoutPending && (
+                      <MDBNavbarLink
+                        active
+                        aria-current="page"
+                        href="#!"
+                        className="mr-2"
+                        onClick={() => logout()}
+                        style={navbarTextStyle}
+                      >
+                        Log Out
+                      </MDBNavbarLink>
+                    )}
+                    {logoutPending && (
+                      <MDBNavbarLink
+                        active
+                        aria-current="page"
+                        href="#!"
+                        className="mr-2"
+                        onClick={() => logout()}
+                        style={navbarTextStyle}
+                      >
+                        Logging Out
+                      </MDBNavbarLink>
+                    )}
+                  </li>
+                )}
               </MDBNavbarItem>
             </MDBNavbarNav>
           </MDBCollapse>

@@ -21,8 +21,11 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
 
 export default function SignIn(): JSX.Element {
+  const { login, loginError, loginPending } = useFirebaseLogin();
+
   return (
     <>
       <MDBRow center className="row-eq-height">
@@ -49,6 +52,17 @@ export default function SignIn(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>...</MDBCardTitle>
+              <MDBBtn
+                noRipple
+                className="float-right"
+                tag="a"
+                href="#!"
+                onClick={() => {
+                  login();
+                }}
+              >
+                Close
+              </MDBBtn>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
