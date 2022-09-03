@@ -3,4 +3,5 @@ export enum ProviderTypes {
   Facebook = 'Facebook',
   GitHub = 'GitHub',
   Twitter = 'Twitter',
+  Phone = 'Phone',
 }

@@ -21,9 +21,10 @@ import {
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
 import { AuthorizationStates } from '../context/AuthorizationContext';
 import { ProviderTypes } from './types/AccountTypes';
+import firebase from 'firebase';
 
 interface FirebaseLogin {
-  login: (providerType: ProviderTypes) => Promise<void>;
+  login: (providerType: ProviderTypes, recaptchaV?: any) => Promise<void>;
   loginError: string | undefined;
   loginPending: boolean;
 }
@@ -41,13 +42,15 @@ export function useFirebaseLogin(): FirebaseLogin {
 
   const { dispatch } = useAuthorizationContext();
 
+  function setUpRecaptcha() {}
+
   /** login
    *
    * proper login fx
    *
    * @returns {Promise<void>}
    */
-  async function login(providerType: ProviderTypes): Promise<void> {
+  async function login(providerType: ProviderTypes, recaptchaV?: any): Promise<void> {
     setLoginError(undefined);
     setPending(true);
 
@@ -94,6 +97,24 @@ export function useFirebaseLogin(): FirebaseLogin {
             });
           });
           break;
+
+        case ProviderTypes.Phone:
+          /*
+          const phoneNumber = '+1 201-317-4098';
+          firebase
+            .auth()
+            .signInWithPhoneNumber(phoneNumber, recaptchaV)
+            .then((confirmationResult) => {
+              console.log(confirmationResult);
+              // SMS sent. Prompt user to type the code from the message, then sign the
+              // user in with confirmationResult.confirm(code).
+              //window.confirmationResult = confirmationResult;
+              // ...
+            });
+            */
+
+          break;
+
         default:
           break;
       }

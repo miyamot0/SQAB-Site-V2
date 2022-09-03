@@ -52,6 +52,16 @@ export const AuthorizationContext = createContext<AuthorizationContextInterface>
   dispatch: undefined,
 });
 
+/** setUpRecaptcha
+ *
+ * @param {string} phoneNumber
+ * @returns
+ */
+export function setUpRecaptcha(phoneNumber: string) {
+  const recapchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+  return projectAuth.signInWithPhoneNumber(phoneNumber, recapchaVerifier);
+}
+
 /** simplifyPrivilegeAccess
  *
  * Simplify access to privilege level

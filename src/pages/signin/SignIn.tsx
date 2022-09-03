@@ -22,11 +22,12 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import firebase from 'firebase';
+import { setUpRecaptcha } from '../../context/AuthorizationContext';
 
 export default function SignIn(): JSX.Element {
   const { login } = useFirebaseLogin();
   const { user, authIsReady } = useAuthorizationContext();
-
   const buttonStatus = user && authIsReady ? true : false;
 
   function generateStatusElement(): JSX.Element {
@@ -35,6 +36,19 @@ export default function SignIn(): JSX.Element {
     }
 
     return <>Not authenticated</>;
+  }
+
+  async function getOTP(e: any) {
+    e.preventDefault();
+
+    try {
+      const response = await setUpRecaptcha('+1 201-317-4098');
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+
+    //login(ProviderTypes.Phone, recapchaVerifier);
   }
 
   return (
@@ -61,6 +75,13 @@ export default function SignIn(): JSX.Element {
       <MDBRow center>
         <MDBCol sm="8">
           <hr className="additional-margin" />
+          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
+        </MDBCol>
+      </MDBRow>
+
+      <MDBRow center>
+        <MDBCol sm="4">
+          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
         </MDBCol>
       </MDBRow>
 
@@ -69,6 +90,21 @@ export default function SignIn(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Current Status: {generateStatusElement()}</MDBCardTitle>
+              <MDBBtn
+                noRipple
+                tag="a"
+                href="#!"
+                disabled={buttonStatus}
+                style={{ width: '100%' }}
+                className="button-fit-card"
+                onClick={(e: any) => {
+                  getOTP(e);
+                }}
+              >
+                Authenticate via Text Message
+              </MDBBtn>
+              <br />
+              <br />
               <MDBBtn
                 noRipple
                 tag="a"
