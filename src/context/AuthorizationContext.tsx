@@ -62,6 +62,10 @@ export function setUpRecaptcha(phoneNumber: string) {
   return projectAuth.signInWithPhoneNumber(phoneNumber, recapchaVerifier);
 }
 
+export function challengeTOP(code: string, confirmResult: any) {
+  return confirmResult.confirm(code, confirmResult);
+}
+
 /** simplifyPrivilegeAccess
  *
  * Simplify access to privilege level

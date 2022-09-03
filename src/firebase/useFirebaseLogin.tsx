@@ -42,8 +42,6 @@ export function useFirebaseLogin(): FirebaseLogin {
 
   const { dispatch } = useAuthorizationContext();
 
-  function setUpRecaptcha() {}
-
   /** login
    *
    * proper login fx

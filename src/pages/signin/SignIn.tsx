@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   MDBCard,
@@ -22,13 +22,35 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import Modal from 'react-modal';
 import firebase from 'firebase';
-import { setUpRecaptcha } from '../../context/AuthorizationContext';
+import { challengeTOP, setUpRecaptcha } from '../../context/AuthorizationContext';
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '50%',
+    maxWidth: '50%',
+    maxHeight: '50%',
+  },
+};
 
 export default function SignIn(): JSX.Element {
   const { login } = useFirebaseLogin();
   const { user, authIsReady } = useAuthorizationContext();
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [otpNumber, setOTPNumber] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showPhoneNumber, setShowPhoneNumber] = useState<boolean>(true);
+  const [showOTP, setShowOTP] = useState<boolean>(false);
   const buttonStatus = user && authIsReady ? true : false;
+
+  let confirmationResult: any = null;
 
   function generateStatusElement(): JSX.Element {
     if (user && authIsReady) {
@@ -41,18 +63,97 @@ export default function SignIn(): JSX.Element {
   async function getOTP(e: any) {
     e.preventDefault();
 
+    // TODO: check phone #
+
+    setShowModal(true);
+
     try {
-      const response = await setUpRecaptcha('+1 201-317-4098');
-      console.log(response);
+      confirmationResult = await setUpRecaptcha(phoneNumber);
+      console.log(confirmationResult);
     } catch (err) {
       console.log(err);
     }
-
-    //login(ProviderTypes.Phone, recapchaVerifier);
   }
 
   return (
     <>
+      <Modal
+        isOpen={showModal}
+        onRequestClose={() => setShowModal(false)}
+        shouldCloseOnOverlayClick={true}
+        preventScroll={true}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <h2>SMS One Time Password (OTP)</h2>
+        <div className="navbar-modal">
+          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
+
+          <label hidden={!showPhoneNumber}>
+            <span>Phone Number:</span>
+            <input
+              required
+              type="text"
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder={'e.g., 123 456 7891'}
+              value={phoneNumber}
+            ></input>
+          </label>
+
+          <label hidden={!showOTP}>
+            <span>One Time Password (OTP):</span>
+            <input
+              required
+              type="text"
+              onChange={(e) => setOTPNumber(e.target.value)}
+              placeholder={'e.g., 123456'}
+              value={otpNumber}
+            ></input>
+          </label>
+
+          <MDBBtn
+            noRipple
+            tag="a"
+            href="#!"
+            style={{ width: '100%' }}
+            hidden={!showPhoneNumber}
+            onClick={async () => {
+              setShowPhoneNumber(false);
+
+              try {
+                const response = await setUpRecaptcha('+1 201-317-4098');
+                console.log(response);
+
+                setShowOTP(true);
+              } catch (err) {
+                console.log(err);
+              }
+              //setShowModal(false);
+            }}
+          >
+            Enter Number
+          </MDBBtn>
+
+          <MDBBtn
+            noRipple
+            tag="a"
+            href="#!"
+            hidden={!showOTP}
+            style={{ width: '100%' }}
+            onClick={async () => {
+              try {
+                const res = await challengeTOP(otpNumber, confirmationResult);
+                console.log(res);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            Enter OTP
+          </MDBBtn>
+        </div>
+      </Modal>
+
       <MDBRow center className="row-eq-height">
         <MDBCol sm="8">
           <MDBCard>
@@ -75,13 +176,6 @@ export default function SignIn(): JSX.Element {
       <MDBRow center>
         <MDBCol sm="8">
           <hr className="additional-margin" />
-          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow center>
-        <MDBCol sm="4">
-          <div id="recaptcha-container" className="d-flex justify-content-center"></div>
         </MDBCol>
       </MDBRow>
 
@@ -97,8 +191,8 @@ export default function SignIn(): JSX.Element {
                 disabled={buttonStatus}
                 style={{ width: '100%' }}
                 className="button-fit-card"
-                onClick={(e: any) => {
-                  getOTP(e);
+                onClick={() => {
+                  setShowModal(true);
                 }}
               >
                 Authenticate via Text Message
