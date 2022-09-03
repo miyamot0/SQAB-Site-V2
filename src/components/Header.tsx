@@ -346,7 +346,7 @@ export default function Header(): JSX.Element {
                 )}
 
                 {user && (
-                  <li>
+                  <>
                     {!logoutPending && (
                       <MDBNavbarLink
                         active
@@ -359,6 +359,7 @@ export default function Header(): JSX.Element {
                         Log Out
                       </MDBNavbarLink>
                     )}
+
                     {logoutPending && (
                       <MDBNavbarLink
                         active
@@ -371,7 +372,7 @@ export default function Header(): JSX.Element {
                         Logging Out
                       </MDBNavbarLink>
                     )}
-                  </li>
+                  </>
                 )}
               </MDBNavbarItem>
             </MDBNavbarNav>
