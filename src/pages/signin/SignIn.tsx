@@ -6,9 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
-
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import {
   MDBCard,
@@ -22,9 +20,22 @@ import {
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
+import { ProviderTypes } from '../../firebase/types/AccountTypes';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 
 export default function SignIn(): JSX.Element {
-  const { login, loginError, loginPending } = useFirebaseLogin();
+  const { login } = useFirebaseLogin();
+  const { user, authIsReady } = useAuthorizationContext();
+
+  const buttonStatus = user && authIsReady ? true : false;
+
+  function generateStatusElement(): JSX.Element {
+    if (user && authIsReady) {
+      return <>Authenticated</>;
+    }
+
+    return <>Not authenticated</>;
+  }
 
   return (
     <>
@@ -57,19 +68,53 @@ export default function SignIn(): JSX.Element {
         <MDBCol sm="4">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle></MDBCardTitle>
+              <MDBCardTitle>Current Status: {generateStatusElement()}</MDBCardTitle>
               <MDBBtn
                 noRipple
                 tag="a"
                 href="#!"
+                disabled={buttonStatus}
                 style={{ width: '100%' }}
                 className="button-fit-card"
                 onClick={() => {
-                  login();
+                  login(ProviderTypes.Google);
                 }}
               >
                 Authenticate via Google Account
               </MDBBtn>
+
+              {/**
+              <br />
+              <br />
+              <MDBBtn
+                noRipple
+                tag="a"
+                href="#!"
+                disabled={buttonStatus}
+                style={{ width: '100%' }}
+                className="button-fit-card"
+                onClick={() => {
+                  login(ProviderTypes.Facebook);
+                }}
+              >
+                Authenticate via Facebook Account
+              </MDBBtn>
+              <br />
+              <br />
+              <MDBBtn
+                noRipple
+                tag="a"
+                href="#!"
+                disabled={buttonStatus}
+                style={{ width: '100%' }}
+                className="button-fit-card"
+                onClick={() => {
+                  login(ProviderTypes.GitHub);
+                }}
+              >
+                Authenticate via GitHub Account
+              </MDBBtn>
+   */}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

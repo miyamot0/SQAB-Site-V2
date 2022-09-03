@@ -11,12 +11,13 @@
  */
 
 import { useState, useEffect } from 'react';
-import { googleAuthProvider, projectAuth } from './config';
+import { googleAuthProvider, githubAuthProvider, fbAuthProvider, projectAuth } from './config';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
 import { AuthorizationStates } from '../context/AuthorizationContext';
+import { ProviderTypes } from './types/AccountTypes';
 
 interface FirebaseLogin {
-  login: () => Promise<void>;
+  login: (providerType: ProviderTypes) => Promise<void>;
   loginError: string | undefined;
   loginPending: boolean;
 }
@@ -40,22 +41,48 @@ export function useFirebaseLogin(): FirebaseLogin {
    *
    * @returns {Promise<void>}
    */
-  async function login(): Promise<void> {
+  async function login(providerType: ProviderTypes): Promise<void> {
     setLoginError(undefined);
     setPending(true);
 
     try {
-      //const loginResult = await projectAuth.signInWithEmailAndPassword(email, password);
+      switch (providerType) {
+        case ProviderTypes.Google:
+          projectAuth.signInWithPopup(googleAuthProvider).then((result) => {
+            //var credential = result.credential;
+            //var user = result.user;
 
-      projectAuth.signInWithPopup(googleAuthProvider).then((result) => {
-        var credential = result.credential;
-        var user = result.user;
+            dispatch({
+              type: AuthorizationStates.LOGIN,
+              payload: result.user,
+            });
+          });
+          break;
+        case ProviderTypes.Facebook:
+          projectAuth.signInWithPopup(fbAuthProvider).then((result) => {
+            //var credential = result.credential;
+            //var user = result.user;
 
-        dispatch({
-          type: AuthorizationStates.LOGIN,
-          payload: result.user,
-        });
-      });
+            dispatch({
+              type: AuthorizationStates.LOGIN,
+              payload: result.user,
+            });
+          });
+          break;
+        case ProviderTypes.GitHub:
+          projectAuth.signInWithPopup(githubAuthProvider).then((result) => {
+            //var credential = result.credential;
+            //var user = result.user;
+
+            dispatch({
+              type: AuthorizationStates.LOGIN,
+              payload: result.user,
+            });
+          });
+          break;
+        default:
+          break;
+      }
 
       if (!loginCancelled) {
         setPending(false);
