@@ -33,7 +33,7 @@ import {
   SubmissionReducer,
 } from './functionality/SubmissionFunctionality';
 
-const ShowSubmissionPortal: boolean = true;
+const ShowSubmissionPortal: boolean = false;
 
 export default function Submission(): JSX.Element {
   const { addDocument, response } = useFirestore('submissionsTemp');
