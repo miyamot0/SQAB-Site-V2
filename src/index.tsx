@@ -16,11 +16,14 @@ import 'handsontable/dist/handsontable.full.css';
 
 import App from './App';
 
-import "./index.css"
+import './index.css';
+import { AuthorizationContextProvider } from './context/AuthorizationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthorizationContextProvider>
+      <App />
+    </AuthorizationContextProvider>
   </React.StrictMode>,
 );

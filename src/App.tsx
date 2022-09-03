@@ -30,77 +30,88 @@ import Recruitment from './pages/recruitment/Recruitment';
 import AnalyticPmax from './pages/tools/AnalyticPmax';
 import DemandCurveAnalyzer from './pages/tools/DemandCurveAnalyzer';
 import DiscountingModelSelector from './pages/tools/DiscountingModelSelector';
+import SignIn from './pages/signin/SignIn';
+import { useAuthorizationContext } from './context/useAuthorizationContext';
 
 const pageTitle = 'SQAB';
 
-function App() {
+function App(): JSX.Element {
+  const { user, authIsReady, adminFlag } = useAuthorizationContext();
+
   useEffect(() => {
     document.title = pageTitle;
   }, []);
 
   return (
-    <BrowserRouter>
-      <MDBContainer
-        fluid
-        style={{
-          flexGrow: 1,
-          paddingLeft: '0',
-          paddingRight: '0',
-          backgroundColor: '#e3e3e3',
-        }}
-      >
-        <Header />
-        <div
-          style={{
-            paddingTop: '20px',
-            paddingBottom: '20px',
-          }}
-        >
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/conference">
-              <AnnualConference />
-            </Route>
-            <Route path="/tutorials/:id">
-              <Tutorials />
-            </Route>
-            <Route path="/registration">
-              <Registration />
-            </Route>
-            <Route path="/submission">
-              <Submission />
-            </Route>
-            <Route path="/records">
-              <Records />
-            </Route>
-            <Route path="/behavioralprocesses">
-              <BeProcInformation />
-            </Route>
-            <Route path="/executiveboard">
-              <ExecutiveBoard />
-            </Route>
-            <Route path="/resources">
-              <Resources />
-            </Route>
-            <Route path="/recruitment">
-              <Recruitment />
-            </Route>
-            <Route path="/pmax">
-              <AnalyticPmax />
-            </Route>
-            <Route path="/demand">
-              <DemandCurveAnalyzer />
-            </Route>
-            <Route path="/discounting">
-              <DiscountingModelSelector />
-            </Route>
-          </Switch>
-        </div>
-        <Footer />
-      </MDBContainer>
-    </BrowserRouter>
+    <div>
+      {authIsReady && (
+        <BrowserRouter>
+          <MDBContainer
+            fluid
+            style={{
+              flexGrow: 1,
+              paddingLeft: '0',
+              paddingRight: '0',
+              backgroundColor: '#e3e3e3',
+            }}
+          >
+            <Header />
+            <div
+              style={{
+                paddingTop: '20px',
+                paddingBottom: '20px',
+              }}
+            >
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route path="/conference">
+                  <AnnualConference />
+                </Route>
+                <Route path="/tutorials/:id">
+                  <Tutorials />
+                </Route>
+                <Route path="/registration">
+                  <Registration />
+                </Route>
+                <Route path="/submission">
+                  <Submission />
+                </Route>
+                <Route path="/records">
+                  <Records />
+                </Route>
+                <Route path="/behavioralprocesses">
+                  <BeProcInformation />
+                </Route>
+                <Route path="/executiveboard">
+                  <ExecutiveBoard />
+                </Route>
+                <Route path="/resources">
+                  <Resources />
+                </Route>
+                <Route path="/recruitment">
+                  <Recruitment />
+                </Route>
+                <Route path="/pmax">
+                  <AnalyticPmax />
+                </Route>
+                <Route path="/demand">
+                  <DemandCurveAnalyzer />
+                </Route>
+                <Route path="/discounting">
+                  <DiscountingModelSelector />
+                </Route>
+                <Route path="/signin">
+                  <SignIn />
+                </Route>
+              </Switch>
+            </div>
+            <Footer />
+          </MDBContainer>
+        </BrowserRouter>
+      )}
+    </div>
   );
 }
 

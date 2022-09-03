@@ -43,8 +43,6 @@ export default function Tutorials(): JSX.Element {
     ? tutorialJson.Tutorials[parseInt(id)]
     : null;
 
-  console.log(showDirectory);
-
   const prevVideoId: number | null = parseInt(id) > 0 ? parseInt(id) + 1 : null;
   const nextVideoId: number | null =
     parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;

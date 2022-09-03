@@ -306,7 +306,7 @@ export default function Header(): JSX.Element {
                 <MDBNavbarLink
                   active
                   aria-current="page"
-                  href="#"
+                  href="#!"
                   onClick={() => openModal2()}
                   className="mr-2"
                   style={navbarTextStyle}
@@ -319,12 +319,24 @@ export default function Header(): JSX.Element {
                 <MDBNavbarLink
                   active
                   aria-current="page"
-                  href="#"
+                  href="#!"
                   onClick={() => openModal()}
                   className="mr-2"
                   style={navbarTextStyle}
                 >
                   Privacy
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+
+              <MDBNavbarItem className="ml-auto">
+                <MDBNavbarLink
+                  active
+                  aria-current="page"
+                  href="/signin"
+                  className="mr-2"
+                  style={navbarTextStyle}
+                >
+                  Log In
                 </MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
