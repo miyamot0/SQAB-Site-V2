@@ -74,12 +74,15 @@ export default function Header(): JSX.Element {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        shouldCloseOnOverlayClick={false}
+        shouldCloseOnOverlayClick={true}
         preventScroll={true}
         style={customStyles}
         contentLabel="Example Modal"
       >
         <h2>Privacy</h2>
+        <button onClick={() => setIsOpen(false)} className="button-close-modal">
+          X
+        </button>
         <div className="navbar-modal">
           <p className="navbar-modal-p">
             This site uses no cookies and performs no tracking. Various calculators are provided to
@@ -90,39 +93,21 @@ export default function Header(): JSX.Element {
             permitted.
           </p>
         </div>
-
-        <MDBBtn
-          noRipple
-          className="float-right"
-          tag="a"
-          href="#"
-          onClick={() => {
-            closeModal();
-          }}
-        >
-          Close
-        </MDBBtn>
       </Modal>
 
       <Modal
         isOpen={modalIsOpen2}
         onRequestClose={closeModal2}
-        shouldCloseOnOverlayClick={false}
+        shouldCloseOnOverlayClick={true}
         preventScroll={true}
         style={customStyles}
         contentLabel="Example Modal"
       >
         <h2>Listserv</h2>
+        <button onClick={() => setIsOpen2(false)} className="button-close-modal">
+          X
+        </button>
         <div className="navbar-modal">
-          <p className="navbar-modal-p">
-            This site uses no cookies and performs no tracking. Various calculators are provided to
-            perform certain analyses, though none of this information is ever saved. Nearly all of
-            the calculations are performed without ever leaving your machine. There is some logging
-            (i.e., diagnostic) performed by the server host, though this information is necessary
-            for regular functioning and is regularly disposed over within the shortest intervals
-            permitted.
-          </p>
-
           <p>
             SQAB maintains an active listserv with over 400 members. Prospective members may access
             this resource by consulting the following webpage:{' '}
@@ -201,18 +186,6 @@ export default function Header(): JSX.Element {
             </a>
           </p>
         </div>
-
-        <MDBBtn
-          noRipple
-          className="float-right"
-          tag="a"
-          href="#"
-          onClick={() => {
-            closeModal2();
-          }}
-        >
-          Close
-        </MDBBtn>
       </Modal>
 
       <MDBNavbar expand="lg" style={{ backgroundColor: '#7f007f' }}>

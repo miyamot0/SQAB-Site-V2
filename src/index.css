@@ -55,3 +55,10 @@ textarea {
 .button-fit-card {
   margin: 0px !important;
 }
+
+.button-close-modal {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  border: 0 !important;
+}

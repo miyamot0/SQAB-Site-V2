@@ -69,8 +69,10 @@ export default function SignIn(): JSX.Element {
     return <>Not authenticated</>;
   }
 
-  /**
-   * postPhoneEntryCall
+  /** postPhoneEntryCall
+   *
+   * Set up captcha to confirm human on end
+   *
    */
   async function postPhoneEntryCall() {
     setShowPhoneNumber(false);
@@ -87,7 +89,9 @@ export default function SignIn(): JSX.Element {
     }
   }
 
-  /**
+  /** postOTPEntryCall
+   *
+   * Call to auth obj to challenge codes
    *
    */
   async function postOTPEntryCall() {
@@ -112,10 +116,7 @@ export default function SignIn(): JSX.Element {
       >
         <h2>Phone Login</h2>
 
-        <button
-          onClick={() => setShowModal(false)}
-          style={{ position: 'absolute', top: '10px', right: '10px', border: '0' }}
-        >
+        <button onClick={() => setShowModal(false)} className="button-close-modal">
           X
         </button>
 
