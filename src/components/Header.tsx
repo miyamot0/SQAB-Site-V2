@@ -321,16 +321,24 @@ export default function Header(): JSX.Element {
                 {user && (
                   <>
                     {!logoutPending && (
-                      <MDBNavbarLink
-                        active
-                        aria-current="page"
-                        href="#!"
-                        className="mr-2"
-                        onClick={() => logout()}
-                        style={navbarTextStyle}
-                      >
-                        Log Out
-                      </MDBNavbarLink>
+                      <>
+                        <MDBDropdown style={navbarTextStyle}>
+                          <MDBDropdownToggle tag="a" className="nav-link mr-2">
+                            Resources
+                          </MDBDropdownToggle>
+                          <MDBDropdownMenu>
+                            <MDBDropdownItem link href="#!">
+                              Manage Recruitment
+                            </MDBDropdownItem>
+                            <MDBDropdownItem link href="#!">
+                              Manage Profile
+                            </MDBDropdownItem>
+                            <MDBDropdownItem link onClick={() => logout()}>
+                              Log Out
+                            </MDBDropdownItem>
+                          </MDBDropdownMenu>
+                        </MDBDropdown>
+                      </>
                     )}
 
                     {logoutPending && (
