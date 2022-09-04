@@ -19,7 +19,7 @@ import {
   twitterAuthProvider,
 } from './config';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
-import { AuthorizationStates } from '../context/AuthorizationContext';
+import { AuthorizationStates, simplifyPrivilegeAccess } from '../context/AuthorizationContext';
 import { ProviderTypes } from './types/AccountTypes';
 import firebase from 'firebase';
 
@@ -66,10 +66,19 @@ export function useFirebaseLogin(): FirebaseLogin {
           projectAuth
             .signInWithPopup(googleAuthProvider)
             .then((result: firebase.auth.UserCredential) => {
-              dispatch({
-                type: AuthorizationStates.LOGIN,
-                payload: result.user,
+              result.user!.getIdTokenResult().then((res) => {
+                dispatch({
+                  type: AuthorizationStates.READY,
+                  payload: result.user,
+                  payload2: simplifyPrivilegeAccess(res.claims.level),
+                  payload3: res.claims.canPostAd,
+                });
               });
+
+              //dispatch({
+              //  type: AuthorizationStates.LOGIN,
+              //  payload: result.user,
+              //});
             });
           break;
         case ProviderTypes.Facebook:

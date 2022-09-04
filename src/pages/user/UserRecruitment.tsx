@@ -27,6 +27,7 @@ import {
 } from './functionality/UserFunctionality';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
 import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 
 export default function UserRecruitment() {
   const history = useHistory();
@@ -37,6 +38,7 @@ export default function UserRecruitment() {
   const { updateDocument, response } = useFirestore('recruitment');
   const [didBuild, setDidBuild] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
+  const { adFlag, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     if (docRec && docUsr && !didBuild) {
@@ -81,16 +83,26 @@ export default function UserRecruitment() {
     return null;
   }
 
-  if (docRecErr || docUsrErr) {
-    return (
-      <div className="error">
-        {docRecErr} {docUsrErr}
-      </div>
-    );
+  if (!authIsReady) {
+    return <></>;
   }
 
-  if (!docRec || !docUsr) {
-    return <div className="loading">Loading...</div>;
+  if (docRecErr || docUsrErr) {
+    return (
+      <div>
+        <MDBRow center className="row-eq-height">
+          <MDBCol sm="4">
+            <MDBCard>
+              <MDBCardBody>
+                <MDBCardTitle>Recruitment Details</MDBCardTitle>
+                At present, you currently do not have a recruitment advertisement. Please contact
+                the site administrator.
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </div>
+    );
   }
 
   return (

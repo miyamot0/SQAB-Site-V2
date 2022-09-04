@@ -18,7 +18,6 @@ export enum AuthorizationStates {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   READY = 'READY',
-  CLAIMS = 'CLAIMS',
 }
 
 export interface AuthorizationContextInterface {
@@ -75,7 +74,7 @@ export function setUpRecaptcha(
  * @param {string} res level
  * @returns {bool}
  */
-function simplifyPrivilegeAccess(res: string): boolean {
+export function simplifyPrivilegeAccess(res: string): boolean {
   return res === 'admin' || res === 'sysadmin';
 }
 
@@ -93,17 +92,16 @@ export function authReducer(
 ): AuthorizationContextStateInterface {
   switch (action.type) {
     case AuthorizationStates.LOGIN:
-      return { ...state, user: action.payload };
-    case AuthorizationStates.LOGOUT:
-      return { ...state, user: null };
-    case AuthorizationStates.READY:
       return {
+        ...state,
         user: action.payload,
-        authIsReady: true,
+        authIsReady: false,
         adminFlag: action.payload2,
         adFlag: action.payload3,
       };
-    case AuthorizationStates.CLAIMS:
+    case AuthorizationStates.LOGOUT:
+      return { ...state, user: null, adminFlag: false, adFlag: false };
+    case AuthorizationStates.READY:
       return {
         user: action.payload,
         authIsReady: true,
@@ -138,7 +136,7 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
             type: AuthorizationStates.READY,
             payload: user,
             payload2: simplifyPrivilegeAccess(res.claims.level),
-            payload3: simplifyPrivilegeAccess(res.claims.level),
+            payload3: res.claims.canPostAd,
           });
         });
       } else {

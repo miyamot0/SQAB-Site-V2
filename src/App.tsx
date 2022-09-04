@@ -39,7 +39,7 @@ import UserRecruitment from './pages/user/UserRecruitment';
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, authIsReady } = useAuthorizationContext();
+  const { user, adminFlag, adFlag, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;

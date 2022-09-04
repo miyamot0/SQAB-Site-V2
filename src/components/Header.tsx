@@ -50,7 +50,7 @@ export default function Header(): JSX.Element {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
   const { logout, logoutPending } = useFirebaseLogout();
-  const { user } = useAuthorizationContext();
+  const { user, authIsReady, adFlag } = useAuthorizationContext();
 
   function openModal(): void {
     setIsOpen(true);
@@ -68,7 +68,7 @@ export default function Header(): JSX.Element {
     setIsOpen2(false);
   }
 
-  return (
+  return authIsReady ? (
     <>
       <Modal
         isOpen={modalIsOpen}
@@ -305,7 +305,7 @@ export default function Header(): JSX.Element {
               </MDBNavbarItem>
 
               <MDBNavbarItem className="ml-auto">
-                {!user && (
+                {authIsReady && !user && (
                   <MDBNavbarLink
                     active
                     aria-current="page"
@@ -317,7 +317,7 @@ export default function Header(): JSX.Element {
                   </MDBNavbarLink>
                 )}
 
-                {user && (
+                {authIsReady && user && (
                   <>
                     {!logoutPending && (
                       <>
@@ -326,9 +326,13 @@ export default function Header(): JSX.Element {
                             Resources
                           </MDBDropdownToggle>
                           <MDBDropdownMenu>
-                            <MDBDropdownItem link href={`/manage/${user.uid}`}>
-                              Manage Recruitment
-                            </MDBDropdownItem>
+                            {authIsReady && adFlag ? (
+                              <MDBDropdownItem link href={`/manage/${user.uid}`}>
+                                Manage Recruitment
+                              </MDBDropdownItem>
+                            ) : (
+                              <></>
+                            )}
                             <MDBDropdownItem link href={`/user/${user.uid}`}>
                               Manage Profile
                             </MDBDropdownItem>
@@ -360,5 +364,7 @@ export default function Header(): JSX.Element {
         </MDBContainer>
       </MDBNavbar>
     </>
+  ) : (
+    <></>
   );
 }
