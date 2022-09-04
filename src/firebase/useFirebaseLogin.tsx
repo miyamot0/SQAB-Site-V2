@@ -105,17 +105,24 @@ export function useFirebaseLogin(): FirebaseLogin {
 
         case ProviderTypes.Phone:
           confirmResult?.confirm(otpNumber!).then((result) => {
+            dispatch({
+              type: AuthorizationStates.READY,
+              payload: result.user,
+            });
+
+            /*
             const credential: firebase.auth.AuthCredential =
               firebase.auth.PhoneAuthProvider.credential(confirmResult!.verificationId, otpNumber!);
 
             projectAuth
               .signInWithCredential(credential)
-              .then((result: firebase.auth.UserCredential) => {
+              .then((result2: firebase.auth.UserCredential) => {
                 dispatch({
                   type: AuthorizationStates.LOGIN,
-                  payload: result.user,
+                  payload: result2.user,
                 });
               });
+              */
           });
           break;
 
