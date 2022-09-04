@@ -326,7 +326,7 @@ export default function Header(): JSX.Element {
                             Resources
                           </MDBDropdownToggle>
                           <MDBDropdownMenu>
-                            <MDBDropdownItem link href="#!">
+                            <MDBDropdownItem link href={`/manage/${user.uid}`}>
                               Manage Recruitment
                             </MDBDropdownItem>
                             <MDBDropdownItem link href={`/user/${user.uid}`}>

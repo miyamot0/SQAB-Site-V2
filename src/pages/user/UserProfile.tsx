@@ -19,12 +19,12 @@ import { useParams } from 'react-router-dom';
 import { useFirestore } from '../../firebase/useFirestore';
 import { useHistory } from 'react-router-dom';
 import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
-import { IndividualUserRecord } from './types/ProfileTypes';
-import { InitialUserState, UserEditAction, UserEditReducer } from './types/UserFunctionality';
-
-interface RoutedAdminSet {
-  id?: string;
-}
+import { IndividualUserRecord, RoutedAdminSet } from './types/ProfileTypes';
+import {
+  InitialUserState,
+  UserEditAction,
+  UserEditReducer,
+} from './functionality/UserFunctionality';
 
 export default function UserProfile() {
   const history = useHistory();
