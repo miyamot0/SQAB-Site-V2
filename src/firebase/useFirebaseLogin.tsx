@@ -11,13 +11,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import {
-  googleAuthProvider,
-  githubAuthProvider,
-  fbAuthProvider,
-  projectAuth,
-  twitterAuthProvider,
-} from './config';
+import { googleAuthProvider, fbAuthProvider, projectAuth } from './config';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
 import { AuthorizationStates, simplifyPrivilegeAccess } from '../context/AuthorizationContext';
 import { ProviderTypes } from './types/AccountTypes';

@@ -12,6 +12,7 @@ export type PosterSubmission = {
   list: string;
   time: firebase.firestore.Timestamp;
   presenter: boolean;
+  reviewed: boolean;
 };
 
 /**

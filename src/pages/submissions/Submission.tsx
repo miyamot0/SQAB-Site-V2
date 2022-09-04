@@ -32,11 +32,13 @@ import {
   SubmissionAction,
   SubmissionReducer,
 } from './functionality/SubmissionFunctionality';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 
-const ShowSubmissionPortal: boolean | null = null;
+const ShowSubmissionPortal: boolean | null = true;
 
 export default function Submission(): JSX.Element {
-  const { addDocument, response } = useFirestore('submissionsTemp');
+  const { user } = useAuthorizationContext();
+  const { addDocument, response } = useFirestore('submissions');
   const [state, dispatch] = useReducer(SubmissionReducer, InitialSubmissionState);
 
   /** handleCreateStudentSubmit
@@ -74,9 +76,10 @@ export default function Submission(): JSX.Element {
       list: state.posterAuthorsFull,
       time: timestamp.fromDate(new Date()),
       presenter: state.authorChoice.value === 'I am interested.',
+      reviewed: false,
     };
 
-    await addDocument(posterSubmission);
+    await addDocument(posterSubmission, user?.uid);
 
     if (response.error) {
       alert(`There was an issue uploading your submission: ${response.error}`);

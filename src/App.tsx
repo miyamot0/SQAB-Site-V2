@@ -35,6 +35,7 @@ import { useAuthorizationContext } from './context/useAuthorizationContext';
 import MentorPage from './pages/recruitment/MentorPage';
 import UserProfile from './pages/user/UserProfile';
 import UserRecruitment from './pages/user/UserRecruitment';
+import UserPoster from './pages/user/UserPoster';
 
 const pageTitle = 'SQAB';
 
@@ -114,6 +115,10 @@ function App(): JSX.Element {
                 <Route path="/user/:id">
                   {!user && <Redirect to="/signin" />}
                   {user && <UserProfile />}
+                </Route>
+                <Route path="/poster/:id">
+                  {!user && <Redirect to="/signin" />}
+                  {user && <UserPoster />}
                 </Route>
                 <Route path="/manage/:id">
                   {!user && <Redirect to="/signin" />}

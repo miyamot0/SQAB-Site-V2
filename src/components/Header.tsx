@@ -333,6 +333,9 @@ export default function Header(): JSX.Element {
                             ) : (
                               <></>
                             )}
+                            <MDBDropdownItem link href={`/poster/${user.uid}`}>
+                              Manage Poster Submission
+                            </MDBDropdownItem>
                             <MDBDropdownItem link href={`/user/${user.uid}`}>
                               Manage Profile
                             </MDBDropdownItem>

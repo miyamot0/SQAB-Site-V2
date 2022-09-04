@@ -36,7 +36,7 @@ interface FirestoreAction {
 }
 
 interface UseFirestore {
-  addDocument: (doc: any) => Promise<void>;
+  addDocument: (doc: any, uid?: string) => Promise<void>;
   updateDocument: (id: string, updates: {}) => Promise<void>;
   response: FirestoreState;
 }
@@ -123,7 +123,7 @@ export function useFirestore(collection: string): UseFirestore {
    * @param {PosterSubmission} doc document to upload
    * @returns {Promise<void>}
    */
-  async function addDocument(doc: PosterSubmission): Promise<void> {
+  async function addDocument(doc: PosterSubmission, uid?: string): Promise<void> {
     dispatch({
       type: FirestoreStates.PENDING,
       payload: null,
@@ -132,13 +132,24 @@ export function useFirestore(collection: string): UseFirestore {
 
     try {
       const createdAt = timestamp.fromDate(new Date());
-      const addedDocument = await ref.add({ ...doc, createdAt });
 
-      dispatchIfNotCancelled({
-        type: FirestoreStates.ADDED,
-        payload: addedDocument,
-        error: null,
-      });
+      if (uid !== null) {
+        const addedDocument = await ref.doc(uid).set({ ...doc, createdAt });
+
+        dispatchIfNotCancelled({
+          type: FirestoreStates.ADDED,
+          payload: addedDocument,
+          error: null,
+        });
+      } else {
+        const addedDocument = await ref.add({ ...doc, createdAt });
+
+        dispatchIfNotCancelled({
+          type: FirestoreStates.ADDED,
+          payload: addedDocument,
+          error: null,
+        });
+      }
     } catch (err: any) {
       dispatchIfNotCancelled({
         type: FirestoreStates.ERROR,
