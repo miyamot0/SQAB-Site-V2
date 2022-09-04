@@ -106,6 +106,29 @@ export default function AnalyticPmax(): JSX.Element {
     }
   }
 
+  /** generateOutputScore
+   *
+   * @param {number} qd
+   * @param {number} pd
+   * @returns {number}
+   */
+  function generateOutputScore(qd: number, pd: number): string {
+    return `${qd.toPrecision(5)} / ${pd.toPrecision(5)}`;
+  }
+
+  /** generateSlope
+   *
+   * @param {number} qd
+   * @param {number} pd
+   */
+  function generateSlope(qd: number, pd: number): string {
+    if (qd < 0.001 && pd < 0.001) {
+      return '-1';
+    } else {
+      return (qd / pd).toFixed(8);
+    }
+  }
+
   /** generateStringOutput
    *
    * Make output for side panel
@@ -124,23 +147,23 @@ export default function AnalyticPmax(): JSX.Element {
     var pDelta = 0.01;
 
     // Scale prices into log units
-    const P1 = Math.log10(rowInNumbers[3] - pDelta);
-    const P2 = Math.log10(rowInNumbers[3] + pDelta * (1 + pDelta));
+    const P1 = Math.log10(rowInNumbers[3]);
+    const P2 = Math.log10(rowInNumbers[3]) + pDelta;
 
     // Get consumption values (already in log units)
     const Q1 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P1);
     const Q2 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P2);
 
     // Calculate deltas
-    const QD = Q2 - Q1;
-    const PD = P2 - P1;
+    const QD = (10 ^ Q2) - (10 ^ Q1);
+    const PD = (10 ^ P2) - (10 ^ P1);
 
-    const pmaxNew = parseFloat(row[3]).toFixed(5);
-    const pmaxOld = parseFloat(row[4]).toFixed(5);
+    const pmaxNew = parseFloat(row[3]);
+    const pmaxOld = parseFloat(row[4]);
     const kValue = parseFloat(row[2]);
 
     const noteString =
-      kValue <= Math.E / Math.log(10)
+      kValue >= Math.E / Math.log(10)
         ? 'Note: Determined through exact solution using Lambert W function.'
         : 'Note: Solved directly referencing empirical slope.';
 
@@ -158,8 +181,8 @@ export default function AnalyticPmax(): JSX.Element {
             P<sub>MAX</sub>
           </i>{' '}
           = {pmaxOld} <br />
-          &Delta;Q/&Delta;P (Log/Log) +/- %1 Unit Price = {QD.toFixed(5)}/${PD.toFixed(5)} ={' '}
-          {(QD / PD).toFixed(2)}
+          &Delta;Q/&Delta;P (Log/Log) +/- %1 Unit Price = {generateOutputScore(QD, PD)} ={' '}
+          {generateSlope(QD, PD)}
           <br />
           {noteString}{' '}
         </p>
