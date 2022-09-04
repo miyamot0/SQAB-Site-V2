@@ -25,6 +25,7 @@ export interface AuthorizationContextInterface {
   user: firebase.User | null;
   authIsReady: boolean;
   adminFlag: boolean;
+  adFlag: boolean;
   dispatch: any;
 }
 
@@ -32,12 +33,14 @@ export interface AuthorizationContextStateInterface {
   user: firebase.User | null;
   authIsReady: boolean;
   adminFlag: boolean;
+  adFlag: boolean;
 }
 
 interface FirebaseLoginAction {
   type: AuthorizationStates;
   payload: firebase.User | null;
   payload2: boolean;
+  payload3: boolean;
 }
 
 export type Props = {
@@ -48,6 +51,7 @@ export type Props = {
 export const AuthorizationContext = createContext<AuthorizationContextInterface>({
   user: null,
   authIsReady: false,
+  adFlag: false,
   adminFlag: false,
   dispatch: undefined,
 });
@@ -97,12 +101,14 @@ export function authReducer(
         user: action.payload,
         authIsReady: true,
         adminFlag: action.payload2,
+        adFlag: action.payload3,
       };
     case AuthorizationStates.CLAIMS:
       return {
         user: action.payload,
         authIsReady: true,
         adminFlag: action.payload2,
+        adFlag: action.payload3,
       };
     default:
       return state;
@@ -121,6 +127,7 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
     user: null,
     authIsReady: false,
     adminFlag: false,
+    adFlag: false,
   });
 
   useEffect(() => {
@@ -131,6 +138,7 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
             type: AuthorizationStates.READY,
             payload: user,
             payload2: simplifyPrivilegeAccess(res.claims.level),
+            payload3: simplifyPrivilegeAccess(res.claims.level),
           });
         });
       } else {
@@ -138,6 +146,7 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
           type: AuthorizationStates.READY,
           payload: user,
           payload2: false,
+          payload3: false,
         });
       }
 
