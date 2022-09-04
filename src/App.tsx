@@ -36,11 +36,12 @@ import MentorPage from './pages/recruitment/MentorPage';
 import UserProfile from './pages/user/UserProfile';
 import UserRecruitment from './pages/user/UserRecruitment';
 import UserPoster from './pages/user/UserPoster';
+import Administration from './pages/admin/Administration';
 
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, adFlag, authIsReady } = useAuthorizationContext();
+  const { user, adFlag, adminFlag, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -80,8 +81,11 @@ function App(): JSX.Element {
                   <Registration />
                 </Route>
                 <Route path="/submission">
-                  {!user && <Redirect to="/signin" />}
-                  <Submission userId={user!.uid} />
+                  {!user || user === null || user.uid === null ? (
+                    <Redirect to="/signin" />
+                  ) : (
+                    <Submission userId={user.uid} />
+                  )}
                 </Route>
                 <Route path="/records">
                   <Records />
@@ -125,6 +129,11 @@ function App(): JSX.Element {
                   {!user && <Redirect to="/signin" />}
                   {!adFlag && <Redirect to="/" />}
                   {user && <UserRecruitment />}
+                </Route>
+                <Route path="/admin">
+                  {!user && <Redirect to="/signin" />}
+                  {!adminFlag && <Redirect to="/" />}
+                  {user && <Administration />}
                 </Route>
               </Switch>
             </div>
