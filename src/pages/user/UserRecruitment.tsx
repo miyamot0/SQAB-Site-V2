@@ -38,7 +38,7 @@ export default function UserRecruitment() {
   const { updateDocument, response } = useFirestore('recruitment');
   const [didBuild, setDidBuild] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
-  const { adFlag, authIsReady } = useAuthorizationContext();
+  const { authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     if (docRec && docUsr && !didBuild) {

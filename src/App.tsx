@@ -39,7 +39,7 @@ import UserRecruitment from './pages/user/UserRecruitment';
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, adminFlag, adFlag, authIsReady } = useAuthorizationContext();
+  const { user, adFlag, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -117,6 +117,7 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/manage/:id">
                   {!user && <Redirect to="/signin" />}
+                  {!adFlag && <Redirect to="/" />}
                   {user && <UserRecruitment />}
                 </Route>
               </Switch>
