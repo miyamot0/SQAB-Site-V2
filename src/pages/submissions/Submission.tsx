@@ -6,10 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { useEffect, useState } from 'react';
-import { useReducer } from 'react';
-import Select from 'react-select';
-import { timestamp } from '../../firebase/config';
+import React, { useEffect, useState, useReducer } from 'react';
 
 import {
   MDBCard,
@@ -21,32 +18,29 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 
-import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import { useFirestore } from '../../firebase/useFirestore';
-import CarouselConference from '../../components/CarouselConference';
-import { PosterSubmission } from './types/SubmissionTypes';
 import {
   AuthorOptions,
   InitialSubmissionState,
   SubmissionAction,
   SubmissionReducer,
 } from './functionality/SubmissionFunctionality';
-import {
-  commonHeading,
-  showSubmissionsClosed,
-  showSubmissionsNotLoggedIn,
-} from './helper/SubmissionHelper';
+
+import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { useFirestore } from '../../firebase/useFirestore';
+import { PosterSubmission } from './types/SubmissionTypes';
+import { commonHeading, showSubmissionsClosed } from './helper/SubmissionHelper';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
 import { IndividualUserRecord } from '../user/types/ProfileTypes';
+import { timestamp } from '../../firebase/config';
 
-export default function Submission(params: { userId: string | undefined }): JSX.Element {
+import CarouselConference from '../../components/CarouselConference';
+import Select from 'react-select';
+
+export default function Submission(params: { userId: string }): JSX.Element {
   const { user, authIsReady } = useAuthorizationContext();
   const { addDocument, response } = useFirestore('submissions');
-  const { document } = useFirebaseDocument(
-    'users',
-    params.userId === undefined ? '' : params.userId,
-  );
+  const { document } = useFirebaseDocument('users', params.userId);
   const [state, dispatch] = useReducer(SubmissionReducer, InitialSubmissionState);
   const [showSubmissionPortal] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>('Submit Poster Application');

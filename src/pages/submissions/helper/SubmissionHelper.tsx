@@ -36,6 +36,7 @@ export function showSubmissionsClosed(): JSX.Element {
   );
 }
 
+/*
 export function showSubmissionsNotLoggedIn(): JSX.Element {
   return (
     <MDBRow center className="row-eq-height">
@@ -54,3 +55,4 @@ export function showSubmissionsNotLoggedIn(): JSX.Element {
     </MDBRow>
   );
 }
+*/

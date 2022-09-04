@@ -81,7 +81,7 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/submission">
                   {!user && <Redirect to="/signin" />}
-                  <Submission userId={user?.uid} />
+                  <Submission userId={user!.uid} />
                 </Route>
                 <Route path="/records">
                   <Records />
