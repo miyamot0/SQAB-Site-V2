@@ -92,7 +92,7 @@ export default function UserProfile() {
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
               <form>
                 <label>
-                  <span>User Name (For Display on Ad):</span>
+                  <span>User Name (For Ad/Poster):</span>
                   <input
                     required
                     type="text"
@@ -103,7 +103,7 @@ export default function UserProfile() {
                   ></input>
                 </label>
                 <label>
-                  <span>User Email (For Display on Ad):</span>
+                  <span>User Email (For Ad/Poster):</span>
                   <input
                     required
                     type="email"
@@ -114,7 +114,7 @@ export default function UserProfile() {
                   ></input>
                 </label>
                 <label>
-                  <span>User Institution (For Display on Ad):</span>
+                  <span>User Institution (For Ad/Poster):</span>
                   <input
                     required
                     type="text"

@@ -18,7 +18,7 @@ const ErrorNoData = 'There was not a document at this location';
 const ErrorSnapshot = 'Unable to get the document';
 
 interface UseFirebaseDocument {
-  document: RecruitmentAd;
+  document: RecruitmentAd | null;
   documentError: string | undefined;
 }
 

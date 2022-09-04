@@ -174,18 +174,34 @@ export default function SignIn(): JSX.Element {
       </Modal>
 
       <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+        <MDBCol sm="6">
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Site Authentication</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle} className="tutorials">
-                The resources available through the SQAB website are generally publically available
-                to all. Certain functionality requires authentication to ensure that authorized
-                users have the ability to access and manage their data. Generally, authentication is
-                only necessary for those submitting materials for the conference or managing an
-                advertisement for graduate student recruitment.
+                The resources available through the SQAB website are all publically available to
+                all. However, certain functionality requires an authentication layer to ensure that
+                users have the ability to submit and manage their data (e.g., advertisements for
+                students, poster submissions).
                 <br />
-                <br />A range of authentication options are presented below:
+                <br />
+                For most users, authentication will only be necessary when submitting materials to
+                be considered for the SQAB conference (e.g., posters). For faculty who wish to use
+                the SQAB site for student recruitment, authentication is necessary to allow those
+                users to administer their recruitment call.{' '}
+                <b>
+                  Authentication is not required to view tutorials, access tools, or review SQAB
+                  materials.
+                </b>
+                <br />
+                <br />
+                In lieu of a username/password system, the website relies on establishing an
+                identity by either referencing common systems (e.g., Google) or via a one-time
+                password linked to your phone number (e.g., a SMS message with a 6-digit code). Just
+                as a note, message rates may apply for the one-time password option.
+                <br />
+                <br />A range of different options are presented below; however, it is recommended
+                to select a primary method and use that moving forward.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -193,7 +209,7 @@ export default function SignIn(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm="6">
           <hr className="additional-margin" />
         </MDBCol>
       </MDBRow>

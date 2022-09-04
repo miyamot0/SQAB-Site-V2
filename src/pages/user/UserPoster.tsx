@@ -12,9 +12,8 @@
 
 import React from 'react';
 
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
@@ -25,7 +24,6 @@ export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();
   const { documentError: docRecErr, document: docRec } = useFirebaseDocument('submissions', id!);
   const { authIsReady } = useAuthorizationContext();
-  const [formError, setFormError] = useState<string>('');
 
   if (!authIsReady) {
     return <></>;
@@ -39,8 +37,9 @@ export default function UserPoster() {
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Poster Details</MDBCardTitle>
-                At present, you currently do not have a poster on record as being submitted. Please
-                contact the site administrator.
+                At present, you currently do not have a poster on record as being submitted. If you
+                have previously submitted a poster, but it is not shown here, contact the site
+                administrator.
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
@@ -74,14 +73,14 @@ export default function UserPoster() {
                   </label>
                   <label>
                     <span>Poster Abstract:</span>
-                    <input required type="text" disabled value={posterObj.abstract}></input>
+                    <textarea required disabled value={posterObj.abstract}></textarea>
                   </label>
                   <label>
                     <span>Full Author List:</span>
-                    <input required type="text" disabled value={posterObj.list}></input>
+                    <textarea required disabled value={posterObj.list}></textarea>
                   </label>
                   <label>
-                    <span>Student Presenter:</span>
+                    <span>Potential Student Presenter:</span>
                     <input
                       required
                       type="text"
@@ -90,7 +89,7 @@ export default function UserPoster() {
                     ></input>
                   </label>
                   <label>
-                    <span>Status:</span>
+                    <span>Status of Review:</span>
                     <input
                       required
                       type="text"
@@ -98,8 +97,6 @@ export default function UserPoster() {
                       value={posterObj.reviewed ? 'Scored' : 'Under Review'}
                     ></input>
                   </label>
-
-                  {formError && <p className="error">{formError}</p>}
                 </form>
               </MDBCardBody>
             </MDBCard>
