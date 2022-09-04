@@ -9,7 +9,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { MDBContainer } from 'mdb-react-ui-kit';
 
@@ -33,11 +33,12 @@ import DiscountingModelSelector from './pages/tools/DiscountingModelSelector';
 import SignIn from './pages/signin/SignIn';
 import { useAuthorizationContext } from './context/useAuthorizationContext';
 import MentorPage from './pages/recruitment/MentorPage';
+import UserProfile from './pages/user/UserProfile';
 
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { authIsReady } = useAuthorizationContext();
+  const { user, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -46,7 +47,7 @@ function App(): JSX.Element {
   return (
     <div>
       {authIsReady && (
-        <BrowserRouter>
+        <BrowserRouter forceRefresh={true}>
           <MDBContainer
             fluid
             style={{
@@ -108,6 +109,10 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/signin">
                   <SignIn />
+                </Route>
+                <Route path="/user/:id">
+                  {!user && <Redirect to="/signin" />}
+                  {user && <UserProfile />}
                 </Route>
               </Switch>
             </div>

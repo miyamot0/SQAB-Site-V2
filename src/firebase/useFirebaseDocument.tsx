@@ -43,10 +43,7 @@ export function useFirebaseDocument(
     const unsubscribe = ref.onSnapshot(
       (snapshot) => {
         if (snapshot.data()) {
-          const id: string = snapshot.id;
-
-          let object = snapshot.data() as RecruitmentAd;
-          object!.id = id;
+          let object = snapshot.data();
 
           setDocument(object);
 

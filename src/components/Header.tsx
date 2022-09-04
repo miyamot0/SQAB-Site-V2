@@ -22,7 +22,6 @@ import {
   MDBCollapse,
   MDBIcon,
   MDBDropdownItem,
-  MDBBtn,
 } from 'mdb-react-ui-kit';
 
 import Modal from 'react-modal';
@@ -330,7 +329,7 @@ export default function Header(): JSX.Element {
                             <MDBDropdownItem link href="#!">
                               Manage Recruitment
                             </MDBDropdownItem>
-                            <MDBDropdownItem link href="#!">
+                            <MDBDropdownItem link href={`/user/${user.uid}`}>
                               Manage Profile
                             </MDBDropdownItem>
                             <MDBDropdownItem link onClick={() => logout()}>
