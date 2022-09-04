@@ -74,64 +74,33 @@ export function useFirebaseLogin(): FirebaseLogin {
                   payload3: res.claims.canPostAd,
                 });
               });
-
-              //dispatch({
-              //  type: AuthorizationStates.LOGIN,
-              //  payload: result.user,
-              //});
             });
           break;
         case ProviderTypes.Facebook:
           projectAuth
             .signInWithPopup(fbAuthProvider)
             .then((result: firebase.auth.UserCredential) => {
-              dispatch({
-                type: AuthorizationStates.LOGIN,
-                payload: result.user,
-              });
-            });
-          break;
-        case ProviderTypes.GitHub:
-          projectAuth
-            .signInWithPopup(githubAuthProvider)
-            .then((result: firebase.auth.UserCredential) => {
-              dispatch({
-                type: AuthorizationStates.LOGIN,
-                payload: result.user,
-              });
-            });
-          break;
-        case ProviderTypes.Twitter:
-          projectAuth
-            .signInWithPopup(twitterAuthProvider)
-            .then((result: firebase.auth.UserCredential) => {
-              dispatch({
-                type: AuthorizationStates.LOGIN,
-                payload: result.user,
+              result.user!.getIdTokenResult().then((res) => {
+                dispatch({
+                  type: AuthorizationStates.READY,
+                  payload: result.user,
+                  payload2: simplifyPrivilegeAccess(res.claims.level),
+                  payload3: res.claims.canPostAd,
+                });
               });
             });
           break;
 
         case ProviderTypes.Phone:
           confirmResult?.confirm(otpNumber!).then((result) => {
-            dispatch({
-              type: AuthorizationStates.READY,
-              payload: result.user,
-            });
-
-            /*
-            const credential: firebase.auth.AuthCredential =
-              firebase.auth.PhoneAuthProvider.credential(confirmResult!.verificationId, otpNumber!);
-
-            projectAuth
-              .signInWithCredential(credential)
-              .then((result2: firebase.auth.UserCredential) => {
-                dispatch({
-                  type: AuthorizationStates.LOGIN,
-                  payload: result2.user,
-                });
+            result.user!.getIdTokenResult().then((res) => {
+              dispatch({
+                type: AuthorizationStates.READY,
+                payload: result.user,
+                payload2: simplifyPrivilegeAccess(res.claims.level),
+                payload3: res.claims.canPostAd,
               });
-              */
+            });
           });
           break;
 
