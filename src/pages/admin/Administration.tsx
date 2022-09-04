@@ -27,7 +27,7 @@ import { useFirebaseCollection } from '../../firebase/useFirebaseCollection';
 import moment from 'moment';
 
 export default function Administration(): JSX.Element {
-  const { documents: recruitmentDocuments } = useFirebaseCollection('recruitmentTemp');
+  const { documents: recruitmentDocuments } = useFirebaseCollection('recruitment');
 
   return (
     <>
@@ -89,11 +89,17 @@ export default function Administration(): JSX.Element {
                                   noRipple
                                   tag="a"
                                   href="#!"
-                                  style={{ width: '100%' }}
-                                  className="button-fit-card"
+                                  style={{
+                                    width: '100%',
+                                  }}
+                                  className={`button-fit-card ${
+                                    recr.Approved
+                                      ? 'button-color-override-red'
+                                      : 'button-color-override-green'
+                                  }`}
                                   onClick={() => true}
                                 >
-                                  Approve
+                                  {recr.Approved ? 'Click to Disapprove' : 'Click to Approve'}
                                 </MDBBtn>
                               </td>
                             </tr>

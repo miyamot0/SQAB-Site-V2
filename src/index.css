@@ -62,3 +62,11 @@ textarea {
   right: 10px !important;
   border: 0 !important;
 }
+
+.button-color-override-red {
+  background-color: red !important;
+}
+
+.button-color-override-green {
+  background-color: green !important;
+}
