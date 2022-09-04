@@ -226,15 +226,20 @@ export default function AnalyticPmax(): JSX.Element {
                 log-unit decrease in consumption, i.e., P<sub>MAX</sub>. This has be done using
                 numerical approximations or through more computationally-exhaustive iterative
                 methods, using the first order derivative, but newer exact solution (Analytic)
-                methods now exist. To calculate exact solution P<sub>MAX</sub>, you may paste the
-                fitted Q0, alpha, and K parameters from the model of demand into the spreadsheet
-                component (in their respective columns). Once entered, simply press the "Calculate"
-                button to calculate the Analytical P<sub>MAX</sub>. Additionally, the Approxiate P
-                <sub>MAX</sub> will also be outputted in the spreadsheet component, in its
-                respective column, though users are recommended to refer to the exact approach
-                whenever possible. Optionally, you may preview this method using a sample data by
-                pressing the "Load Sample Data" button and then pressing "Calculate". This will let
-                you view the differences between the Approximate and Analytical P<sub>MAX</sub>.
+                methods now exist.
+                <br />
+                <br />
+                To calculate exact solution P<sub>MAX</sub>, you may paste the fitted Q0, alpha, and
+                K parameters from the model of demand into the spreadsheet component (in their
+                respective columns). Once entered, simply press the "Calculate" button to calculate
+                the Analytical P<sub>MAX</sub>. Additionally, the Approxiate P<sub>MAX</sub> will
+                also be outputted in the spreadsheet component, in its respective column, though
+                users are recommended to refer to the exact approach whenever possible.
+                <br />
+                <br />
+                Optionally, you may preview this method using a sample data by pressing the "Load
+                Sample Data" button and then pressing "Calculate". This will let you view the
+                differences between the Approximate and Analytical P<sub>MAX</sub>.
               </MDBCardText>
 
               <MDBBtn
