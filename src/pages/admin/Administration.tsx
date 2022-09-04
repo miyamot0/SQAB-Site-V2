@@ -16,27 +16,92 @@ import {
   MDBRow,
   MDBCol,
   MDBBtn,
+  MDBTableBody,
+  MDBTableHead,
+  MDBTable,
 } from 'mdb-react-ui-kit';
 
-import Logo from '../../components/Logo';
-import CarouselConference from '../../components/CarouselConference';
-import CarouselTutorial from '../../components/CarouselTutorial';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { RecruitmentAd } from '../recruitment/types/RecruitmentTypes';
+import { useFirebaseCollection } from '../../firebase/useFirebaseCollection';
+import moment from 'moment';
 
 export default function Administration(): JSX.Element {
+  const { documents: recruitmentDocuments } = useFirebaseCollection('recruitmentTemp');
+
   return (
     <>
-      <MDBRow className="d-flex justify-content-center" style={{ paddingBottom: '20px' }}>
-        <Logo />
-      </MDBRow>
-
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow className="d-flex justify-content-center">
+        <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>...</MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle}>...</MDBCardText>
+              <MDBCardTitle>Recruitment Review</MDBCardTitle>
+              <MDBTable responsive>
+                <MDBTableHead>
+                  <tr>
+                    <th className="recruitment-table-th" scope="col">
+                      Mentor
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
+                      Institution
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
+                      Contact Information
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
+                      Summary of Mentory and Lab
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
+                      Application Deadline
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
+                      Approved
+                    </th>
+                  </tr>
+                </MDBTableHead>
+                <MDBTableBody>
+                  {(recruitmentDocuments as RecruitmentAd[])
+                    ? (recruitmentDocuments as RecruitmentAd[])
+                        .sort((a, b) => {
+                          return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
+                            moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
+                          )
+                            ? 1
+                            : -1;
+                        })
+                        .map((recr) => {
+                          return (
+                            <tr key={recr.Contact} className="recruitment-table-tr">
+                              <td>{recr.Mentor}</td>
+                              <td>{recr.Institution}</td>
+                              <td>
+                                {' '}
+                                <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
+                                  {recr.Contact}
+                                </a>
+                              </td>
+                              <td>
+                                <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
+                              </td>
+                              <td>{recr.Cycle}</td>
+                              <td>
+                                <MDBBtn
+                                  noRipple
+                                  tag="a"
+                                  href="#!"
+                                  style={{ width: '100%' }}
+                                  className="button-fit-card"
+                                  onClick={() => true}
+                                >
+                                  Approve
+                                </MDBBtn>
+                              </td>
+                            </tr>
+                          );
+                        })
+                    : null}
+                </MDBTableBody>
+              </MDBTable>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -51,41 +116,10 @@ export default function Administration(): JSX.Element {
       <MDBRow className="d-flex justify-content-center">
         <MDBCol sm="8">
           <MDBCard>
-            <MDBRow className="g-0">
-              <MDBCol md="6">
-                <CarouselConference />
-              </MDBCol>
-              <MDBCol md="6">
-                <MDBCardBody>
-                  <MDBCardTitle>...</MDBCardTitle>
-                  <MDBCardText style={CardBodyTextStyle}>...</MDBCardText>
-                </MDBCardBody>
-              </MDBCol>
-            </MDBRow>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="8">
-          <MDBCard>
-            <MDBRow className="g-0">
-              <MDBCol md="6">
-                <CarouselConference />
-              </MDBCol>
-              <MDBCol md="6">
-                <MDBCardBody>
-                  <MDBCardTitle>...</MDBCardTitle>
-                  <MDBCardText style={CardBodyTextStyle}>...</MDBCardText>
-                </MDBCardBody>
-              </MDBCol>
-            </MDBRow>
+            <MDBCardBody>
+              <MDBCardTitle>Recruitment Ads to Review</MDBCardTitle>
+              <MDBCardText style={CardBodyTextStyle}>...</MDBCardText>
+            </MDBCardBody>
           </MDBCard>
         </MDBCol>
       </MDBRow>

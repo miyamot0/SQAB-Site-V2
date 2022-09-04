@@ -50,6 +50,7 @@ export default function Recruitment(): JSX.Element {
                 <MDBTableBody>
                   {(documents as RecruitmentAd[])
                     ? (documents as RecruitmentAd[])
+                        .filter((ad) => ad.Approved)
                         .sort((a, b) => {
                           return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
                             moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),

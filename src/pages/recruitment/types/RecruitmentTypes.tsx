@@ -13,6 +13,7 @@ export type RecruitmentAd = {
   Position: string;
   PositionText: string;
   PositionTitle: string;
+  Approved: boolean;
   id?: string;
 };
 
