@@ -686,15 +686,28 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 <br />
                 <b>Based on the following works:</b>
                 <br />
+                Hursh, S. R., & Silberberg, A. (2008). Economic demand and essential value.
+                <i>Psychological Review, 115(1)</i>, 186-198. doi:{' '}
+                <a href="https://psycnet.apa.org/doi/10.1037/0033-295X.115.1.186">
+                  10.1037/0033-295X.115.1.186
+                </a>
+                <br />
+                <br />
+                Koffarnus, M. N., Franck, C. T., Stein, J. S., & Bickel, W. K. (2015). A modified
+                exponential behavioral economic demand model to better describe consumption data.
+                <i>Experimental and clinical psychopharmacology, 23(6)</i>, 504-512. doi:{' '}
+                <a href="https://doi.org/10.1037%2Fpha0000045">10.1037/pha0000045</a>
+                <br />
+                <br />
                 Gilroy, S. P., Kaplan, B. A., Reed, D. D., Koffarnus, M. N. & Hantula, D. A. (2018).
                 The Demand Curve Analyzer: Behavioral economic software for applied researchers.
-                Journal of the Experimental Analysis of Behavior, 110(3), 553-568.{' '}
+                <i>Journal of the Experimental Analysis of Behavior, 110(3)</i>, 553-568. doi:{' '}
                 <a href="https://doi.org/10.1002/jeab.479">10.1002/jeab.479</a>.
                 <br />
                 <br />
                 Kaplan, B. A., Gilroy, S. P., Reed, D. D., Koffarnus, M. N., & Hursh, S. R. (2019).
-                The R package beezdemand: behavioral economic easy demand. Perspectives on Behavior
-                Science, 42(1), 163-180.{' '}
+                The R package beezdemand: behavioral economic easy demand.{' '}
+                <i>Perspectives on Behavior Science, 42(1)</i>, 163-180.{' '}
                 <a href="https://doi.org/10.1007/s40614-018-00187-7">10.1007/s40614-018-00187-7</a>.
                 <br />
                 <br />
@@ -702,6 +715,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 Exact Solution for Unit Elasticity in the Exponential Model of Demand.{' '}
                 <i>Journal of Experimental and Clinical Psychopharmacology, 27(6)</i>, 588-597. doi:{' '}
                 <a href="https://psycnet.apa.org/doi/10.1037/pha0000268">10.1037/pha0000268</a>.
+                <br />
+                <br />
+                Gilroy, S. P., Kaplan, B. A., Schwartz, L. P., Reed, D. D., & Hursh, S. R. (2021). A
+                zero-bounded model of operant demand.{' '}
+                <i>Journal of the Experimental Analysis of Behavior, 115(3)</i>, 729-746. doi:{' '}
+                <a href="https://doi.org/10.1002/jeab.679">10.1002/jeab.679</a>.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
