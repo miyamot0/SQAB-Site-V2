@@ -15,9 +15,11 @@ import { projectFunctions } from './config';
 export function useFirebaseFunction() {
   const updateStatusForRecruitment = projectFunctions.httpsCallable('updateStatusForRecruitment');
 
+  const updateStatusForPoster = projectFunctions.httpsCallable('updateStatusForPoster');
+
   const createBlankTemplateRecruitment = projectFunctions.httpsCallable(
     'createBlankTemplateRecruitment',
   );
 
-  return { updateStatusForRecruitment, createBlankTemplateRecruitment };
+  return { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster };
 }

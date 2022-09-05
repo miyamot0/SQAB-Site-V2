@@ -38,7 +38,8 @@ export default function Administration(): JSX.Element {
   const { documents: userDocuments } = useFirebaseCollection('users');
   const { documents: submissionDocuments } = useFirebaseCollection('submissions');
 
-  const { updateStatusForRecruitment, createBlankTemplateRecruitment } = useFirebaseFunction();
+  const { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster } =
+    useFirebaseFunction();
 
   const [userAdArray, setUserAdArray] = useState<SingleOptionType[]>([]);
   const [selectedAdUser, setSelectedAdUser] = useState<SingleOptionType>({
@@ -74,6 +75,23 @@ export default function Administration(): JSX.Element {
       await updateStatusForRecruitment({
         recruitmentId: recr.id,
         recruitmentApproval: !recr.Approved,
+      });
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  /** toggleRecruitmentStatus
+   *
+   * Modify recruitment status on the back end
+   *
+   * @param {PosterSubmission} poster objec
+   */
+  async function togglePosterStatus(poster: PosterSubmission) {
+    try {
+      await updateStatusForPoster({
+        posterId: poster.id,
+        posterApproval: !poster.reviewed,
       });
     } catch (err) {
       alert(err);
@@ -356,6 +374,9 @@ export default function Administration(): JSX.Element {
                       Student Presenter
                     </th>
                     <th className="recruitment-table-th" scope="col">
+                      Link to Entry
+                    </th>
+                    <th className="recruitment-table-th" scope="col">
                       Decision
                     </th>
                   </tr>
@@ -373,6 +394,9 @@ export default function Administration(): JSX.Element {
                             <td>{poster.abstract}</td>
                             <td>{poster.presenter ? 'Interested' : 'Not Interested'}</td>
                             <td>
+                              <a href={`/poster/${poster.id}`}>Submission</a>
+                            </td>
+                            <td>
                               <MDBBtn
                                 noRipple
                                 tag="a"
@@ -385,7 +409,7 @@ export default function Administration(): JSX.Element {
                                     ? 'button-color-override-red'
                                     : 'button-color-override-green'
                                 }`}
-                                onClick={() => true}
+                                onClick={() => togglePosterStatus(poster)}
                               >
                                 {poster.reviewed ? 'Click to Disapprove' : 'Click to Accept'}
                               </MDBBtn>
