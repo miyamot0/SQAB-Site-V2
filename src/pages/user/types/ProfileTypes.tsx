@@ -5,6 +5,7 @@ export interface IndividualUserRecord {
   userInstitution: string;
   userName: string;
   userPhone: string;
+  id?: string;
 }
 
 export interface RoutedAdminSet {
