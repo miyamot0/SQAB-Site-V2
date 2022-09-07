@@ -15,21 +15,24 @@ import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
 import { useParams } from 'react-router-dom';
-import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import { PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();
-  const { documentError: docRecErr, document: docRec } = useFirebaseDocument('submissions', id!);
+  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>(
+    'submissions',
+    id!,
+  );
   const { authIsReady } = useAuthorizationContext();
 
   if (!authIsReady) {
     return <></>;
   }
 
-  if (docRecErr) {
+  if (documentError) {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -48,9 +51,7 @@ export default function UserPoster() {
     );
   }
 
-  if (docRec) {
-    const posterObj = docRec as unknown as PosterSubmission;
-
+  if (document) {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -61,23 +62,23 @@ export default function UserPoster() {
                 <form>
                   <label>
                     <span>Submitting Author (Edit in Profile):</span>
-                    <input required type="text" disabled value={posterObj.name}></input>
+                    <input required type="text" disabled value={document.name}></input>
                   </label>
                   <label>
                     <span>Corresponding Email (Edit in Profile):</span>
-                    <input required type="text" disabled value={posterObj.email}></input>
+                    <input required type="text" disabled value={document.email}></input>
                   </label>
                   <label>
                     <span>Poster Title:</span>
-                    <input required type="text" disabled value={posterObj.title}></input>
+                    <input required type="text" disabled value={document.title}></input>
                   </label>
                   <label>
                     <span>Poster Abstract:</span>
-                    <textarea required disabled value={posterObj.abstract}></textarea>
+                    <textarea required disabled value={document.abstract}></textarea>
                   </label>
                   <label>
                     <span>Full Author List:</span>
-                    <textarea required disabled value={posterObj.list}></textarea>
+                    <textarea required disabled value={document.list}></textarea>
                   </label>
                   <label>
                     <span>Potential Student Presenter:</span>
@@ -85,7 +86,7 @@ export default function UserPoster() {
                       required
                       type="text"
                       disabled
-                      value={posterObj.presenter.toString()}
+                      value={document.presenter.toString()}
                     ></input>
                   </label>
                   <label>
@@ -94,7 +95,7 @@ export default function UserPoster() {
                       required
                       type="text"
                       disabled
-                      value={posterObj.reviewed ? 'Scored' : 'Under Review'}
+                      value={document.reviewed ? 'Scored' : 'Under Review'}
                     ></input>
                   </label>
                 </form>

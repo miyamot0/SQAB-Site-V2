@@ -4,12 +4,13 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui
 
 import './Recruitment.css';
 import { RoutedMentor } from './types/RecruitmentTypes';
-import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
 import { useParams } from 'react-router-dom';
+import { RecruitmentAd } from '../../firebase/types/RecordTypes';
 
 export default function MentorPage(): JSX.Element {
   const { id } = useParams<RoutedMentor>();
-  const { document } = useFirebaseDocument('recruitment', id);
+  const { document } = useFirebaseDocumentTyped<RecruitmentAd>('recruitment', id);
 
   if (document) {
     return (

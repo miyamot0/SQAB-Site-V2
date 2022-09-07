@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
+
+import moment from 'moment';
 
 import './../Recruitment.css';
-import moment from 'moment';
-import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 
 export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Element {
   return (
@@ -30,8 +31,8 @@ export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Elemen
           </tr>
         </MDBTableHead>
         <MDBTableBody>
-          {(documents as RecruitmentAd[])
-            ? (documents as RecruitmentAd[])
+          {documents
+            ? documents
                 .filter((ad) => ad.Approved)
                 .sort((a, b) => {
                   return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(

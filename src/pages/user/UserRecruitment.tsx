@@ -17,7 +17,7 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBBtn } from 'mdb-
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import { useFirestore } from '../../firebase/useFirestore';
 import {
@@ -28,11 +28,16 @@ import {
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
 import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { IndividualUserRecord, RecruitmentAd } from '../../firebase/types/RecordTypes';
 
 export default function UserRecruitment() {
   const { id } = useParams<RoutedAdminSet>();
-  const { documentError: docRecErr, document: docRec } = useFirebaseDocument('recruitment', id!);
-  const { documentError: docUsrErr, document: docUsr } = useFirebaseDocument('users', id!);
+  const { documentError: docRecErr, document: docRec } = useFirebaseDocumentTyped<RecruitmentAd>(
+    'recruitment',
+    id!,
+  );
+  const { documentError: docUsrErr, document: docUsr } =
+    useFirebaseDocumentTyped<IndividualUserRecord>('users', id!);
   const { updateDocument, response } = useFirestore('recruitment');
   const { authIsReady } = useAuthorizationContext();
 

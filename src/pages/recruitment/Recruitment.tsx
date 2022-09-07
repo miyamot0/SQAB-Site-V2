@@ -1,14 +1,15 @@
 import React from 'react';
 
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-import { useFirebaseCollection } from '../../firebase/useFirebaseCollection';
+import { useFirebaseCollectionTyped } from '../../firebase/useFirebaseCollection';
 
 import RecruitmentTable from './subcomponents/RecruitmentTable';
 
 import './Recruitment.css';
+import { RecruitmentAd } from '../../firebase/types/RecordTypes';
 
 export default function Recruitment(): JSX.Element {
-  const { documents } = useFirebaseCollection('recruitment');
+  const { documents } = useFirebaseCollectionTyped<RecruitmentAd>('recruitment');
 
   return (
     <>
@@ -17,7 +18,6 @@ export default function Recruitment(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Current and Upcoming Graduate Student Opportunities</MDBCardTitle>
-
               {documents && RecruitmentTable(documents)}
             </MDBCardBody>
           </MDBCard>

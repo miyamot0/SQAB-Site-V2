@@ -23,7 +23,7 @@ import {
 import Select from 'react-select';
 import moment from 'moment';
 
-import { useFirebaseCollection } from '../../firebase/useFirebaseCollection';
+import { useFirebaseCollectionTyped } from '../../firebase/useFirebaseCollection';
 import { useFirebaseFunction } from '../../firebase/useFirebaseFunction';
 
 import { SingleOptionType } from '../tools/helpers/GeneralTypes';
@@ -36,9 +36,11 @@ import {
 } from '../../firebase/types/RecordTypes';
 
 export default function Administration(): JSX.Element {
-  const { documents: recruitmentDocuments } = useFirebaseCollection('recruitment');
-  const { documents: userDocuments } = useFirebaseCollection('users');
-  const { documents: submissionDocuments } = useFirebaseCollection('submissions');
+  const { documents: recruitmentDocuments } =
+    useFirebaseCollectionTyped<RecruitmentAd>('recruitment');
+  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecord>('users');
+  const { documents: submissionDocuments } =
+    useFirebaseCollectionTyped<PosterSubmission>('submissions');
 
   const { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster } =
     useFirebaseFunction();
@@ -104,7 +106,7 @@ export default function Administration(): JSX.Element {
     if (userDocuments && recruitmentDocuments && submissionDocuments) {
       const usersWithAdsToFilter = recruitmentDocuments.map((obj) => obj.id) as string[];
 
-      const potentialUsers = (userDocuments as unknown as IndividualUserRecord[])
+      const potentialUsers = userDocuments
         .filter((obj) => !usersWithAdsToFilter.includes(obj.id as string))
         .map((obj) => {
           return {
@@ -235,8 +237,8 @@ export default function Administration(): JSX.Element {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {(recruitmentDocuments as RecruitmentAd[])
-                    ? (recruitmentDocuments as RecruitmentAd[])
+                  {recruitmentDocuments
+                    ? recruitmentDocuments
                         .sort((a, b) => {
                           return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
                             moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
@@ -384,8 +386,8 @@ export default function Administration(): JSX.Element {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                  {(submissionDocuments as unknown as PosterSubmission[])
-                    ? (submissionDocuments as unknown as PosterSubmission[]).map((poster) => {
+                  {submissionDocuments
+                    ? submissionDocuments.map((poster) => {
                         return (
                           <tr key={poster.name} className="recruitment-table-tr">
                             <td>{poster.name}</td>

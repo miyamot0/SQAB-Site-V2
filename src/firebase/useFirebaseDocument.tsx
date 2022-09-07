@@ -12,15 +12,9 @@
 
 import { useEffect, useState } from 'react';
 import { projectFirestore } from './config';
-import { RecruitmentAd } from './types/RecordTypes';
 
 const ErrorNoData = 'There was not a document at this location';
 const ErrorSnapshot = 'Unable to get the document';
-
-interface UseFirebaseDocument {
-  document: RecruitmentAd | null;
-  documentError: string | undefined;
-}
 
 /** useFirebaseDocument
  *
@@ -30,11 +24,14 @@ interface UseFirebaseDocument {
  * @param {string} idString id for student
  * @returns {UseFirebaseDocument}
  */
-export function useFirebaseDocument(
+export function useFirebaseDocumentTyped<T>(
   collectionString: string,
   idString: string,
-): UseFirebaseDocument {
-  const [document, setDocument] = useState<any>(null);
+): {
+  document: T | null;
+  documentError: string | undefined;
+} {
+  const [document, setDocument] = useState<T | null>(null);
   const [documentError, setError] = useState<string>();
 
   function pullDocs() {
@@ -43,9 +40,10 @@ export function useFirebaseDocument(
     const unsubscribe = ref.onSnapshot(
       (snapshot) => {
         if (snapshot.data()) {
-          let object = snapshot.data();
-
-          setDocument(object);
+          setDocument({
+            ...snapshot.data(),
+            id: snapshot.id,
+          } as unknown as T);
 
           setError(undefined);
         } else {

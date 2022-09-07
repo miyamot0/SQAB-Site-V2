@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFirestore } from '../../firebase/useFirestore';
 import { useHistory } from 'react-router-dom';
-import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import {
   InitialUserState,
@@ -30,7 +30,7 @@ import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
 export default function UserProfile() {
   const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
-  const { documentError, document } = useFirebaseDocument('users', id!);
+  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>('users', id!);
   const [state, dispatch] = useReducer(UserEditReducer, InitialUserState);
   const { updateDocument, response } = useFirestore('users');
 
@@ -42,9 +42,8 @@ export default function UserProfile() {
   if (document && !didBuild) {
     setDidBuild(true);
 
-    const docObject: IndividualUserRecord = document as unknown as IndividualUserRecord;
-    setPhoneAuthed(docObject.userPhone.trim().length > 0);
-    dispatch({ type: UserEditAction.Load, payload: docObject });
+    setPhoneAuthed(document.userPhone.trim().length > 0);
+    dispatch({ type: UserEditAction.Load, payload: document });
   }
 
   /** handleEditFormSubmit

@@ -14,17 +14,8 @@ import { useEffect, useState } from 'react';
 import { projectFirestore } from './config';
 
 import { Query } from '@firebase/firestore-types';
-import { RecruitmentAd } from './types/RecordTypes';
 
 const CollectionError = 'Unable to retrieve data';
-
-export type CurrentObjectTypes = RecruitmentAd;
-export type CurrentObjectTypeArrays = RecruitmentAd[];
-
-interface UseFirebaseCollection {
-  documents: CurrentObjectTypeArrays | null;
-  error: string | undefined;
-}
 
 /** useFirebaseCollection
  *
@@ -33,8 +24,11 @@ interface UseFirebaseCollection {
  * @param {string} collectionString collection address
  * @returns {UseFirebaseCollection}
  */
-export function useFirebaseCollection(collectionString: string): UseFirebaseCollection {
-  const [documents, setDocuments] = useState<CurrentObjectTypeArrays | null>(null);
+export function useFirebaseCollectionTyped<T>(collectionString: string): {
+  documents: T[] | null;
+  error: string | undefined;
+} {
+  const [documents, setDocuments] = useState<T[] | null>(null);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
@@ -42,15 +36,15 @@ export function useFirebaseCollection(collectionString: string): UseFirebaseColl
 
     const unsubscribe = ref.onSnapshot(
       (snapshot) => {
-        let results = Array<CurrentObjectTypes | null>();
+        setDocuments(
+          snapshot.docs.map((doc) => {
+            return {
+              ...doc.data(),
+              id: doc.id,
+            } as unknown as T;
+          }),
+        );
 
-        snapshot.docs.forEach((doc) => {
-          let preDoc = doc.data() as CurrentObjectTypes;
-          preDoc.id = doc.id;
-          results.push(preDoc);
-        });
-
-        setDocuments(results as RecruitmentAd[]);
         setError(undefined);
       },
       (error) => {
