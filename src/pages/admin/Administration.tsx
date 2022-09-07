@@ -34,6 +34,7 @@ import {
   PosterSubmission,
   RecruitmentAd,
 } from '../../firebase/types/RecordTypes';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 
 export default function Administration(): JSX.Element {
   const { documents: recruitmentDocuments } =
@@ -50,6 +51,8 @@ export default function Administration(): JSX.Element {
     label: '',
     value: '',
   });
+
+  const { sysAdminFlag } = useAuthorizationContext();
 
   /** createBlankAdTemplate
    *
@@ -100,6 +103,60 @@ export default function Administration(): JSX.Element {
     } catch (err) {
       alert(err);
     }
+  }
+
+  function showAdminContent(): JSX.Element {
+    return (
+      <>
+        <MDBRow center>
+          <MDBCol sm="8">
+            <hr className="additional-margin" />
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow className="d-flex justify-content-center">
+          <MDBCol sm="8">
+            <MDBCard>
+              <MDBCardBody>
+                <MDBCardTitle>User Dashboard</MDBCardTitle>
+                <MDBTable responsive>
+                  <MDBTableHead>
+                    <tr>
+                      <th className="recruitment-table-th" scope="col">
+                        User Id
+                      </th>
+                      <th className="recruitment-table-th" scope="col">
+                        Name
+                      </th>
+                      <th className="recruitment-table-th" scope="col">
+                        Email
+                      </th>
+                      <th className="recruitment-table-th" scope="col">
+                        Number
+                      </th>
+                    </tr>
+                  </MDBTableHead>
+                  <MDBTableBody>
+                    {userDocuments
+                      ? userDocuments.map((userItem) => {
+                          return (
+                            <tr key={userItem.id} className="recruitment-table-tr">
+                              <td>{userItem.id}</td>
+                              <td>{userItem.userName}</td>
+                              <td>{userItem.userEmail}</td>
+                              <td>{userItem.userPhone}</td>
+                            </tr>
+                          );
+                        })
+                      : null}
+                  </MDBTableBody>
+                </MDBTable>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </>
+    );
   }
 
   useEffect(() => {
@@ -201,6 +258,8 @@ export default function Administration(): JSX.Element {
           </MDBCard>
         </MDBCol>
       </MDBRow>
+
+      {sysAdminFlag && showAdminContent()}
 
       <MDBRow center>
         <MDBCol sm="8">
