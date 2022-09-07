@@ -38,7 +38,7 @@ const modalStyle = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     minWidth: '400px',
-    maxWidth: '50%',
+    maxWidth: '450px',
     maxHeight: '50%',
   },
 };
@@ -148,6 +148,11 @@ export default function SignIn(): JSX.Element {
               value={otpNumber}
             ></input>
           </label>
+
+          <p>
+            You need to enter your phone number, click the captcha, enter the text message that
+            arrives after the captcha and click the "Enter OTP" button.
+          </p>
 
           <MDBBtn
             noRipple
@@ -262,39 +267,6 @@ export default function SignIn(): JSX.Element {
               >
                 Authenticate via Facebook Account
               </MDBBtn>
-
-              {/**
-              <br />
-              <br />
-              <MDBBtn
-                noRipple
-                tag="a"
-                href="#!"
-                disabled={buttonStatus}
-                style={{ width: '100%' }}
-                className="button-fit-card"
-                onClick={() => {
-                  login(ProviderTypes.GitHub);
-                }}
-              >
-                Authenticate via GitHub Account
-              </MDBBtn>
-              <br />
-              <br />
-              <MDBBtn
-                noRipple
-                tag="a"
-                href="#!"
-                disabled={buttonStatus}
-                style={{ width: '100%' }}
-                className="button-fit-card"
-                onClick={() => {
-                  login(ProviderTypes.Twitter);
-                }}
-              >
-                Authenticate via Twitter Account
-              </MDBBtn>
-   */}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

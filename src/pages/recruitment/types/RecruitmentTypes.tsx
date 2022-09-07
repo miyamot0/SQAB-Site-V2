@@ -8,6 +8,7 @@ export type RecruitmentAd = {
   Description: string;
   Institution: string;
   Link: string;
+  LabLink: string;
   Mentor: string;
   Name: string;
   Position: string;
@@ -27,6 +28,7 @@ export interface EditRecruitmentState {
   Description: string;
   Institution: string;
   Link: string;
+  LabLink: string;
   Position: string;
 }
 

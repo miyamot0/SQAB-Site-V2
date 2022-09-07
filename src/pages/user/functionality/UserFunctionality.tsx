@@ -23,6 +23,7 @@ export enum RecruitmentEditAction {
   EditDescription,
   EditLink,
   EditDate,
+  EditLabLink,
 }
 
 /**
@@ -48,6 +49,7 @@ export const InitialRecruitmentState: EditRecruitmentState = {
   Description: '',
   Institution: '',
   Link: '',
+  LabLink: '',
   Position: '',
 };
 
@@ -93,6 +95,8 @@ export function RecruitmentEditReducer(
       return { ...state, Link: action.payload };
     case RecruitmentEditAction.EditDate:
       return { ...state, Cycle: action.payload };
+    case RecruitmentEditAction.EditLabLink:
+      return { ...state, LabLink: action.payload };
 
     default:
       throw new Error();

@@ -33,8 +33,11 @@ export default function MentorPage(): JSX.Element {
                 <b>Deadline for Applications: </b> {document.Cycle}
                 <br />
                 <br />
-                <b>Link to Application/Institution Information: </b>{' '}
-                <a href={document.Link}>Link</a>
+                <b>Link to Additional Lab Information: </b>{' '}
+                <a href={document.LabLink}>{document.LabLink}</a>
+                <br />
+                <br />
+                <b>Link to Application Information: </b> <a href={document.Link}>{document.Link}</a>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

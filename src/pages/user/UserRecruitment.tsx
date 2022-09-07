@@ -30,15 +30,17 @@ import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 
 export default function UserRecruitment() {
-  const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
   const { documentError: docRecErr, document: docRec } = useFirebaseDocument('recruitment', id!);
   const { documentError: docUsrErr, document: docUsr } = useFirebaseDocument('users', id!);
-  const [state, dispatch] = useReducer(RecruitmentEditReducer, InitialRecruitmentState);
   const { updateDocument, response } = useFirestore('recruitment');
+  const { authIsReady } = useAuthorizationContext();
+
+  const [state, dispatch] = useReducer(RecruitmentEditReducer, InitialRecruitmentState);
   const [didBuild, setDidBuild] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
-  const { authIsReady } = useAuthorizationContext();
+
+  const history = useHistory();
 
   useEffect(() => {
     if (docRec && docUsr && !didBuild) {
@@ -62,13 +64,14 @@ export default function UserRecruitment() {
   async function handleEditRecruitmentSubmit(): Promise<any> {
     setFormError('');
 
-    let selectedProperties = (({ Bio, Cycle, Description, Link, Position }) => ({
-      Bio,
-      Cycle,
-      Description,
-      Link,
-      Position,
-    }))(state as EditRecruitmentState);
+    let selectedProperties = {
+      Bio: state.Bio,
+      Cycle: state.Cycle,
+      Description: state.Description,
+      Link: state.Link,
+      Position: state.Position,
+      LabLink: state.LabLink,
+    };
 
     selectedProperties.Cycle = dateToMDY(selectedProperties.Cycle);
 
@@ -174,6 +177,17 @@ export default function UserRecruitment() {
                       dispatch({ type: RecruitmentEditAction.EditDate, payload: e.target.value })
                     }
                     value={state.Cycle}
+                  ></input>
+                </label>
+                <label>
+                  <span>Link to Lab Webpage:</span>
+                  <input
+                    required
+                    type="text"
+                    onChange={(e) =>
+                      dispatch({ type: RecruitmentEditAction.EditLabLink, payload: e.target.value })
+                    }
+                    value={state.LabLink}
                   ></input>
                 </label>
                 <label>

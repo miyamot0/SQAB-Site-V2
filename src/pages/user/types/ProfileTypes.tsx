@@ -19,4 +19,5 @@ export type RecruitmentActions =
   | { type: RecruitmentEditAction.EditMentorBio; payload: string }
   | { type: RecruitmentEditAction.EditDescription; payload: string }
   | { type: RecruitmentEditAction.EditLink; payload: string }
-  | { type: RecruitmentEditAction.EditDate; payload: string };
+  | { type: RecruitmentEditAction.EditDate; payload: string }
+  | { type: RecruitmentEditAction.EditLabLink; payload: string };
