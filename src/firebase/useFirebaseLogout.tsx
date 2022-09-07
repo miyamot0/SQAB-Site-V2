@@ -41,8 +41,12 @@ export function useFirebaseLogout(): FirebaseLogout {
     try {
       await projectAuth.signOut();
 
-      dispatch({
+      dispatch!({
         type: AuthorizationStates.LOGOUT,
+        payloadUser: null,
+        payloadFlagAdmin: false,
+        payloadFlagRecruiter: false,
+        payloadFlagSysAdmin: false,
       });
 
       if (!logoutCancelled) {

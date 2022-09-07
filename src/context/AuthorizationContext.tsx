@@ -24,27 +24,32 @@ export interface AuthorizationContextInterface {
   user: firebase.User | null;
   authIsReady: boolean;
   adminFlag: boolean;
+  sysAdminFlag: boolean;
   adFlag: boolean;
-  dispatch: any;
+  dispatch: LoginDispatch | undefined;
 }
 
 export interface AuthorizationContextStateInterface {
   user: firebase.User | null;
   authIsReady: boolean;
   adminFlag: boolean;
+  sysAdminFlag: boolean;
   adFlag: boolean;
 }
 
 interface FirebaseLoginAction {
   type: AuthorizationStates;
-  payload: firebase.User | null;
-  payload2: boolean;
-  payload3: boolean;
+  payloadUser: firebase.User | null;
+  payloadFlagAdmin: boolean;
+  payloadFlagRecruiter: boolean;
+  payloadFlagSysAdmin: boolean;
 }
 
 export type Props = {
   children: ReactNode;
 };
+
+type LoginDispatch = (arg: FirebaseLoginAction) => void;
 
 // Context to inherit
 export const AuthorizationContext = createContext<AuthorizationContextInterface>({
@@ -52,6 +57,7 @@ export const AuthorizationContext = createContext<AuthorizationContextInterface>
   authIsReady: false,
   adFlag: false,
   adminFlag: false,
+  sysAdminFlag: false,
   dispatch: undefined,
 });
 
@@ -65,6 +71,17 @@ export function setUpRecaptcha(
   recapchaVerifier: firebase.auth.RecaptchaVerifier,
 ) {
   return projectAuth.signInWithPhoneNumber(phoneNumber, recapchaVerifier);
+}
+
+/** simplifyPrivilegeAccess
+ *
+ * Simplify access to privilege level
+ *
+ * @param {string} res level
+ * @returns {bool}
+ */
+export function simplifySysPrivilegeAccess(res: string): boolean {
+  return res === 'sysadmin';
 }
 
 /** simplifyPrivilegeAccess
@@ -94,19 +111,21 @@ export function authReducer(
     case AuthorizationStates.LOGIN:
       return {
         ...state,
-        user: action.payload,
+        user: action.payloadUser,
         authIsReady: false,
-        adminFlag: action.payload2,
-        adFlag: action.payload3,
+        adminFlag: action.payloadFlagAdmin,
+        adFlag: action.payloadFlagRecruiter,
+        sysAdminFlag: action.payloadFlagSysAdmin,
       };
     case AuthorizationStates.LOGOUT:
-      return { ...state, user: null, adminFlag: false, adFlag: false };
+      return { ...state, user: null, adminFlag: false, adFlag: false, sysAdminFlag: false };
     case AuthorizationStates.READY:
       return {
-        user: action.payload,
+        user: action.payloadUser,
         authIsReady: true,
-        adminFlag: action.payload2,
-        adFlag: action.payload3,
+        adminFlag: action.payloadFlagAdmin,
+        adFlag: action.payloadFlagRecruiter,
+        sysAdminFlag: action.payloadFlagSysAdmin,
       };
     default:
       return state;
@@ -126,6 +145,7 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
     authIsReady: false,
     adminFlag: false,
     adFlag: false,
+    sysAdminFlag: false,
   });
 
   useEffect(() => {
@@ -134,17 +154,19 @@ export function AuthorizationContextProvider({ children }: Props): JSX.Element {
         user.getIdTokenResult().then((res) => {
           dispatch({
             type: AuthorizationStates.READY,
-            payload: user,
-            payload2: simplifyPrivilegeAccess(res.claims.level),
-            payload3: res.claims.canPostAd,
+            payloadUser: user,
+            payloadFlagAdmin: simplifyPrivilegeAccess(res.claims.level),
+            payloadFlagRecruiter: res.claims.canPostAd,
+            payloadFlagSysAdmin: simplifySysPrivilegeAccess(res.claims.level),
           });
         });
       } else {
         dispatch({
           type: AuthorizationStates.READY,
-          payload: user,
-          payload2: false,
-          payload3: false,
+          payloadUser: user,
+          payloadFlagAdmin: false,
+          payloadFlagRecruiter: false,
+          payloadFlagSysAdmin: false,
         });
       }
 

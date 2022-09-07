@@ -13,7 +13,11 @@
 import { useState, useEffect } from 'react';
 import { googleAuthProvider, fbAuthProvider, projectAuth } from './config';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
-import { AuthorizationStates, simplifyPrivilegeAccess } from '../context/AuthorizationContext';
+import {
+  AuthorizationStates,
+  simplifyPrivilegeAccess,
+  simplifySysPrivilegeAccess,
+} from '../context/AuthorizationContext';
 import { ProviderTypes } from './types/AccountTypes';
 import firebase from 'firebase';
 
@@ -40,6 +44,38 @@ export function useFirebaseLogin(): FirebaseLogin {
 
   const { dispatch } = useAuthorizationContext();
 
+  /** preFlightObject
+   *
+   * Construct object to pass along to dispatcher
+   *
+   * @param {firebase.User | null} user
+   * @param {firebase.auth.IdTokenResult} res
+   * @returns
+   */
+  function preFlightObject(user: firebase.User | null, res: firebase.auth.IdTokenResult) {
+    return {
+      payloadUser: user,
+      payloadFlagAdmin: simplifyPrivilegeAccess(res.claims.level),
+      payloadFlagRecruiter: res.claims.canPostAd,
+      payloadFlagSysAdmin: simplifySysPrivilegeAccess(res.claims.level),
+    };
+  }
+
+  /** handleResult
+   *
+   * Handle the resulting auth challenge
+   *
+   * @param {firebase.auth.UserCredential} result
+   */
+  function handleResult(result: firebase.auth.UserCredential) {
+    result.user!.getIdTokenResult().then((res) => {
+      dispatch!({
+        type: AuthorizationStates.READY,
+        ...preFlightObject(result.user, res),
+      });
+    });
+  }
+
   /** login
    *
    * proper login fx
@@ -59,43 +95,18 @@ export function useFirebaseLogin(): FirebaseLogin {
         case ProviderTypes.Google:
           projectAuth
             .signInWithPopup(googleAuthProvider)
-            .then((result: firebase.auth.UserCredential) => {
-              result.user!.getIdTokenResult().then((res) => {
-                dispatch({
-                  type: AuthorizationStates.READY,
-                  payload: result.user,
-                  payload2: simplifyPrivilegeAccess(res.claims.level),
-                  payload3: res.claims.canPostAd,
-                });
-              });
-            });
+            .then((result: firebase.auth.UserCredential) => handleResult(result));
           break;
         case ProviderTypes.Facebook:
           projectAuth
             .signInWithPopup(fbAuthProvider)
-            .then((result: firebase.auth.UserCredential) => {
-              result.user!.getIdTokenResult().then((res) => {
-                dispatch({
-                  type: AuthorizationStates.READY,
-                  payload: result.user,
-                  payload2: simplifyPrivilegeAccess(res.claims.level),
-                  payload3: res.claims.canPostAd,
-                });
-              });
-            });
+            .then((result: firebase.auth.UserCredential) => handleResult(result));
           break;
 
         case ProviderTypes.Phone:
-          confirmResult?.confirm(otpNumber!).then((result) => {
-            result.user!.getIdTokenResult().then((res) => {
-              dispatch({
-                type: AuthorizationStates.READY,
-                payload: result.user,
-                payload2: simplifyPrivilegeAccess(res.claims.level),
-                payload3: res.claims.canPostAd,
-              });
-            });
-          });
+          confirmResult
+            ?.confirm(otpNumber!)
+            .then((result: firebase.auth.UserCredential) => handleResult(result));
           break;
 
         default:
