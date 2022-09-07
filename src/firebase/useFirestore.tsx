@@ -11,8 +11,8 @@
  */
 
 import { useReducer, useEffect, useState } from 'react';
-import { PosterSubmission } from '../pages/submissions/types/SubmissionTypes';
 import { projectFirestore, timestamp } from './config';
+import { PosterSubmission } from './types/RecordTypes';
 
 export enum FirestoreStates {
   PENDING = 'PENDING',

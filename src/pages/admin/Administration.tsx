@@ -26,12 +26,14 @@ import moment from 'moment';
 import { useFirebaseCollection } from '../../firebase/useFirebaseCollection';
 import { useFirebaseFunction } from '../../firebase/useFirebaseFunction';
 
-import { IndividualUserRecord } from '../user/types/ProfileTypes';
-import { RecruitmentAd } from '../recruitment/types/RecruitmentTypes';
 import { SingleOptionType } from '../tools/helpers/GeneralTypes';
-import { PosterSubmission } from '../submissions/types/SubmissionTypes';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import {
+  IndividualUserRecord,
+  PosterSubmission,
+  RecruitmentAd,
+} from '../../firebase/types/RecordTypes';
 
 export default function Administration(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollection('recruitment');
@@ -245,7 +247,7 @@ export default function Administration(): JSX.Element {
                         .map((recr) => {
                           return (
                             <tr key={recr.Contact} className="recruitment-table-tr">
-                              <td>{recr.Mentor}</td>
+                              <td title={recr.id}>{recr.Mentor}</td>
                               <td>{recr.Institution}</td>
                               <td>
                                 {' '}

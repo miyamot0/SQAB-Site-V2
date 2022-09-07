@@ -4,7 +4,7 @@ import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 import './../Recruitment.css';
 import moment from 'moment';
-import { RecruitmentAd } from './../types/RecruitmentTypes';
+import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 
 export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Element {
   return (

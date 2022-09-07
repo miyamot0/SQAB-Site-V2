@@ -11,8 +11,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { RecruitmentAd } from '../pages/recruitment/types/RecruitmentTypes';
 import { projectFirestore } from './config';
+import { RecruitmentAd } from './types/RecordTypes';
 
 const ErrorNoData = 'There was not a document at this location';
 const ErrorSnapshot = 'Unable to get the document';

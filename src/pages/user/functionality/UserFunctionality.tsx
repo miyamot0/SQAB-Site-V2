@@ -1,5 +1,6 @@
+import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
 import { EditRecruitmentState } from '../../recruitment/types/RecruitmentTypes';
-import { IndividualUserRecord, RecruitmentActions } from '../types/ProfileTypes';
+import { RecruitmentActions } from '../types/ProfileTypes';
 
 /**
  * Actions for reducer

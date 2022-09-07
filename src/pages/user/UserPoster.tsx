@@ -18,7 +18,7 @@ import { useParams } from 'react-router-dom';
 import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
-import { PosterSubmission } from '../submissions/types/SubmissionTypes';
+import { PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();

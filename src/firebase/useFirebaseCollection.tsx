@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { projectFirestore } from './config';
 
 import { Query } from '@firebase/firestore-types';
-import { RecruitmentAd } from '../pages/recruitment/types/RecruitmentTypes';
+import { RecruitmentAd } from './types/RecordTypes';
 
 const CollectionError = 'Unable to retrieve data';
 
@@ -34,7 +34,7 @@ interface UseFirebaseCollection {
  * @returns {UseFirebaseCollection}
  */
 export function useFirebaseCollection(collectionString: string): UseFirebaseCollection {
-  const [documents, setDocuments] = useState<RecruitmentAd[] | null>(null);
+  const [documents, setDocuments] = useState<CurrentObjectTypeArrays | null>(null);
   const [error, setError] = useState<string>();
 
   useEffect(() => {

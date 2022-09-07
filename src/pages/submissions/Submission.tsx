@@ -27,15 +27,14 @@ import {
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirestore } from '../../firebase/useFirestore';
-import { PosterSubmission } from './types/SubmissionTypes';
 import { commonHeading, showSubmissionsClosed } from './helper/SubmissionHelper';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import { useFirebaseDocument } from '../../firebase/useFirebaseDocument';
-import { IndividualUserRecord } from '../user/types/ProfileTypes';
 import { timestamp } from '../../firebase/config';
 
 import CarouselConference from '../../components/CarouselConference';
 import Select from 'react-select';
+import { IndividualUserRecord, PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function Submission(params: { userId: string }): JSX.Element {
   const { user, authIsReady } = useAuthorizationContext();
