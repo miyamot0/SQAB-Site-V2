@@ -8,14 +8,7 @@
 
 import React from 'react';
 
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBRow,
-  MDBCol
-} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
@@ -33,8 +26,8 @@ export default function Registration(): JSX.Element {
                 <br />
                 <br />
                 SQAB Membership includes six months of free electronic access to the Special Issue
-                of Behavioural Processes, containing the proceedings of last year's SQAB meeting,
-                beginning on the date of our conference.
+                of Behavioural Processes, containing the proceedings of last year&apos;s SQAB
+                meeting, beginning on the date of our conference.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -71,16 +64,16 @@ export default function Registration(): JSX.Element {
             <MDBCardBody>
               <MDBCardTitle>Terms of Registration</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}>
-                All attendees at SQAB events are expected to abide by SQAB's Ethics and Diversity
-                policies. Discriminatory and derogatory language and behavior, as well as harassment
-                of any kind, will not be tolerated at the SQAB conference.
+                All attendees at SQAB events are expected to abide by SQAB&apos;s Ethics and
+                Diversity policies. Discriminatory and derogatory language and behavior, as well as
+                harassment of any kind, will not be tolerated at the SQAB conference.
                 <br />
                 <br />
                 Anyone registering for the SQAB conference is required to accept the following:
                 <br />
                 <br />
                 Your registration is acceptance of responsibility. By registering for the SQAB
-                conference, you agree to abide by SQAB's Ethics and Diversity policies and
+                conference, you agree to abide by SQAB&apos;s Ethics and Diversity policies and
                 understand that discriminatory and derogatory language and behavior, as well as
                 harassment of any kind, will not be tolerated at SQAB. Failure to comply with the
                 policy could result in suspension of membership to SQAB, revocation of rights to

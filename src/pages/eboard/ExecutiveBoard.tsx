@@ -32,7 +32,7 @@ export default function ExecutiveBoard(): JSX.Element {
                 as student appointees, is provided below.
                 <br />
                 <br />
-                The most recent copy of the organization's bylaws are available{' '}
+                The most recent copy of the organization&apos;s bylaws are available{' '}
                 <a href={Bylaws} className="bylawsLink">
                   here
                 </a>

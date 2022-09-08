@@ -140,16 +140,18 @@ export default function Header(): JSX.Element {
             The new listserv is the same as the previous. MailMan does not require an account with
             Yahoo or any other third party. Rather, you simply use an email of your choice and
             select a password. It is good to note that MailMan suggests avoiding the use of
-            'valuable' passwords. This is because password changes are sent via email and this is
-            not a secure process (i.e., do not use a password also used with sensitive accounts).
+            &apos;valuable&apos; passwords. This is because password changes are sent via email and
+            this is not a secure process (i.e., do not use a password also used with sensitive
+            accounts).
             <br />
             <br />
             The MailMan service allows readers to (optionally) receive updates in the form of
-            'digests.' Digests are a way to get updates from the listserv without receiving dozens
-            of updates in the span of a day. That is, a single email digest will provide updates to
-            users if so desired. Digests are generally preferred by users who do not wish to be
-            receive a notification on their phone or email client following every single interaction
-            on the listserv (most users do opt for a digest to avoid this very issue).
+            &apos;digests.&apos; Digests are a way to get updates from the listserv without
+            receiving dozens of updates in the span of a day. That is, a single email digest will
+            provide updates to users if so desired. Digests are generally preferred by users who do
+            not wish to be receive a notification on their phone or email client following every
+            single interaction on the listserv (most users do opt for a digest to avoid this very
+            issue).
             <br />
             <br />
             Various features exist beyond those explicitly noted here and users are encouraged to
@@ -159,7 +161,8 @@ export default function Header(): JSX.Element {
             <br />
             MailMan has a template-based manner of sending emails and this has a high likelihood of
             being picked up as SPAM (i.e., it can look like unsolicited messaging. As a result, we
-            suggest you immediately whitelist this sender from your email client's SPAM filtering.
+            suggest you immediately whitelist this sender from your email client&apos;s SPAM
+            filtering.
             <br />
             <br />
             <b>Getting Started:</b>

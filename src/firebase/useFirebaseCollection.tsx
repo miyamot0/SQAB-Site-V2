@@ -32,7 +32,7 @@ export function useFirebaseCollectionTyped<T>(collectionString: string): {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    let ref: Query = projectFirestore.collection(collectionString);
+    const ref: Query = projectFirestore.collection(collectionString);
 
     const unsubscribe = ref.onSnapshot(
       (snapshot) => {
@@ -47,7 +47,7 @@ export function useFirebaseCollectionTyped<T>(collectionString: string): {
 
         setError(undefined);
       },
-      (error) => {
+      function () {
         setError(CollectionError);
       },
     );

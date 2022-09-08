@@ -144,7 +144,7 @@ export default function AnalyticPmax(): JSX.Element {
 
     const rowInNumbers = row.map(Number);
 
-    var pDelta = 0.01;
+    const pDelta = 0.01;
 
     // Scale prices into log units
     const P1 = Math.log10(rowInNumbers[3]);
@@ -254,15 +254,17 @@ export default function AnalyticPmax(): JSX.Element {
                 <br />
                 To calculate exact solution P<sub>MAX</sub>, you may paste the fitted Q0, alpha, and
                 K parameters from the model of demand into the spreadsheet component (in their
-                respective columns). Once entered, simply press the "Calculate" button to calculate
-                the Analytical P<sub>MAX</sub>. Additionally, the Approxiate P<sub>MAX</sub> will
-                also be outputted in the spreadsheet component, in its respective column, though
-                users are recommended to refer to the exact approach whenever possible.
+                respective columns). Once entered, simply press the &quot;Calculate&quot; button to
+                calculate the Analytical P<sub>MAX</sub>. Additionally, the Approxiate P
+                <sub>MAX</sub> will also be outputted in the spreadsheet component, in its
+                respective column, though users are recommended to refer to the exact approach
+                whenever possible.
                 <br />
                 <br />
-                Optionally, you may preview this method using a sample data by pressing the "Load
-                Sample Data" button and then pressing "Calculate". This will let you view the
-                differences between the Approximate and Analytical P<sub>MAX</sub>.
+                Optionally, you may preview this method using a sample data by pressing the
+                &quot;Load Sample Data&quot; button and then pressing &quot;Calculate&quot;. This
+                will let you view the differences between the Approximate and Analytical P
+                <sub>MAX</sub>.
               </MDBCardText>
 
               <MDBBtn

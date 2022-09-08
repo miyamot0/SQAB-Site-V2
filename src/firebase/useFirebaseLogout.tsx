@@ -38,10 +38,14 @@ export function useFirebaseLogout(): FirebaseLogout {
     setLogoutError(undefined);
     setLogoutPending(true);
 
+    if (dispatch === undefined) {
+      return;
+    }
+
     try {
       await projectAuth.signOut();
 
-      dispatch!({
+      dispatch({
         type: AuthorizationStates.LOGOUT,
         payloadUser: null,
         payloadFlagAdmin: false,

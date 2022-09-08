@@ -23,8 +23,8 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import { DemandResult } from './helpers/DemandTypes';
-import { SingleOptionType } from './helpers/GeneralTypes';
+import { DemandResult, DemandXYPoints, PlotXYPoints } from './types/DemandTypes';
+import { SingleOptionType } from './types/GeneralTypes';
 
 import './Tools.css';
 import {
@@ -103,8 +103,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
     const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
-    let dataForPlotting: any[] = [];
-    let dataPointsForPlotting: any[] = [];
+    const dataForPlotting: DemandXYPoints[] = [];
+    const dataPointsForPlotting: PlotXYPoints[] = [];
 
     let lowestDemand = -1;
 
@@ -208,8 +208,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
     const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
-    let dataForPlotting: any[] = [];
-    let dataPointsForPlotting: any[] = [];
+    const dataForPlotting: DemandXYPoints[] = [];
+    const dataPointsForPlotting: PlotXYPoints[] = [];
 
     let lowestDemand = -1;
 
@@ -314,8 +314,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
     const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
-    let dataForPlotting: any[] = [];
-    let dataPointsForPlotting: any[] = [];
+    const dataForPlotting: DemandXYPoints[] = [];
+    const dataPointsForPlotting: PlotXYPoints[] = [];
 
     let lowestDemand = -1;
 
@@ -420,8 +420,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
     const newPrices = Array.from({ length: density }, (v, k) => k + delta);
 
-    let dataForPlotting: any[] = [];
-    let dataPointsForPlotting: any[] = [];
+    const dataForPlotting: DemandXYPoints[] = [];
+    const dataPointsForPlotting: PlotXYPoints[] = [];
 
     let lowestDemand = -1;
 
@@ -541,13 +541,17 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       return;
     }
 
+    if (hotData === null || hotData === undefined) {
+      return;
+    }
+
     const thing = hotData;
 
-    var mX = [];
-    var mY = [];
+    const mX = [];
+    const mY = [];
 
-    for (var i = 0; i < thing!.length; i++) {
-      var temp = thing![i];
+    for (let i = 0; i < thing.length; i++) {
+      const temp = thing[i];
 
       const passCheck = isValidNumber(temp[0]) && isValidNumber(temp[1]);
 
@@ -679,9 +683,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 for these calculations. Demand Curve Analyzer fits respective parameters using
                 differential evolution, a robust metaheuristic process for optimizing model
                 performance. At present, only a single series may be fitted at a time. All methods
-                are performed "behind the scenes", faciliating model fitting while retaining a
-                simple, spreadsheet-based interface. This project is fully open-sourced under a
-                GPL-license (v3) and all source code is completely available.
+                are performed &quot;behind the scenes&quot;, faciliating model fitting while
+                retaining a simple, spreadsheet-based interface. This project is fully open-sourced
+                under a GPL-license (v3) and all source code is completely available.
                 <br />
                 <br />
                 <b>Based on the following works:</b>
@@ -789,19 +793,21 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 <Select
                   options={ModelOptions}
                   onChange={(option) => {
-                    setModelOption(option!);
+                    if (option) {
+                      setModelOption(option);
 
-                    if (option!.value.includes('Zero')) {
-                      setKOptionsAvailable([
-                        { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-                      ]);
+                      if (option.value.includes('Zero')) {
+                        setKOptionsAvailable([
+                          { label: 'Fit as Parameter', value: 'Fit as Parameter' },
+                        ]);
 
-                      setKOption({ label: 'Fit as Parameter', value: 'Fit as Parameter' });
-                    } else {
-                      setKOptionsAvailable([
-                        { label: 'Log Range', value: 'Log Range' },
-                        { label: 'Fit as Parameter', value: 'Fit as Parameter' },
-                      ]);
+                        setKOption({ label: 'Fit as Parameter', value: 'Fit as Parameter' });
+                      } else {
+                        setKOptionsAvailable([
+                          { label: 'Log Range', value: 'Log Range' },
+                          { label: 'Fit as Parameter', value: 'Fit as Parameter' },
+                        ]);
+                      }
                     }
                   }}
                   value={modelOption}
@@ -820,7 +826,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 <Select
                   options={kOptionsAvailable}
                   onChange={(option) => {
-                    setKOption(option!);
+                    if (option) {
+                      setKOption(option);
+                    }
                   }}
                   value={kOption}
                   menuPlacement="auto"

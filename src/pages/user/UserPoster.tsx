@@ -22,10 +22,7 @@ import { PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>(
-    'submissions',
-    id!,
-  );
+  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>('submissions', id);
   const { authIsReady } = useAuthorizationContext();
 
   if (!authIsReady) {

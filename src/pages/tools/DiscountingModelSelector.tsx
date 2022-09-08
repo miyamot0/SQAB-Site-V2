@@ -35,9 +35,9 @@ import {
   getbleichrodtProjection,
   getElementByModel,
 } from './helpers/DiscountingHelpers';
-import { PointArray, DiscountingResult, ModelOptions } from './helpers/DiscountingTypes';
+import { PointArray, DiscountingResult, ModelOptions } from './types/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
-import { SingleOptionType } from './helpers/GeneralTypes';
+import { SingleOptionType } from './types/GeneralTypes';
 
 export default function DiscountingModelSelector(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
@@ -319,11 +319,15 @@ export default function DiscountingModelSelector(): JSX.Element {
 
     const thing = hotData;
 
-    var mX = [];
-    var mY = [];
+    if (thing === null || thing === undefined) {
+      return;
+    }
 
-    for (var i = 0; i < thing!.length; i++) {
-      var temp = thing![i];
+    const mX = [];
+    const mY = [];
+
+    for (let i = 0; i < thing.length; i++) {
+      const temp = thing[i];
 
       const passCheck = isValidNumber(temp[0]) && isValidNumber(temp[1]);
 
@@ -374,29 +378,31 @@ export default function DiscountingModelSelector(): JSX.Element {
       const belElement = getElementByModel(data.results, 'Beleichrodt');
 
       // Map points
-      let temp = [];
-      for (var k = 0; k < obj.data.x.length; k++) {
+      const temp = [];
+      for (let k = 0; k < obj.data.x.length; k++) {
         temp.push({
           x: obj.data.x[k],
           y: obj.data.y[k],
         });
       }
 
-      let tempN = [];
-      let tempE = [];
-      let tempH = [];
-      let tempBD = [];
-      let tempMG = [];
-      let tempR = [];
-      let tempLP = [];
-      let tempEP = [];
-      let tempB = [];
+      const tempN = [];
+      const tempE = [];
+      const tempH = [];
+      const tempBD = [];
+      const tempMG = [];
+      const tempR = [];
+      const tempLP = [];
+      const tempEP = [];
+      const tempB = [];
 
-      for (var i = 1; i <= mFinalDelay; ) {
-        tempN.push({
-          x: i,
-          y: noiseElement!.Params[0],
-        });
+      for (let i = 1; i <= mFinalDelay; ) {
+        if (noiseElement) {
+          tempN.push({
+            x: i,
+            y: noiseElement.Params[0],
+          });
+        }
 
         if (expElement) {
           tempE.push({
@@ -870,7 +876,9 @@ export default function DiscountingModelSelector(): JSX.Element {
                 <Select
                   options={ModelOptions}
                   onChange={(option) => {
-                    setModelOption(option!);
+                    if (option) {
+                      setModelOption(option);
+                    }
                   }}
                   value={modelOption}
                   styles={{

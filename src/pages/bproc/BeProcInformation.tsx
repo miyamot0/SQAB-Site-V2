@@ -6,22 +6,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
+import React from 'react';
 
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBRow,
-  MDBCol,
-} from 'mdb-react-ui-kit'
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
-import { CardBodyTextStyle } from '../../utilities/StyleHelper'
+import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import './BeProcInformation.css'
+import './BeProcInformation.css';
 
-import specialIssueJson from './../../assets/json/specialissues.json'
+import specialIssueJson from './../../assets/json/specialissues.json';
 
 export default function BeProcInformation(): JSX.Element {
   return (
@@ -31,13 +24,11 @@ export default function BeProcInformation(): JSX.Element {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>
-                Special Issues from The Society for the
-                Quantitative Analyses of Behavior
+                Special Issues from The Society for the Quantitative Analyses of Behavior
               </MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}>
-                Special Issues are available through Open
-                Access complements of Elsevier for six
-                months following​ conference proceedings.
+                Special Issues are available through Open Access complements of Elsevier for six
+                months following conference proceedings.
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -54,9 +45,7 @@ export default function BeProcInformation(): JSX.Element {
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>
-                Available Tutorials
-              </MDBCardTitle>
+              <MDBCardTitle>Available Tutorials</MDBCardTitle>
               <ul className="beproc-ul">
                 {specialIssueJson.Specials.map((issue) => {
                   return (
@@ -69,7 +58,7 @@ export default function BeProcInformation(): JSX.Element {
                         </span>
                       </a>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </MDBCardBody>
@@ -77,5 +66,5 @@ export default function BeProcInformation(): JSX.Element {
         </MDBCol>
       </MDBRow>
     </>
-  )
+  );
 }

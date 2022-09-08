@@ -34,10 +34,10 @@ export default function UserRecruitment() {
   const { id } = useParams<RoutedAdminSet>();
   const { documentError: docRecErr, document: docRec } = useFirebaseDocumentTyped<RecruitmentAd>(
     'recruitment',
-    id!,
+    id,
   );
   const { documentError: docUsrErr, document: docUsr } =
-    useFirebaseDocumentTyped<IndividualUserRecord>('users', id!);
+    useFirebaseDocumentTyped<IndividualUserRecord>('users', id);
   const { updateDocument, response } = useFirestore('recruitment');
   const { authIsReady } = useAuthorizationContext();
 
@@ -66,10 +66,10 @@ export default function UserRecruitment() {
    * Submission event for student edit form
    *
    */
-  async function handleEditRecruitmentSubmit(): Promise<any> {
+  async function handleEditRecruitmentSubmit(): Promise<void> {
     setFormError('');
 
-    let selectedProperties = {
+    const selectedProperties = {
       Bio: state.Bio,
       Cycle: state.Cycle,
       Description: state.Description,
@@ -80,7 +80,7 @@ export default function UserRecruitment() {
 
     selectedProperties.Cycle = dateToMDY(selectedProperties.Cycle);
 
-    await updateDocument(id!, selectedProperties);
+    await updateDocument(id, selectedProperties);
 
     if (response.error) {
       alert(response.error);
@@ -88,7 +88,7 @@ export default function UserRecruitment() {
       history.push('/');
     }
 
-    return null;
+    return;
   }
 
   if (!authIsReady) {

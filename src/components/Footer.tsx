@@ -24,8 +24,8 @@ export default function Footer() {
 
             <p>
               This site is built using Material Design for Bootstrap and React and is hosted on
-              Google's firebase service. This site, along with all of the assets/code, is available
-              for public inspection at the GitHub account linked below in the repository{' '}
+              Google&apos;s firebase service. This site, along with all of the assets/code, is
+              available for public inspection at the GitHub account linked below in the repository{' '}
               <a href="https://github.com/miyamot0/SQAB-Site-V2">SQAB-Site-V2</a> under an{' '}
               <a href="https://raw.githubusercontent.com/miyamot0/SQAB-Site-V2/master/LICENSE">
                 MIT

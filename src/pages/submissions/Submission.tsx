@@ -63,34 +63,36 @@ export default function Submission(params: { userId: string }): JSX.Element {
   async function handleCreateStudentSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
 
-    if (state.submittingAuthor!.split(/\w\w+/).length - 1 < 2) {
-      alert('Please enter a full name (i.e., First and Last)!');
-      return;
-    } else if (state.posterTitle!.split(/\w\w+/).length - 1 < 2) {
-      alert('Please enter a full title (i.e., 3+ Words)!');
-    } else if (state.posterAbstract!.split(/\w\w+/).length - 1 > 120) {
-      alert('Abstract is too long (i.e., over 120 words)!');
-      return;
-    }
+    if (state.submittingAuthor && state.posterTitle && state.posterAbstract) {
+      if (state.submittingAuthor.split(/\w\w+/).length - 1 < 2) {
+        alert('Please enter a full name (i.e., First and Last)!');
+        return;
+      } else if (state.posterTitle.split(/\w\w+/).length - 1 < 2) {
+        alert('Please enter a full title (i.e., 3+ Words)!');
+      } else if (state.posterAbstract.split(/\w\w+/).length - 1 > 120) {
+        alert('Abstract is too long (i.e., over 120 words)!');
+        return;
+      }
 
-    const posterSubmission: PosterSubmission = {
-      name: state.submittingAuthor,
-      title: state.posterTitle,
-      email: state.correspondingEmail,
-      abstract: state.posterAbstract,
-      list: state.posterAuthorsFull,
-      time: timestamp.fromDate(new Date()),
-      presenter: state.authorChoice.value === 'I am interested.',
-      reviewed: false,
-    };
+      const posterSubmission: PosterSubmission = {
+        name: state.submittingAuthor,
+        title: state.posterTitle,
+        email: state.correspondingEmail,
+        abstract: state.posterAbstract,
+        list: state.posterAuthorsFull,
+        time: timestamp.fromDate(new Date()),
+        presenter: state.authorChoice.value === 'I am interested.',
+        reviewed: false,
+      };
 
-    await addDocument(posterSubmission, user?.uid);
+      await addDocument(posterSubmission, user?.uid);
 
-    if (response.error) {
-      alert(`There was an issue uploading your submission: ${response.error}`);
-    } else {
-      setButtonText('Submission Completed');
-      alert('Your submission has been received and is currently under consideration.');
+      if (response.error) {
+        alert(`There was an issue uploading your submission: ${response.error}`);
+      } else {
+        setButtonText('Submission Completed');
+        alert('Your submission has been received and is currently under consideration.');
+      }
     }
   }
 

@@ -26,7 +26,7 @@ const ErrorSnapshot = 'Unable to get the document';
  */
 export function useFirebaseDocumentTyped<T>(
   collectionString: string,
-  idString: string,
+  idString: string | undefined,
 ): {
   document: T | null;
   documentError: string | undefined;
@@ -50,7 +50,7 @@ export function useFirebaseDocumentTyped<T>(
           setError(ErrorNoData);
         }
       },
-      (err) => {
+      function () {
         setError(ErrorSnapshot);
       },
     );
@@ -60,7 +60,6 @@ export function useFirebaseDocumentTyped<T>(
 
   useEffect(() => {
     pullDocs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionString, idString]);
 
   return { document, documentError };

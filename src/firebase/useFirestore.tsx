@@ -37,7 +37,7 @@ interface FirestoreAction {
 
 interface UseFirestore {
   addDocument: (doc: any, uid?: string) => Promise<void>;
-  updateDocument: (id: string, updates: {}) => Promise<void>;
+  updateDocument: (id: string | undefined | null, updates: any) => Promise<void>;
   response: FirestoreState;
 }
 
@@ -167,7 +167,7 @@ export function useFirestore(collection: string): UseFirestore {
    * @param {updates} updates object with features to update
    * @returns {Promise<void>}
    */
-  async function updateDocument(id: string, updates: {}): Promise<void> {
+  async function updateDocument(id: string | undefined | null, updates: any): Promise<void> {
     dispatch({
       type: FirestoreStates.PENDING,
       payload: null,
@@ -175,6 +175,16 @@ export function useFirestore(collection: string): UseFirestore {
     });
 
     try {
+      if (id === undefined || id === null) {
+        dispatchIfNotCancelled({
+          type: FirestoreStates.ERROR,
+          payload: null,
+          error: 'id is null/undefined',
+        });
+
+        return;
+      }
+
       const updatedDocument = await ref.doc(id).update(updates);
       dispatchIfNotCancelled({
         type: FirestoreStates.UPDATED,

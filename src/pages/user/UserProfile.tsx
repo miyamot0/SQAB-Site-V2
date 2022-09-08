@@ -30,7 +30,7 @@ import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
 export default function UserProfile() {
   const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>('users', id!);
+  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>('users', id);
   const [state, dispatch] = useReducer(UserEditReducer, InitialUserState);
   const { updateDocument, response } = useFirestore('users');
 
@@ -51,7 +51,7 @@ export default function UserProfile() {
    * Submission event for student edit form
    *
    */
-  async function handleEditFormSubmit(): Promise<any> {
+  async function handleEditFormSubmit(): Promise<void> {
     setFormError('');
 
     if (!state.userName) {
@@ -64,7 +64,7 @@ export default function UserProfile() {
       return;
     }
 
-    await updateDocument(id!, state);
+    await updateDocument(id, state);
 
     if (response.error) {
       alert(response.error);
@@ -72,7 +72,7 @@ export default function UserProfile() {
       history.push('/');
     }
 
-    return null;
+    return;
   }
 
   if (documentError) {

@@ -151,7 +151,7 @@ export default function SignIn(): JSX.Element {
 
           <p>
             You need to enter your phone number, click the captcha, enter the text message that
-            arrives after the captcha and click the "Enter OTP" button.
+            arrives after the captcha and click the &quot;Enter OTP&quot; button.
           </p>
 
           <MDBBtn

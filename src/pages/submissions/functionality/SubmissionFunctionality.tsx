@@ -1,4 +1,4 @@
-import { SingleOptionType } from '../../tools/helpers/GeneralTypes';
+import { SingleOptionType } from '../../tools/types/GeneralTypes';
 import { PosterState } from '../types/SubmissionTypes';
 
 /**

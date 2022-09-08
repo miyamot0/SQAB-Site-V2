@@ -63,7 +63,10 @@ export const InitialRecruitmentState: EditRecruitmentState = {
  * @param {any} action
  * @returns {PosterState}
  */
-export function UserEditReducer(state: IndividualUserRecord, action: any): IndividualUserRecord {
+export function UserEditReducer(
+  state: IndividualUserRecord,
+  action: { type: UserEditAction; payload: any },
+): IndividualUserRecord {
   switch (action.type) {
     case UserEditAction.Email:
       return { ...state, userEmail: action.payload };

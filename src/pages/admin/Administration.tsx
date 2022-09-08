@@ -26,7 +26,7 @@ import moment from 'moment';
 import { useFirebaseCollectionTyped } from '../../firebase/useFirebaseCollection';
 import { useFirebaseFunction } from '../../firebase/useFirebaseFunction';
 
-import { SingleOptionType } from '../tools/helpers/GeneralTypes';
+import { SingleOptionType } from '../tools/types/GeneralTypes';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import {
@@ -232,12 +232,12 @@ export default function Administration(): JSX.Element {
                 recruitment panel. One, authorized users can supply privileges to registered users
                 related to managing a recruitmend ad. By default, typical users can only submit
                 posters via the website. This permission can be granted using the dropdown and
-                button included in the "Create Recruitment Entry" panel. Two, recently created ads
-                are naturally not going to be ready for display on the site and will require review.
-                The "Recruitment Advertisement Dashboard" allows authorized users to view the
-                current status of an ad, and if deemed ready, can click to approve the add for
-                display. However, at any time, authorized users can choose to disapprove the add
-                (e.g., the interval has lapsed).
+                button included in the &quot;Create Recruitment Entry&quot; panel. Two, recently
+                created ads are naturally not going to be ready for display on the site and will
+                require review. The &quot;Recruitment Advertisement Dashboard&quot; allows
+                authorized users to view the current status of an ad, and if deemed ready, can click
+                to approve the add for display. However, at any time, authorized users can choose to
+                disapprove the add (e.g., the interval has lapsed).
               </MDBCardText>
             </MDBCardBody>
           </MDBCard>
@@ -249,13 +249,17 @@ export default function Administration(): JSX.Element {
               <MDBCardText style={CardBodyTextStyle}>
                 By default, new users do not have access to a recruitment ad. To enable this
                 functionality, select the account from the drop-down below and then present the
-                'create entry' button to create a blank ad for them.
+                &quot;create entry&quot; button to create a blank ad for them.
               </MDBCardText>
               <label>
                 <span>Template Creator:</span>
                 <Select
                   options={userAdArray}
-                  onChange={(option) => setSelectedAdUser(option!)}
+                  onChange={(option) => {
+                    if (option) {
+                      setSelectedAdUser(option);
+                    }
+                  }}
                   value={selectedAdUser}
                 />
               </label>

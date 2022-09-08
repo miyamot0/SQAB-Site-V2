@@ -1,4 +1,4 @@
-import { DiscountingFit } from './DiscountingTypes';
+import { DiscountingFit } from '../types/DiscountingTypes';
 
 /** getElementByModel
  *
@@ -7,7 +7,7 @@ import { DiscountingFit } from './DiscountingTypes';
  * @returns {DiscountingFit | null}
  */
 export function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | null {
-  var result = arr.filter(function (o) {
+  const result = arr.filter(function (o) {
     return o.Model === value;
   });
 

@@ -11,8 +11,8 @@ export function commonHeading(): JSX.Element {
         system. You will need to authenticate via either a Google or Facebook account or by
         receiving a one-time password via text message (Note: messaging rates may apply). Once
         submitted, you may review the status of your submission at any time by authenticating (via
-        the same method, of course) by selecting the "Manage Poster Submission" element in the
-        dropdown in the upper right of your screen.
+        the same method, of course) by selecting the &quot;Manage Poster Submission&quot; element in
+        the dropdown in the upper right of your screen.
       </MDBCardText>
     </>
   );

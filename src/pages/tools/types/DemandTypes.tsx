@@ -18,3 +18,13 @@ export interface DemandResult {
   X: number[];
   done: boolean;
 }
+
+export interface DemandXYPoints {
+  Price: number;
+  Demand: number;
+}
+
+export interface PlotXYPoints {
+  x: number;
+  y: number;
+}
