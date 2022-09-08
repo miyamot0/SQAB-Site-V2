@@ -35,6 +35,8 @@ export const InitialUserState: IndividualUserRecord = {
   userInstitution: '',
   userName: '',
   userPhone: '',
+  perms: 'baseuser',
+  canPostAd: false,
 };
 
 /**

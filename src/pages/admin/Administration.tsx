@@ -105,6 +105,12 @@ export default function Administration(): JSX.Element {
     }
   }
 
+  /** showAdminContent
+   *
+   * Show admin content if authorized
+   *
+   * @returns {JSX.Element}
+   */
   function showAdminContent(): JSX.Element {
     return (
       <>
@@ -134,6 +140,12 @@ export default function Administration(): JSX.Element {
                       <th className="recruitment-table-th" scope="col">
                         Number
                       </th>
+                      <th className="recruitment-table-th" scope="col">
+                        Ad Privilege
+                      </th>
+                      <th className="recruitment-table-th" scope="col">
+                        Access Level
+                      </th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody>
@@ -145,6 +157,10 @@ export default function Administration(): JSX.Element {
                               <td>{userItem.userName}</td>
                               <td>{userItem.userEmail}</td>
                               <td>{userItem.userPhone}</td>
+                              <td>{userItem.canPostAd ? <b>true</b> : ''}</td>
+                              <td>
+                                {userItem.perms === 'baseuser' ? '' : <b>{userItem.perms}</b>}
+                              </td>
                             </tr>
                           );
                         })

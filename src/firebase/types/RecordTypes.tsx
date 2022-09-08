@@ -5,6 +5,8 @@ export interface IndividualUserRecord {
   userInstitution: string;
   userName: string;
   userPhone: string;
+  canPostAd: boolean;
+  perms: string;
   id?: string;
 }
 
