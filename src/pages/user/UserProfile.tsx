@@ -12,7 +12,7 @@
 
 import React, { useReducer } from 'react';
 
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBBtn, MDBCardText } from 'mdb-react-ui-kit';
 
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -69,7 +69,7 @@ export default function UserProfile() {
     if (response.error) {
       alert(response.error);
     } else {
-      history.push('/');
+      history.push(`/user/${id}`);
     }
 
     return;
@@ -90,6 +90,7 @@ export default function UserProfile() {
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
+              <MDBCardText>Please complete your profile. In the near future, both recruitment and poster submissions will link directly to your profile. At a minimum, please ensure that your name and institution are indicated and spelled correctly.</MDBCardText>
               <form>
                 <label>
                   <span>User Name (For Ad/Poster):</span>
@@ -143,7 +144,7 @@ export default function UserProfile() {
                   className="button-fit-card"
                   onClick={() => handleEditFormSubmit()}
                 >
-                  Edit Profile
+                  Save Profile Information
                 </MDBBtn>
 
                 {formError && <p className="error">{formError}</p>}

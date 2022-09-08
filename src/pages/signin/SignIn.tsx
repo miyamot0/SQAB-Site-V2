@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
   MDBCard,
@@ -18,33 +19,20 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 
-import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import { CardBodyTextStyle, CommonModalStyleSignin } from '../../utilities/StyleHelper';
 import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { setUpRecaptcha } from '../../context/AuthorizationContext';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
 import firebase from 'firebase';
-import { setUpRecaptcha } from '../../context/AuthorizationContext';
 
 import 'react-phone-number-input/style.css';
 
-const modalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    minWidth: '400px',
-    maxWidth: '450px',
-    maxHeight: '50%',
-  },
-};
-
 export default function SignIn(): JSX.Element {
   const { login } = useFirebaseLogin();
+  const history = useHistory();
 
   const { user, authIsReady } = useAuthorizationContext();
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -52,10 +40,14 @@ export default function SignIn(): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showPhoneNumber, setShowPhoneNumber] = useState<boolean>(true);
   const [showOTP, setShowOTP] = useState<boolean>(false);
-  const buttonStatus = user && authIsReady ? true : false;
   const [confirmResult, setConfirmResult] = useState<firebase.auth.ConfirmationResult>();
+  const buttonStatus = user && authIsReady ? true : false;
 
   let recapchaVerifier: firebase.auth.RecaptchaVerifier;
+
+  if (user && authIsReady) {
+    history.push(`/user/${user.uid}`);
+  }
 
   /** generateStatusElement
    *
@@ -111,7 +103,7 @@ export default function SignIn(): JSX.Element {
         onRequestClose={() => setShowModal(false)}
         shouldCloseOnOverlayClick={false}
         preventScroll={true}
-        style={modalStyle}
+        style={CommonModalStyleSignin}
         contentLabel="Example Modal"
       >
         <h2>Phone Login</h2>
