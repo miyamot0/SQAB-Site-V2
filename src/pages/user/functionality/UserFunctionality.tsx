@@ -96,7 +96,7 @@ export function RecruitmentEditReducer(
     case RecruitmentEditAction.EditMentorBio:
       return { ...state, Bio: action.payload };
     case RecruitmentEditAction.EditDescription:
-      return { ...state, Bio: action.payload };
+      return { ...state, Description: action.payload };
     case RecruitmentEditAction.EditLink:
       return { ...state, Link: action.payload };
     case RecruitmentEditAction.EditDate:
