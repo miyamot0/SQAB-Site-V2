@@ -168,13 +168,7 @@ export default function UserProfile() {
       <MDBRow center className="row-eq-height">
         <MDBCol sm="4">
           <MDBCard>
-            <MDBCardBody>
-              {documentError && outputError()}
-
-              {!document && outputLoading()}
-
-              {document && !documentError && outputBody()}
-            </MDBCardBody>
+            <MDBCardBody>{document && !documentError ? outputBody() : outputLoading()}</MDBCardBody>
           </MDBCard>
         </MDBCol>
       </MDBRow>
