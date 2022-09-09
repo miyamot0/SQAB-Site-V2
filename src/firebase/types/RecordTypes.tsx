@@ -33,8 +33,6 @@ export type RecruitmentAd = {
   Mentor: string;
   Name: string;
   Position: string;
-  //PositionText: string;
-  //PositionTitle: string;
   Approved: boolean;
   id?: string;
 };
