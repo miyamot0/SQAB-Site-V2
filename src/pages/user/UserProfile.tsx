@@ -88,12 +88,79 @@ export default function UserProfile() {
     return;
   }
 
-  if (documentError) {
-    return <div className="error">{documentError}</div>;
+  function outputError(): JSX.Element {
+    return <MDBCardTitle>{documentError}</MDBCardTitle>;
   }
 
-  if (!document) {
-    return <div className="loading">Loading...</div>;
+  function outputLoading(): JSX.Element {
+    return <MDBCardTitle>Loading...</MDBCardTitle>;
+  }
+
+  function outputBody(): JSX.Element {
+    return (
+      <>
+        <MDBCardTitle>Edit Profile Information</MDBCardTitle>
+        <MDBCardText>
+          Please complete your profile. In the near future, both recruitment and poster submissions
+          will link directly to your profile. At a minimum, please ensure that your name and
+          institution are indicated and spelled correctly.
+        </MDBCardText>
+        <form>
+          <label>
+            <span>User Name (For Ad/Poster):</span>
+            <input
+              required
+              type="text"
+              onChange={(e) => dispatch({ type: UserEditAction.Name, payload: e.target.value })}
+              value={state.userName}
+            ></input>
+          </label>
+          <label>
+            <span>User Email (For Ad/Poster):</span>
+            <input
+              required
+              type="email"
+              onChange={(e) => dispatch({ type: UserEditAction.Email, payload: e.target.value })}
+              value={state.userEmail}
+            ></input>
+          </label>
+          <label>
+            <span>User Institution (For Ad/Poster):</span>
+            <input
+              required
+              type="text"
+              onChange={(e) =>
+                dispatch({ type: UserEditAction.Instituation, payload: e.target.value })
+              }
+              value={state.userInstitution}
+            ></input>
+          </label>
+
+          {phoneAuthed && (
+            <label>
+              <span>Phone on Record (Only for Phone Login):</span>
+              <input type="text" disabled value={state.userPhone}></input>
+            </label>
+          )}
+
+          <MDBBtn
+            noRipple
+            style={{
+              width: '100%',
+              marginBottom: '25px',
+            }}
+            tag="a"
+            href="#!"
+            className="button-fit-card"
+            onClick={() => handleEditFormSubmit()}
+          >
+            Save Profile Information
+          </MDBBtn>
+
+          {formError && <p className="error">{formError}</p>}
+        </form>
+      </>
+    );
   }
 
   return (
@@ -102,70 +169,11 @@ export default function UserProfile() {
         <MDBCol sm="4">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Edit Profile Information</MDBCardTitle>
-              <MDBCardText>
-                Please complete your profile. In the near future, both recruitment and poster
-                submissions will link directly to your profile. At a minimum, please ensure that
-                your name and institution are indicated and spelled correctly.
-              </MDBCardText>
-              <form>
-                <label>
-                  <span>User Name (For Ad/Poster):</span>
-                  <input
-                    required
-                    type="text"
-                    onChange={(e) =>
-                      dispatch({ type: UserEditAction.Name, payload: e.target.value })
-                    }
-                    value={state.userName}
-                  ></input>
-                </label>
-                <label>
-                  <span>User Email (For Ad/Poster):</span>
-                  <input
-                    required
-                    type="email"
-                    onChange={(e) =>
-                      dispatch({ type: UserEditAction.Email, payload: e.target.value })
-                    }
-                    value={state.userEmail}
-                  ></input>
-                </label>
-                <label>
-                  <span>User Institution (For Ad/Poster):</span>
-                  <input
-                    required
-                    type="text"
-                    onChange={(e) =>
-                      dispatch({ type: UserEditAction.Instituation, payload: e.target.value })
-                    }
-                    value={state.userInstitution}
-                  ></input>
-                </label>
+              {documentError && outputError()}
 
-                {phoneAuthed && (
-                  <label>
-                    <span>Phone on Record (Only for Phone Login):</span>
-                    <input type="text" disabled value={state.userPhone}></input>
-                  </label>
-                )}
+              {!document && outputLoading()}
 
-                <MDBBtn
-                  noRipple
-                  style={{
-                    width: '100%',
-                    marginBottom: '25px',
-                  }}
-                  tag="a"
-                  href="#!"
-                  className="button-fit-card"
-                  onClick={() => handleEditFormSubmit()}
-                >
-                  Save Profile Information
-                </MDBBtn>
-
-                {formError && <p className="error">{formError}</p>}
-              </form>
+              {document && !documentError && outputBody()}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
