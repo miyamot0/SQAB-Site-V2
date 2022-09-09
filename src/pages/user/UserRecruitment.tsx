@@ -71,11 +71,15 @@ export default function UserRecruitment() {
 
     const selectedProperties = {
       Bio: state.Bio,
+      Contact: state.userEmail,
       Cycle: state.Cycle,
       Description: state.Description,
-      Link: state.Link,
-      Position: state.Position,
+      Institution: state.userInstitution,
       LabLink: state.LabLink,
+      Link: state.Link,
+      Mentor: state.userName,
+      Name: state.userName,
+      Position: state.Position,
     };
 
     selectedProperties.Cycle = dateToMDY(selectedProperties.Cycle);
