@@ -28,7 +28,7 @@ import {
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { commonHeading, showSubmissionsClosed } from './helper/SubmissionHelper';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { timestamp } from '../../firebase/config';
 

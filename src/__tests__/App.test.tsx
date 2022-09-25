@@ -15,13 +15,16 @@ import ReactModal from 'react-modal';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import firebase from 'firebase';
-
-/*
-import { AuthorizationContext } from "../context/AuthorizationContext";
-import { mount } from "enzyme";
-import { Redirect, Route, Router, Switch } from "react-router-dom";
-import { createMemoryHistory } from "history";
-*/
+import { FirestoreState } from '../firebase/interfaces/FirebaseInterfaces';
+import { createMemoryHistory } from 'history';
+import { AuthorizationContext } from '../context/AuthorizationContext';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import { mount } from 'enzyme';
+import Header from '../components/Header';
+import Home from '../pages/home/Home';
+import AnnualConference from '../pages/conference/AnnualConference';
+import Tutorials from '../pages/tutorials/Tutorials';
+import { AuthorizationContextInterface } from '../context/interfaces/AuthorizationInterfaces';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -31,14 +34,13 @@ const generalAuthObj = {
   user: null,
   authIsReady: false,
   adminFlag: false,
+  sysAdminFlag: false,
+  adFlag: false,
   dispatch: jest.fn(),
-};
+} as AuthorizationContextInterface;
 
-/*
-jest.mock("./../firebase/hooks/useFirebaseDocument", () => {
-  const originalModule = jest.requireActual(
-    "./../firebase/hooks/useFirebaseDocument"
-  );
+jest.mock('./../firebase/hooks/useFirebaseDocument', () => {
+  const originalModule = jest.requireActual('./../firebase/hooks/useFirebaseDocument');
   return {
     __esModule: true,
     ...originalModule,
@@ -48,36 +50,51 @@ jest.mock("./../firebase/hooks/useFirebaseDocument", () => {
     }),
   };
 });
-*/
+
+jest.mock('../firebase/hooks/useFirebaseLogout', () => {
+  const originalModule = jest.requireActual('../firebase/hooks/useFirebaseLogout');
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: () => ({
+      logout: jest.fn(),
+      logoutPending: false,
+    }),
+  };
+});
 
 describe('Routing (Has Admin)', () => {
   it('Should display conditionally selectively', async () => {
-    const unauthedObject = {
+    const authedObject = {
       ...generalAuthObj,
       user: { uid: '123', email: 'asdf@asdf.com' } as firebase.User,
       authIsReady: true,
       adminFlag: true,
-    };
-
-    expect(1).toBe(1);
-
-    /*
+      sysAdminFlag: true,
+    } as AuthorizationContextInterface;
 
     const history = createMemoryHistory();
 
     const wrapper = mount(
-      <AuthorizationContext.Provider value={{ ...unauthedObject }}>
+      <AuthorizationContext.Provider value={{ ...authedObject }}>
         <Router history={history}>
-          <Navbar />
+          <Header />
           <Switch>
             <Route exact path="/">
-              {!unauthedObject.user && <Redirect to="/login" />}
-              {unauthedObject.user && <Landing />}
+              {authedObject.user && <Home />}
             </Route>
-            <Route path="/dashboard">
-              {!unauthedObject.user && <Redirect to="/login" />}
-              {unauthedObject.user && <DashboardDisplay />}
+            <Route path="/conference">
+              <AnnualConference />
             </Route>
+            <Route path="/tutorials/:id">
+              <Tutorials />
+            </Route>
+          </Switch>
+        </Router>
+      </AuthorizationContext.Provider>,
+    );
+
+    /**
             <Route path="/practice">
               {!unauthedObject.user && <Redirect to="/login" />}
               {unauthedObject.user && <DashboardPractice />}
@@ -89,10 +106,6 @@ describe('Routing (Has Admin)', () => {
             <Route path="/create">
               {!unauthedObject.user && <Redirect to="/login" />}
               {unauthedObject.user && <CreateStudent />}
-            </Route>
-            <Route path="/student/:id">
-              {!unauthedObject.user && <Redirect to="/login" />}
-              {unauthedObject.user && <DisplayStudent />}
             </Route>
             <Route path="/edit/:id">
               {!unauthedObject.user && <Redirect to="/login" />}
@@ -162,18 +175,16 @@ describe('Routing (Has Admin)', () => {
               {unauthedObject.user && <Redirect to="/" />}
               {!unauthedObject.user && <Login />}
             </Route>
-          </Switch>
-        </Router>
-      </AuthorizationContext.Provider>
-    );
+ */
 
-    history.push("/");
+    history.push('/');
 
-    // Landing, True
-    expect(wrapper.find("div.navbar")).toHaveLength(1);
-    expect(wrapper.find(Landing)).toHaveLength(1);
+    expect(wrapper.find(Home)).toHaveLength(1);
 
     wrapper.update();
+
+    /*
+
 
     const adminElement = wrapper.find("a.admin-class");
     expect(adminElement).toHaveLength(1);

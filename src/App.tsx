@@ -31,7 +31,7 @@ import AnalyticPmax from './pages/tools/AnalyticPmax';
 import DemandCurveAnalyzer from './pages/tools/DemandCurveAnalyzer';
 import DiscountingModelSelector from './pages/tools/DiscountingModelSelector';
 import SignIn from './pages/signin/SignIn';
-import { useAuthorizationContext } from './context/useAuthorizationContext';
+import { useAuthorizationContext } from './context/hooks/useAuthorizationContext';
 import MentorPage from './pages/recruitment/MentorPage';
 import UserProfile from './pages/user/UserProfile';
 import UserRecruitment from './pages/user/UserRecruitment';

@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react';
 import { projectAuth } from '../config';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AuthorizationStates } from '../../context/AuthorizationContext';
 import { FirebaseLogout } from '../interfaces/FirebaseInterfaces';
 

@@ -22,7 +22,7 @@ import {
 import { CardBodyTextStyle, CommonModalStyleSignin } from '../../utilities/StyleHelper';
 import { useFirebaseLogin } from '../../firebase/hooks/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { setUpRecaptcha } from '../../context/AuthorizationContext';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';

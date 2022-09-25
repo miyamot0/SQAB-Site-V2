@@ -15,15 +15,13 @@ import 'mdbreact/dist/css/mdb.css';
 import 'handsontable/dist/handsontable.full.css';
 
 import App from './App';
+import { AuthorizationContextProvider } from './context/AuthorizationContext';
 
 import './index.css';
-import { AuthorizationContextProvider } from './context/AuthorizationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
-  <React.StrictMode>
-    <AuthorizationContextProvider>
-      <App />
-    </AuthorizationContextProvider>
-  </React.StrictMode>,
+  <AuthorizationContextProvider>
+    <App />
+  </AuthorizationContextProvider>,
 );

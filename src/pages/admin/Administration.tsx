@@ -33,7 +33,7 @@ import {
   PosterSubmission,
   RecruitmentAd,
 } from '../../firebase/types/RecordTypes';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { useFirebaseFunction } from '../../firebase/hooks/useFirebaseFunction';
 
 export default function Administration(): JSX.Element {

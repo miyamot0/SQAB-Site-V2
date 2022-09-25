@@ -25,10 +25,10 @@ import {
 } from 'mdb-react-ui-kit';
 
 import Modal from 'react-modal';
-import { useAuthorizationContext } from '../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../context/hooks/useAuthorizationContext';
 import { useFirebaseLogout } from '../firebase/hooks/useFirebaseLogout';
 
-Modal.setAppElement('#root');
+//import './styles/Header.css';
 
 const customStyles = {
   content: {
@@ -46,7 +46,7 @@ const customStyles = {
 const navbarTextStyle = { color: 'white' };
 
 export default function Header(): JSX.Element {
-  const [showBasic, setShowBasic] = useState<boolean>(false);
+  const [showBasic, setShowBasic] = useState<boolean>(true);
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
   const { logout, logoutPending } = useFirebaseLogout();
@@ -67,6 +67,12 @@ export default function Header(): JSX.Element {
   function closeModal2(): void {
     setIsOpen2(false);
   }
+
+  function toggleView(): void {
+    setShowBasic(!showBasic);
+  }
+
+  Modal.setAppElement('#root');
 
   return authIsReady ? (
     <>
@@ -190,7 +196,7 @@ export default function Header(): JSX.Element {
         </div>
       </Modal>
 
-      <MDBNavbar expand="lg" style={{ backgroundColor: '#7f007f' }}>
+      <MDBNavbar expand="sm md lg xl xxl" style={{ backgroundColor: '#7f007f' }}>
         <MDBContainer fluid>
           <MDBNavbarBrand href="/" style={navbarTextStyle}>
             SQAB
@@ -200,7 +206,7 @@ export default function Header(): JSX.Element {
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
-            onClick={() => setShowBasic(!showBasic)}
+            onClick={toggleView}
           >
             <MDBIcon icon="bars" fas />
           </MDBNavbarToggler>
@@ -337,7 +343,11 @@ export default function Header(): JSX.Element {
                               <></>
                             )}
                             {authIsReady && adminFlag ? (
-                              <MDBDropdownItem link href={'/admin'}>
+                              <MDBDropdownItem
+                                link
+                                href={'/admin'}
+                                data-testid={'administration-link'}
+                              >
                                 Administration
                               </MDBDropdownItem>
                             ) : (

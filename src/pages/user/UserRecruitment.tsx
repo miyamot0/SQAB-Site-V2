@@ -27,7 +27,7 @@ import {
 } from './functionality/UserFunctionality';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
 import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { IndividualUserRecord, RecruitmentAd } from '../../firebase/types/RecordTypes';
 
 export default function UserRecruitment() {

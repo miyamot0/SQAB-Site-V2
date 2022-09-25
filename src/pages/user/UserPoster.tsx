@@ -17,7 +17,7 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui
 import { useParams } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
-import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function UserPoster() {

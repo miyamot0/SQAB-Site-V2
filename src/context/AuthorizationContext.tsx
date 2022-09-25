@@ -13,43 +13,23 @@
 import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
 import firebase from 'firebase/app';
 import { projectAuth } from '../firebase/config';
+import {
+  AuthorizationContextInterface,
+  AuthorizationContextStateInterface,
+  FirebaseLoginAction,
+} from './interfaces/AuthorizationInterfaces';
+import { AuthorizationProviderInterface } from './types/AuthorizationTypes';
+import { authorizationReducer } from './functionality/AuthorizationBehavior';
+import {
+  simplifyPrivilegeAccess,
+  simplifySysPrivilegeAccess,
+} from './helpers/AuthorizationHelpers';
 
 export enum AuthorizationStates {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   READY = 'READY',
 }
-
-export interface AuthorizationContextInterface {
-  user: firebase.User | null;
-  authIsReady: boolean;
-  adminFlag: boolean;
-  sysAdminFlag: boolean;
-  adFlag: boolean;
-  dispatch: LoginDispatch | undefined;
-}
-
-export interface AuthorizationContextStateInterface {
-  user: firebase.User | null;
-  authIsReady: boolean;
-  adminFlag: boolean;
-  sysAdminFlag: boolean;
-  adFlag: boolean;
-}
-
-interface FirebaseLoginAction {
-  type: AuthorizationStates;
-  payloadUser: firebase.User | null;
-  payloadFlagAdmin: boolean;
-  payloadFlagRecruiter: boolean;
-  payloadFlagSysAdmin: boolean;
-}
-
-export type Props = {
-  children: ReactNode;
-};
-
-type LoginDispatch = (arg: FirebaseLoginAction) => void;
 
 // Context to inherit
 export const AuthorizationContext = createContext<AuthorizationContextInterface>({
@@ -73,36 +53,7 @@ export function setUpRecaptcha(
   return projectAuth.signInWithPhoneNumber(phoneNumber, recapchaVerifier);
 }
 
-/** simplifyPrivilegeAccess
- *
- * Simplify access to privilege level
- *
- * @param {string} res level
- * @returns {bool}
- */
-export function simplifySysPrivilegeAccess(res: string): boolean {
-  return res === 'sysadmin';
-}
-
-/** simplifyPrivilegeAccess
- *
- * Simplify access to privilege level
- *
- * @param {string} res level
- * @returns {bool}
- */
-export function simplifyPrivilegeAccess(res: string): boolean {
-  return res === 'admin' || res === 'sysadmin';
-}
-
-/** Auth reducer
- *
- * Reducer firestore login
- *
- * @param {Enum} state Current state
- * @param {Object} action Action type
- * @returns {AuthorizationContextStateInterface}
- */
+/*
 export function authReducer(
   state: AuthorizationContextStateInterface,
   action: FirebaseLoginAction,
@@ -131,6 +82,7 @@ export function authReducer(
       return state;
   }
 }
+*/
 
 /** AuthorizationContextProvider
  *
@@ -139,8 +91,10 @@ export function authReducer(
  * @param {ReactNode} children Current state
  * @returns {AuthorizationContextStateInterface}
  */
-export function AuthorizationContextProvider({ children }: Props): JSX.Element {
-  const [state, dispatch] = useReducer(authReducer, {
+export function AuthorizationContextProvider({
+  children,
+}: AuthorizationProviderInterface): JSX.Element {
+  const [state, dispatch] = useReducer(authorizationReducer, {
     user: null,
     authIsReady: false,
     adminFlag: false,
