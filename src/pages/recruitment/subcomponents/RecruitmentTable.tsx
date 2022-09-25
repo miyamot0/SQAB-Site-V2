@@ -1,11 +1,18 @@
+/** @license
+ *
+ * Copyright (c) Shawn P. Gilroy, Louisiana State University.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import React from 'react';
+import moment from 'moment';
 
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 
-import moment from 'moment';
-
-import './../Recruitment.css';
+import './../styles/Recruitment.css';
 
 export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Element {
   return (

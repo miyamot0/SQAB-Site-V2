@@ -1,12 +1,20 @@
+/** @license
+ *
+ * Copyright (c) Shawn P. Gilroy, Louisiana State University.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import React from 'react';
 
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
-import './Recruitment.css';
-import { RoutedMentor } from './types/RecruitmentTypes';
+import { RoutedMentor } from '../recruitment/types/RecruitmentTypes';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { useParams } from 'react-router-dom';
 import { RecruitmentAd } from '../../firebase/types/RecordTypes';
+
+import '../recruitment/styles/Recruitment.css';
 
 export default function MentorPage(): JSX.Element {
   const { id } = useParams<RoutedMentor>();
