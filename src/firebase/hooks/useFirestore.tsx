@@ -6,13 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * Firestore hook
- */
-
 import { useReducer, useEffect, useState } from 'react';
-import { projectFirestore, timestamp } from './config';
-import { PosterSubmission } from './types/RecordTypes';
+import { projectFirestore, timestamp } from '../config';
+import { FirestoreAction, FirestoreState, UseFirestore } from '../interfaces/FirebaseInterfaces';
+import { PosterSubmission } from '../types/RecordTypes';
 
 export enum FirestoreStates {
   PENDING = 'PENDING',
@@ -20,25 +17,6 @@ export enum FirestoreStates {
   DELETED = 'DELETED',
   UPDATED = 'UPDATED',
   ERROR = 'ERROR',
-}
-
-interface FirestoreState {
-  isPending: boolean;
-  document: any;
-  success: boolean;
-  error: string | null;
-}
-
-interface FirestoreAction {
-  type: FirestoreStates;
-  payload: any;
-  error: string | null;
-}
-
-interface UseFirestore {
-  addDocument: (doc: any, uid?: string) => Promise<void>;
-  updateDocument: (id: string | undefined | null, updates: any) => Promise<void>;
-  response: FirestoreState;
 }
 
 /** firestoreReducer

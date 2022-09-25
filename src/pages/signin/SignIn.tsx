@@ -20,7 +20,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 import { CardBodyTextStyle, CommonModalStyleSignin } from '../../utilities/StyleHelper';
-import { useFirebaseLogin } from '../../firebase/useFirebaseLogin';
+import { useFirebaseLogin } from '../../firebase/hooks/useFirebaseLogin';
 import { ProviderTypes } from '../../firebase/types/AccountTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import { setUpRecaptcha } from '../../context/AuthorizationContext';

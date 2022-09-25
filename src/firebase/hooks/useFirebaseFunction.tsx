@@ -10,7 +10,7 @@
  * Firebase hook
  */
 
-import { projectFunctions } from './config';
+import { projectFunctions } from '../config';
 
 export function useFirebaseFunction() {
   const updateStatusForRecruitment = projectFunctions.httpsCallable('updateStatusForRecruitment');

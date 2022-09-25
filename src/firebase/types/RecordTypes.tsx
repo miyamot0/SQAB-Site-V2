@@ -1,6 +1,14 @@
+/** @license
+ *
+ * Copyright (c) Shawn P. Gilroy, Louisiana State University.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import firebase from 'firebase/app';
 
-export interface IndividualUserRecord {
+export type IndividualUserRecord = {
   userEmail: string;
   userInstitution: string;
   userName: string;
@@ -8,7 +16,7 @@ export interface IndividualUserRecord {
   canPostAd: boolean;
   perms: string;
   id?: string;
-}
+};
 
 export type PosterSubmission = {
   name: string;

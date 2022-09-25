@@ -23,8 +23,7 @@ import {
 import Select from 'react-select';
 import moment from 'moment';
 
-import { useFirebaseCollectionTyped } from '../../firebase/useFirebaseCollection';
-import { useFirebaseFunction } from '../../firebase/useFirebaseFunction';
+import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
 
 import { SingleOptionType } from '../tools/types/GeneralTypes';
 
@@ -35,13 +34,24 @@ import {
   RecruitmentAd,
 } from '../../firebase/types/RecordTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { useFirebaseFunction } from '../../firebase/hooks/useFirebaseFunction';
 
 export default function Administration(): JSX.Element {
-  const { documents: recruitmentDocuments } =
-    useFirebaseCollectionTyped<RecruitmentAd>('recruitment');
-  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecord>('users');
-  const { documents: submissionDocuments } =
-    useFirebaseCollectionTyped<PosterSubmission>('submissions');
+  const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
+    collectionString: 'recruitment',
+    queryString: undefined,
+    orderString: undefined,
+  });
+  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecord>({
+    collectionString: 'users',
+    queryString: undefined,
+    orderString: undefined,
+  });
+  const { documents: submissionDocuments } = useFirebaseCollectionTyped<PosterSubmission>({
+    collectionString: 'submissions',
+    queryString: undefined,
+    orderString: undefined,
+  });
 
   const { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster } =
     useFirebaseFunction();

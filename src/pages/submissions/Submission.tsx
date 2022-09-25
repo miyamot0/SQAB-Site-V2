@@ -26,10 +26,10 @@ import {
 } from './functionality/SubmissionFunctionality';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import { useFirestore } from '../../firebase/useFirestore';
+import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { commonHeading, showSubmissionsClosed } from './helper/SubmissionHelper';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
-import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { timestamp } from '../../firebase/config';
 
 import CarouselConference from '../../components/CarouselConference';
@@ -39,7 +39,10 @@ import { IndividualUserRecord, PosterSubmission } from '../../firebase/types/Rec
 export default function Submission(params: { userId: string }): JSX.Element {
   const { user, authIsReady } = useAuthorizationContext();
   const { addDocument, response } = useFirestore('submissions');
-  const { document } = useFirebaseDocumentTyped<IndividualUserRecord>('users', params.userId);
+  const { document } = useFirebaseDocumentTyped<IndividualUserRecord>({
+    collectionString: 'users',
+    idString: params.userId,
+  });
   const [state, dispatch] = useReducer(SubmissionReducer, InitialSubmissionState);
   const [showSubmissionPortal] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>('Submit Poster Application');

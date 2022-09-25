@@ -15,14 +15,18 @@ import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 
 import { useParams } from 'react-router-dom';
-import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import { PosterSubmission } from '../../firebase/types/RecordTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>('submissions', id);
+  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>({
+    collectionString: 'submissions',
+    idString: id,
+  });
+
   const { authIsReady } = useAuthorizationContext();
 
   if (!authIsReady) {

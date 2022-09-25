@@ -6,15 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * Firebase document pull
- */
-
 import { useEffect, useState } from 'react';
-import { projectFirestore } from './config';
+import { projectFirestore } from '../config';
 
-const ErrorNoData = 'There was not a document at this location';
-const ErrorSnapshot = 'Unable to get the document';
+import { DocumentInputInterface } from '../interfaces/FirebaseInterfaces';
+import {
+  onSnapshotEventDocument,
+  onSnapshotEventDocumentErr,
+} from './helpers/FirestoreSnapshotHelpers';
 
 /** useFirebaseDocument
  *
@@ -24,42 +23,25 @@ const ErrorSnapshot = 'Unable to get the document';
  * @param {string} idString id for student
  * @returns {UseFirebaseDocument}
  */
-export function useFirebaseDocumentTyped<T>(
-  collectionString: string,
-  idString: string | undefined,
-): {
+export function useFirebaseDocumentTyped<T>({
+  collectionString,
+  idString,
+}: DocumentInputInterface): {
   document: T | null;
   documentError: string | undefined;
 } {
   const [document, setDocument] = useState<T | null>(null);
   const [documentError, setError] = useState<string>();
 
-  function pullDocs() {
+  useEffect(() => {
     const ref = projectFirestore.collection(collectionString).doc(idString);
 
     const unsubscribe = ref.onSnapshot(
-      (snapshot) => {
-        if (snapshot.data()) {
-          setDocument({
-            ...snapshot.data(),
-            id: snapshot.id,
-          } as unknown as T);
-
-          setError(undefined);
-        } else {
-          setError(ErrorNoData);
-        }
-      },
-      function () {
-        setError(ErrorSnapshot);
-      },
+      (snapshot) => onSnapshotEventDocument(snapshot, setDocument, setError),
+      (err) => onSnapshotEventDocumentErr(err, setError),
     );
 
-    return () => unsubscribe;
-  }
-
-  useEffect(() => {
-    pullDocs();
+    return () => unsubscribe();
   }, [collectionString, idString]);
 
   return { document, documentError };

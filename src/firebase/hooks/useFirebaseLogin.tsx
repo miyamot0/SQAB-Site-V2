@@ -6,30 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * Firebase login
- */
-
 import { useState, useEffect } from 'react';
-import { googleAuthProvider, fbAuthProvider, projectAuth } from './config';
-import { useAuthorizationContext } from '../context/useAuthorizationContext';
+import { googleAuthProvider, fbAuthProvider, projectAuth } from '../config';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
 import {
   AuthorizationStates,
   simplifyPrivilegeAccess,
   simplifySysPrivilegeAccess,
-} from '../context/AuthorizationContext';
-import { ProviderTypes } from './types/AccountTypes';
+} from '../../context/AuthorizationContext';
+import { ProviderTypes } from '../types/AccountTypes';
 import firebase from 'firebase';
-
-interface FirebaseLogin {
-  login: (
-    providerType: ProviderTypes,
-    confirmResult?: firebase.auth.ConfirmationResult | undefined,
-    otpNumber?: string,
-  ) => Promise<void>;
-  loginError: string | undefined;
-  loginPending: boolean;
-}
+import { FirebaseLogin } from '../interfaces/FirebaseInterfaces';
 
 /** useFirebaseLogin
  *

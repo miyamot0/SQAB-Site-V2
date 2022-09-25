@@ -24,9 +24,9 @@ import {
 
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useFirestore } from '../../firebase/useFirestore';
+import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { useHistory } from 'react-router-dom';
-import { useFirebaseDocumentTyped } from '../../firebase/useFirebaseDocument';
+import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { RoutedAdminSet } from './types/ProfileTypes';
 import {
   InitialUserState,
@@ -38,7 +38,10 @@ import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
 export default function UserProfile() {
   const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>('users', id);
+  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>({
+    collectionString: 'users',
+    idString: id,
+  });
   const [state, dispatch] = useReducer(UserEditReducer, InitialUserState);
   const { updateDocument, response } = useFirestore('users');
 

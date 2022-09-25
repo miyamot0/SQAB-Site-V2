@@ -6,20 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * Firebase logout
- */
-
 import { useEffect, useState } from 'react';
-import { projectAuth } from './config';
-import { useAuthorizationContext } from '../context/useAuthorizationContext';
-import { AuthorizationStates } from '../context/AuthorizationContext';
-
-interface FirebaseLogout {
-  logout: () => Promise<void>;
-  logoutError: string | undefined;
-  logoutPending: boolean;
-}
+import { projectAuth } from '../config';
+import { useAuthorizationContext } from '../../context/useAuthorizationContext';
+import { AuthorizationStates } from '../../context/AuthorizationContext';
+import { FirebaseLogout } from '../interfaces/FirebaseInterfaces';
 
 /** useFirebaseLogout
  *
@@ -58,9 +49,11 @@ export function useFirebaseLogout(): FirebaseLogout {
         setLogoutError(undefined);
       }
     } catch (err: any) {
-      if (!logoutCancelled) {
+      if (logoutCancelled === false) {
         setLogoutError(err.message);
         setLogoutPending(false);
+      } else {
+        return;
       }
     }
   };

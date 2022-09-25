@@ -25,8 +25,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 import Modal from 'react-modal';
-import { useFirebaseLogout } from '../firebase/useFirebaseLogout';
 import { useAuthorizationContext } from '../context/useAuthorizationContext';
+import { useFirebaseLogout } from '../firebase/hooks/useFirebaseLogout';
 
 Modal.setAppElement('#root');
 
