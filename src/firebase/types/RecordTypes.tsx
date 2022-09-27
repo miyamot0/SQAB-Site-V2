@@ -16,6 +16,15 @@ export type IndividualUserRecord = {
   canPostAd: boolean;
   perms: string;
   id?: string;
+
+  // New params
+  userEducation: string;
+  userGender: string;
+  userAge: string;
+  userRaceEthnicity: string;
+  userOrientation: string;
+  userLanguage: string;
+  userNationality: string;
 };
 
 export type PosterSubmission = {
