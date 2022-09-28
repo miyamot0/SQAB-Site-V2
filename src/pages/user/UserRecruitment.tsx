@@ -6,10 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * User Recruitment Page
- */
-
 import React, { useEffect, useReducer } from 'react';
 
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBBtn } from 'mdb-react-ui-kit';
@@ -18,17 +14,17 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
-import { RoutedAdminSet } from './types/ProfileTypes';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
-import {
-  InitialRecruitmentState,
-  RecruitmentEditAction,
-  RecruitmentEditReducer,
-} from './functionality/UserFunctionality';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
 import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { IndividualUserRecord, RecruitmentAd } from '../../firebase/types/RecordTypes';
+import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
+import {
+  InitialRecruitmentState,
+  RecruitmentEditAction,
+  RecruitmentEditReducer,
+} from './functionality/UserRecruitmentFunctionality';
 
 export default function UserRecruitment() {
   const { id } = useParams<RoutedAdminSet>();

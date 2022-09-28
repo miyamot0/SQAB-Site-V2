@@ -70,3 +70,10 @@ textarea {
 .button-color-override-green {
   background-color: green !important;
 }
+
+/* Styles: for forms */
+
+.select-label {
+  display: block !important;
+  margin-bottom: 10px !important;
+}

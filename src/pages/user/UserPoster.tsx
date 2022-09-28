@@ -6,19 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * User Recruitment Page
- */
-
 import React from 'react';
-
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
 import { useParams } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
-import { RoutedAdminSet } from './types/ProfileTypes';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { PosterSubmission } from '../../firebase/types/RecordTypes';
+import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();

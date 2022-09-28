@@ -7,6 +7,8 @@
  */
 
 import firebase from 'firebase/app';
+import { MultiValue } from 'react-select';
+import { SingleOptionType } from '../../pages/tools/types/GeneralTypes';
 
 export type IndividualUserRecord = {
   userEmail: string;
@@ -16,15 +18,18 @@ export type IndividualUserRecord = {
   canPostAd: boolean;
   perms: string;
   id?: string;
+  formError: string | undefined | null;
+  phoneAuthed: boolean;
+  didBuild: boolean;
 
   // New params
-  userEducation: string;
-  userGender: string;
-  userAge: string;
-  userRaceEthnicity: string;
-  userOrientation: string;
-  userLanguage: string;
-  userNationality: string;
+  userEducation: SingleOptionType | undefined;
+  userGender: SingleOptionType | undefined;
+  userAge: SingleOptionType | undefined;
+  userRaceEthnicity: MultiValue<SingleOptionType> | undefined;
+  userOrientation: SingleOptionType | undefined;
+  userLanguage: SingleOptionType | undefined;
+  userNationality: SingleOptionType | undefined;
 };
 
 export type PosterSubmission = {

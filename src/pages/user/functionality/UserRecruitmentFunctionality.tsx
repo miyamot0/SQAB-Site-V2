@@ -1,17 +1,13 @@
-import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
-import { EditRecruitmentState } from '../../recruitment/types/RecruitmentTypes';
-import { RecruitmentActions } from '../types/ProfileTypes';
-
-/**
- * Actions for reducer
+/** @license
+ *
+ * Copyright (c) Shawn P. Gilroy, Louisiana State University.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
-export enum UserEditAction {
-  Email,
-  Instituation,
-  Name,
-  Phone,
-  Load,
-}
+
+import { EditRecruitmentState } from '../../recruitment/types/RecruitmentTypes';
+import { RecruitmentActions } from '../types/RecruitmentActionTypes';
 
 /**
  * Actions for reducer
@@ -30,18 +26,6 @@ export enum RecruitmentEditAction {
 /**
  * Initial state
  */
-export const InitialUserState: IndividualUserRecord = {
-  userEmail: '',
-  userInstitution: '',
-  userName: '',
-  userPhone: '',
-  perms: 'baseuser',
-  canPostAd: false,
-};
-
-/**
- * Initial state
- */
 export const InitialRecruitmentState: EditRecruitmentState = {
   userEmail: '',
   userInstitution: '',
@@ -56,32 +40,12 @@ export const InitialRecruitmentState: EditRecruitmentState = {
   Position: '',
 };
 
-/**
- * Reducer for submission
+/** RecruitmentEditReducer
  *
- * @param {IndividualUserRecord} state
- * @param {any} action
- * @returns {PosterState}
+ * @param state
+ * @param action
+ * @returns
  */
-export function UserEditReducer(
-  state: IndividualUserRecord,
-  action: { type: UserEditAction; payload: any },
-): IndividualUserRecord {
-  switch (action.type) {
-    case UserEditAction.Email:
-      return { ...state, userEmail: action.payload };
-    case UserEditAction.Instituation:
-      return { ...state, userInstitution: action.payload };
-    case UserEditAction.Name:
-      return { ...state, userName: action.payload };
-    case UserEditAction.Load:
-      return { ...action.payload };
-
-    default:
-      throw new Error();
-  }
-}
-
 export function RecruitmentEditReducer(
   state: EditRecruitmentState,
   action: RecruitmentActions,

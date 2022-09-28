@@ -6,34 +6,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/**
- * User Edit Page
- */
-
-import React, { useReducer } from 'react';
-
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBRow,
-  MDBCol,
-  MDBBtn,
-  MDBCardText,
-} from 'mdb-react-ui-kit';
-
-import { useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
+import { MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { useHistory } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
-import { RoutedAdminSet } from './types/ProfileTypes';
 import {
   InitialUserState,
   UserEditAction,
   UserEditReducer,
-} from './functionality/UserFunctionality';
+} from './functionality/UserProfileFunctionality';
 import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
+import { OutputUserError } from './views/UserOutputError';
+import { UserOutputLoading } from './views/UserOutputLoading';
+import { UserOutputBody } from './views/UserOutputBody';
+import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 
 export default function UserProfile() {
   const history = useHistory();
@@ -45,41 +33,29 @@ export default function UserProfile() {
   const [state, dispatch] = useReducer(UserEditReducer, InitialUserState);
   const { updateDocument, response } = useFirestore('users');
 
-  const [phoneAuthed, setPhoneAuthed] = useState<boolean>(false);
+  useEffect(() => {
+    if (document && !state.didBuild) {
+      dispatch({ type: UserEditAction.EditDidBuild, payload: true });
 
-  const [formError, setFormError] = useState<string>('');
-  const [didBuild, setDidBuild] = useState(false);
+      if (document.userPhone) {
+        dispatch({
+          type: UserEditAction.EditPhoneAuthed,
+          payload: document.userPhone.trim().length > 0,
+        });
+      } else {
+        dispatch({ type: UserEditAction.EditPhoneAuthed, payload: false });
+      }
 
-  if (document && !didBuild) {
-    setDidBuild(true);
-
-    if (document.userPhone) {
-      setPhoneAuthed(document.userPhone.trim().length > 0);
-    } else {
-      setPhoneAuthed(false);
+      dispatch({ type: UserEditAction.Load, payload: document });
     }
-
-    dispatch({ type: UserEditAction.Load, payload: document });
-  }
+  }, [document]);
 
   /** handleEditFormSubmit
    *
    * Submission event for student edit form
    *
    */
-  async function handleEditFormSubmit(): Promise<void> {
-    setFormError('');
-
-    if (!state.userName) {
-      setFormError('Please enter a valid name');
-      return;
-    }
-
-    if (!state.userInstitution) {
-      setFormError('Please enter a valid school name');
-      return;
-    }
-
+  async function submitCallback(): Promise<void> {
     await updateDocument(id, state);
 
     if (response.error) {
@@ -91,92 +67,25 @@ export default function UserProfile() {
     return;
   }
 
-  function outputError(): JSX.Element {
-    return <MDBCardTitle>{documentError}</MDBCardTitle>;
-  }
-
-  function outputLoading(): JSX.Element {
-    return <MDBCardTitle>Loading...</MDBCardTitle>;
-  }
-
-  function outputBody(): JSX.Element {
+  if (documentError) {
+    return <OutputUserError documentError={documentError} />;
+  } else if (!document && !documentError) {
+    return <UserOutputLoading />;
+  } else {
     return (
-      <>
-        <MDBCardTitle>Edit Profile Information</MDBCardTitle>
-        <MDBCardText>
-          Please complete your profile. In the near future, both recruitment and poster submissions
-          will link directly to your profile. At a minimum, please ensure that your name and
-          institution are indicated and spelled correctly.
-        </MDBCardText>
-        <form>
-          <label>
-            <span>User Name (For Ad/Poster):</span>
-            <input
-              required
-              type="text"
-              onChange={(e) => dispatch({ type: UserEditAction.Name, payload: e.target.value })}
-              value={state.userName}
-            ></input>
-          </label>
-          <label>
-            <span>User Email (For Ad/Poster):</span>
-            <input
-              required
-              type="email"
-              onChange={(e) => dispatch({ type: UserEditAction.Email, payload: e.target.value })}
-              value={state.userEmail}
-            ></input>
-          </label>
-          <label>
-            <span>User Institution (For Ad/Poster):</span>
-            <input
-              required
-              type="text"
-              onChange={(e) =>
-                dispatch({ type: UserEditAction.Instituation, payload: e.target.value })
-              }
-              value={state.userInstitution}
-            ></input>
-          </label>
+      <div>
+        <MDBRow center className="row-eq-height">
+          <MDBCol sm="6">
+            <MDBCard>
+              <MDBCardBody>
+                <UserOutputBody state={state} submitCallback={submitCallback} dispatch={dispatch} />
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
 
-          {phoneAuthed && (
-            <label>
-              <span>Phone on Record (Only for Phone Login):</span>
-              <input type="text" disabled value={state.userPhone}></input>
-            </label>
-          )}
-
-          <MDBBtn
-            noRipple
-            style={{
-              width: '100%',
-              marginBottom: '25px',
-            }}
-            tag="a"
-            href="#!"
-            className="button-fit-card"
-            onClick={() => handleEditFormSubmit()}
-          >
-            Save Profile Information
-          </MDBBtn>
-
-          {formError && <p className="error">{formError}</p>}
-        </form>
-      </>
+        <br></br>
+      </div>
     );
   }
-
-  return (
-    <div>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
-          <MDBCard>
-            <MDBCardBody>{document && !documentError ? outputBody() : outputLoading()}</MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-
-      <br></br>
-    </div>
-  );
 }

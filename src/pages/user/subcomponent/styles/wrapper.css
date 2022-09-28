@@ -1,0 +1,10 @@
+.react-select-wrapper {
+  position: relative;
+}
+
+.hidden-input {
+  opacity: 0;
+  width: 100%;
+  height: 0;
+  position: absolute;
+}
