@@ -8,16 +8,13 @@
 
 import React from 'react';
 import { MDBCardTitle } from 'mdb-react-ui-kit';
+import { OutputUserErrorInterface } from '../interfaces/UserInterfaces';
 
 /** OutputUserError
  *
  * @param param0
  * @returns
  */
-export function OutputUserError({
-  documentError,
-}: {
-  documentError: string | undefined | null;
-}): JSX.Element {
+export function OutputUserError({ documentError, }: OutputUserErrorInterface): JSX.Element {
   return documentError ? <MDBCardTitle>{documentError}</MDBCardTitle> : <></>;
 }

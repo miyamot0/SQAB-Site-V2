@@ -21,7 +21,8 @@
     "react-phone-number-input": "^3.2.11",
     "react-router-dom": "5.1",
     "react-scripts": "5.0.1",
-    "react-select": "^5.3.2"
+    "react-select": "^5.3.2",
+    "smallnstats-shared-component-library": "^0.1.4"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

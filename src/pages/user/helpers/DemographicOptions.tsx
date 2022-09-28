@@ -7,46 +7,63 @@
  */
 
 export const EducationOptions = [
-  'Some high school',
-  'High school',
-  'Trade school',
-  'Associate degree',
-  'Bachelors degree',
-  'Masters degree',
-  'Doctoral degree or higher',
-  'Prefer not to answer',
+  { label: 'Some high school', value: 'Some high school', },
+  {
+    label: 'High school', value: 'High school',
+  },
+  {
+    label: 'Trade school', value: 'Trade school',
+  },
+  {
+    label: 'Associate degree', value: 'Associate degree',
+  },
+  {
+    label: 'Bachelors degree', value: 'Bachelors degree',
+  },
+  {
+    label: 'Masters degree', value: 'Masters degree',
+  },
+  {
+    label: 'Doctoral degree or higher', value: 'Doctoral degree or higher',
+  },
+  { label: 'Prefer not to answer', value: 'Prefer not to answer', }
 ];
 
-export const GenderOptions = ['Woman', 'Man', 'Nonbinary', 'Other gender', 'Prefer not to answer'];
+export const GenderOptions = [{ value: 'Woman', label: 'Woman', },
+{ value: 'Man', label: 'Man', },
+{ value: 'Nonbinary', label: 'Nonbinary', },
+{ value: 'Other gender', label: 'Other gender', },
+{ value: 'Prefer not to answer', label: 'Prefer not to answer', },
+];
 
 export const AgeOptions = [
-  '<18 years',
-  '18-20',
-  '21-29',
-  '30-39',
-  '40-49',
-  '50-59',
-  '60-69',
-  '70 or older',
-  'Prefer not to answer',
+  { value: '<18 years', label: '<18 years', },
+  { value: '18-20', label: '18-20', },
+  { value: '21-29', label: '21-29', },
+  { value: '30-39', label: '30-39', },
+  { value: '40-49', label: '40-49', },
+  { value: '50-59', label: '50-59', },
+  { value: '60-69', label: '60-69', },
+  { value: '70 or older', label: '70 or older', },
+  { value: 'Prefer not to answer', label: 'Prefer not to answer', },
 ];
 
 export const SexualityOptions = [
-  'Heterosexual or Straight',
-  'Gay or Lesbian',
-  'Bisexual',
-  'Other orientation',
-  'Prefer not to answer',
+  { value: 'Heterosexual or Straight', label: 'Heterosexual or Straight', },
+  { value: 'Gay or Lesbian', label: 'Gay or Lesbian', },
+  { value: 'Bisexual', label: 'Bisexual', },
+  { value: 'Other orientation', label: 'Other orientation', },
+  { value: 'Prefer not to answer', label: 'Prefer not to answer', },
 ];
 
 export const DemographicOptions = [
-  'African American/Black',
-  'Asian',
-  'Caucasian/White',
-  'Hispanic/Latino/a/x',
-  'Middle Eastern/North African',
-  'Native American/American Indian/Alaska Native',
-  'Native Hawaiian or Pacific Islander',
-  'Other race or ethnicity',
-  'Prefer not to answer',
+  { value: 'African American/Black', label: 'African American/Black', },
+  { value: 'Asian', label: 'Asian', },
+  { value: 'Caucasian/White', label: 'Caucasian/White', },
+  { value: 'Hispanic/Latino/a/x', label: 'Hispanic/Latino/a/x', },
+  { value: 'Middle Eastern/North African', label: 'Middle Eastern/North African', },
+  { value: 'Native American/American Indian/Alaska Native', label: 'Native American/American Indian/Alaska Native', },
+  { value: 'Native Hawaiian or Pacific Islander', label: 'Native Hawaiian or Pacific Islander', },
+  { value: 'Other race or ethnicity', label: 'Other race or ethnicity', },
+  { value: 'Prefer not to answer', label: 'Prefer not to answer', },
 ];

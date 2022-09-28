@@ -7,7 +7,6 @@
  */
 
 import React, { useEffect, useReducer } from 'react';
-import { MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useParams } from 'react-router-dom';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { useHistory } from 'react-router-dom';
@@ -20,7 +19,7 @@ import {
 import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
 import { OutputUserError } from './views/UserOutputError';
 import { UserOutputLoading } from './views/UserOutputLoading';
-import { UserOutputBody } from './views/UserOutputBody';
+import { LayoutProfileBody } from './layouts/LayoutProfileBody';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 
 export default function UserProfile() {
@@ -72,20 +71,6 @@ export default function UserProfile() {
   } else if (!document && !documentError) {
     return <UserOutputLoading />;
   } else {
-    return (
-      <div>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="6">
-            <MDBCard>
-              <MDBCardBody>
-                <UserOutputBody state={state} submitCallback={submitCallback} dispatch={dispatch} />
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-
-        <br></br>
-      </div>
-    );
+    return <LayoutProfileBody state={state} submitCallback={submitCallback} dispatch={dispatch} />;
   }
 }
