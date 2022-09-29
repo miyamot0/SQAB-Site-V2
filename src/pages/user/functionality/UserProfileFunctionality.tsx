@@ -43,13 +43,13 @@ export const InitialUserState: IndividualUserRecord = {
   formError: undefined,
   phoneAuthed: false,
   didBuild: false,
-  userEducation: undefined,
-  userGender: undefined,
-  userAge: undefined,
-  userRaceEthnicity: undefined,
-  userOrientation: undefined,
-  userLanguage: undefined,
-  userNationality: undefined,
+  userEducation: { value: '', label: '' },
+  userGender: { value: '', label: '' },
+  userAge: { value: '', label: '' },
+  userRaceEthnicity: [{ value: '', label: '' }],
+  userOrientation: { value: '', label: '' },
+  userLanguage: { value: '', label: '' },
+  userNationality: { value: '', label: '' },
 };
 
 /**

@@ -12,9 +12,9 @@ import { SingleOptionType } from "../../tools/types/GeneralTypes";
 import { ProfileActions } from "../types/ProfileActionTypes";
 
 export interface SelectFieldEntryProps {
-    label: string | undefined;
+    label: string;
     options: SingleOptionType[];
-    currentValue: SingleOptionType | undefined;
+    currentValue: SingleOptionType;
     type: number;
     dispatch: (value: ProfileActions) => void;
 }

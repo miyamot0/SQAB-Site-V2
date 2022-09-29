@@ -7,14 +7,14 @@
  */
 
 import React from "react";
-import Select, { MultiValue, SingleValue } from "react-select";
+import Select, { MultiValue } from "react-select";
 import { SingleOptionType } from "../../tools/types/GeneralTypes";
 import { ProfileActions } from "../types/ProfileActionTypes";
 
 export interface MultipleSelectFieldEntryProps {
-    label: string | undefined;
+    label: string;
     options: SingleOptionType[];
-    currentValue: MultiValue<SingleOptionType> | SingleValue<SingleOptionType> | undefined;
+    currentValue: MultiValue<SingleOptionType>;
     type: number;
     dispatch: (value: ProfileActions) => void;
 }
@@ -23,7 +23,7 @@ export interface MultipleSelectFieldEntryProps {
 
  * @param {SingleOptionType} label value to display
  * @param {any[]} options options to display
- * @param {SingleOptionType | undefined} currentValue value to display
+ * @param {SingleOptionType} currentValue value to display
  * @param {number} type enum related to dispatch/reducer
  * @param {function} dispatch dispatch callback
  * @returns {JSX.Element}

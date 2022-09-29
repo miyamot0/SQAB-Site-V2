@@ -19,6 +19,7 @@ import { LayoutProfileBodyInterface } from '../interfaces/UserInterfaces';
 import { StandardEntryFieldText, StandardEntryFieldEmail } from 'smallnstats-shared-component-library';
 import { StandardEntryFieldSelectSingle } from '../views/StandardEntryFieldSelectSingle';
 import StandardEntryFieldSelectMultiple from '../views/StandardEntryFieldSelectMultiple';
+import { CountryList } from '../../../utilities/CountryCodes';
 
 /** UserOutputBody
  *
@@ -36,11 +37,13 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
 
     dispatch({ type: UserEditAction.EditFormError, payload: undefined });
 
-    if (!state.userEducation ||
-      !state.userGender ||
-      !state.userAge ||
-      !state.userRaceEthnicity ||
-      !state.userOrientation) {
+    if (!state.userEducation || state.userEducation.label === "" ||
+      !state.userGender || state.userGender.label === "" ||
+      !state.userAge || state.userAge.label === "" ||
+      !state.userRaceEthnicity || state.userRaceEthnicity.length === 0 ||
+      !state.userOrientation || state.userOrientation.label === "" ||
+      !state.userNationality || state.userNationality.label === "") {
+      console.log(state)
       dispatch({ type: UserEditAction.EditFormError, payload: 'Please provide an answer to all areas' });
 
       return;
@@ -63,6 +66,7 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                 will link directly to your profile. At a minimum, please ensure that your name and
                 institution are indicated and spelled correctly.
               </MDBCardText>
+
               <form onSubmit={handleEditFormSubmit}>
                 <StandardEntryFieldText
                   label={'User Name (For Ad/Poster):'}
@@ -108,7 +112,6 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                   dispatch={dispatch}
                 />
 
-
                 <StandardEntryFieldSelectSingle
                   label={'What is your age?'}
                   options={AgeOptions}
@@ -133,6 +136,14 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                   dispatch={dispatch}
                 />
 
+                <StandardEntryFieldSelectSingle
+                  label={'In which country or region do you reside? Do you consider yourself to be:'}
+                  options={CountryList}
+                  currentValue={state.userNationality}
+                  type={UserEditAction.EditNationality}
+                  dispatch={dispatch}
+                />
+
                 <OutputUserError documentError={state.formError} />
 
                 <MDBBtn
@@ -147,6 +158,7 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                   className="button-fit-card">
                   Save Profile Information
                 </MDBBtn>
+
               </form>
             </MDBCardBody>
           </MDBCard>

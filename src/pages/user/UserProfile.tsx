@@ -23,6 +23,7 @@ import { LayoutProfileBody } from './layouts/LayoutProfileBody';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
 import { AgeOptions, DemographicOptions, EducationOptions, GenderOptions, SexualityOptions } from './helpers/DemographicOptions';
+import { CountryList } from '../../utilities/CountryCodes';
 
 export default function UserProfile() {
   const history = useHistory();
@@ -57,13 +58,13 @@ export default function UserProfile() {
 
       const modDocument = {
         ...document,
-        userEducation: EducationOptions.filter(function (ed: SingleOptionType) {
+        userEducation: EducationOptions.find(function (ed: SingleOptionType) {
           return ed.value === document.userEducation;
         }),
-        userGender: GenderOptions.filter(function (ed: SingleOptionType) {
+        userGender: GenderOptions.find(function (ed: SingleOptionType) {
           return ed.value === document.userGender;
         }),
-        userAge: AgeOptions.filter(function (ed: SingleOptionType) {
+        userAge: AgeOptions.find(function (ed: SingleOptionType) {
           return ed.value === document.userAge;
         }),
         userRaceEthnicity: DemographicOptions.filter(function (ed: SingleOptionType) {
@@ -73,10 +74,20 @@ export default function UserProfile() {
             return false;
           }
         }),
-        userOrientation: SexualityOptions.filter(function (ed: SingleOptionType) {
+        userOrientation: SexualityOptions.find(function (ed: SingleOptionType) {
           return ed.value === document.userOrientation;
         }),
+        userNationality: CountryList.find(function (ed: SingleOptionType) {
+          return ed.label === document.userNationality;
+        }),
       };
+
+      modDocument.userEducation = modDocument.userEducation ?? null as unknown as SingleOptionType;
+      modDocument.userGender = modDocument.userGender ?? null as unknown as SingleOptionType;
+      modDocument.userAge = modDocument.userAge ?? null as unknown as SingleOptionType;
+      modDocument.userOrientation = modDocument.userOrientation ?? null as unknown as SingleOptionType;
+      modDocument.userNationality = modDocument.userNationality ?? null as unknown as SingleOptionType;
+      modDocument.userRaceEthnicity = modDocument.userRaceEthnicity ?? []
 
       dispatch({ type: UserEditAction.Load, payload: modDocument });
     }
@@ -98,19 +109,18 @@ export default function UserProfile() {
       userEducation: state.userEducation?.value,
       userGender: state.userGender?.value,
       userOrientation: state.userOrientation?.value,
+      userNationality: state.userNationality?.label,
       userRaceEthnicity: state.userRaceEthnicity?.map((resp: SingleOptionType) => {
         return resp.value
       }).join(":"),
     } as IndividualUserRecordSaved;
-
-    console.log(uploadObject)
 
     await updateDocument(id, uploadObject);
 
     if (response.error) {
       alert(response.error);
     } else {
-      //history.push(`/user/${id}`);
+      history.push(`/user/${id}`);
     }
 
     return;

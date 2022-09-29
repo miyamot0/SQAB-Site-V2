@@ -23,13 +23,13 @@ export type IndividualUserRecord = {
   didBuild: boolean;
 
   // New params
-  userEducation: SingleOptionType | undefined;
-  userGender: SingleOptionType | undefined;
-  userAge: SingleOptionType | undefined;
-  userRaceEthnicity: MultiValue<SingleOptionType> | undefined;
-  userOrientation: SingleOptionType | undefined;
-  userLanguage: SingleOptionType | undefined;
-  userNationality: SingleOptionType | undefined;
+  userEducation: SingleOptionType;
+  userGender: SingleOptionType;
+  userAge: SingleOptionType;
+  userRaceEthnicity: MultiValue<SingleOptionType>;
+  userOrientation: SingleOptionType;
+  userLanguage: SingleOptionType;
+  userNationality: SingleOptionType;
 };
 
 export type IndividualUserRecordSaved = {
