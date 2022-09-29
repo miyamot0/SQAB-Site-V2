@@ -44,12 +44,12 @@ textarea {
 }
 
 .error {
-  color: red;
+  color: rgb(221, 192, 192);
   background: rgb(221, 127, 143);
   border: 1px solid red;
   border-radius: 4px;
   padding: 10px;
-  margin: 10px 0;
+  margin: 25px 0;
 }
 
 .button-fit-card {

@@ -24,5 +24,5 @@ export type ProfileActions =
   | { type: UserEditAction.EditLanguage; payload: SingleOptionType }
   | { type: UserEditAction.EditNationality; payload: SingleOptionType }
   | { type: UserEditAction.EditPhoneAuthed; payload: boolean }
-  | { type: UserEditAction.EditFormError; payload: string }
+  | { type: UserEditAction.EditFormError; payload: string | undefined }
   | { type: UserEditAction.EditDidBuild; payload: boolean };

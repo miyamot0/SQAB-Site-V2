@@ -10,33 +10,45 @@ import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import { UserEditAction } from '../functionality/UserProfileFunctionality';
 import { OutputUserError } from '../views/UserOutputError';
-
 import {
   AgeOptions,
   DemographicOptions,
-  EducationOptions,
-  GenderOptions,
-  SexualityOptions,
+  EducationOptions, GenderOptions, SexualityOptions,
 } from '../helpers/DemographicOptions';
 import { LayoutProfileBodyInterface } from '../interfaces/UserInterfaces';
-import { StandardEntryFieldText, StandardEntryFieldEmail, StandardEntryFieldSelectSingle, StandardEntryFieldSelectMultiple } from 'smallnstats-shared-component-library';
+import { StandardEntryFieldText, StandardEntryFieldEmail } from 'smallnstats-shared-component-library';
+import { StandardEntryFieldSelectSingle } from '../views/StandardEntryFieldSelectSingle';
+import StandardEntryFieldSelectMultiple from '../views/StandardEntryFieldSelectMultiple';
 
 /** UserOutputBody
  *
  * @param param0
  * @returns
  */
-export function LayoutProfileBody({ state, submitCallback, dispatch,
-}: LayoutProfileBodyInterface): JSX.Element {
+export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutProfileBodyInterface): JSX.Element {
   /** handleEditFormSubmit
    *
    * Submission event for student edit form
    *
    */
-  async function handleEditFormSubmit(): Promise<void> {
-    dispatch({ type: UserEditAction.EditFormError, payload: '' });
+  async function handleEditFormSubmit(event: React.SyntheticEvent<HTMLFormElement>): Promise<void> {
+    event.preventDefault();
 
-    submitCallback();
+    dispatch({ type: UserEditAction.EditFormError, payload: undefined });
+
+    if (!state.userEducation ||
+      !state.userGender ||
+      !state.userAge ||
+      !state.userRaceEthnicity ||
+      !state.userOrientation) {
+      dispatch({ type: UserEditAction.EditFormError, payload: 'Please provide an answer to all areas' });
+
+      return;
+    } else {
+      submitCallback();
+
+      return;
+    }
   }
 
   return (
@@ -51,7 +63,7 @@ export function LayoutProfileBody({ state, submitCallback, dispatch,
                 will link directly to your profile. At a minimum, please ensure that your name and
                 institution are indicated and spelled correctly.
               </MDBCardText>
-              <form>
+              <form onSubmit={handleEditFormSubmit}>
                 <StandardEntryFieldText
                   label={'User Name (For Ad/Poster):'}
                   currentValue={state.userName}
@@ -96,6 +108,7 @@ export function LayoutProfileBody({ state, submitCallback, dispatch,
                   dispatch={dispatch}
                 />
 
+
                 <StandardEntryFieldSelectSingle
                   label={'What is your age?'}
                   options={AgeOptions}
@@ -120,23 +133,20 @@ export function LayoutProfileBody({ state, submitCallback, dispatch,
                   dispatch={dispatch}
                 />
 
-                <br />
+                <OutputUserError documentError={state.formError} />
 
                 <MDBBtn
                   noRipple
                   style={{
                     width: '100%',
                     marginBottom: '25px',
+                    marginTop: '25px'
                   }}
-                  tag="a"
-                  href="#!"
-                  className="button-fit-card"
-                  onClick={() => handleEditFormSubmit()}
-                >
+                  tag="button"
+                  type='submit'
+                  className="button-fit-card">
                   Save Profile Information
                 </MDBBtn>
-
-                <OutputUserError documentError={state.formError} />
               </form>
             </MDBCardBody>
           </MDBCard>

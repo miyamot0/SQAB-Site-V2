@@ -6,7 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export const EducationOptions = [
+import { SingleOptionType } from "../../tools/types/GeneralTypes";
+
+export const EducationOptions: SingleOptionType[] = [
   { label: 'Some high school', value: 'Some high school', },
   {
     label: 'High school', value: 'High school',

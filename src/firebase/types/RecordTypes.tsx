@@ -32,6 +32,28 @@ export type IndividualUserRecord = {
   userNationality: SingleOptionType | undefined;
 };
 
+export type IndividualUserRecordSaved = {
+  userEmail: string;
+  userInstitution: string;
+  userName: string;
+  userPhone: string;
+  canPostAd: boolean;
+  perms: string;
+  id?: string;
+  formError: string | undefined | null;
+  phoneAuthed: boolean;
+  didBuild: boolean;
+
+  // New params
+  userEducation: string | undefined;
+  userGender: string | undefined;
+  userAge: string | undefined;
+  userRaceEthnicity: string | undefined;
+  userOrientation: string | undefined;
+  userLanguage: string | undefined;
+  userNationality: string | undefined;
+};
+
 export type PosterSubmission = {
   name: string;
   title: string;

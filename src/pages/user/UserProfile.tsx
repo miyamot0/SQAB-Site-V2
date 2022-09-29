@@ -16,16 +16,18 @@ import {
   UserEditAction,
   UserEditReducer,
 } from './functionality/UserProfileFunctionality';
-import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
+import { IndividualUserRecordSaved } from '../../firebase/types/RecordTypes';
 import { OutputUserError } from './views/UserOutputError';
 import { UserOutputLoading } from './views/UserOutputLoading';
 import { LayoutProfileBody } from './layouts/LayoutProfileBody';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
+import { SingleOptionType } from '../tools/types/GeneralTypes';
+import { AgeOptions, DemographicOptions, EducationOptions, GenderOptions, SexualityOptions } from './helpers/DemographicOptions';
 
 export default function UserProfile() {
   const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecord>({
+  const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecordSaved>({
     collectionString: 'users',
     idString: id,
   });
@@ -45,7 +47,38 @@ export default function UserProfile() {
         dispatch({ type: UserEditAction.EditPhoneAuthed, payload: false });
       }
 
-      dispatch({ type: UserEditAction.Load, payload: document });
+      let raceEthnicityOptions: string[] | undefined = undefined;
+
+      if (document.userRaceEthnicity && document.userRaceEthnicity.includes(':')) {
+        raceEthnicityOptions = document.userRaceEthnicity.split(':')
+      } else if (document.userRaceEthnicity && !document.userRaceEthnicity.includes(':')) {
+        raceEthnicityOptions = [document.userRaceEthnicity]
+      }
+
+      const modDocument = {
+        ...document,
+        userEducation: EducationOptions.filter(function (ed: SingleOptionType) {
+          return ed.value === document.userEducation;
+        }),
+        userGender: GenderOptions.filter(function (ed: SingleOptionType) {
+          return ed.value === document.userGender;
+        }),
+        userAge: AgeOptions.filter(function (ed: SingleOptionType) {
+          return ed.value === document.userAge;
+        }),
+        userRaceEthnicity: DemographicOptions.filter(function (ed: SingleOptionType) {
+          if (raceEthnicityOptions && raceEthnicityOptions.includes(ed.value)) {
+            return true;
+          } else {
+            return false;
+          }
+        }),
+        userOrientation: SexualityOptions.filter(function (ed: SingleOptionType) {
+          return ed.value === document.userOrientation;
+        }),
+      };
+
+      dispatch({ type: UserEditAction.Load, payload: modDocument });
     }
   }, [document]);
 
@@ -55,12 +88,29 @@ export default function UserProfile() {
    *
    */
   async function submitCallback(): Promise<void> {
-    await updateDocument(id, state);
+
+    const uploadObject = {
+      userName: state.userName,
+      userEmail: state.userEmail,
+      userInstitution: state.userInstitution,
+
+      userAge: state.userAge?.value,
+      userEducation: state.userEducation?.value,
+      userGender: state.userGender?.value,
+      userOrientation: state.userOrientation?.value,
+      userRaceEthnicity: state.userRaceEthnicity?.map((resp: SingleOptionType) => {
+        return resp.value
+      }).join(":"),
+    } as IndividualUserRecordSaved;
+
+    console.log(uploadObject)
+
+    await updateDocument(id, uploadObject);
 
     if (response.error) {
       alert(response.error);
     } else {
-      history.push(`/user/${id}`);
+      //history.push(`/user/${id}`);
     }
 
     return;
