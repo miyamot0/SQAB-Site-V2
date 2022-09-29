@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import StandardEntryFieldSelectMultiple from '../views/StandardEntryFieldSelectMultiple';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import { UserEditAction } from '../functionality/UserProfileFunctionality';
 import { OutputUserError } from '../views/UserOutputError';
@@ -18,8 +19,9 @@ import {
 import { LayoutProfileBodyInterface } from '../interfaces/UserInterfaces';
 import { StandardEntryFieldText, StandardEntryFieldEmail } from 'smallnstats-shared-component-library';
 import { StandardEntryFieldSelectSingle } from '../views/StandardEntryFieldSelectSingle';
-import StandardEntryFieldSelectMultiple from '../views/StandardEntryFieldSelectMultiple';
 import { CountryList } from '../../../utilities/CountryCodes';
+
+import './../styles/UserFieldStyles.css'
 
 /** UserOutputBody
  *
@@ -67,7 +69,7 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                 institution are indicated and spelled correctly.
               </MDBCardText>
 
-              <form onSubmit={handleEditFormSubmit}>
+              <form onSubmit={handleEditFormSubmit} id={"user-profile-form"}>
                 <StandardEntryFieldText
                   label={'User Name (For Ad/Poster):'}
                   currentValue={state.userName}

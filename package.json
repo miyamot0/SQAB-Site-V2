@@ -1,10 +1,9 @@
 {
   "name": "sqab-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@handsontable/react": "^12.1.2",
-    "@types/jest": "^28.1.8",
     "@types/node": "^18.7.13",
     "bootstrap-css-only": "^4.4.1",
     "firebase": "^8.10.1",

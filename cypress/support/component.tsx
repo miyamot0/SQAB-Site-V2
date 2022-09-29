@@ -17,7 +17,8 @@
 import './commands';
 import { mount } from 'cypress/react';
 import { projectAuth } from '../../src/firebase/config';
-import { email, password } from './../fixtures/auth-user';
+import { email, password } from '../fixtures/auth-user';
+import React from 'react';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -28,6 +29,7 @@ declare global {
       saveLocalStorage(): void;
       restoreLocalStorage(): void;
       mount: typeof mount;
+      mount2(element: JSX.Element): unknown;
     }
   }
 }
@@ -36,6 +38,12 @@ declare global {
 let LOCAL_STORAGE_MEMORY: any = {};
 
 Cypress.Commands.add('mount', mount);
+
+Cypress.Commands.add('mount2', (element: JSX.Element) => {
+  const modLoad = <div>{element}</div>;
+  //const root = ReactDOM.createRoot(document.getElementById('root')!);
+  return mount(modLoad);
+});
 
 Cypress.Commands.add('login', () => {
   return projectAuth.signInWithEmailAndPassword(email, password);
