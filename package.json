@@ -29,7 +29,8 @@
     "lint": "eslint --ext .js,.ts .",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cypress run",
+    "test:runner": "cypress open",
     "test-coverage": "npm run test -- --coverage --watchAll --coverageDirectory='coverage'",
     "test-summarize": "npm run test -- --coverage --watchAll --coverageDirectory='coverage' --coverageReporters='json-summary'",
     "make-badges": "istanbul-badges-readme",
@@ -37,8 +38,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -57,10 +57,11 @@
     "@babel/core": "^7.19.0",
     "@babel/preset-env": "^7.19.0",
     "@babel/preset-typescript": "^7.18.6",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
+    "@cypress/code-coverage": "^3.10.0",
+    "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/react": "^6.2.0",
+    "@cypress/webpack-dev-server": "^2.3.0",
     "@testing-library/react-hooks": "^8.0.1",
-    "@testing-library/user-event": "^12.8.3",
     "@types/enzyme": "^3.10.12",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/react": "^18.0.17",
@@ -73,11 +74,13 @@
     "@typescript-eslint/parser": "^5.36.2",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^29.0.3",
+    "cypress": "^10.9.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^8.23.0",
     "eslint-plugin-react": "^7.31.7",
     "firestore-jest-mock": "^0.19.0",
+    "html-webpack-plugin": "4.5.x",
     "istanbul-badges-readme": "^1.8.0",
     "postcss-import": "^14.1.0",
     "react-select-event": "^5.5.1",

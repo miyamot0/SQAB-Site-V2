@@ -3,6 +3,13 @@ node_modules
 build
 coverage
 
+cypress/results/*
+cypress/reports/*
+cypress/screenshots/*
+cypress/videos/*
+
+/.nyc_output
+
 .prettierignore
 .prettierrc.json
 .firebase
