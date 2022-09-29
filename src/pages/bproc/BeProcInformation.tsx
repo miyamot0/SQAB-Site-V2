@@ -45,7 +45,7 @@ export default function BeProcInformation(): JSX.Element {
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Available Tutorials</MDBCardTitle>
+              <MDBCardTitle>Available Issues</MDBCardTitle>
               <ul className="beproc-ul">
                 {specialIssueJson.Specials.map((issue) => {
                   return (

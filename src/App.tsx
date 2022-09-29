@@ -127,12 +127,12 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/manage/:id">
                   {!user && <Redirect to="/signin" />}
-                  {!adFlag && <Redirect to="/" />}
+                  {user && adFlag === false && <Redirect to="/" />}
                   {user && <UserRecruitment />}
                 </Route>
                 <Route path="/admin">
                   {!user && <Redirect to="/signin" />}
-                  {!adminFlag && <Redirect to="/" />}
+                  {user && adminFlag === false && <Redirect to="/" />}
                   {user && <Administration />}
                 </Route>
               </Switch>

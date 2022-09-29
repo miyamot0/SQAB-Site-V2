@@ -1,8 +1,18 @@
 import React from "react"
-import App from "../../src/App"
+import Home from "../../src/pages/home/Home";
 
 describe('Home.cy.tsx', () => {
-  it('playground', () => {
-    //cy.mount(<App />)
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  it('Should successfully log in', () => {
+    cy.login();
+    // Probe the landing page
+    cy.mount(<Home />)
   })
 })

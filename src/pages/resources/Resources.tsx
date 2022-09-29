@@ -49,7 +49,7 @@ export default function Resources(): JSX.Element {
               marginBottom: '2rem',
             }}
           >
-            Past Leadership
+            Labs and Tools
           </h4>
         </MDBCol>
       </MDBRow>
@@ -107,7 +107,7 @@ export default function Resources(): JSX.Element {
               marginBottom: '2rem',
             }}
           >
-            Past Leadership
+            Books and Software
           </h4>
         </MDBCol>
       </MDBRow>
