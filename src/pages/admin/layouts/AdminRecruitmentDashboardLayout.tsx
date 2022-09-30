@@ -21,6 +21,8 @@ import {
 } from 'mdb-react-ui-kit';
 import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 import { toggleRecruitmentStatus } from '../helpers/AdministrationHelpers';
+import { ColumnType } from '../types/TableTypes';
+import { MDBDataTable } from 'mdbreact';
 
 export interface AdminRecruitmentDashboardLayoutInterface {
   recruitmentDocuments: RecruitmentAd[] | null;
@@ -34,6 +36,60 @@ export interface AdminRecruitmentDashboardLayoutInterface {
 export function AdminRecruitmentDashboardLayout({
   recruitmentDocuments,
 }: AdminRecruitmentDashboardLayoutInterface) {
+  if (!recruitmentDocuments) {
+    return <></>;
+  }
+
+  const columns: ColumnType[] = [
+    //{ label: 'ID', field: 'id', sort: 'asc' },
+    { label: 'Mentor', field: 'mentor' },
+    { label: 'Contact Information', field: 'email' },
+    { label: 'Institution', field: 'institution' },
+    { label: 'Application Deadline', field: 'cycle', sort: 'asc' },
+    { label: 'Summary of Mentory and Lab', field: 'link' },
+    { label: 'Approved', field: 'approved' },
+  ];
+
+  const rows = recruitmentDocuments
+    .sort((a, b) => {
+      if (!a.Cycle || a.Cycle.trim().length === 0) {
+        return 1;
+      }
+      return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
+        moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
+      )
+        ? 1
+        : -1;
+    })
+    .map((recr) => {
+      const ret = {
+        //id: recr.id,
+        mentor: recr.Mentor,
+        email: recr.Contact,
+        institution: recr.Institution,
+        cycle: recr.Cycle,
+        link: <a href={`/recruitment/${recr.id}`}>Link to Page</a>,
+        approved: (
+          <MDBBtn
+            noRipple
+            tag="a"
+            href="#!"
+            style={{
+              width: '100%',
+            }}
+            className={`button-fit-card ${
+              recr.Approved ? 'button-color-override-red' : 'button-color-override-green'
+            }`}
+            onClick={() => toggleRecruitmentStatus(recr)}
+          >
+            {recr.Approved ? 'Disapprove' : 'Approve'}
+          </MDBBtn>
+        ),
+      };
+
+      return ret;
+    });
+
   return (
     <>
       <MDBRow center>
@@ -54,79 +110,16 @@ export function AdminRecruitmentDashboardLayout({
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Recruitment Advertisement Dashboard</MDBCardTitle>
-              <MDBTable responsive>
-                <MDBTableHead>
-                  <tr>
-                    <th className="recruitment-table-th" scope="col">
-                      Mentor
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Institution
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Contact Information
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Summary of Mentory and Lab
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Application Deadline
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Approved
-                    </th>
-                  </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                  {recruitmentDocuments
-                    ? recruitmentDocuments
-                        .sort((a, b) => {
-                          return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
-                            moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
-                          )
-                            ? 1
-                            : -1;
-                        })
-                        .map((recr) => {
-                          return (
-                            <tr key={recr.Contact} className="recruitment-table-tr">
-                              <td title={recr.id}>{recr.Mentor}</td>
-                              <td>{recr.Institution}</td>
-                              <td>
-                                {' '}
-                                <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
-                                  {recr.Contact}
-                                </a>
-                              </td>
-                              <td>
-                                <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
-                              </td>
-                              <td>{recr.Cycle}</td>
-                              <td>
-                                <MDBBtn
-                                  noRipple
-                                  tag="a"
-                                  href="#!"
-                                  style={{
-                                    width: '100%',
-                                  }}
-                                  className={`button-fit-card ${
-                                    recr.Approved
-                                      ? 'button-color-override-red'
-                                      : 'button-color-override-green'
-                                  }`}
-                                  onClick={() => toggleRecruitmentStatus(recr)}
-                                >
-                                  {recr.Approved ? 'Click to Disapprove' : 'Click to Approve'}
-                                </MDBBtn>
-                              </td>
-                            </tr>
-                          );
-                        })
-                    : null}
-                </MDBTableBody>
-              </MDBTable>
+              <MDBCardTitle>Recruitment Database</MDBCardTitle>
+              <MDBDataTable
+                exportToCSV
+                noBottomColumns
+                striped
+                data={{
+                  columns,
+                  rows,
+                }}
+              />
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

@@ -7,16 +7,7 @@
  */
 
 import React from 'react';
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCol,
-  MDBRow,
-  MDBTable,
-  MDBTableBody,
-  MDBTableHead,
-} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
   IndividualUserRecord,
   PosterSubmission,
@@ -25,6 +16,7 @@ import {
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 import { RecruitmentLayout } from '../views/RecruitmentLayout';
 import { MDBDataTable } from 'mdbreact';
+import { ColumnType } from '../types/TableTypes';
 
 export interface AdminDashboardSystemLayoutInterface {
   sysAdminFlag: boolean;
@@ -35,14 +27,6 @@ export interface AdminDashboardSystemLayoutInterface {
   userAdArray: SingleOptionType[];
   setSelectedAdUser: (option: SingleOptionType) => void;
 }
-type columnType = {
-  label?: string;
-  field?: string;
-  sort?: string;
-  width?: number;
-  searchable?: boolean;
-  [rest: string]: any;
-};
 
 export function AdminDashboardSystemLayout({
   sysAdminFlag,
@@ -57,7 +41,7 @@ export function AdminDashboardSystemLayout({
     return <></>;
   }
 
-  const columns: columnType[] = [
+  const columns: ColumnType[] = [
     { label: 'ID', field: 'id', sort: 'asc' },
     { label: 'Name', field: 'name', sort: 'asc' },
     { label: 'Email', field: 'email', sort: 'asc' },
@@ -65,17 +49,25 @@ export function AdminDashboardSystemLayout({
     { label: 'Permissions', field: 'perms', sort: 'asc' },
   ];
 
-  const rows = userDocuments.map((userItem) => {
-    const ret = {
-      id: userItem.id ?? '',
-      name: userItem.userName,
-      email: userItem.userEmail,
-      ad: userItem.canPostAd ? 'Yes' : '',
-      perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
-    };
+  const rows = userDocuments
+    .sort((a, b) => {
+      if (!a.userName || a.userName.trim().length === 0) {
+        return 1;
+      }
 
-    return ret;
-  });
+      return a.userName.localeCompare(b.userName);
+    })
+    .map((userItem) => {
+      const ret = {
+        id: userItem.id ?? '',
+        name: userItem.userName,
+        email: userItem.userEmail,
+        ad: userItem.canPostAd ? 'Yes' : '',
+        perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
+      };
+
+      return ret;
+    });
 
   return (
     <>
