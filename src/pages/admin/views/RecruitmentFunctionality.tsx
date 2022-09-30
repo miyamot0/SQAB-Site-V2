@@ -17,7 +17,7 @@ import { AdministrationRecruitmentGenerator } from './AdministrationRecruitmentG
 import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 
-export interface RecruitementLayoutInterface {
+export interface RecruitmentFunctionalityInterface {
   userDocuments: IndividualUserRecord[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
   submissionDocuments: PosterSubmission[] | null;
@@ -26,11 +26,11 @@ export interface RecruitementLayoutInterface {
   setSelectedAdUser: (option: SingleOptionType) => void;
 }
 
-export function RecruitmentLayout({
+export function RecruitmentFunctionality({
   selectedAdUser,
   userAdArray,
   setSelectedAdUser,
-}: RecruitementLayoutInterface) {
+}: RecruitmentFunctionalityInterface) {
   return (
     <MDBRow className="d-flex justify-content-center">
       <MDBCol sm="4">

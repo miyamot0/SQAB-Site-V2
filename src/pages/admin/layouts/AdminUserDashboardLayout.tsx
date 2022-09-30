@@ -8,36 +8,25 @@
 
 import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import {
-  IndividualUserRecord,
-  PosterSubmission,
-  RecruitmentAd,
-} from '../../../firebase/types/RecordTypes';
-import { SingleOptionType } from '../../tools/types/GeneralTypes';
-import { RecruitmentLayout } from '../views/RecruitmentLayout';
-import { MDBDataTable } from 'mdbreact';
+import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
 import { ColumnType } from '../types/TableTypes';
+import { MDBDataTable } from 'mdbreact';
 
-export interface AdminDashboardSystemLayoutInterface {
+export interface AdminUserDashboardLayoutInterface {
   sysAdminFlag: boolean;
   userDocuments: IndividualUserRecord[] | null;
-  recruitmentDocuments: RecruitmentAd[] | null;
-  submissionDocuments: PosterSubmission[] | null;
-  selectedAdUser: SingleOptionType;
-  userAdArray: SingleOptionType[];
-  setSelectedAdUser: (option: SingleOptionType) => void;
 }
 
-export function AdminDashboardSystemLayout({
+/** AdministrationUserSummary
+ *
+ * @param param0
+ * @returns
+ */
+export function AdminUserDashboardLayout({
   sysAdminFlag,
   userDocuments,
-  recruitmentDocuments,
-  submissionDocuments,
-  selectedAdUser,
-  userAdArray,
-  setSelectedAdUser,
-}: AdminDashboardSystemLayoutInterface) {
-  if (userDocuments === null) {
+}: AdminUserDashboardLayoutInterface) {
+  if (!userDocuments || sysAdminFlag === false) {
     return <></>;
   }
 
@@ -80,25 +69,8 @@ export function AdminDashboardSystemLayout({
               marginBottom: '2rem',
             }}
           >
-            Authorization for Recruitment
+            User Information
           </h4>
-        </MDBCol>
-      </MDBRow>
-
-      {sysAdminFlag === true && (
-        <RecruitmentLayout
-          userDocuments={userDocuments}
-          recruitmentDocuments={recruitmentDocuments}
-          submissionDocuments={submissionDocuments}
-          selectedAdUser={selectedAdUser}
-          userAdArray={userAdArray}
-          setSelectedAdUser={setSelectedAdUser}
-        />
-      )}
-
-      <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
         </MDBCol>
       </MDBRow>
 
@@ -106,7 +78,7 @@ export function AdminDashboardSystemLayout({
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>User Database</MDBCardTitle>
+              <MDBCardTitle>User Dashboard</MDBCardTitle>
               <MDBDataTable
                 exportToCSV
                 noBottomColumns

@@ -7,13 +7,13 @@
  */
 
 import React from 'react';
-import { MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
   IndividualUserRecord,
   PosterSubmission,
   RecruitmentAd,
 } from '../../../firebase/types/RecordTypes';
-import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
+import { UserSummaryCard } from './UserSummaryCard';
 
 export interface AdministrationUserSummaryInterface {
   userDocuments: IndividualUserRecord[] | null;
@@ -34,25 +34,11 @@ export function AdministrationUserSummary({
   return (
     <MDBRow className="d-flex justify-content-center">
       <MDBCol sm="8">
-        <MDBCard>
-          <MDBCardBody>
-            <MDBCardTitle>Administrative Summary</MDBCardTitle>
-            <MDBCardText style={CardBodyTextStyle}>
-              <b>Total Users:</b> {userDocuments ? userDocuments.length : 0} users currently
-              registered
-              <br />
-              <br />
-              <b>Total Recruitment Ads:</b> {recruitmentDocuments ? recruitmentDocuments.length : 0}{' '}
-              recruitment entries (either complete or in-progress)
-              <br />
-              <br />
-              <b>Total Poster Submissions:</b>{' '}
-              {submissionDocuments ? submissionDocuments.length : 0} posters submitted and either
-              approved or under review
-              <br />
-            </MDBCardText>
-          </MDBCardBody>
-        </MDBCard>
+        <UserSummaryCard
+          userDocuments={userDocuments}
+          recruitmentDocuments={recruitmentDocuments}
+          submissionDocuments={submissionDocuments}
+        />
       </MDBCol>
     </MDBRow>
   );

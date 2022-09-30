@@ -13,7 +13,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": true,
-    "allowJs": true,
-    "types": ["cypress"]
+    "allowJs": true
   }
 }

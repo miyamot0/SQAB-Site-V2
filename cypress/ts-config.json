@@ -1,16 +1,9 @@
 {
-    "compilerOptions": {
-        "noEmit": false,
-        "types": [
-            "cypress"
-        ],
-        "baseUrl": "/"
-    },
-    "include": [
-        "../node_modules/cypress",
-        "./**/*.tsx",
-        "../cypress.config.ts",
-        "e2e/*.tsx"
-    ],
-    "exclude": []
+  "compilerOptions": {
+    "noEmit": false,
+    "types": ["cypress"],
+    "baseUrl": "/"
+  },
+  "include": ["../node_modules/cypress", "./**/*.tsx", "../cypress.config.ts", "e2e/*.tsx"],
+  "exclude": []
 }

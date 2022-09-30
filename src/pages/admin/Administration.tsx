@@ -16,9 +16,10 @@ import {
 } from '../../firebase/types/RecordTypes';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AdministrationUserSummary } from './views/AdministrationUserSummary';
-import { AdminRecruitmentDashboardLayout } from './layouts/AdminRecruitmentDashboardLayout';
-import { AdminDashboardSystemLayout } from './layouts/AdminDashboardSystemLayout';
 import { AdminPosterDashboardLayout } from './layouts/AdminPosterDashboardLayout';
+import { AdminRecruitmentDashboardLayout } from './layouts/AdminRecruitmentDashboardLayout';
+import { AdminUserDashboardLayout } from './layouts/AdminUserDashboardLayout';
+import { AdminDiversityDashboardLayout } from './layouts/AdminDiversityDashboardLayout';
 
 export default function Administration(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
@@ -64,13 +65,29 @@ export default function Administration(): JSX.Element {
 
   return (
     <>
+      {/**
+       * Summary element, all admins can see general info
+       */}
       <AdministrationUserSummary
         userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
         submissionDocuments={submissionDocuments}
       />
 
-      <AdminDashboardSystemLayout
+      {/**
+       * Purely sysadmin content
+       */}
+      <AdminUserDashboardLayout sysAdminFlag={sysAdminFlag} userDocuments={userDocuments} />
+
+      {/**
+       * Diversity-focus information, for sys and admins with that priv
+       */}
+      <AdminDiversityDashboardLayout sysAdminFlag={sysAdminFlag} userDocuments={userDocuments} />
+
+      {/**
+       * Recruitment-focus information, for sys and admins w/ that priv
+       */}
+      <AdminRecruitmentDashboardLayout
         sysAdminFlag={sysAdminFlag}
         userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
@@ -80,9 +97,13 @@ export default function Administration(): JSX.Element {
         setSelectedAdUser={setSelectedAdUser}
       />
 
-      <AdminRecruitmentDashboardLayout recruitmentDocuments={recruitmentDocuments} />
-
-      <AdminPosterDashboardLayout submissionDocuments={submissionDocuments} />
+      {/**
+       * Poster-focus information, for sys and admins with that priv
+       */}
+      <AdminPosterDashboardLayout
+        sysAdminFlag={sysAdminFlag}
+        submissionDocuments={submissionDocuments}
+      />
     </>
   );
 }

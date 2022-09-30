@@ -22,14 +22,67 @@ import {
 import { PosterSubmission } from '../../../firebase/types/RecordTypes';
 import { togglePosterStatus } from '../helpers/AdministrationHelpers';
 import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
+import { ColumnType } from '../types/TableTypes';
+import { MDBDataTable } from 'mdbreact';
 
 export interface AdminPosterDashboardLayoutInterface {
+  sysAdminFlag: boolean;
   submissionDocuments: PosterSubmission[] | null;
 }
 
 export function AdminPosterDashboardLayout({
+  sysAdminFlag,
   submissionDocuments,
 }: AdminPosterDashboardLayoutInterface) {
+  if (!submissionDocuments || sysAdminFlag === false) {
+    return <></>;
+  }
+
+  const columns: ColumnType[] = [
+    { label: 'ID', field: 'id', sort: 'asc' },
+    { label: 'Name', field: 'name', sort: 'asc' },
+    { label: 'Title', field: 'title', sort: 'asc' },
+    { label: 'Email', field: 'email', sort: 'asc' },
+    { label: 'Presenter?', field: 'presenter', sort: 'asc' },
+    { label: 'Reviewed', field: 'reviewed', sort: 'asc' },
+  ];
+
+  const rows = submissionDocuments
+    .sort((a, b) => {
+      if (!a.name || a.name.trim().length === 0) {
+        return 1;
+      }
+
+      return a.name.localeCompare(b.name);
+    })
+    .map((posterItem) => {
+      const ret = {
+        id: posterItem.id ?? '',
+        name: posterItem.name,
+        title: posterItem.title,
+        email: posterItem.email,
+        presenter: posterItem.presenter ? 'Yes' : '',
+        reviewed: (
+          <MDBBtn
+            noRipple
+            tag="a"
+            href="#!"
+            style={{
+              width: '100%',
+            }}
+            className={`button-fit-card ${
+              posterItem.reviewed ? 'button-color-override-red' : 'button-color-override-green'
+            }`}
+            onClick={() => togglePosterStatus(posterItem)}
+          >
+            {posterItem.reviewed ? 'Disapprove' : 'Accept'}
+          </MDBBtn>
+        ),
+      };
+
+      return ret;
+    });
+
   return (
     <>
       <MDBRow center>
@@ -103,76 +156,21 @@ export function AdminPosterDashboardLayout({
           <hr className="additional-margin" />
         </MDBCol>
       </MDBRow>
+
       <MDBRow className="d-flex justify-content-center">
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Poster Management Dashboard</MDBCardTitle>
-              <MDBTable responsive>
-                <MDBTableHead>
-                  <tr>
-                    <th className="recruitment-table-th" scope="col">
-                      Name
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Email
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Title
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Abstract
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Student Presenter
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Link to Entry
-                    </th>
-                    <th className="recruitment-table-th" scope="col">
-                      Decision
-                    </th>
-                  </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                  {submissionDocuments
-                    ? submissionDocuments.map((poster) => {
-                        return (
-                          <tr key={poster.name} className="recruitment-table-tr">
-                            <td>{poster.name}</td>
-                            <td>
-                              <a href={`mailto:${poster.email}`}>{poster.email}</a>
-                            </td>
-                            <td>{poster.title}</td>
-                            <td>{poster.abstract}</td>
-                            <td>{poster.presenter ? 'Interested' : 'Not Interested'}</td>
-                            <td>
-                              <a href={`/poster/${poster.id}`}>Submission</a>
-                            </td>
-                            <td>
-                              <MDBBtn
-                                noRipple
-                                tag="a"
-                                href="#!"
-                                style={{
-                                  width: '100%',
-                                }}
-                                className={`button-fit-card ${
-                                  poster.reviewed
-                                    ? 'button-color-override-red'
-                                    : 'button-color-override-green'
-                                }`}
-                                onClick={() => togglePosterStatus(poster)}
-                              >
-                                {poster.reviewed ? 'Click to Disapprove' : 'Click to Accept'}
-                              </MDBBtn>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    : null}
-                </MDBTableBody>
-              </MDBTable>
+              <MDBDataTable
+                exportToCSV
+                noBottomColumns
+                striped
+                data={{
+                  columns,
+                  rows,
+                }}
+              />
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

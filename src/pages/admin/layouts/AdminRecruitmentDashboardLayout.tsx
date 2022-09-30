@@ -7,84 +7,63 @@
  */
 
 import React from 'react';
-import moment from 'moment';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCol,
-  MDBRow,
-  MDBTable,
-  MDBTableBody,
-  MDBTableHead,
-} from 'mdb-react-ui-kit';
-import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
-import { toggleRecruitmentStatus } from '../helpers/AdministrationHelpers';
+  IndividualUserRecord,
+  PosterSubmission,
+  RecruitmentAd,
+} from '../../../firebase/types/RecordTypes';
+import { SingleOptionType } from '../../tools/types/GeneralTypes';
+import { RecruitmentFunctionality } from '../views/RecruitmentFunctionality';
 import { ColumnType } from '../types/TableTypes';
 import { MDBDataTable } from 'mdbreact';
 
 export interface AdminRecruitmentDashboardLayoutInterface {
+  sysAdminFlag: boolean;
+  userDocuments: IndividualUserRecord[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
+  submissionDocuments: PosterSubmission[] | null;
+  selectedAdUser: SingleOptionType;
+  userAdArray: SingleOptionType[];
+  setSelectedAdUser: (option: SingleOptionType) => void;
 }
 
-/** AdministrationUserSummary
- *
- * @param param0
- * @returns
- */
 export function AdminRecruitmentDashboardLayout({
+  sysAdminFlag,
+  userDocuments,
   recruitmentDocuments,
+  submissionDocuments,
+  selectedAdUser,
+  userAdArray,
+  setSelectedAdUser,
 }: AdminRecruitmentDashboardLayoutInterface) {
-  if (!recruitmentDocuments) {
+  if (!userDocuments || sysAdminFlag === false) {
     return <></>;
   }
 
   const columns: ColumnType[] = [
-    //{ label: 'ID', field: 'id', sort: 'asc' },
-    { label: 'Mentor', field: 'mentor' },
-    { label: 'Contact Information', field: 'email' },
-    { label: 'Institution', field: 'institution' },
-    { label: 'Application Deadline', field: 'cycle', sort: 'asc' },
-    { label: 'Summary of Mentory and Lab', field: 'link' },
-    { label: 'Approved', field: 'approved' },
+    { label: 'ID', field: 'id', sort: 'asc' },
+    { label: 'Name', field: 'name', sort: 'asc' },
+    { label: 'Email', field: 'email', sort: 'asc' },
+    { label: 'Ad', field: 'ad', sort: 'asc' },
+    { label: 'Permissions', field: 'perms', sort: 'asc' },
   ];
 
-  const rows = recruitmentDocuments
+  const rows = userDocuments
     .sort((a, b) => {
-      if (!a.Cycle || a.Cycle.trim().length === 0) {
+      if (!a.userName || a.userName.trim().length === 0) {
         return 1;
       }
-      return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
-        moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
-      )
-        ? 1
-        : -1;
+
+      return a.userName.localeCompare(b.userName);
     })
-    .map((recr) => {
+    .map((userItem) => {
       const ret = {
-        //id: recr.id,
-        mentor: recr.Mentor,
-        email: recr.Contact,
-        institution: recr.Institution,
-        cycle: recr.Cycle,
-        link: <a href={`/recruitment/${recr.id}`}>Link to Page</a>,
-        approved: (
-          <MDBBtn
-            noRipple
-            tag="a"
-            href="#!"
-            style={{
-              width: '100%',
-            }}
-            className={`button-fit-card ${
-              recr.Approved ? 'button-color-override-red' : 'button-color-override-green'
-            }`}
-            onClick={() => toggleRecruitmentStatus(recr)}
-          >
-            {recr.Approved ? 'Disapprove' : 'Approve'}
-          </MDBBtn>
-        ),
+        id: userItem.id ?? '',
+        name: userItem.userName,
+        email: userItem.userEmail,
+        ad: userItem.canPostAd ? 'Yes' : '',
+        perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
       };
 
       return ret;
@@ -101,8 +80,23 @@ export function AdminRecruitmentDashboardLayout({
               marginBottom: '2rem',
             }}
           >
-            Current Recruitment Submissions
+            Authorization for Recruitment
           </h4>
+        </MDBCol>
+      </MDBRow>
+
+      <RecruitmentFunctionality
+        userDocuments={userDocuments}
+        recruitmentDocuments={recruitmentDocuments}
+        submissionDocuments={submissionDocuments}
+        selectedAdUser={selectedAdUser}
+        userAdArray={userAdArray}
+        setSelectedAdUser={setSelectedAdUser}
+      />
+
+      <MDBRow center>
+        <MDBCol sm="8">
+          <hr className="additional-margin" />
         </MDBCol>
       </MDBRow>
 
@@ -110,7 +104,7 @@ export function AdminRecruitmentDashboardLayout({
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              <MDBCardTitle>Recruitment Database</MDBCardTitle>
+              <MDBCardTitle>Recruitment Dashboard</MDBCardTitle>
               <MDBDataTable
                 exportToCSV
                 noBottomColumns

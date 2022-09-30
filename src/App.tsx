@@ -57,14 +57,14 @@ function App(): JSX.Element {
               backgroundColor: '#e3e3e3',
             }}
           >
-            <Header />
-            <div
-              style={{
-                paddingTop: '20px',
-                paddingBottom: '20px',
-              }}
-            >
-              <Suspense fallback="Loading...">
+            <Suspense fallback="Loading...">
+              <Header />
+              <div
+                style={{
+                  paddingTop: '20px',
+                  paddingBottom: '20px',
+                }}
+              >
                 <Switch>
                   <Route exact path="/">
                     <Home />
@@ -134,9 +134,9 @@ function App(): JSX.Element {
                     {user && <Administration />}
                   </Route>
                 </Switch>
-              </Suspense>
-            </div>
-            <Footer />
+              </div>
+              <Footer />
+            </Suspense>
           </MDBContainer>
         </BrowserRouter>
       )}
