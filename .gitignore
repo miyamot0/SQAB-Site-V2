@@ -14,3 +14,4 @@ cypress/videos/*
 .prettierrc.json
 .firebase
 firebase.json
+cypress/fixtures/auth-user.tsx
