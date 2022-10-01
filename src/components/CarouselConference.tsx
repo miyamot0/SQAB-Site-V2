@@ -8,11 +8,11 @@
 
 import React from 'react';
 
-import Symp1 from './../assets/img/symp-1-min.jpeg';
-import Symp2 from './../assets/img/symp-2-min.jpeg';
-import Symp3 from './../assets/img/symp-3-min.jpeg';
-import Symp4 from './../assets/img/symp-4-min.jpeg';
-import Symp5 from './../assets/img/symp-5-min.jpeg';
+import Symp1 from './../assets/img/symp-1-min.webp';
+import Symp2 from './../assets/img/symp-2-min.webp';
+import Symp3 from './../assets/img/symp-3-min.webp';
+import Symp4 from './../assets/img/symp-4-min.webp';
+import Symp5 from './../assets/img/symp-5-min.webp';
 
 import { MDBCarousel, MDBCarouselItem } from 'mdb-react-ui-kit';
 

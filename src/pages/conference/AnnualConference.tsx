@@ -7,9 +7,9 @@
  */
 
 import React from 'react';
-import AceLogo from './../../assets/img/BACB-ACE-475x325.png';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
+import AceLogo from './../../assets/img/BACB-ACE-475x325.webp';
 
 export default function AnnualConference(): JSX.Element {
   return (
