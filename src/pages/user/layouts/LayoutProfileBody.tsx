@@ -8,27 +8,44 @@
 
 import React from 'react';
 import StandardEntryFieldSelectMultiple from '../views/StandardEntryFieldSelectMultiple';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardText,
+  MDBCardTitle,
+  MDBCol,
+  MDBRow,
+} from 'mdb-react-ui-kit';
 import { UserEditAction } from '../functionality/UserProfileFunctionality';
 import { OutputUserError } from '../views/UserOutputError';
 import {
   AgeOptions,
   DemographicOptions,
-  EducationOptions, GenderOptions, SexualityOptions,
+  EducationOptions,
+  GenderOptions,
+  SexualityOptions,
 } from '../helpers/DemographicOptions';
 import { LayoutProfileBodyInterface } from '../interfaces/UserInterfaces';
-import { StandardEntryFieldText, StandardEntryFieldEmail } from 'smallnstats-shared-component-library';
+import {
+  StandardEntryFieldText,
+  StandardEntryFieldEmail,
+} from 'smallnstats-shared-component-library';
 import { StandardEntryFieldSelectSingle } from '../views/StandardEntryFieldSelectSingle';
 import { CountryList } from '../../../utilities/CountryCodes';
 
-import './../styles/UserFieldStyles.css'
+import './../styles/UserFieldStyles.css';
 
 /** UserOutputBody
  *
  * @param param0
  * @returns
  */
-export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutProfileBodyInterface): JSX.Element {
+export function LayoutProfileBody({
+  state,
+  submitCallback,
+  dispatch,
+}: LayoutProfileBodyInterface): JSX.Element {
   /** handleEditFormSubmit
    *
    * Submission event for student edit form
@@ -39,14 +56,25 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
 
     dispatch({ type: UserEditAction.EditFormError, payload: undefined });
 
-    if (!state.userEducation || state.userEducation.label === "" ||
-      !state.userGender || state.userGender.label === "" ||
-      !state.userAge || state.userAge.label === "" ||
-      !state.userRaceEthnicity || state.userRaceEthnicity.length === 0 ||
-      !state.userOrientation || state.userOrientation.label === "" ||
-      !state.userNationality || state.userNationality.label === "") {
-      console.log(state)
-      dispatch({ type: UserEditAction.EditFormError, payload: 'Please provide an answer to all areas' });
+    if (
+      !state.userEducation ||
+      state.userEducation.label === '' ||
+      !state.userGender ||
+      state.userGender.label === '' ||
+      !state.userAge ||
+      state.userAge.label === '' ||
+      !state.userRaceEthnicity ||
+      state.userRaceEthnicity.length === 0 ||
+      !state.userOrientation ||
+      state.userOrientation.label === '' ||
+      !state.userNationality ||
+      state.userNationality.label === ''
+    ) {
+      console.log(state);
+      dispatch({
+        type: UserEditAction.EditFormError,
+        payload: 'Please provide an answer to all areas',
+      });
 
       return;
     } else {
@@ -59,17 +87,24 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
   return (
     <div>
       <MDBRow center className="row-eq-height">
-        <MDBCol sm="6">
+        <MDBCol sm="5">
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
               <MDBCardText>
-                Please complete your profile. In the near future, both recruitment and poster submissions
-                will link directly to your profile. At a minimum, please ensure that your name and
-                institution are indicated and spelled correctly.
+                Please complete your profile. In the near future, both recruitment and poster
+                submissions will link directly to your profile. This will help with timely
+                communication as well as inform on-going DEI initiatives. Indicating a preference
+                not to answer will in no way affect the functionality of the site or your account.{' '}
+                <br />
+                <br />
+                Any personal information provided here is carefully handled. The system
+                administrator has access restricted to the daily functioning of the site. Only a
+                single member of SQAB, the one tasked with quantifying DEI information, will have
+                access to data in aggregate form (i.e., no personally-identifiable information).
               </MDBCardText>
 
-              <form onSubmit={handleEditFormSubmit} id={"user-profile-form"}>
+              <form onSubmit={handleEditFormSubmit} id={'user-profile-form'}>
                 <StandardEntryFieldText
                   label={'User Name (For Ad/Poster):'}
                   currentValue={state.userName}
@@ -139,7 +174,9 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                 />
 
                 <StandardEntryFieldSelectSingle
-                  label={'In which country or region do you reside? Do you consider yourself to be:'}
+                  label={
+                    'In which country or region do you reside? Do you consider yourself to be:'
+                  }
                   options={CountryList}
                   currentValue={state.userNationality}
                   type={UserEditAction.EditNationality}
@@ -153,14 +190,14 @@ export function LayoutProfileBody({ state, submitCallback, dispatch }: LayoutPro
                   style={{
                     width: '100%',
                     marginBottom: '25px',
-                    marginTop: '25px'
+                    marginTop: '25px',
                   }}
                   tag="button"
-                  type='submit'
-                  className="button-fit-card">
+                  type="submit"
+                  className="button-fit-card"
+                >
                   Save Profile Information
                 </MDBBtn>
-
               </form>
             </MDBCardBody>
           </MDBCard>

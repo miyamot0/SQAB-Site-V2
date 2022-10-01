@@ -103,7 +103,7 @@ export default function UserRecruitment() {
     return (
       <div>
         <MDBRow center className="row-eq-height">
-          <MDBCol sm="4">
+          <MDBCol sm="8">
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Recruitment Details</MDBCardTitle>
@@ -120,7 +120,7 @@ export default function UserRecruitment() {
   return (
     <div>
       <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+        <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Recruitment Details</MDBCardTitle>

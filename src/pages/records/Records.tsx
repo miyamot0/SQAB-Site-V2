@@ -186,7 +186,7 @@ export default function Records(): JSX.Element {
                 {Programs.map((prog) => {
                   return (
                     <li key={`program-${prog.Year}`}>
-                      <a href={`${prog.Path}`}>
+                      <a href={`${prog.Path}`} target="_blank" rel="noreferrer">
                         <span>{`${prog.Year} SQAB Program`}</span>
                       </a>
                     </li>
@@ -205,7 +205,7 @@ export default function Records(): JSX.Element {
                 {Newsletters.map((news) => {
                   return (
                     <li key={`news-${news.Year}`}>
-                      <a href={`${news.Path}`}>
+                      <a href={`${news.Path}`} target="_blank" rel="noreferrer">
                         <span>{`${news.Year} SQAB Newsletter`}</span>
                       </a>
                     </li>

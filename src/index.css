@@ -16,6 +16,10 @@
   font-size: 1em;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 /* Styles: for forms */
 
 label {

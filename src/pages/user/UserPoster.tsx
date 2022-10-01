@@ -31,7 +31,7 @@ export default function UserPoster() {
     return (
       <div>
         <MDBRow center className="row-eq-height">
-          <MDBCol sm="4">
+          <MDBCol sm="8">
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Poster Details</MDBCardTitle>
@@ -50,7 +50,7 @@ export default function UserPoster() {
     return (
       <div>
         <MDBRow center className="row-eq-height">
-          <MDBCol sm="4">
+          <MDBCol sm="8">
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Poster Details</MDBCardTitle>
