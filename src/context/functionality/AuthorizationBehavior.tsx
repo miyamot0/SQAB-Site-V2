@@ -14,7 +14,7 @@ import {
 export const InitialAuthorizationState = {
   user: null,
   authIsReady: false,
-  adminFlag: false,
+  studentRecruitFlag: false,
   adFlag: false,
   sysAdminFlag: false,
 };
@@ -45,27 +45,37 @@ export function authorizationReducer(
         ...state,
         user: action.payloadUser,
         authIsReady: false,
-        adminFlag: action.payloadFlagAdmin,
-        adFlag: action.payloadFlagRecruiter,
-        sysAdminFlag: action.payloadFlagSysAdmin,
+        studentRecruitFlag: action.payloadStudentRecruitmentFlag,
+        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
+        systemAdministratorFlag: action.payloadFlagSysAdmin,
+        diversityReviewFlag: action.payloadDiversityReviewFlag,
       };
     case AuthorizationStates.LOGOUT:
-      return { ...state, user: null, adminFlag: false, adFlag: false, sysAdminFlag: false };
+      return {
+        ...state,
+        user: null,
+        studentRecruitFlag: false,
+        canEditRecruitmentAdFlag: false,
+        systemAdministratorFlag: false,
+        diversityReviewFlag: false,
+      };
     case AuthorizationStates.READY:
       return {
         user: action.payloadUser,
         authIsReady: true,
-        adminFlag: action.payloadFlagAdmin,
-        adFlag: action.payloadFlagRecruiter,
-        sysAdminFlag: action.payloadFlagSysAdmin,
+        studentRecruitFlag: action.payloadStudentRecruitmentFlag,
+        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
+        systemAdministratorFlag: action.payloadFlagSysAdmin,
+        diversityReviewFlag: action.payloadDiversityReviewFlag,
       };
     case AuthorizationStates.CLAIMS:
       return {
         user: action.payloadUser,
         authIsReady: true,
-        adminFlag: action.payloadFlagAdmin,
-        adFlag: action.payloadFlagRecruiter,
-        sysAdminFlag: action.payloadFlagSysAdmin,
+        studentRecruitFlag: action.payloadStudentRecruitmentFlag,
+        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
+        systemAdministratorFlag: action.payloadFlagSysAdmin,
+        diversityReviewFlag: action.payloadDiversityReviewFlag,
       };
     default:
       return state;

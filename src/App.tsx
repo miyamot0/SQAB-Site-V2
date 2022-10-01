@@ -31,14 +31,15 @@ const MentorPage = React.lazy(() => import('./pages/mentor/MentorPage'));
 const UserProfile = React.lazy(() => import('./pages/user/UserProfile'));
 const UserRecruitment = React.lazy(() => import('./pages/user/UserRecruitment'));
 const UserPoster = React.lazy(() => import('./pages/user/UserPoster'));
-const Administration = React.lazy(() => import('./pages/admin/Administration'));
+const SystemAdministration = React.lazy(() => import('./pages/admin/SystemAdministration'));
 
 import { useAuthorizationContext } from './context/hooks/useAuthorizationContext';
 
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, adFlag, adminFlag, authIsReady } = useAuthorizationContext();
+  const { user, canEditRecruitmentAdFlag, systemAdministratorFlag, authIsReady } =
+    useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -125,13 +126,13 @@ function App(): JSX.Element {
                   </Route>
                   <Route path="/manage/:id">
                     {!user && <Redirect to="/signin" />}
-                    {user && adFlag === false && <Redirect to="/" />}
+                    {user && canEditRecruitmentAdFlag === false && <Redirect to="/" />}
                     {user && <UserRecruitment />}
                   </Route>
                   <Route path="/admin">
                     {!user && <Redirect to="/signin" />}
-                    {user && adminFlag === false && <Redirect to="/" />}
-                    {user && <Administration />}
+                    {user && systemAdministratorFlag === false && <Redirect to="/" />}
+                    {user && <SystemAdministration />}
                   </Route>
                 </Switch>
               </div>

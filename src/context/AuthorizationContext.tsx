@@ -16,14 +16,9 @@ import { projectAuth } from '../firebase/config';
 import {
   AuthorizationContextInterface,
   AuthorizationContextStateInterface,
-  FirebaseLoginAction,
 } from './interfaces/AuthorizationInterfaces';
 import { AuthorizationProviderInterface } from './types/AuthorizationTypes';
 import { authorizationReducer } from './functionality/AuthorizationBehavior';
-import {
-  simplifyPrivilegeAccess,
-  simplifySysPrivilegeAccess,
-} from './helpers/AuthorizationHelpers';
 
 export enum AuthorizationStates {
   LOGIN = 'LOGIN',
@@ -35,9 +30,10 @@ export enum AuthorizationStates {
 export const AuthorizationContext = createContext<AuthorizationContextInterface>({
   user: null,
   authIsReady: false,
-  adFlag: false,
-  adminFlag: false,
-  sysAdminFlag: false,
+  canEditRecruitmentAdFlag: false,
+  studentRecruitFlag: false,
+  diversityReviewFlag: false,
+  systemAdministratorFlag: false,
   dispatch: undefined,
 });
 
@@ -53,37 +49,6 @@ export function setUpRecaptcha(
   return projectAuth.signInWithPhoneNumber(phoneNumber, recapchaVerifier);
 }
 
-/*
-export function authReducer(
-  state: AuthorizationContextStateInterface,
-  action: FirebaseLoginAction,
-): AuthorizationContextStateInterface {
-  switch (action.type) {
-    case AuthorizationStates.LOGIN:
-      return {
-        ...state,
-        user: action.payloadUser,
-        authIsReady: false,
-        adminFlag: action.payloadFlagAdmin,
-        adFlag: action.payloadFlagRecruiter,
-        sysAdminFlag: action.payloadFlagSysAdmin,
-      };
-    case AuthorizationStates.LOGOUT:
-      return { ...state, user: null, adminFlag: false, adFlag: false, sysAdminFlag: false };
-    case AuthorizationStates.READY:
-      return {
-        user: action.payloadUser,
-        authIsReady: true,
-        adminFlag: action.payloadFlagAdmin,
-        adFlag: action.payloadFlagRecruiter,
-        sysAdminFlag: action.payloadFlagSysAdmin,
-      };
-    default:
-      return state;
-  }
-}
-*/
-
 /** AuthorizationContextProvider
  *
  * Provider for auth state
@@ -97,30 +62,34 @@ export function AuthorizationContextProvider({
   const [state, dispatch] = useReducer(authorizationReducer, {
     user: null,
     authIsReady: false,
-    adminFlag: false,
-    adFlag: false,
-    sysAdminFlag: false,
+    studentRecruitFlag: false,
+    canEditRecruitmentAdFlag: false,
+    systemAdministratorFlag: false,
+    diversityReviewFlag: false,
   });
 
   useEffect(() => {
     const unsub = projectAuth.onAuthStateChanged((user) => {
       if (user) {
         user.getIdTokenResult().then((res) => {
+          console.log(res);
           dispatch({
             type: AuthorizationStates.READY,
             payloadUser: user,
-            payloadFlagAdmin: simplifyPrivilegeAccess(res.claims.level),
+            payloadStudentRecruitmentFlag: res.claims.permissions.Recruitment,
             payloadFlagRecruiter: res.claims.canPostAd,
-            payloadFlagSysAdmin: simplifySysPrivilegeAccess(res.claims.level),
+            payloadFlagSysAdmin: res.claims.permissions.Administration,
+            payloadDiversityReviewFlag: res.claims.permissions.Demographics,
           });
         });
       } else {
         dispatch({
           type: AuthorizationStates.READY,
           payloadUser: user,
-          payloadFlagAdmin: false,
+          payloadStudentRecruitmentFlag: false,
           payloadFlagRecruiter: false,
           payloadFlagSysAdmin: false,
+          payloadDiversityReviewFlag: false,
         });
       }
 

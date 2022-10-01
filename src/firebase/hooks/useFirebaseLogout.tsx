@@ -39,7 +39,7 @@ export function useFirebaseLogout(): FirebaseLogout {
       dispatch({
         type: AuthorizationStates.LOGOUT,
         payloadUser: null,
-        payloadFlagAdmin: false,
+        payloadStudentRecruitmentFlag: false,
         payloadFlagRecruiter: false,
         payloadFlagSysAdmin: false,
       });

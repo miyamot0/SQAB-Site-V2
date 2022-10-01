@@ -21,7 +21,7 @@ import { AdminRecruitmentDashboardLayout } from './layouts/AdminRecruitmentDashb
 import { AdminUserDashboardLayout } from './layouts/AdminUserDashboardLayout';
 import { AdminDiversityDashboardLayout } from './layouts/AdminDiversityDashboardLayout';
 
-export default function Administration(): JSX.Element {
+export default function SystemAdministration(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
     collectionString: 'recruitment',
     queryString: undefined,
@@ -44,7 +44,7 @@ export default function Administration(): JSX.Element {
     value: '',
   });
 
-  const { sysAdminFlag } = useAuthorizationContext();
+  const { systemAdministratorFlag } = useAuthorizationContext();
 
   useEffect(() => {
     if (userDocuments && recruitmentDocuments && submissionDocuments) {
@@ -77,18 +77,24 @@ export default function Administration(): JSX.Element {
       {/**
        * Purely sysadmin content
        */}
-      <AdminUserDashboardLayout sysAdminFlag={sysAdminFlag} userDocuments={userDocuments} />
+      <AdminUserDashboardLayout
+        sysAdminFlag={systemAdministratorFlag}
+        userDocuments={userDocuments}
+      />
 
       {/**
        * Diversity-focus information, for sys and admins with that priv
        */}
-      <AdminDiversityDashboardLayout sysAdminFlag={sysAdminFlag} userDocuments={userDocuments} />
+      <AdminDiversityDashboardLayout
+        sysAdminFlag={systemAdministratorFlag}
+        userDocuments={userDocuments}
+      />
 
       {/**
        * Recruitment-focus information, for sys and admins w/ that priv
        */}
       <AdminRecruitmentDashboardLayout
-        sysAdminFlag={sysAdminFlag}
+        sysAdminFlag={systemAdministratorFlag}
         userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
         submissionDocuments={submissionDocuments}
@@ -101,7 +107,7 @@ export default function Administration(): JSX.Element {
        * Poster-focus information, for sys and admins with that priv
        */}
       <AdminPosterDashboardLayout
-        sysAdminFlag={sysAdminFlag}
+        sysAdminFlag={systemAdministratorFlag}
         submissionDocuments={submissionDocuments}
       />
     </>

@@ -42,7 +42,7 @@ export function useFirebaseLogin(): FirebaseLogin {
   function preFlightObject(user: firebase.User | null, res: firebase.auth.IdTokenResult) {
     return {
       payloadUser: user,
-      payloadFlagAdmin: simplifyPrivilegeAccess(res.claims.level),
+      payloadStudentRecruitmentFlag: simplifyPrivilegeAccess(res.claims.level),
       payloadFlagRecruiter: res.claims.canPostAd,
       payloadFlagSysAdmin: simplifySysPrivilegeAccess(res.claims.level),
     };

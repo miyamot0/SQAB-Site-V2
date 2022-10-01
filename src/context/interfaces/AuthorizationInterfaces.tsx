@@ -13,24 +13,27 @@ import { LoginDispatch } from '../types/AuthorizationTypes';
 export interface AuthorizationContextInterface {
   user: firebase.User | null;
   authIsReady: boolean;
-  adminFlag: boolean;
-  sysAdminFlag: boolean;
-  adFlag: boolean;
+  studentRecruitFlag: boolean;
+  systemAdministratorFlag: boolean;
+  diversityReviewFlag: boolean;
+  canEditRecruitmentAdFlag: boolean;
   dispatch: LoginDispatch | undefined;
 }
 
 export interface AuthorizationContextStateInterface {
   user: firebase.User | null;
   authIsReady: boolean;
-  adminFlag: boolean;
-  sysAdminFlag: boolean;
-  adFlag: boolean;
+  studentRecruitFlag: boolean;
+  systemAdministratorFlag: boolean;
+  diversityReviewFlag: boolean;
+  canEditRecruitmentAdFlag: boolean;
 }
 
 export interface FirebaseLoginAction {
   type: AuthorizationStates;
   payloadUser: firebase.User | null;
-  payloadFlagAdmin: boolean;
+  payloadStudentRecruitmentFlag: boolean;
   payloadFlagRecruiter: boolean;
+  payloadDiversityReviewFlag: boolean;
   payloadFlagSysAdmin: boolean;
 }
