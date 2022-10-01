@@ -28,8 +28,6 @@ import Modal from 'react-modal';
 import { useAuthorizationContext } from '../context/hooks/useAuthorizationContext';
 import { useFirebaseLogout } from '../firebase/hooks/useFirebaseLogout';
 
-//import './styles/Header.css';
-
 const customStyles = {
   content: {
     top: '50%',

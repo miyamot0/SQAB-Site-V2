@@ -19,9 +19,13 @@ import { AuthorizationContextProvider } from './context/AuthorizationContext';
 
 import './index.css';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(
-  <AuthorizationContextProvider>
-    <App />
-  </AuthorizationContextProvider>,
-);
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <AuthorizationContextProvider>
+      <App />
+    </AuthorizationContextProvider>,
+  );
+}

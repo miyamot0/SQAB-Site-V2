@@ -7,14 +7,12 @@
  */
 
 import React from 'react';
-
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import './BeProcInformation.css';
-
 import specialIssueJson from './../../assets/json/specialissues.json';
+
+import './styles/BeProcInformation.css';
 
 export default function BeProcInformation(): JSX.Element {
   return (

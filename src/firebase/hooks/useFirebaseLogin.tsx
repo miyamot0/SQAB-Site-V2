@@ -52,12 +52,14 @@ export function useFirebaseLogin(): FirebaseLogin {
    * @param {firebase.auth.UserCredential} result
    */
   function handleResult(result: firebase.auth.UserCredential) {
-    result.user!.getIdTokenResult().then((res) => {
-      dispatch!({
-        type: AuthorizationStates.READY,
-        ...preFlightObject(result.user, res),
+    if (result.user && dispatch) {
+      result.user.getIdTokenResult().then((res) => {
+        dispatch({
+          type: AuthorizationStates.READY,
+          ...preFlightObject(result.user, res),
+        });
       });
-    });
+    }
   }
 
   /** login
@@ -88,9 +90,11 @@ export function useFirebaseLogin(): FirebaseLogin {
           break;
 
         case ProviderTypes.Phone:
-          confirmResult
-            ?.confirm(otpNumber!)
-            .then((result: firebase.auth.UserCredential) => handleResult(result));
+          if (confirmResult && otpNumber) {
+            confirmResult
+              .confirm(otpNumber)
+              .then((result: firebase.auth.UserCredential) => handleResult(result));
+          }
           break;
 
         default:

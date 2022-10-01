@@ -9,13 +9,13 @@
 import React from 'react';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 
-import './Footer.css';
+import './styles/Footer.css';
 
 export default function Footer() {
   return (
     <MDBFooter
       className="text-center text-lg-left overall-footer"
-      style={{ backgroundColor: '#838383', marginTop: '25px' }}
+      style={{ backgroundColor: '#838383' }}
     >
       <MDBContainer className="p-4">
         <MDBRow>

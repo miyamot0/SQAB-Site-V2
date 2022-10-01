@@ -24,7 +24,7 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
 import tutorialJson from './../../assets/json/tutorials.json';
 
-import './Tutorials.css';
+import './styles/Tutorials.css';
 import IframeResizer from 'iframe-resizer-react';
 
 interface VideoInformation {

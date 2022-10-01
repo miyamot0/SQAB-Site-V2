@@ -23,7 +23,6 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import './Tools.css';
 import {
   getExponentialProjection,
   getHyperbolicProjection,
@@ -38,6 +37,8 @@ import {
 import { PointArray, DiscountingResult, ModelOptions } from './types/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
 import { SingleOptionType } from './types/GeneralTypes';
+
+import './styles/Tools.css';
 
 export default function DiscountingModelSelector(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();

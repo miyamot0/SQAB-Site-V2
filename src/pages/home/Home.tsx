@@ -7,7 +7,9 @@
  */
 
 import React from 'react';
-
+import Logo from '../../components/Logo';
+import CarouselConference from '../../components/CarouselConference';
+import CarouselTutorial from '../../components/CarouselTutorial';
 import {
   MDBCard,
   MDBCardBody,
@@ -17,14 +19,9 @@ import {
   MDBCol,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-
-import Logo from '../../components/Logo';
-import CarouselConference from '../../components/CarouselConference';
-import CarouselTutorial from '../../components/CarouselTutorial';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import './Home.css';
+import './styles/Home.css';
 
 export default function Home(): JSX.Element {
   return (

@@ -7,16 +7,12 @@
  */
 
 import React from 'react';
-
+import Bylaws from './../../assets/administration/SQAB_Bylaws_June2018.pdf';
+import boardJson from './../../assets/json/board.json';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
-import Bylaws from './../../assets/administration/SQAB_Bylaws_June2018.pdf';
-
-import boardJson from './../../assets/json/board.json';
-
-import './ExecutiveBoard.css';
+import './styles/ExecutiveBoard.css';
 
 export default function ExecutiveBoard(): JSX.Element {
   return (

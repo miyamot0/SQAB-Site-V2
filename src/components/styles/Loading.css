@@ -1,0 +1,31 @@
+.suspense-animation-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /*
+  position: fixed;
+  */
+
+  background: rgba(0, 0, 0, 0);
+  z-index: 1;
+}
+
+.suspense-animation {
+  width: 50px;
+  height: 50px;
+  border: 10px solid;
+  border-color: rgb(127, 0, 127) transparent rgb(127, 0, 127) transparent;
+  border-radius: 50%;
+  animation: spin-anim 1s linear infinite;
+}
+
+@keyframes spin-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

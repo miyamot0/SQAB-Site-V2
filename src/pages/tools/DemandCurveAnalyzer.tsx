@@ -25,8 +25,6 @@ import HighchartsReact from 'highcharts-react-official';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { DemandResult, DemandXYPoints, PlotXYPoints } from './types/DemandTypes';
 import { SingleOptionType } from './types/GeneralTypes';
-
-import './Tools.css';
 import {
   renderExponentialDemand,
   renderExponentiatedDemand,
@@ -35,6 +33,8 @@ import {
   unIHS,
 } from './helpers/DemandHelpers';
 import { isValidNumber } from './helpers/GeneralHelpers';
+
+import './styles/Tools.css';
 
 const ModelOptions: SingleOptionType[] = [
   { label: 'Exponential Model', value: 'Exponential Model' },

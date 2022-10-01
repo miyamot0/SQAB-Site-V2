@@ -51,7 +51,7 @@ import Newsletter2020 from './../../assets/newsletters/2020.pdf';
 // TODO: need 2021
 import Newsletter2022 from './../../assets/newsletters/2022.pdf';
 
-import './Records.css';
+import './styles/Records.css';
 
 const Programs = [
   {

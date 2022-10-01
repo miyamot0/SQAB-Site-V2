@@ -8,20 +8,12 @@
 
 import React from 'react';
 
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBRow,
-  MDBCol
-} from 'mdb-react-ui-kit';
-
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 
 import resourcesJson from './../../assets/json/resources.json';
 
-import './Resources.css';
+import './styles/Resources.css';
 
 export default function Resources(): JSX.Element {
   return (

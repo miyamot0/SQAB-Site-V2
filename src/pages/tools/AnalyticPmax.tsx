@@ -7,7 +7,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-
 import {
   MDBCard,
   MDBCardBody,
@@ -17,14 +16,12 @@ import {
   MDBCol,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-
 import { HotColumn, HotTable } from '@handsontable/react';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-
-import './Tools.css';
 import { WorkerPmaxResult } from './helpers/PmaxHelpers';
 import { renderExponentialDemand } from './helpers/DemandHelpers';
+
+import './styles/Tools.css';
 
 export default function AnalyticPmax(): JSX.Element {
   const [hotData, setHotData] = useState<any[][]>();
