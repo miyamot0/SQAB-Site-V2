@@ -71,6 +71,11 @@ export default function SystemAdministration(): JSX.Element {
     }
   }, [recruitmentDocuments, userDocuments, submissionDocuments]);
 
+  console.log(systemAdministratorFlag);
+  console.log(diversityReviewFlag);
+  console.log(studentRecruitFlag);
+  console.log(submissionReviewFlag);
+
   return (
     <>
       {/**

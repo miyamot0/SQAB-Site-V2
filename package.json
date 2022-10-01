@@ -1,6 +1,6 @@
 {
   "name": "sqab-react",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "@handsontable/react": "^12.1.2",
