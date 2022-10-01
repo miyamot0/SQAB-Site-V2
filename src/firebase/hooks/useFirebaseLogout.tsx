@@ -42,6 +42,7 @@ export function useFirebaseLogout(): FirebaseLogout {
         payloadStudentRecruitmentFlag: false,
         payloadFlagRecruiter: false,
         payloadFlagSysAdmin: false,
+        payloadDiversityReviewFlag: false,
       });
 
       if (!logoutCancelled) {

@@ -13,10 +13,6 @@ import { AuthorizationStates } from '../../context/AuthorizationContext';
 import { ProviderTypes } from '../types/AccountTypes';
 import firebase from 'firebase';
 import { FirebaseLogin } from '../interfaces/FirebaseInterfaces';
-import {
-  simplifyPrivilegeAccess,
-  simplifySysPrivilegeAccess,
-} from '../../context/helpers/AuthorizationHelpers';
 
 /** useFirebaseLogin
  *
@@ -42,9 +38,10 @@ export function useFirebaseLogin(): FirebaseLogin {
   function preFlightObject(user: firebase.User | null, res: firebase.auth.IdTokenResult) {
     return {
       payloadUser: user,
-      payloadStudentRecruitmentFlag: simplifyPrivilegeAccess(res.claims.level),
-      payloadFlagRecruiter: res.claims.canPostAd,
-      payloadFlagSysAdmin: simplifySysPrivilegeAccess(res.claims.level),
+      payloadStudentRecruitmentFlag: res.claims.permissions.Recruitment,
+      payloadFlagRecruiter: true,
+      payloadFlagSysAdmin: res.claims.permissions.Administration,
+      payloadDiversityReviewFlag: res.claims.permissions.Demographics,
     };
   }
 

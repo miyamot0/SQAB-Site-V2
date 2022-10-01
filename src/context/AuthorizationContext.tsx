@@ -10,13 +10,10 @@
  * Authorization context
  */
 
-import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import firebase from 'firebase/app';
 import { projectAuth } from '../firebase/config';
-import {
-  AuthorizationContextInterface,
-  AuthorizationContextStateInterface,
-} from './interfaces/AuthorizationInterfaces';
+import { AuthorizationContextInterface } from './interfaces/AuthorizationInterfaces';
 import { AuthorizationProviderInterface } from './types/AuthorizationTypes';
 import { authorizationReducer } from './functionality/AuthorizationBehavior';
 
@@ -63,7 +60,7 @@ export function AuthorizationContextProvider({
     user: null,
     authIsReady: false,
     studentRecruitFlag: false,
-    canEditRecruitmentAdFlag: false,
+    canEditRecruitmentAdFlag: true,
     systemAdministratorFlag: false,
     diversityReviewFlag: false,
   });
@@ -77,7 +74,7 @@ export function AuthorizationContextProvider({
             type: AuthorizationStates.READY,
             payloadUser: user,
             payloadStudentRecruitmentFlag: res.claims.permissions.Recruitment,
-            payloadFlagRecruiter: res.claims.canPostAd,
+            payloadFlagRecruiter: true,
             payloadFlagSysAdmin: res.claims.permissions.Administration,
             payloadDiversityReviewFlag: res.claims.permissions.Demographics,
           });
