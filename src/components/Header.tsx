@@ -50,7 +50,7 @@ export default function Header(): JSX.Element {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
   const { logout, logoutPending } = useFirebaseLogout();
-  const { user, authIsReady, studentRecruitFlag, systemAdministratorFlag } =
+  const { user, authIsReady, studentRecruitFlag, diversityReviewFlag, systemAdministratorFlag } =
     useAuthorizationContext();
 
   function openModal(): void {
@@ -343,7 +343,10 @@ export default function Header(): JSX.Element {
                             ) : (
                               <></>
                             )}
-                            {authIsReady && (studentRecruitFlag || systemAdministratorFlag) ? (
+                            {authIsReady &&
+                            (studentRecruitFlag ||
+                              diversityReviewFlag ||
+                              systemAdministratorFlag) ? (
                               <MDBDropdownItem
                                 link
                                 href={'/admin'}
