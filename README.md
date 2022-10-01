@@ -8,6 +8,7 @@ The SQAB repository is an openly-shared collection of information and software d
 
 ### Changelog
 
+- 1.0.3.0 - User metrics, fx for officers
 - 1.0.2.0 - Expanded fx
 - 1.0.1.0 - Push new fx
 - 1.0.0.0 - Initial push to live

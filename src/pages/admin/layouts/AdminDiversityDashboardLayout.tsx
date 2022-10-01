@@ -104,7 +104,7 @@ export function AdminDiversityDashboardLayout({
     soDataDynamic.push(value);
   });
   const sexData: DemographicsBarChartInterface = {
-    name: 'Age Demographics',
+    name: 'Sexual Orientation Demographics',
     data: soDataDynamic,
   };
 
