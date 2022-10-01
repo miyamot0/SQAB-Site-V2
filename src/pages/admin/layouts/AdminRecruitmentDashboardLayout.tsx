@@ -55,6 +55,16 @@ export function AdminRecruitmentDashboardLayout({
   ];
 
   const rows = recruitmentDocuments
+    .filter((recr) => {
+      return (
+        recr.Bio.trim().length > 0 &&
+        recr.Contact.trim().length > 0 &&
+        recr.Cycle.trim().length > 0 &&
+        recr.Mentor.trim().length > 0 &&
+        recr.Position.trim().length > 0 &&
+        recr.Name.trim().length > 0
+      );
+    })
     .sort((a, b) => {
       if (!a.Cycle || a.Cycle.trim().length === 0) {
         return 1;
