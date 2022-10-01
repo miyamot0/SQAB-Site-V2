@@ -80,3 +80,24 @@ export type RecruitmentAd = {
   Approved: boolean;
   id?: string;
 };
+
+type EmailTemplate = {
+  data: {
+    name: string;
+    title: string;
+  };
+  name: string;
+};
+
+export type EmailStatus = {
+  delivery: {
+    attempts: number;
+    endTime: firebase.firestore.Timestamp;
+    error: string;
+    leaseExpireTime: null | string;
+    startTime: firebase.firestore.Timestamp;
+    state: string;
+  };
+  template: null | EmailTemplate;
+  to: string[];
+};

@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
 import {
+  EmailStatus,
   IndividualUserRecordSaved,
   PosterSubmission,
   RecruitmentAd,
@@ -20,6 +21,7 @@ import { AdminPosterDashboardLayout } from './layouts/AdminPosterDashboardLayout
 import { AdminRecruitmentDashboardLayout } from './layouts/AdminRecruitmentDashboardLayout';
 import { AdminUserDashboardLayout } from './layouts/AdminUserDashboardLayout';
 import { AdminDiversityDashboardLayout } from './layouts/AdminDiversityDashboardLayout';
+import { AdminEmailDashboardLayout } from './layouts/AdminEmailDashboardLayout';
 
 export default function SystemAdministration(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
@@ -34,6 +36,11 @@ export default function SystemAdministration(): JSX.Element {
   });
   const { documents: submissionDocuments } = useFirebaseCollectionTyped<PosterSubmission>({
     collectionString: 'submissions',
+    queryString: undefined,
+    orderString: undefined,
+  });
+  const { documents: mailDocuments } = useFirebaseCollectionTyped<EmailStatus>({
+    collectionString: 'mail',
     queryString: undefined,
     orderString: undefined,
   });
@@ -73,6 +80,13 @@ export default function SystemAdministration(): JSX.Element {
         userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
         submissionDocuments={submissionDocuments}
+      />
+      {/**
+       * Purely sysadmin content
+       */}
+      <AdminEmailDashboardLayout
+        sysAdminFlag={systemAdministratorFlag}
+        mailDocuments={mailDocuments}
       />
       {/**
        * Purely sysadmin content
