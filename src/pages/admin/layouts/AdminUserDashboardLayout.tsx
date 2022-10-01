@@ -8,13 +8,13 @@
 
 import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
+import { IndividualUserRecordSaved } from '../../../firebase/types/RecordTypes';
 import { ColumnType } from '../types/TableTypes';
 import { MDBDataTable } from 'mdbreact';
 
 export interface AdminUserDashboardLayoutInterface {
   sysAdminFlag: boolean;
-  userDocuments: IndividualUserRecord[] | null;
+  userDocuments: IndividualUserRecordSaved[] | null;
 }
 
 /** AdministrationUserSummary

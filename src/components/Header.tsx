@@ -50,13 +50,8 @@ export default function Header(): JSX.Element {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [modalIsOpen2, setIsOpen2] = useState<boolean>(false);
   const { logout, logoutPending } = useFirebaseLogout();
-  const {
-    user,
-    authIsReady,
-    canEditRecruitmentAdFlag,
-    studentRecruitFlag,
-    systemAdministratorFlag,
-  } = useAuthorizationContext();
+  const { user, authIsReady, studentRecruitFlag, systemAdministratorFlag } =
+    useAuthorizationContext();
 
   function openModal(): void {
     setIsOpen(true);
@@ -341,7 +336,7 @@ export default function Header(): JSX.Element {
                             Resources
                           </MDBDropdownToggle>
                           <MDBDropdownMenu>
-                            {authIsReady && canEditRecruitmentAdFlag ? (
+                            {authIsReady ? (
                               <MDBDropdownItem link href={`/manage/${user.uid}`}>
                                 Manage Recruitment
                               </MDBDropdownItem>

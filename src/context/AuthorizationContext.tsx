@@ -27,10 +27,10 @@ export enum AuthorizationStates {
 export const AuthorizationContext = createContext<AuthorizationContextInterface>({
   user: null,
   authIsReady: false,
-  canEditRecruitmentAdFlag: false,
   studentRecruitFlag: false,
   diversityReviewFlag: false,
   systemAdministratorFlag: false,
+  submissionReviewFlag: false,
   dispatch: undefined,
 });
 
@@ -60,23 +60,22 @@ export function AuthorizationContextProvider({
     user: null,
     authIsReady: false,
     studentRecruitFlag: false,
-    canEditRecruitmentAdFlag: true,
     systemAdministratorFlag: false,
     diversityReviewFlag: false,
+    submissionReviewFlag: false,
   });
 
   useEffect(() => {
     const unsub = projectAuth.onAuthStateChanged((user) => {
       if (user) {
         user.getIdTokenResult().then((res) => {
-          console.log(res);
           dispatch({
             type: AuthorizationStates.READY,
             payloadUser: user,
             payloadStudentRecruitmentFlag: res.claims.permissions.Recruitment,
-            payloadFlagRecruiter: true,
             payloadFlagSysAdmin: res.claims.permissions.Administration,
             payloadDiversityReviewFlag: res.claims.permissions.Demographics,
+            payloadFlagSubmissionReview: res.claims.permissions.Submissions,
           });
         });
       } else {
@@ -84,9 +83,9 @@ export function AuthorizationContextProvider({
           type: AuthorizationStates.READY,
           payloadUser: user,
           payloadStudentRecruitmentFlag: false,
-          payloadFlagRecruiter: false,
           payloadFlagSysAdmin: false,
           payloadDiversityReviewFlag: false,
+          payloadFlagSubmissionReview: false,
         });
       }
 

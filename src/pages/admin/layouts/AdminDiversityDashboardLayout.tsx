@@ -8,15 +8,27 @@
 
 import React from 'react';
 import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
+import { IndividualUserRecordSaved } from '../../../firebase/types/RecordTypes';
 import { ColumnType } from '../types/TableTypes';
 import { DemographicsBarChart, DemographicsBarChartInterface } from '../views/DemographicsBarChart';
 import { DemographicsDataTable } from '../views/DemographicsDataTable';
+import {
+  AgeOptions,
+  EducationOptions,
+  GenderOptions,
+  SexualityOptions,
+} from '../../user/helpers/DemographicOptions';
 
 export interface AdminDiversityDashboardLayoutInterface {
   sysAdminFlag: boolean;
-  userDocuments: IndividualUserRecord[] | null;
+  diversityReviewFlag: boolean;
+  userDocuments: IndividualUserRecordSaved[] | null;
 }
+
+export type ChartDataFormat = {
+  name: string;
+  y: number;
+};
 
 /** AdministrationUserSummary
  *
@@ -25,207 +37,132 @@ export interface AdminDiversityDashboardLayoutInterface {
  */
 export function AdminDiversityDashboardLayout({
   sysAdminFlag,
+  diversityReviewFlag,
   userDocuments,
 }: AdminDiversityDashboardLayoutInterface) {
-  if (!userDocuments || sysAdminFlag === false) {
+  if (!userDocuments || (sysAdminFlag === false && diversityReviewFlag === false)) {
     return <></>;
   }
 
+  // Gender
+  const genderCategories = GenderOptions.map((gender) => gender.label);
+  const genderDataDynamic: ChartDataFormat[] = [];
+  genderCategories.forEach((gender) => {
+    const value = {
+      name: gender,
+      y: userDocuments.map((doc) => doc.userGender).filter((val) => val === gender).length,
+    } as ChartDataFormat;
+
+    genderDataDynamic.push(value);
+  });
+  const genderData: DemographicsBarChartInterface = {
+    name: 'Gender Demographics',
+    data: genderDataDynamic,
+  };
+
+  // Education
+  const educationCategories = EducationOptions.map((edu) => edu.label);
+  const educationDataDynamic: ChartDataFormat[] = [];
+  educationCategories.forEach((category) => {
+    const value = {
+      name: category,
+      y: userDocuments.map((doc) => doc.userEducation).filter((val) => val === category).length,
+    } as ChartDataFormat;
+
+    educationDataDynamic.push(value);
+  });
+  const eduData: DemographicsBarChartInterface = {
+    name: 'Education Demographics',
+    data: educationDataDynamic,
+  };
+
+  // Age
+  const ageCategories = AgeOptions.map((age) => age.label);
+  const ageDataDynamic: ChartDataFormat[] = [];
+  ageCategories.forEach((age) => {
+    const value = {
+      name: age,
+      y: userDocuments.map((doc) => doc.userAge).filter((val) => val === age).length,
+    } as ChartDataFormat;
+
+    ageDataDynamic.push(value);
+  });
+  const ageData: DemographicsBarChartInterface = {
+    name: 'Age Demographics',
+    data: ageDataDynamic,
+  };
+
+  // Orientation
+  const soCategories = SexualityOptions.map((sex) => sex.label);
+  const soDataDynamic: ChartDataFormat[] = [];
+  soCategories.forEach((sex) => {
+    const value = {
+      name: sex,
+      y: userDocuments.map((doc) => doc.userOrientation).filter((val) => val === sex).length,
+    } as ChartDataFormat;
+
+    soDataDynamic.push(value);
+  });
+  const sexData: DemographicsBarChartInterface = {
+    name: 'Age Demographics',
+    data: soDataDynamic,
+  };
+
+  // Nationality
+  const natlCategories = userDocuments
+    .map((docs) => docs.userNationality)
+    .filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    })
+    .filter((natl) => natl && natl.trim().length > 0);
+  const natlDataDynamic: { country: string | undefined; counts: number }[] = [];
+  natlCategories.forEach((natl) => {
+    const value = {
+      country: natl,
+      counts: userDocuments.map((doc) => doc.userNationality).filter((val) => val === natl).length,
+    };
+
+    natlDataDynamic.push(value);
+  });
   const columnsNationality: ColumnType[] = [
     { label: 'Country', field: 'country', sort: 'asc' },
     { label: 'Counts', field: 'counts', sort: 'asc' },
   ];
-
-  const rowsNationality = [{
-    country: 'USA',
-    counts: 1
-  }, {
-    country: 'UK',
-    counts: 1
-  }]
-
-  const demoNationality = {
-    name: "Nationality Demographics",
+  const dataTableNationality = {
+    name: 'Nationality Demographics',
     data: {
       columns: columnsNationality,
-      rows: rowsNationality
-    }
-  }
+      rows: natlDataDynamic,
+    },
+  };
 
+  // Race/Ethnicity
+  const reCategories = userDocuments
+    .map((docs) => docs.userRaceEthnicity)
+    .filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    })
+    .filter((natl) => natl && natl.trim().length > 0);
+  const reDataDynamic: { background: string | undefined; counts: number }[] = [];
+  reCategories.forEach((re) => {
+    const value = {
+      background: re,
+      counts: userDocuments.map((doc) => doc.userRaceEthnicity).filter((val) => val === re).length,
+    };
+
+    reDataDynamic.push(value);
+  });
   const columnsRaceEthnicity: ColumnType[] = [
     { label: 'Racial/Ethnic Background', field: 'background', sort: 'asc' },
     { label: 'Counts', field: 'counts', sort: 'asc' },
   ];
-
-  const rowsRaceEthnicity = [{
-    background: 'African American/Black',
-    counts: 1
-  }, {
-    background: 'Asian',
-    counts: 1
-  }, {
-    background: 'Caucasian/White',
-    counts: 1
-  }, {
-    background: 'Hispanic/Latino/a/x',
-    counts: 1
-  }, {
-    background: 'Middle Eastern/North African',
-    counts: 1
-  }, {
-    background: 'Native American/American Indian/Alaska Native',
-    counts: 1
-  }, {
-    background: 'Native Hawaiian or Pacific Islander',
-    counts: 1
-  }, {
-    background: 'Other race or ethnicity',
-    counts: 1
-  }, {
-    background: 'Prefer not to answer',
-    counts: 1
-  }
-  ]
-
-  const demoRaceEthnicity = {
-    name: "Racial/Ethnic Backgrounds",
+  const dataTableRaceEthnicity = {
+    name: 'Racial/Ethnic Backgrounds',
     data: {
       columns: columnsRaceEthnicity,
-      rows: rowsRaceEthnicity
-    }
-  }
-
-  const genderData: DemographicsBarChartInterface = {
-    name: "Gender Demographics",
-    data: [
-      {
-        name: "Woman",
-        y: 1,
-      },
-      {
-        name: "Man",
-        y: 1,
-      },
-      {
-        name: "Non-binary",
-        y: 1,
-      },
-      {
-        name: "Other gender",
-        y: 1,
-      },
-      {
-        name: "Prefer not to answer",
-        y: 1,
-      }
-    ]
-  }
-
-  const eduData: DemographicsBarChartInterface = {
-    name: "Education Demographics",
-    data: [
-      {
-        name: "Some High School",
-        y: 1,
-      },
-      {
-        name: "High School",
-        y: 1,
-      },
-      {
-        name: "Trade School",
-        y: 1,
-      },
-      {
-        name: "Associates Degree",
-        y: 1,
-      },
-      {
-        name: "Bachelors Degree",
-        y: 1,
-      },
-      {
-        name: "Masters Degree",
-        y: 1,
-      },
-      {
-        name: "Doctoral Degree",
-        y: 1,
-      },
-      {
-        name: "Prefer not to answer",
-        y: 1,
-      }
-    ]
-  }
-
-  const ageData: DemographicsBarChartInterface = {
-    name: "Age Demographics",
-    data: [
-      {
-        name: "<18 years",
-        y: 1,
-      },
-      {
-        name: "18-20",
-        y: 1,
-      },
-      {
-        name: "21-29",
-        y: 1,
-      },
-      {
-        name: "30-39",
-        y: 1,
-      },
-      {
-        name: "40-49'",
-        y: 1,
-      },
-      {
-        name: "50-59",
-        y: 1,
-      },
-      {
-        name: "60-69",
-        y: 1,
-      },
-      {
-        name: "70 or older",
-        y: 1,
-      },
-      {
-        name: "Prefer not to answer",
-        y: 1,
-      }
-    ]
-  }
-
-  const orientationData: DemographicsBarChartInterface = {
-    name: "Sexual Orientation",
-    data: [
-      {
-        name: "Heterosexual or Straight",
-        y: 1,
-      },
-      {
-        name: "Gay or Lesbian",
-        y: 1,
-      },
-      {
-        name: "Bisexual",
-        y: 1,
-      },
-      {
-        name: "Other orientation",
-        y: 1,
-      },
-      {
-        name: "Prefer not to answer",
-        y: 1,
-      }
-    ]
-  }
+      rows: reDataDynamic,
+    },
+  };
 
   return (
     <>
@@ -265,7 +202,7 @@ export function AdminDiversityDashboardLayout({
         </MDBCol>
 
         <MDBCol sm="4">
-          <DemographicsBarChart demographicData={orientationData} />
+          <DemographicsBarChart demographicData={sexData} />
         </MDBCol>
       </MDBRow>
 
@@ -277,11 +214,11 @@ export function AdminDiversityDashboardLayout({
 
       <MDBRow className="d-flex justify-content-center">
         <MDBCol sm="4">
-          <DemographicsDataTable demographicData={demoNationality} />
+          <DemographicsDataTable demographicData={dataTableNationality} />
         </MDBCol>
 
         <MDBCol sm="4">
-          <DemographicsDataTable demographicData={demoRaceEthnicity} />
+          <DemographicsDataTable demographicData={dataTableRaceEthnicity} />
         </MDBCol>
       </MDBRow>
     </>

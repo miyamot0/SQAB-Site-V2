@@ -24,14 +24,16 @@ import { MDBDataTable } from 'mdbreact';
 
 export interface AdminPosterDashboardLayoutInterface {
   sysAdminFlag: boolean;
+  submissionReviewFlag: boolean;
   submissionDocuments: PosterSubmission[] | null;
 }
 
 export function AdminPosterDashboardLayout({
   sysAdminFlag,
+  submissionReviewFlag,
   submissionDocuments,
 }: AdminPosterDashboardLayoutInterface) {
-  if (!submissionDocuments || sysAdminFlag === false) {
+  if (!submissionDocuments || (sysAdminFlag === false && submissionReviewFlag === false)) {
     return <></>;
   }
 

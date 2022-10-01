@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
 import {
-  IndividualUserRecord,
+  IndividualUserRecordSaved,
   PosterSubmission,
   RecruitmentAd,
 } from '../../firebase/types/RecordTypes';
@@ -27,7 +27,7 @@ export default function SystemAdministration(): JSX.Element {
     queryString: undefined,
     orderString: undefined,
   });
-  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecord>({
+  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecordSaved>({
     collectionString: 'users',
     queryString: undefined,
     orderString: undefined,
@@ -44,7 +44,8 @@ export default function SystemAdministration(): JSX.Element {
     value: '',
   });
 
-  const { systemAdministratorFlag } = useAuthorizationContext();
+  const { systemAdministratorFlag, diversityReviewFlag, studentRecruitFlag, submissionReviewFlag } =
+    useAuthorizationContext();
 
   useEffect(() => {
     if (userDocuments && recruitmentDocuments && submissionDocuments) {
@@ -73,7 +74,6 @@ export default function SystemAdministration(): JSX.Element {
         recruitmentDocuments={recruitmentDocuments}
         submissionDocuments={submissionDocuments}
       />
-
       {/**
        * Purely sysadmin content
        */}
@@ -81,20 +81,20 @@ export default function SystemAdministration(): JSX.Element {
         sysAdminFlag={systemAdministratorFlag}
         userDocuments={userDocuments}
       />
-
       {/**
        * Diversity-focus information, for sys and admins with that priv
        */}
       <AdminDiversityDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
+        diversityReviewFlag={diversityReviewFlag}
         userDocuments={userDocuments}
       />
-
       {/**
        * Recruitment-focus information, for sys and admins w/ that priv
        */}
       <AdminRecruitmentDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
+        recruitmentReviewFlag={studentRecruitFlag}
         userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
         submissionDocuments={submissionDocuments}
@@ -108,6 +108,7 @@ export default function SystemAdministration(): JSX.Element {
        */}
       <AdminPosterDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
+        submissionReviewFlag={submissionReviewFlag}
         submissionDocuments={submissionDocuments}
       />
     </>

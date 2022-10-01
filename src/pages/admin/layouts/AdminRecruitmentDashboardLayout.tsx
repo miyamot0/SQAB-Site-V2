@@ -9,7 +9,7 @@
 import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
-  IndividualUserRecord,
+  IndividualUserRecordSaved,
   PosterSubmission,
   RecruitmentAd,
 } from '../../../firebase/types/RecordTypes';
@@ -22,7 +22,8 @@ import { toggleRecruitmentStatus } from '../helpers/AdministrationHelpers';
 
 export interface AdminRecruitmentDashboardLayoutInterface {
   sysAdminFlag: boolean;
-  userDocuments: IndividualUserRecord[] | null;
+  recruitmentReviewFlag: boolean;
+  userDocuments: IndividualUserRecordSaved[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
   submissionDocuments: PosterSubmission[] | null;
   selectedAdUser: SingleOptionType;
@@ -32,6 +33,7 @@ export interface AdminRecruitmentDashboardLayoutInterface {
 
 export function AdminRecruitmentDashboardLayout({
   sysAdminFlag,
+  recruitmentReviewFlag,
   userDocuments,
   recruitmentDocuments,
   submissionDocuments,
@@ -39,7 +41,7 @@ export function AdminRecruitmentDashboardLayout({
   userAdArray,
   setSelectedAdUser,
 }: AdminRecruitmentDashboardLayoutInterface) {
-  if (!recruitmentDocuments || sysAdminFlag === false) {
+  if (!recruitmentDocuments || (sysAdminFlag === false && recruitmentReviewFlag === false)) {
     return <></>;
   }
 
@@ -51,8 +53,6 @@ export function AdminRecruitmentDashboardLayout({
     { label: 'Application Deadline', field: 'deadline', sort: 'asc' },
     { label: 'Approved', field: 'approval', sort: 'asc' },
   ];
-
-  //
 
   const rows = recruitmentDocuments
     .sort((a, b) => {

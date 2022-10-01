@@ -38,8 +38,7 @@ import { useAuthorizationContext } from './context/hooks/useAuthorizationContext
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, canEditRecruitmentAdFlag, systemAdministratorFlag, authIsReady } =
-    useAuthorizationContext();
+  const { user, systemAdministratorFlag, authIsReady } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -126,7 +125,6 @@ function App(): JSX.Element {
                   </Route>
                   <Route path="/manage/:id">
                     {!user && <Redirect to="/signin" />}
-                    {user && canEditRecruitmentAdFlag === false && <Redirect to="/" />}
                     {user && <UserRecruitment />}
                   </Route>
                   <Route path="/admin">

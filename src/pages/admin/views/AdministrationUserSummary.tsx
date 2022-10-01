@@ -9,14 +9,14 @@
 import React from 'react';
 import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
-  IndividualUserRecord,
+  IndividualUserRecordSaved,
   PosterSubmission,
   RecruitmentAd,
 } from '../../../firebase/types/RecordTypes';
 import { UserSummaryCard } from './UserSummaryCard';
 
 export interface AdministrationUserSummaryInterface {
-  userDocuments: IndividualUserRecord[] | null;
+  userDocuments: IndividualUserRecordSaved[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
   submissionDocuments: PosterSubmission[] | null;
 }

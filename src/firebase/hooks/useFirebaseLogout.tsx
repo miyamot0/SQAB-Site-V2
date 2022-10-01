@@ -40,9 +40,9 @@ export function useFirebaseLogout(): FirebaseLogout {
         type: AuthorizationStates.LOGOUT,
         payloadUser: null,
         payloadStudentRecruitmentFlag: false,
-        payloadFlagRecruiter: false,
         payloadFlagSysAdmin: false,
         payloadDiversityReviewFlag: false,
+        payloadFlagSubmissionReview: false,
       });
 
       if (!logoutCancelled) {

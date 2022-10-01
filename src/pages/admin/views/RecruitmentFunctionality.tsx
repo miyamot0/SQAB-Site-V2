@@ -9,7 +9,7 @@
 import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
-  IndividualUserRecord,
+  IndividualUserRecordSaved,
   PosterSubmission,
   RecruitmentAd,
 } from '../../../firebase/types/RecordTypes';
@@ -18,7 +18,7 @@ import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 
 export interface RecruitmentFunctionalityInterface {
-  userDocuments: IndividualUserRecord[] | null;
+  userDocuments: IndividualUserRecordSaved[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
   submissionDocuments: PosterSubmission[] | null;
   selectedAdUser: SingleOptionType;

@@ -46,7 +46,6 @@ export function authorizationReducer(
         user: action.payloadUser,
         authIsReady: false,
         studentRecruitFlag: action.payloadStudentRecruitmentFlag,
-        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
       };
@@ -55,7 +54,6 @@ export function authorizationReducer(
         ...state,
         user: null,
         studentRecruitFlag: false,
-        canEditRecruitmentAdFlag: false,
         systemAdministratorFlag: false,
         diversityReviewFlag: false,
       };
@@ -64,18 +62,18 @@ export function authorizationReducer(
         user: action.payloadUser,
         authIsReady: true,
         studentRecruitFlag: action.payloadStudentRecruitmentFlag,
-        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
+        submissionReviewFlag: action.payloadFlagSubmissionReview,
       };
     case AuthorizationStates.CLAIMS:
       return {
         user: action.payloadUser,
         authIsReady: true,
         studentRecruitFlag: action.payloadStudentRecruitmentFlag,
-        canEditRecruitmentAdFlag: action.payloadFlagRecruiter,
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
+        submissionReviewFlag: action.payloadFlagSubmissionReview,
       };
     default:
       return state;

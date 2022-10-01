@@ -39,9 +39,9 @@ export function useFirebaseLogin(): FirebaseLogin {
     return {
       payloadUser: user,
       payloadStudentRecruitmentFlag: res.claims.permissions.Recruitment,
-      payloadFlagRecruiter: true,
       payloadFlagSysAdmin: res.claims.permissions.Administration,
       payloadDiversityReviewFlag: res.claims.permissions.Demographics,
+      payloadFlagSubmissionReview: res.claims.permissions.Submissions,
     };
   }
 
