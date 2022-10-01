@@ -6,34 +6,44 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { MDBCard, MDBCardBody, MDBCardTitle } from "mdb-react-ui-kit";
-import { MDBDataTable } from "mdbreact";
-import React from "react";
-import { ColumnType } from "../types/TableTypes";
+import { MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
+import { MDBDataTable } from 'mdbreact';
+import React from 'react';
+import { ColumnType } from '../types/TableTypes';
 
 export type TableEntry = {
-    columns: ColumnType[],
-    rows: any[],
-}
+  columns: ColumnType[];
+  rows: any[];
+};
 
 export interface DemographicsDataTableInterface {
-    name: string,
-    data: TableEntry
+  name: string;
+  data: TableEntry;
 }
 
-export function DemographicsDataTable({ demographicData }: { demographicData: DemographicsDataTableInterface }) {
-    return <MDBCard>
-        <MDBCardBody>
-            <MDBCardTitle>{demographicData.name}</MDBCardTitle>
-            <MDBDataTable
-                exportToCSV
-                noBottomColumns
-                striped
-                data={{
-                    columns: demographicData.data.columns,
-                    rows: demographicData.data.rows,
-                }}
-            />
-        </MDBCardBody>
-    </MDBCard>;
+export function DemographicsDataTable({
+  demographicData,
+}: {
+  demographicData: DemographicsDataTableInterface;
+}) {
+  if (!demographicData) {
+    return <></>;
+  }
+
+  return (
+    <MDBCard>
+      <MDBCardBody>
+        <MDBCardTitle>{demographicData.name}</MDBCardTitle>
+        <MDBDataTable
+          exportToCSV
+          noBottomColumns
+          striped
+          data={{
+            columns: demographicData.data.columns,
+            rows: demographicData.data.rows,
+          }}
+        />
+      </MDBCardBody>
+    </MDBCard>
+  );
 }

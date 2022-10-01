@@ -6,50 +6,60 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import { MDBCard } from "mdb-react-ui-kit";
-import React from "react";
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import { MDBCard } from 'mdb-react-ui-kit';
+import React from 'react';
 
 export type BarChartEntry = {
-    name: string,
-    y: number,
-}
+  name: string;
+  y: number;
+};
 
 export interface DemographicsBarChartInterface {
-    name: string,
-    data: BarChartEntry[]
+  name: string;
+  data: BarChartEntry[];
 }
 
-export function DemographicsBarChart({ demographicData }: { demographicData: DemographicsBarChartInterface }) {
-    return <MDBCard>
-        <HighchartsReact
-            allowChartUpdate={false}
-            highcharts={Highcharts}
-            options={{
-                title: {
-                    text: demographicData.name
-                },
-                chart: {
-                    type: "column"
-                },
-                xAxis: {
-                    type: 'category',
-                    labels: {
-                        rotation: -45,
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Counts'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                series: [demographicData],
-            }}
-        />
-    </MDBCard>;
+export function DemographicsBarChart({
+  demographicData,
+}: {
+  demographicData: DemographicsBarChartInterface;
+}) {
+  if (!demographicData) {
+    return <></>;
+  }
+
+  return (
+    <MDBCard>
+      <HighchartsReact
+        allowChartUpdate={false}
+        highcharts={Highcharts}
+        options={{
+          title: {
+            text: demographicData.name,
+          },
+          chart: {
+            type: 'column',
+          },
+          xAxis: {
+            type: 'category',
+            labels: {
+              rotation: -45,
+            },
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Total Counts',
+            },
+          },
+          legend: {
+            enabled: false,
+          },
+          series: [demographicData],
+        }}
+      />
+    </MDBCard>
+  );
 }

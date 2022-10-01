@@ -9,28 +9,18 @@
 import React, { useEffect, useState } from 'react';
 import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
-import {
-  EmailStatus,
-  IndividualUserRecordSaved,
-  PosterSubmission,
-  RecruitmentAd,
-} from '../../firebase/types/RecordTypes';
+import { PosterSubmission, RecruitmentAd } from '../../firebase/types/RecordTypes';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
-import { AdministrationUserSummary } from './views/AdministrationUserSummary';
 import { AdminPosterDashboardLayout } from './layouts/AdminPosterDashboardLayout';
-import { AdminRecruitmentDashboardLayout } from './layouts/AdminRecruitmentDashboardLayout';
-import { AdminUserDashboardLayout } from './layouts/AdminUserDashboardLayout';
-import { AdminDiversityDashboardLayout } from './layouts/AdminDiversityDashboardLayout';
-import { AdminEmailDashboardLayout } from './layouts/AdminEmailDashboardLayout';
+import { useFirebaseFunction } from '../../firebase/hooks/useFirebaseFunction';
+import { DiversityFunctionResponse } from '../../firebase/types/FunctionTypes';
+import { DiversityDashboardLayout } from './layouts/DiversityDashboardLayout';
 
-export default function SystemAdministration(): JSX.Element {
+const { getAggregatedDiversityInformation } = useFirebaseFunction();
+
+export default function BasicAdministrator(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
     collectionString: 'recruitment',
-    queryString: undefined,
-    orderString: undefined,
-  });
-  const { documents: userDocuments } = useFirebaseCollectionTyped<IndividualUserRecordSaved>({
-    collectionString: 'users',
     queryString: undefined,
     orderString: undefined,
   });
@@ -39,11 +29,8 @@ export default function SystemAdministration(): JSX.Element {
     queryString: undefined,
     orderString: undefined,
   });
-  const { documents: mailDocuments } = useFirebaseCollectionTyped<EmailStatus>({
-    collectionString: 'mail',
-    queryString: undefined,
-    orderString: undefined,
-  });
+
+  const [currentDemographics, setCurrentDemographics] = useState<DiversityFunctionResponse>();
 
   const [userAdArray, setUserAdArray] = useState<SingleOptionType[]>([]);
   const [selectedAdUser, setSelectedAdUser] = useState<SingleOptionType>({
@@ -55,57 +42,29 @@ export default function SystemAdministration(): JSX.Element {
     useAuthorizationContext();
 
   useEffect(() => {
-    if (userDocuments && recruitmentDocuments && submissionDocuments) {
-      const usersWithAdsToFilter = recruitmentDocuments.map((obj) => obj.id) as string[];
+    getAggregatedDiversityInformation().then((value) => {
+      if (value && value.data) {
+        const cast = value.data as DiversityFunctionResponse;
 
-      const potentialUsers = userDocuments
-        .filter((obj) => !usersWithAdsToFilter.includes(obj.id as string))
-        .map((obj) => {
-          return {
-            value: obj.id, // value for db
-            label: `Name: ${obj.userName} Email: ${obj.userEmail}`,
-          } as SingleOptionType;
-        });
-
-      setUserAdArray(potentialUsers);
-    }
-  }, [recruitmentDocuments, userDocuments, submissionDocuments]);
+        if (cast) {
+          setCurrentDemographics(cast);
+        }
+      }
+    });
+  }, [recruitmentDocuments, submissionDocuments]);
 
   return (
     <>
       {/**
-       * Summary element, all admins can see general info
-       */}
-      <AdministrationUserSummary
-        userDocuments={userDocuments}
-        recruitmentDocuments={recruitmentDocuments}
-        submissionDocuments={submissionDocuments}
-      />
-      {/**
-       * Purely sysadmin content
-       */}
-      <AdminEmailDashboardLayout
-        sysAdminFlag={systemAdministratorFlag}
-        mailDocuments={mailDocuments}
-      />
-      {/**
-       * Purely sysadmin content
-       */}
-      <AdminUserDashboardLayout
-        sysAdminFlag={systemAdministratorFlag}
-        userDocuments={userDocuments}
-      />
-      {/**
        * Diversity-focus information, for sys and admins with that priv
        */}
-      <AdminDiversityDashboardLayout
+      <DiversityDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         diversityReviewFlag={diversityReviewFlag}
-        userDocuments={userDocuments}
+        currentDemographics={currentDemographics}
       />
       {/**
        * Recruitment-focus information, for sys and admins w/ that priv
-       */}
       <AdminRecruitmentDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         recruitmentReviewFlag={studentRecruitFlag}
@@ -116,6 +75,7 @@ export default function SystemAdministration(): JSX.Element {
         userAdArray={userAdArray}
         setSelectedAdUser={setSelectedAdUser}
       />
+       */}
 
       {/**
        * Poster-focus information, for sys and admins with that priv

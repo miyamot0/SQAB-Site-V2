@@ -21,5 +21,16 @@ export function useFirebaseFunction() {
     'createBlankTemplateRecruitment',
   );
 
-  return { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster };
+  const getAggregatedDiversityInformation = projectFunctions.httpsCallable(
+    'getAggregatedDiversityInformation',
+  );
+
+  // get id/name/email/recruitment status
+
+  return {
+    updateStatusForRecruitment,
+    createBlankTemplateRecruitment,
+    updateStatusForPoster,
+    getAggregatedDiversityInformation,
+  };
 }

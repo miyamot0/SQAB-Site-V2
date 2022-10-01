@@ -36,6 +36,7 @@ const SystemAdministration = React.lazy(() => import('./pages/admin/SystemAdmini
 
 import { useAuthorizationContext } from './context/hooks/useAuthorizationContext';
 import Loading from './components/Loading';
+import BasicAdministrator from './pages/admin/BasicAdministrator';
 
 const pageTitle = 'SQAB';
 
@@ -141,6 +142,14 @@ function App(): JSX.Element {
                           <Redirect to="/" />
                         )}
                       {user && <SystemAdministration />}
+                    </Route>
+                    <Route path="/admin2">
+                      {!user && <Redirect to="/signin" />}
+                      {user &&
+                        !(systemAdministratorFlag || studentRecruitFlag || diversityReviewFlag) && (
+                          <Redirect to="/" />
+                        )}
+                      {user && <BasicAdministrator />}
                     </Route>
                   </Switch>
                 </Suspense>
