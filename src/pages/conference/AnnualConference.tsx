@@ -7,12 +7,8 @@
  */
 
 import React from 'react';
-
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-
-import AceLogo from './../../assets/img/BACB-ACE-475x325.png';
 
 export default function AnnualConference(): JSX.Element {
   return (
@@ -43,7 +39,12 @@ export default function AnnualConference(): JSX.Element {
           paddingBottom: '20px',
         }}
       >
-        <img src={AceLogo} alt="ACE logo"></img>
+        <img
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2FBACB-ACE-475x325.png?alt=media&token=eca4627d-7b7e-4ab2-b6bd-10ad472278ae'
+          }
+          alt="ACE logo for BACB"
+        ></img>
       </MDBRow>
     </>
   );

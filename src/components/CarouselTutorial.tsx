@@ -7,46 +7,52 @@
  */
 
 import React from 'react';
-
-import Tut1 from './../assets/img/tut-1-min.jpeg';
-import Tut2 from './../assets/img/tut-2-min.jpeg';
-import Tut3 from './../assets/img/tut-3-min.jpeg';
-import Tut4 from './../assets/img/tut-4-min.jpeg';
-import Tut5 from './../assets/img/tut-5-min.jpeg';
-import Tut6 from './../assets/img/tut-6-min.jpeg';
-/*
-Expensive, time and network wise
-
-import Tut7 from './../assets/img/tut-7-min.jpeg';
-import Tut8 from './../assets/img/tut-8-min.jpeg';
-import Tut9 from './../assets/img/tut-9-min.jpeg';
-import Tut10 from './../assets/img/tut-10-min.jpeg';
-import Tut11 from './../assets/img/tut-11-min.jpeg';
-import Tut12 from './../assets/img/tut-12-min.jpeg';
-import Tut13 from './../assets/img/tut-13-min.jpeg';
-
-
-<MDBCarouselItem className="w-100 d-block" itemId={7} src={Tut7} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={8} src={Tut8} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={9} src={Tut9} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={10} src={Tut10} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={11} src={Tut11} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={12} src={Tut12} alt="..." />
-<MDBCarouselItem className="w-100 d-block" itemId={13} src={Tut13} alt="..." />
-*/
-
 import { MDBCarousel, MDBCarouselItem } from 'mdb-react-ui-kit';
 
 export default function CarouselConference(): JSX.Element {
   return (
     <>
       <MDBCarousel showIndicators fade>
-        <MDBCarouselItem className="w-100 d-block" itemId={1} src={Tut1} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={2} src={Tut2} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={3} src={Tut3} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={4} src={Tut4} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={5} src={Tut5} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={6} src={Tut6} alt="..." />
+        <MDBCarouselItem
+          className="w-100 d-block"
+          itemId={1}
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2Ftut-1-min.jpeg?alt=media&token=60ec4cd8-54d5-46d3-89c4-5f152be344a3'
+          }
+          alt="Image of a speaker during tutorial"
+        />
+        <MDBCarouselItem
+          className="w-100 d-block"
+          itemId={2}
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2Ftut-2-min.jpeg?alt=media&token=b7e7c4da-f2f8-4245-9be1-fdb9580fa1fd'
+          }
+          alt="Image of a speaker during tutorial"
+        />
+        <MDBCarouselItem
+          className="w-100 d-block"
+          itemId={3}
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2Ftut-3-min.jpeg?alt=media&token=3224d092-26d1-4427-9408-26258b66ac58'
+          }
+          alt="Image of a speaker during tutorial"
+        />
+        <MDBCarouselItem
+          className="w-100 d-block"
+          itemId={4}
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2Ftut-4-min.jpeg?alt=media&token=4698006c-0c24-4374-9ca0-4a67fbbcf623'
+          }
+          alt="Image of a speaker during tutorial"
+        />
+        <MDBCarouselItem
+          className="w-100 d-block"
+          itemId={5}
+          src={
+            'https://firebasestorage.googleapis.com/v0/b/sqab-website-v2.appspot.com/o/images%2Ftut-5-min.jpeg?alt=media&token=544aa310-d73b-4342-bb16-81f8a0911894'
+          }
+          alt="Image of a speaker during tutorial"
+        />
       </MDBCarousel>
     </>
   );
