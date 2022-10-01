@@ -8,21 +8,13 @@
 
 import React from 'react';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import {
-  IndividualUserRecordSaved,
-  PosterSubmission,
-  RecruitmentAd,
-} from '../../../firebase/types/RecordTypes';
 import { AdministrationRecruitmentGenerator } from './AdministrationRecruitmentGenerator';
 import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 
 export interface RecruitmentFunctionalityInterface {
-  userDocuments: IndividualUserRecordSaved[] | null;
-  recruitmentDocuments: RecruitmentAd[] | null;
-  submissionDocuments: PosterSubmission[] | null;
   selectedAdUser: SingleOptionType;
-  userAdArray: SingleOptionType[];
+  userAdArray: SingleOptionType[] | null | undefined;
   setSelectedAdUser: (option: SingleOptionType) => void;
 }
 

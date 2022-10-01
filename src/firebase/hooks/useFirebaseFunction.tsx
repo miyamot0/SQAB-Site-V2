@@ -25,6 +25,10 @@ export function useFirebaseFunction() {
     'getAggregatedDiversityInformation',
   );
 
+  const getFilteredRecruitmentInformation = projectFunctions.httpsCallable(
+    'getFilteredRecruitmentInformation',
+  );
+
   // get id/name/email/recruitment status
 
   return {
@@ -32,5 +36,6 @@ export function useFirebaseFunction() {
     createBlankTemplateRecruitment,
     updateStatusForPoster,
     getAggregatedDiversityInformation,
+    getFilteredRecruitmentInformation,
   };
 }

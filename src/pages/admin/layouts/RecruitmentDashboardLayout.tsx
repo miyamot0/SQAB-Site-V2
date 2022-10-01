@@ -20,27 +20,23 @@ import { MDBDataTable } from 'mdbreact';
 import moment from 'moment';
 import { toggleRecruitmentStatus } from '../helpers/AdministrationHelpers';
 
-export interface AdminRecruitmentDashboardLayoutInterface {
+export interface RecruitmentDashboardLayoutInterface {
   sysAdminFlag: boolean;
   recruitmentReviewFlag: boolean;
-  userDocuments: IndividualUserRecordSaved[] | null;
   recruitmentDocuments: RecruitmentAd[] | null;
-  submissionDocuments: PosterSubmission[] | null;
   selectedAdUser: SingleOptionType;
-  userAdArray: SingleOptionType[];
+  userAdArray: SingleOptionType[] | null | undefined;
   setSelectedAdUser: (option: SingleOptionType) => void;
 }
 
-export function AdminRecruitmentDashboardLayout({
+export function RecruitmentDashboardLayout({
   sysAdminFlag,
   recruitmentReviewFlag,
-  userDocuments,
   recruitmentDocuments,
-  submissionDocuments,
   selectedAdUser,
   userAdArray,
   setSelectedAdUser,
-}: AdminRecruitmentDashboardLayoutInterface) {
+}: RecruitmentDashboardLayoutInterface) {
   if (!recruitmentDocuments || (sysAdminFlag === false && recruitmentReviewFlag === false)) {
     return <></>;
   }
@@ -124,6 +120,8 @@ export function AdminRecruitmentDashboardLayout({
         </MDBCol>
       </MDBRow>
 
+      {/**
+       */}
       <RecruitmentFunctionality
         selectedAdUser={selectedAdUser}
         userAdArray={userAdArray}

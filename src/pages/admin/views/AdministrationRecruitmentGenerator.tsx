@@ -15,7 +15,7 @@ import { SingleOptionType } from '../../tools/types/GeneralTypes';
 
 export interface AdministrationRecruitmentGeneratorInterface {
   selectedAdUser: SingleOptionType;
-  userAdArray: SingleOptionType[];
+  userAdArray: SingleOptionType[] | null | undefined;
   setSelectedAdUser: (option: SingleOptionType) => void;
 }
 
@@ -42,7 +42,7 @@ export function AdministrationRecruitmentGenerator({
           <label>
             <span>Template Creator:</span>
             <Select
-              options={userAdArray}
+              options={userAdArray ?? []}
               onChange={(option) => {
                 if (option) {
                   setSelectedAdUser(option);

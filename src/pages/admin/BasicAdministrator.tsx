@@ -13,10 +13,15 @@ import { PosterSubmission, RecruitmentAd } from '../../firebase/types/RecordType
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AdminPosterDashboardLayout } from './layouts/AdminPosterDashboardLayout';
 import { useFirebaseFunction } from '../../firebase/hooks/useFirebaseFunction';
-import { DiversityFunctionResponse } from '../../firebase/types/FunctionTypes';
+import {
+  DiversityFunctionResponse,
+  RecruitmentFunctionResponse,
+} from '../../firebase/types/FunctionTypes';
 import { DiversityDashboardLayout } from './layouts/DiversityDashboardLayout';
+import { RecruitmentDashboardLayout } from './layouts/RecruitmentDashboardLayout';
 
-const { getAggregatedDiversityInformation } = useFirebaseFunction();
+const { getAggregatedDiversityInformation, getFilteredRecruitmentInformation } =
+  useFirebaseFunction();
 
 export default function BasicAdministrator(): JSX.Element {
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
@@ -31,6 +36,7 @@ export default function BasicAdministrator(): JSX.Element {
   });
 
   const [currentDemographics, setCurrentDemographics] = useState<DiversityFunctionResponse>();
+  const [currentUsersLacking, setCurrentUsersLacking] = useState<RecruitmentFunctionResponse>();
 
   const [userAdArray, setUserAdArray] = useState<SingleOptionType[]>([]);
   const [selectedAdUser, setSelectedAdUser] = useState<SingleOptionType>({
@@ -42,15 +48,30 @@ export default function BasicAdministrator(): JSX.Element {
     useAuthorizationContext();
 
   useEffect(() => {
-    getAggregatedDiversityInformation().then((value) => {
-      if (value && value.data) {
-        const cast = value.data as DiversityFunctionResponse;
+    if (diversityReviewFlag || systemAdministratorFlag) {
+      getAggregatedDiversityInformation().then((value) => {
+        if (value && value.data) {
+          const cast = value.data as DiversityFunctionResponse;
 
-        if (cast) {
-          setCurrentDemographics(cast);
+          if (cast) {
+            setCurrentDemographics(cast);
+          }
         }
-      }
-    });
+      });
+    }
+
+    if (studentRecruitFlag || systemAdministratorFlag) {
+      getFilteredRecruitmentInformation().then((value) => {
+        if (value && value.data) {
+          const cast = value.data as RecruitmentFunctionResponse;
+
+          if (cast && cast.arrayUsersNeedAds) {
+            setCurrentUsersLacking(cast);
+            setUserAdArray(cast.arrayUsersNeedAds);
+          }
+        }
+      });
+    }
   }, [recruitmentDocuments, submissionDocuments]);
 
   return (
@@ -63,19 +84,18 @@ export default function BasicAdministrator(): JSX.Element {
         diversityReviewFlag={diversityReviewFlag}
         currentDemographics={currentDemographics}
       />
+
       {/**
        * Recruitment-focus information, for sys and admins w/ that priv
-      <AdminRecruitmentDashboardLayout
+       */}
+      <RecruitmentDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         recruitmentReviewFlag={studentRecruitFlag}
-        userDocuments={userDocuments}
         recruitmentDocuments={recruitmentDocuments}
-        submissionDocuments={submissionDocuments}
         selectedAdUser={selectedAdUser}
         userAdArray={userAdArray}
         setSelectedAdUser={setSelectedAdUser}
       />
-       */}
 
       {/**
        * Poster-focus information, for sys and admins with that priv
