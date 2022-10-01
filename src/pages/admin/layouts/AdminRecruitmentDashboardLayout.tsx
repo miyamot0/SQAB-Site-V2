@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import {
   IndividualUserRecord,
   PosterSubmission,
@@ -17,6 +17,8 @@ import { SingleOptionType } from '../../tools/types/GeneralTypes';
 import { RecruitmentFunctionality } from '../views/RecruitmentFunctionality';
 import { ColumnType } from '../types/TableTypes';
 import { MDBDataTable } from 'mdbreact';
+import moment from 'moment';
+import { toggleRecruitmentStatus } from '../helpers/AdministrationHelpers';
 
 export interface AdminRecruitmentDashboardLayoutInterface {
   sysAdminFlag: boolean;
@@ -37,33 +39,60 @@ export function AdminRecruitmentDashboardLayout({
   userAdArray,
   setSelectedAdUser,
 }: AdminRecruitmentDashboardLayoutInterface) {
-  if (!userDocuments || sysAdminFlag === false) {
+  if (!recruitmentDocuments || sysAdminFlag === false) {
     return <></>;
   }
 
   const columns: ColumnType[] = [
-    { label: 'ID', field: 'id', sort: 'asc' },
-    { label: 'Name', field: 'name', sort: 'asc' },
-    { label: 'Email', field: 'email', sort: 'asc' },
-    { label: 'Ad', field: 'ad', sort: 'asc' },
-    { label: 'Permissions', field: 'perms', sort: 'asc' },
+    { label: 'Mentor', field: 'mentor', sort: 'asc' },
+    { label: 'Institution', field: 'institution', sort: 'asc' },
+    { label: 'Contact Information', field: 'contact', sort: 'asc' },
+    { label: 'Summary of Mentory and Lab', field: 'ad', sort: 'asc' },
+    { label: 'Application Deadline', field: 'deadline', sort: 'asc' },
+    { label: 'Approved', field: 'approval', sort: 'asc' },
   ];
 
-  const rows = userDocuments
+  //
+
+  const rows = recruitmentDocuments
     .sort((a, b) => {
-      if (!a.userName || a.userName.trim().length === 0) {
+      if (!a.Cycle || a.Cycle.trim().length === 0) {
         return 1;
       }
 
-      return a.userName.localeCompare(b.userName);
+      return moment(new Date(a.Cycle), 'DD/MM/YYYY').isAfter(
+        moment(new Date(b.Cycle), 'DD/MM/YYYY'),
+      )
+        ? 1
+        : -1;
     })
     .map((userItem) => {
       const ret = {
-        id: userItem.id ?? '',
-        name: userItem.userName,
-        email: userItem.userEmail,
-        ad: userItem.canPostAd ? 'Yes' : '',
-        perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
+        mentor: userItem.Mentor,
+        institution: userItem.Institution,
+        contact: userItem.Contact,
+        ad: (
+          <a href={`/recruitment/${userItem.id}`} style={{ color: '#7f007f' }}>
+            Lab & Mentor Details
+          </a>
+        ),
+        deadline: userItem.Cycle,
+        approval: (
+          <MDBBtn
+            noRipple
+            tag="a"
+            href="#!"
+            style={{
+              width: '100%',
+            }}
+            className={`button-fit-card ${
+              userItem.Approved ? 'button-color-override-red' : 'button-color-override-green'
+            }`}
+            onClick={() => toggleRecruitmentStatus(userItem)}
+          >
+            {userItem.Approved ? 'Revoke Approval' : 'Approve'}
+          </MDBBtn>
+        ),
       };
 
       return ret;

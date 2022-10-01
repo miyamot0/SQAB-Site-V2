@@ -6,12 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import firebase from 'firebase';
 import { useState, useEffect } from 'react';
 import { googleAuthProvider, fbAuthProvider, projectAuth } from '../config';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AuthorizationStates } from '../../context/AuthorizationContext';
 import { ProviderTypes } from '../types/AccountTypes';
-import firebase from 'firebase';
 import { FirebaseLogin } from '../interfaces/FirebaseInterfaces';
 
 /** useFirebaseLogin

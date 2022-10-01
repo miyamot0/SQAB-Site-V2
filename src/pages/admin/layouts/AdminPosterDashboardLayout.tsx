@@ -67,11 +67,12 @@ export function AdminPosterDashboardLayout({
             style={{
               width: '100%',
             }}
-            className={`button-fit-card ${posterItem.reviewed ? 'button-color-override-red' : 'button-color-override-green'
-              }`}
+            className={`button-fit-card ${
+              posterItem.reviewed ? 'button-color-override-red' : 'button-color-override-green'
+            }`}
             onClick={() => togglePosterStatus(posterItem)}
           >
-            {posterItem.reviewed ? 'Disapprove' : 'Accept'}
+            {posterItem.reviewed ? 'Revoke Approval' : 'Approve'}
           </MDBBtn>
         ),
       };
