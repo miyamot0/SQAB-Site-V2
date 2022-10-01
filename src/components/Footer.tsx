@@ -60,6 +60,7 @@ export default function Footer() {
             noRipple
             className="m-1 btn-facebook"
             href="https://www.facebook.com/Society-for-the-Quantitative-Analyses-of-Behavior-127961307223883/"
+            aria-label="Link to facebook account"
             role="button"
           >
             <MDBIcon fab icon="facebook-f" />
@@ -69,6 +70,7 @@ export default function Footer() {
             noRipple
             className="m-1 btn-twitter"
             href="https://twitter.com/SQABmedia"
+            aria-label="Link to twitter account"
             role="button"
           >
             <MDBIcon fab icon="twitter" />
@@ -78,6 +80,7 @@ export default function Footer() {
             noRipple
             className="m-1 btn-github"
             href="https://github.com/SQAB-ABAI"
+            aria-label="Link to github account"
             role="button"
           >
             <MDBIcon fab icon="github" />

@@ -95,7 +95,7 @@ export default function Home(): JSX.Element {
                     will be listed on the Annual Conference page in the future.
                   </MDBCardText>
                   <MDBBtn noRipple className="float-right" tag="a" href="/conference">
-                    Learn More
+                    See Conference Page
                   </MDBBtn>
                 </MDBCardBody>
               </MDBCol>
@@ -126,7 +126,7 @@ export default function Home(): JSX.Element {
                     means for encouraging dissemination of novel methods and approaches.
                   </MDBCardText>
                   <MDBBtn noRipple className="float-right" tag="a" href="/tutorials/-1">
-                    Learn More
+                    See Recorded Tutorials
                   </MDBBtn>
                 </MDBCardBody>
               </MDBCol>
