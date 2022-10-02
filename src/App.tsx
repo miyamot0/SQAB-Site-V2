@@ -41,8 +41,14 @@ import BasicAdministrator from './pages/admin/BasicAdministrator';
 const pageTitle = 'SQAB';
 
 function App(): JSX.Element {
-  const { user, systemAdministratorFlag, studentRecruitFlag, diversityReviewFlag, authIsReady } =
-    useAuthorizationContext();
+  const {
+    user,
+    systemAdministratorFlag,
+    studentRecruitFlag,
+    diversityReviewFlag,
+    submissionReviewFlag,
+    authIsReady,
+  } = useAuthorizationContext();
 
   useEffect(() => {
     document.title = pageTitle;
@@ -141,15 +147,11 @@ function App(): JSX.Element {
                         !(systemAdministratorFlag || studentRecruitFlag || diversityReviewFlag) && (
                           <Redirect to="/" />
                         )}
-                      {user && <SystemAdministration />}
-                    </Route>
-                    <Route path="/admin2">
-                      {!user && <Redirect to="/signin" />}
+                      {user && systemAdministratorFlag && <SystemAdministration />}
                       {user &&
-                        !(systemAdministratorFlag || studentRecruitFlag || diversityReviewFlag) && (
-                          <Redirect to="/" />
+                        (studentRecruitFlag || diversityReviewFlag || submissionReviewFlag) && (
+                          <BasicAdministrator />
                         )}
-                      {user && <BasicAdministrator />}
                     </Route>
                   </Switch>
                 </Suspense>
