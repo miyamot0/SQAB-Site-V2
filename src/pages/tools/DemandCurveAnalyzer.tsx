@@ -581,7 +581,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       return;
     }
 
-    worker = new Worker('./workers/worker_demand.js');
+    worker = new Worker('./workers/worker_demand2.js');
     worker.onmessage = handleWorkerOutput;
 
     worker.postMessage({
