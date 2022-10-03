@@ -106,12 +106,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const dataForPlotting: DemandXYPoints[] = [];
     const dataPointsForPlotting: PlotXYPoints[] = [];
 
-    let lowestDemand = -1;
-
     newPrices.forEach((price) => {
       const demand = renderExponentialDemand(obj.Q0, obj.Alpha, obj.K, price);
-
-      lowestDemand = demand;
 
       dataForPlotting.push({
         Price: price,
@@ -202,7 +198,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    */
   function constructExponentiatedChart(obj: DemandResult) {
     const lowestPrice = Math.min(...obj.X);
-    const lowestConsumption = Math.min(...obj.Y);
     const highestPrice = Math.max(...obj.X) + 1;
     const density = 100;
     const rangeP = highestPrice - lowestPrice;
@@ -213,20 +208,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const dataForPlotting: DemandXYPoints[] = [];
     const dataPointsForPlotting: PlotXYPoints[] = [];
 
-    let lowestDemand = -1;
-
     newPrices.forEach((price) => {
       const demand = renderExponentiatedDemand(obj.Q0, obj.Alpha, obj.K, price);
-
-      lowestDemand = demand;
 
       dataForPlotting.push({
         Price: price,
         Demand: demand,
       });
     });
-
-    lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
 
     obj.X.forEach((x, index) => {
       if (x > 0 && obj.Y[index] > 0) {
@@ -310,7 +299,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    */
   function constructIHS3Chart(obj: DemandResult) {
     const lowestPrice = Math.min(...obj.X);
-    const lowestConsumption = Math.min(...obj.Y);
     const highestPrice = Math.max(...obj.X) + 1;
     const density = 100;
     const rangeP = highestPrice - lowestPrice;
@@ -321,20 +309,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const dataForPlotting: DemandXYPoints[] = [];
     const dataPointsForPlotting: PlotXYPoints[] = [];
 
-    let lowestDemand = -1;
-
     newPrices.forEach((price) => {
       const demand = unIHS(renderIHS3Demand(obj.Q0, obj.Alpha, obj.K, price));
-
-      lowestDemand = demand;
 
       dataForPlotting.push({
         Price: price,
         Demand: demand,
       });
     });
-
-    lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
 
     obj.X.forEach((x, index) => {
       if (x > 0 && unIHS(obj.Y[index]) > 0) {
