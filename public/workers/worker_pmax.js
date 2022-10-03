@@ -1,5 +1,8 @@
 var running = false;
 
+var model;
+var hasTwoParams;
+
 var currentRow = 0;
 var lastRow = 0;
 
@@ -35,6 +38,14 @@ function isValidNumber(num) {
 */
 function renderOriginalPmax(Q, A, K) {
   return (1 / (Q * A * Math.pow(K, 1.5))) * (0.083 * K + 0.65);
+}
+
+function unIHS(x) {
+  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
+}
+
+function ihsTransform(x) {
+  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-* Functions with Error Codes *-*-*-*-*-*-*-*-*-*-*-*/
@@ -105,41 +116,99 @@ function beginWork() {
   while (running && currentRow < lastRow) {
     tempData = sheetData[currentRow];
 
-    // Check, are these as they should be?
-    Q = parseFloat(tempData[0]);
-    A = parseFloat(tempData[1]);
-    K = parseFloat(tempData[2]);
+    if (isZBE && hasTwoParams) {
+      Q = parseFloat(tempData[0]);
+      A = parseFloat(tempData[1]);
 
-    if (isValidNumber(Q) && isValidNumber(A) && isValidNumber(K) && K <= limit) {
-      // Hursh approx
-      oldPmax = renderOriginalPmax(Q, A, K);
+      if (isValidNumber(Q) && isValidNumber(A)) {
+        // eslint-disable-next-line no-loop-func
 
-      // eslint-disable-next-line no-loop-func
-      var lamba = function (x) {
-        return Math.abs(Math.log(Math.pow(10, K)) * (-A * Q * x * Math.exp(-A * Q * x)) + 1);
-      };
+        var lamba = function (x) {
+          var demand = ihsTransform(Q) * Math.exp(-(A / ihsTransform(Q)) * Q * x);
+          var work = unIHS(demand) * x;
 
-      // eslint-disable-next-line no-undef
-      result = numeric.uncmin(lamba, [startingParam], etol, gradient, maxIts, cb, opts);
+          return -Math.log10(work);
+        };
 
-      sheetData[currentRow][3] = result.solution[0].toFixed(8);
-      sheetData[currentRow][4] = oldPmax.toFixed(8);
-    } else if (isValidNumber(Q) && isValidNumber(A) && isValidNumber(K)) {
-      // Hursh approx
-      oldPmax = renderOriginalPmax(Q, A, K);
+        // eslint-disable-next-line no-undef
+        result = numeric.uncmin(lamba, [1], 1e-30, gradient, 2000, cb, opts);
 
-      // Gilroy et al,
-      var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, K)));
+        sheetData[currentRow][2] = result.solution[0];
+      } else {
+        postMessage({
+          done: true,
+          sheet: sheetData,
+        });
 
-      sheetData[currentRow][3] = (-lambertResult.val / (A * Q)).toFixed(8);
-      sheetData[currentRow][4] = oldPmax.toFixed(8);
+        running = false;
+      }
+    } else if (isZBE && !hasTwoParams) {
+      Q = parseFloat(tempData[0]);
+      A = parseFloat(tempData[1]);
+      K = parseFloat(tempData[2]);
+
+      if (isValidNumber(Q) && isValidNumber(A) && isValidNumber(K)) {
+        // eslint-disable-next-line no-loop-func
+
+        var lamba = function (x) {
+          var lowerLimit = ihsTransform(Q) - K;
+          var demand = ihsTransform(Q) + K * (Math.exp(-A * Q * x) - 1);
+          demand = demand - lowerLimit;
+
+          var work = unIHS(demand) * x;
+
+          return -Math.log10(work);
+        };
+
+        // eslint-disable-next-line no-undef
+        result = numeric.uncmin(lamba, [1], 1e-30, gradient, 2000, cb, opts);
+
+        sheetData[currentRow][3] = result.solution[0];
+      } else {
+        postMessage({
+          done: true,
+          sheet: sheetData,
+        });
+
+        running = false;
+      }
     } else {
-      postMessage({
-        done: true,
-        sheet: sheetData,
-      });
+      // Check, are these as they should be?
+      Q = parseFloat(tempData[0]);
+      A = parseFloat(tempData[1]);
+      K = parseFloat(tempData[2]);
 
-      running = false;
+      if (isValidNumber(Q) && isValidNumber(A) && isValidNumber(K) && K <= limit) {
+        // Hursh approx
+        oldPmax = renderOriginalPmax(Q, A, K);
+
+        // eslint-disable-next-line no-loop-func
+        var lamba = function (x) {
+          return Math.abs(Math.log(Math.pow(10, K)) * (-A * Q * x * Math.exp(-A * Q * x)) + 1);
+        };
+
+        // eslint-disable-next-line no-undef
+        result = numeric.uncmin(lamba, [startingParam], etol, gradient, maxIts, cb, opts);
+
+        sheetData[currentRow][3] = result.solution[0];
+        sheetData[currentRow][4] = oldPmax;
+      } else if (isValidNumber(Q) && isValidNumber(A) && isValidNumber(K)) {
+        // Hursh approx
+        oldPmax = renderOriginalPmax(Q, A, K);
+
+        // Gilroy et al,
+        var lambertResult = gsl_sf_lambert_W0_e(-1 / Math.log(Math.pow(10, K)));
+
+        sheetData[currentRow][3] = -lambertResult.val / (A * Q);
+        sheetData[currentRow][4] = oldPmax;
+      } else {
+        postMessage({
+          done: true,
+          sheet: sheetData,
+        });
+
+        running = false;
+      }
     }
 
     currentRow++;
@@ -148,6 +217,8 @@ function beginWork() {
 
 onmessage = function (passer) {
   sheetData = passer.data.data;
+  isZBE = passer.data.isZBE;
+  hasTwoParams = passer.data.hasTwoParams;
   lastRow = passer.data.data.length;
 
   beginWork();

@@ -7,6 +7,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import {
   MDBCard,
   MDBCardBody,
@@ -16,16 +17,29 @@ import {
   MDBCol,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-import { HotColumn, HotTable } from '@handsontable/react';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { WorkerPmaxResult } from './helpers/PmaxHelpers';
-import { renderExponentialDemand } from './helpers/DemandHelpers';
-
+import { HotTableTwoParamZBE } from './views/HotTableTwoParamZBE';
+import { clearConsumptionData, loadExampleData } from './behavior/DemandBehavior';
+import { HotTableThreeParamZBE } from './views/HotTableThreeParamZBE';
+import { ResultsZBE2 } from './views/ResultsZBE2';
+import { round } from './helpers/GeneralHelpers';
+import { ResultsZBE3 } from './views/ResultsZBE3';
+import { ResultsHS } from './views/ResultsHS';
+import { HotTableThreeParamHS } from './views/HotTableThreeParamHS';
 import './styles/Tools.css';
 
+const ModelOptions = [
+  { value: 'ZBE-2', label: '2-Parameter ZBE (no K)' },
+  { value: 'ZBE-3', label: '3-Parameter ZBE (with K)' },
+  { value: 'Exponentiated', label: 'Exponentiated Model' },
+  { value: 'Exponential', label: 'Exponential Model' },
+]
+
 export default function AnalyticPmax(): JSX.Element {
-  const [hotData, setHotData] = useState<any[][]>();
-  const [hotData2, setHotData2] = useState<any[][]>();
+  const [hotData, setHotData] = useState<string[][]>();
+  const [hotData2, setHotData2] = useState<string[][]>();
+  const [modelOption, setModelOption] = useState(ModelOptions[0])
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
 
   let worker: Worker | undefined = undefined;
@@ -50,40 +64,21 @@ export default function AnalyticPmax(): JSX.Element {
     ]);
   }, []);
 
-  /**
-   * loadExampleData
-   */
-  function loadExampleData(): void {
-    setHotData([
-      ['4.1849', '0.00518467', '5.31159', '', ''],
-      ['6.20081', '0.00315093', '5.31159', '', ''],
-      ['3.91589', '0.00290809', '5.31159', '', ''],
-      ['6.19246', '0.00259647', '5.31159', '', ''],
-      ['6.50739', '0.00252394', '5.31159', '', ''],
-      ['8.32759', '0.00294164', '5.31159', '', ''],
-      ['7.14605', '0.00245646', '5.31159', '', ''],
-      ['10.8495', '0.00260554', '5.31159', '', ''],
-      ['5.69435', '0.00250289', '5.31159', '', ''],
-      ['4.92234', '0.00239768', '5.31159', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-    ]);
-  }
-
-  /** calculatePmax
+  /** startPmaxWorker
    *
    */
-  function calculatePmax(): void {
+  function startPmaxWorker(): void {
     if (worker !== undefined) {
       return;
     }
 
     worker = new Worker('./workers/worker_pmax.js');
     worker.onmessage = handleWorkerOutput;
-    worker.postMessage({ data: hotData });
+    worker.postMessage({
+      data: hotData,
+      isZBE: modelOption.value.includes('ZBE'),
+      hasTwoParams: modelOption.value.includes('ZBE-2')
+    });
   }
 
   /** handleWorkerOutput
@@ -93,98 +88,29 @@ export default function AnalyticPmax(): JSX.Element {
   function handleWorkerOutput(obj: any): void {
     const data = obj.data as WorkerPmaxResult;
 
-    if (data.done) {
+    if (data.done && data.sheet) {
       worker = undefined;
-      setHotData(data.sheet);
+
+      const pmaxRow = modelOption.value.includes("ZBE-2") ? 2 : 3;
+
+      const trimmedPrecision = data.sheet.map((sheet) => {
+        const iSheet = sheet;
+        const pmaxValue = iSheet[pmaxRow].toString();
+
+        if (pmaxValue.trim().length === 0) {
+          return iSheet
+        } else {
+          iSheet[pmaxRow] = round(pmaxValue, 4);
+          return iSheet
+        }
+      })
+
+      setHotData(trimmedPrecision);
       setHotData2(data.sheet);
 
       setRunningCalculation(false);
       return;
     }
-  }
-
-  /** generateOutputScore
-   *
-   * @param {number} qd
-   * @param {number} pd
-   * @returns {number}
-   */
-  function generateOutputScore(qd: number, pd: number): string {
-    return `${qd.toPrecision(5)} / ${pd.toPrecision(5)}`;
-  }
-
-  /** generateSlope
-   *
-   * @param {number} qd
-   * @param {number} pd
-   */
-  function generateSlope(qd: number, pd: number): string {
-    if (qd < 0.001 && pd < 0.001) {
-      return '-1';
-    } else {
-      return (qd / pd).toFixed(8);
-    }
-  }
-
-  /** generateStringOutput
-   *
-   * Make output for side panel
-   *
-   * @param {string[]} row string array from table
-   * @param {number} index index
-   * @returns {JSX.Element}
-   */
-  function generateStringOutput(row: string[], index: number): JSX.Element {
-    if (row[0].trim().length === 0) {
-      return <div key={index}></div>;
-    }
-
-    const rowInNumbers = row.map(Number);
-
-    const pDelta = 0.01;
-
-    // Scale prices into log units
-    const P1 = Math.log10(rowInNumbers[3]);
-    const P2 = Math.log10(rowInNumbers[3]) + pDelta;
-
-    // Get consumption values (already in log units)
-    const Q1 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P1);
-    const Q2 = renderExponentialDemand(rowInNumbers[0], rowInNumbers[1], rowInNumbers[2], P2);
-
-    // Calculate deltas
-    const QD = (10 ^ Q2) - (10 ^ Q1);
-    const PD = (10 ^ P2) - (10 ^ P1);
-
-    const pmaxNew = parseFloat(row[3]);
-    const pmaxOld = parseFloat(row[4]);
-    const kValue = parseFloat(row[2]);
-
-    const noteString =
-      kValue >= Math.E / Math.log(10)
-        ? 'Note: Determined through exact solution using Lambert W function.'
-        : 'Note: Solved directly referencing empirical slope.';
-
-    return (
-      <div key={index}>
-        <h5>{`Row #${index + 1}`}</h5>
-        <p className="toolTextOutputStyle">
-          Analytical{' '}
-          <i>
-            P<sub>MAX</sub>
-          </i>{' '}
-          = {pmaxNew} <br />
-          Approxmiate{' '}
-          <i>
-            P<sub>MAX</sub>
-          </i>{' '}
-          = {pmaxOld} <br />
-          &Delta;Q/&Delta;P (Log/Log) +/- %1 Unit Price = {generateOutputScore(QD, PD)} ={' '}
-          {generateSlope(QD, PD)}
-          <br />
-          {noteString}{' '}
-        </p>
-      </div>
-    );
   }
 
   return (
@@ -252,10 +178,7 @@ export default function AnalyticPmax(): JSX.Element {
                 To calculate exact solution P<sub>MAX</sub>, you may paste the fitted Q0, alpha, and
                 K parameters from the model of demand into the spreadsheet component (in their
                 respective columns). Once entered, simply press the &quot;Calculate&quot; button to
-                calculate the Analytical P<sub>MAX</sub>. Additionally, the Approxiate P
-                <sub>MAX</sub> will also be outputted in the spreadsheet component, in its
-                respective column, though users are recommended to refer to the exact approach
-                whenever possible.
+                calculate the Analytical P<sub>MAX</sub>.
                 <br />
                 <br />
                 Optionally, you may preview this method using a sample data by pressing the
@@ -263,6 +186,32 @@ export default function AnalyticPmax(): JSX.Element {
                 will let you view the differences between the Approximate and Analytical P
                 <sub>MAX</sub>.
               </MDBCardText>
+
+              <label style={{ width: '100%', marginTop: '25px' }}>
+                <span>Select Implementation of Framework:</span>
+                <Select
+                  options={ModelOptions}
+                  onChange={(option) => {
+                    if (option) {
+                      setModelOption(option);
+                      clearConsumptionData({
+                        setHotData,
+                        hasTwoParameters: modelOption === ModelOptions[0]
+                      })
+                      setHotData2(undefined)
+                    }
+                  }}
+                  value={modelOption}
+                  styles={{
+                    menu: (base) => ({
+                      ...base,
+                      width: 'max-content',
+                      minWidth: '100%',
+                      zIndex: 9999
+                    }),
+                  }}
+                />
+              </label>
 
               <MDBBtn
                 noRipple
@@ -274,35 +223,19 @@ export default function AnalyticPmax(): JSX.Element {
                 href="#!"
                 className="button-fit-card"
                 disabled={runningCalculation}
-                onClick={() => loadExampleData()}
+                onClick={() => loadExampleData({
+                  setHotData,
+                  isZBE: modelOption.label.includes("ZBE"),
+                  hasTwoParameters: modelOption === ModelOptions[0]
+                })}
               >
                 Load Example Data
               </MDBBtn>
 
-              <HotTable
-                data={hotData}
-                colHeaders={true}
-                rowHeaders={true}
-                height="auto"
-                stretchH="all"
-                style={{ marginTop: '25px', marginBottom: '25px' }}
-                columnSorting={false}
-                columns={[
-                  { data: 0, type: 'string' },
-                  { data: 1, type: 'string' },
-                  { data: 2, type: 'string' },
-                  { data: 3, type: 'string' },
-                  { data: 4, type: 'string' },
-                ]}
-                contextMenu={true}
-                licenseKey="non-commercial-and-evaluation"
-              >
-                <HotColumn title="Q0" />
-                <HotColumn title="Alpha" />
-                <HotColumn title="K" />
-                <HotColumn title="Analytical" />
-                <HotColumn title="Approximate" />
-              </HotTable>
+              {modelOption === ModelOptions[0] ? <HotTableTwoParamZBE hotData={hotData} /> :
+                modelOption === ModelOptions[1] ? <HotTableThreeParamZBE hotData={hotData} /> :
+                  <HotTableThreeParamHS hotData={hotData} />
+              }
 
               <MDBBtn
                 noRipple
@@ -315,8 +248,12 @@ export default function AnalyticPmax(): JSX.Element {
                 className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => {
-                  setRunningCalculation(true);
-                  calculatePmax();
+                  if (!hotData || hotData[0][0].trim().length === 0 || hotData[0][1].trim().length === 0) {
+                    return
+                  } else {
+                    setRunningCalculation(true);
+                    startPmaxWorker();
+                  }
                 }}
               >
                 Calculate
@@ -325,15 +262,10 @@ export default function AnalyticPmax(): JSX.Element {
           </MDBCard>
         </MDBCol>
         <MDBCol md="4">
-          <MDBCard className="outputPanel">
-            <MDBCardBody>
-              <MDBCardTitle>
-                P<sub>MAX</sub> Output Logs
-              </MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle}></MDBCardText>
-              {hotData2?.map((row, index) => generateStringOutput(row, index))}
-            </MDBCardBody>
-          </MDBCard>
+          {modelOption === ModelOptions[0] ? <ResultsZBE2 hotData2={hotData2} /> :
+            modelOption === ModelOptions[1] ? <ResultsZBE3 hotData2={hotData2} /> :
+              <ResultsHS hotData2={hotData2} model={modelOption.value} />
+          }
         </MDBCol>
       </MDBRow>
     </>
