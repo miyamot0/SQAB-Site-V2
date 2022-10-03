@@ -1,6 +1,6 @@
 self.importScripts('random.min.js');
 self.importScripts('math.min.js');
-self.importScripts('utilities_demand.js');
+self.importScripts('utilities_demand2.js');
 self.importScripts('utilities_de.js');
 
 // eslint-disable-next-line no-undef
