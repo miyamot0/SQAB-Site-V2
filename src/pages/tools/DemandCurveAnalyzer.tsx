@@ -44,7 +44,7 @@ const ModelOptions: SingleOptionType[] = [
 ];
 
 export default function DemandCurveAnalyzer(): JSX.Element {
-  const [hotData, setHotData] = useState<any[][]>();
+  const [hotData, setHotData] = useState<string[][]>();
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
 
   const [kOptionsAvailable, setKOptionsAvailable] = useState<SingleOptionType[]>([
@@ -120,10 +120,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     });
 
     obj.X.forEach((x, index) => {
-      dataPointsForPlotting.push({
-        x: x,
-        y: obj.Y[index],
-      });
+      if (x > 0 && obj.Y[index] > 0) {
+        dataPointsForPlotting.push({
+          x: x,
+          y: obj.Y[index],
+        });
+      }
     });
 
     setChartOptions({
@@ -178,10 +180,10 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       ],
       yAxis: {
         title: {
-          text: 'Demand (Log Scale)',
+          text: 'Demand (Log10 Units)',
         },
-        type: 'logarithmic',
-        min: lowestDemand - 0.1,
+        //type: 'logarithmic',
+        min: 0,
       },
       xAxis: {
         title: {
@@ -227,10 +229,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
 
     obj.X.forEach((x, index) => {
-      dataPointsForPlotting.push({
-        x: x,
-        y: obj.Y[index],
-      });
+      if (x > 0 && obj.Y[index] > 0) {
+        dataPointsForPlotting.push({
+          x: x,
+          y: obj.Y[index],
+        });
+      }
     });
 
     setChartOptions({
@@ -285,9 +289,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       ],
       yAxis: {
         title: {
-          text: 'Demand (Linear Scale)',
+          text: 'Demand (Linear Units)',
         },
-        min: lowestDemand,
+        min: 0,
       },
       xAxis: {
         title: {
@@ -333,10 +337,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
 
     obj.X.forEach((x, index) => {
-      dataPointsForPlotting.push({
-        x: x,
-        y: unIHS(obj.Y[index]),
-      });
+      if (x > 0 && unIHS(obj.Y[index]) > 0) {
+        dataPointsForPlotting.push({
+          x: x,
+          y: unIHS(obj.Y[index]),
+        });
+      }
     });
 
     setChartOptions({
@@ -391,9 +397,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       ],
       yAxis: {
         title: {
-          text: 'Demand (IHS Scale)',
+          text: 'Demand (Linear Units)',
         },
-        min: lowestDemand,
+        min: 0,
       },
       xAxis: {
         title: {
@@ -418,7 +424,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     const rangeP = highestPrice - lowestPrice;
     const delta = rangeP / density;
 
-    const newPrices = Array.from({ length: density }, (v, k) => k + delta);
+    const newPrices = [0.1, ...Array.from({ length: density }, (v, k) => k + delta)];
 
     const dataForPlotting: DemandXYPoints[] = [];
     const dataPointsForPlotting: PlotXYPoints[] = [];
@@ -437,10 +443,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
     });
 
     obj.X.forEach((x, index) => {
-      dataPointsForPlotting.push({
-        x: x,
-        y: unIHS(obj.Y[index]),
-      });
+      if (x > 0 && unIHS(obj.Y[index]) > 0) {
+        dataPointsForPlotting.push({
+          x: x,
+          y: unIHS(obj.Y[index]),
+        });
+      }
     });
 
     lowestDemand = lowestDemand < lowestConsumption ? lowestDemand : lowestConsumption;
@@ -497,9 +505,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       ],
       yAxis: {
         title: {
-          text: 'Demand (IHS Scale)',
+          text: 'Demand (Linear Units)',
         },
-        min: lowestDemand,
+        min: 0,
       },
       xAxis: {
         title: {
@@ -795,6 +803,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                   onChange={(option) => {
                     if (option) {
                       setModelOption(option);
+                      setChartOptions({})
 
                       if (option.value.includes('Zero')) {
                         setKOptionsAvailable([
@@ -821,20 +830,24 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 />
               </label>
 
-              <label style={{ width: '100%' }}>
-                <span>Scaling parameter (K) Value:</span>
-                <Select
-                  options={kOptionsAvailable}
-                  onChange={(option) => {
-                    if (option) {
-                      setKOption(option);
-                    }
-                  }}
-                  value={kOption}
-                  menuPlacement="auto"
-                  menuPosition="fixed"
-                />
-              </label>
+
+              {modelOption !== ModelOptions[3] && (
+                <label style={{ width: '100%' }}>
+                  <span>Scaling parameter (K) Value:</span>
+                  <Select
+                    options={kOptionsAvailable}
+                    onChange={(option) => {
+                      if (option) {
+                        setKOption(option);
+                      }
+                    }}
+                    value={kOption}
+                    menuPlacement="auto"
+                    menuPosition="fixed"
+                  />
+                </label>
+              )}
+
 
               <MDBBtn
                 noRipple

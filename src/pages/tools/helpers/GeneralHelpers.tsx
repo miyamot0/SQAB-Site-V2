@@ -14,7 +14,9 @@
  * @returns {boolean} is a valid num or no
  */
 export function isValidNumber(num: string): boolean {
-  if (num.trim().length === 0) return false;
+  if (!num) return false;
+
+  if (num && num.trim().length === 0) return false;
 
   if (parseFloat(num.trim()) < 0) return false;
 

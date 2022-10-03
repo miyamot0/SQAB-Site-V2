@@ -10,6 +10,14 @@ var boundUpper, boundLower, hiP, loP;
 
 var setK = null;
 
+function unIHS(x) {
+  return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
+}
+
+function ihsTransform(x) {
+  return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
+}
+
 function setKValue(obj) {
   switch (obj.KFit) {
     case 'Log Range':
@@ -60,23 +68,23 @@ function beginLooper(obj) {
     case 'Zero-bounded Model (with K)':
       yValues = yValues.map(ihsTransform);
 
-      if (obj.KFit === 'Fit as Parameter') {
-        boundsU = [hiQ * 2, Math.pow(10, -1), Math.log10(hiQ)];
-        boundsL = [1, Math.pow(10, -10), 0.5];
+      //if (obj.KFit === 'Fit as Parameter') {
+      boundsU = [hiQ * 2, Math.pow(10, -1), ihsTransform(hiQ)];
+      boundsL = [1, Math.pow(10, -10), 0.25];
 
-        Optimize(costFunctionIHS3WithK);
-      } else {
-        if (obj.FitK === 'Log Range') {
-          setK = ihsTransform(hiQ) - ihsTransform(loQ) + 1;
-        } else if (obj.FitK === 'Custom') {
-          setK = parseFloat(obj.KValue);
-        }
-
-        boundsU = [hiQ * 2, Math.pow(10, -1)];
-        boundsL = [1, Math.pow(10, -10)];
-
-        Optimize(costFunctionIHS3);
-      }
+      Optimize(costFunctionIHS3WithK);
+      //} else {
+      //  if (obj.FitK === 'Log Range') {
+      //    setK = ihsTransform(hiQ) - ihsTransform(loQ) + 1;
+      //  } else if (obj.FitK === 'Custom') {
+      //    setK = parseFloat(obj.KValue);
+      //  }
+      //
+      //  boundsU = [hiQ * 2, Math.pow(10, -1)];
+      //  boundsL = [1, Math.pow(10, -10)];
+      //
+      //  Optimize(costFunctionIHS3);
+      //}
 
       break;
     case 'Zero-bounded Model (no K)':
