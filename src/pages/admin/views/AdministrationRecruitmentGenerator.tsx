@@ -39,18 +39,15 @@ export function AdministrationRecruitmentGenerator({
             functionality, select the account from the drop-down below and then present the
             &quot;create entry&quot; button to create a blank ad for them.
           </MDBCardText>
-          <label>
-            <span>Template Creator:</span>
-            <Select
-              options={userAdArray ?? []}
-              onChange={(option) => {
-                if (option) {
-                  setSelectedAdUser(option);
-                }
-              }}
-              value={selectedAdUser}
-            />
-          </label>
+
+          <label htmlFor="single-field">Template Creator:</label>
+          <Select
+            name="single-field"
+            inputId="single-field"
+            options={userAdArray ?? []}
+            onChange={(option) => setSelectedAdUser(option as SingleOptionType)}
+            value={selectedAdUser}
+          />
 
           <MDBBtn
             noRipple

@@ -37,7 +37,6 @@ export function AdministrationUserSummary({
     orderString: undefined,
   });
 
-
   return (
     <MDBRow className="d-flex justify-content-center">
       <MDBCol sm="8">

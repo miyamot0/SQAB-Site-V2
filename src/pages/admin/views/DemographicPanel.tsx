@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { MDBCol, MDBRow } from "mdb-react-ui-kit";
 import React from "react";
+import { MDBCol, MDBRow } from "mdb-react-ui-kit";
 import { DiversityFunctionResponse } from "../../../firebase/types/FunctionTypes";
 import { DemographicsBarChart } from "./DemographicsBarChart";
 import { DemographicsDataTable } from "./DemographicsDataTable";

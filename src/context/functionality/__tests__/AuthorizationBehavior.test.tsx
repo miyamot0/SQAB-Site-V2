@@ -28,8 +28,8 @@ describe('Authorization Behavior: Reducer behavior', () => {
     })
   })
 
-  it('Dispatch test: LOGIN', () => {
-    act(async () => {
+  it('Dispatch test: LOGIN', async () => {
+    await act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
@@ -135,7 +135,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
   });
 
   it('test dispatch: THROWERR', async () => {
-    act(async () => {
+    await act(async () => {
       const { result } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );

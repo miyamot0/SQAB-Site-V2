@@ -21,11 +21,7 @@ export interface DemographicsDataTableInterface {
   data: TableEntry;
 }
 
-export function DemographicsDataTable({
-  demographicData,
-}: {
-  demographicData: DemographicsDataTableInterface;
-}) {
+export function DemographicsDataTable({ demographicData }: { demographicData: DemographicsDataTableInterface; }) {
   if (!demographicData) {
     return <></>;
   }

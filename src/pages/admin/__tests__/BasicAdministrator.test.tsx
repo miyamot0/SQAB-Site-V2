@@ -20,6 +20,7 @@ import { DiversityFunctionResponse, RecruitmentFunctionResponse } from "../../..
 import { BarChartEntry, DemographicsBarChartInterface } from "../views/DemographicsBarChart";
 import { act } from "react-dom/test-utils";
 import { timestamp } from '../../../firebase/config'
+import { waitFor } from "@testing-library/react";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -135,111 +136,8 @@ describe('Basic Administrator', () => {
     const stuSpy = jest.spyOn(FBFunctions, 'getFilteredRecruitmentInformation');
     //const collSpy = jest.spyOn(FBHooks, 'useFirebaseCollectionTyped')
 
-    it('Should render, if responses received', () => {
+    it('Should render, but nothing in no perms', () => {
         act(() => {
-            const mockDocs = jest.spyOn(
-                FBHooks,
-                "useFirebaseCollectionTyped"
-            );
-            mockDocs
-                .mockImplementationOnce(() => ({
-                    documents: [{
-                        Bio: '',
-                        Contact: '',
-                        Cycle: '',
-                        Mentor: '',
-                        Position: '',
-                        Name: '',
-                        Description: 'string',
-                        Institution: 'string',
-                        Link: 'string',
-                        LabLink: 'string',
-                        Approved: false,
-                        id: 'string',
-                    }],
-                    error: undefined,
-                }))
-                .mockImplementationOnce(() => ({
-                    documents: [{
-                        name: 'string',
-                        title: 'string',
-                        email: 'string',
-                        abstract: 'string',
-                        list: 'string',
-                        time: mockDate,
-                        presenter: true,
-                        reviewed: true,
-                        id: ''
-                    }],
-                    error: undefined
-                }));
-
-            /*
-            collSpy.mockResolvedValueOnce(Promise.resolve({
-                documents: [{
-                    Bio: '',
-                    Contact: '',
-                    Cycle: '',
-                    Mentor: '',
-                    Position: '',
-                    Name: '',
-                }],
-                error: undefined
-            }))
-
-            collSpy.mockReturnValueOnce({
-                documents: [mockStudentFxResult],
-                error: undefined
-            })
-            */
-
-            const mockDiversityFx = jest.fn(() => {
-                return Promise.resolve({
-                    data: mockDiversityResponse
-                })
-            });
-            const mockStudentFx = jest.fn(() => {
-                return Promise.resolve({
-                    data: mockStudentFxResult
-                })
-            });
-
-            authSpy.mockReturnValue({
-                user: { uid: "123" } as firebase.User,
-                authIsReady: true,
-                studentRecruitFlag: false,
-                systemAdministratorFlag: true,
-                diversityReviewFlag: false,
-                submissionReviewFlag: false,
-                dispatch: dispatch
-            })
-
-            divSpy.mockImplementation(mockDiversityFx);
-            stuSpy.mockImplementation(mockStudentFx);
-
-            const wrapper = mount(<BasicAdministrator />);
-
-            //wrapper.update();
-            //wrapper.render();
-
-            expect(wrapper.find('Demographic Information').length).toBe(1)
-            expect(wrapper.find('Authorization for Recruitment').length).toBe(1)
-            expect(wrapper.find('Authorization for Posters').length).toBe(1)
-        })
-    })
-
-    /*
-
-    it('Should render, bad permissions', () => {
-        act(() => {
-            const mockDiversityFx = jest.fn(() => {
-                return Promise.resolve({ data: null as unknown as DiversityFunctionResponse })
-            });
-            const mockStudentFx = jest.fn(() => {
-                return Promise.resolve({
-                    data: mockStudentFxResult
-                })
-            });
 
             authSpy.mockReturnValue({
                 user: { uid: "123" } as firebase.User,
@@ -251,22 +149,15 @@ describe('Basic Administrator', () => {
                 dispatch: dispatch
             })
 
-            collSpy.mockReturnValue({
-                documents: [],
-                error: undefined
-            }).mockReturnValue({
-                documents: [],
-                error: undefined
-            })
+            const mockDiv = jest.fn();
+            mockDiv.mockReturnValue(Promise.resolve({ data: mockDiversityResponse }));
+            divSpy.mockImplementation(mockDiv);
 
-            divSpy.mockImplementation(mockDiversityFx);
-
-            stuSpy.mockImplementation(mockStudentFx);
+            const mockStu = jest.fn();
+            mockStu.mockReturnValue(Promise.resolve({ data: mockStudentFxResult }));
+            stuSpy.mockImplementation(mockStu);
 
             const wrapper = mount(<BasicAdministrator />);
-
-            wrapper.update();
-            wrapper.render();
 
             expect(wrapper.find('Demographic Information').length).toBe(0)
             expect(wrapper.find('Authorization for Recruitment').length).toBe(0)
@@ -274,92 +165,96 @@ describe('Basic Administrator', () => {
         })
     })
 
-    it('Should render, bad data', () => {
-        act(() => {
-            const mockDiversityFx = jest.fn(() => {
-                return Promise.resolve({ data: null as unknown as DiversityFunctionResponse })
-            });
-            const mockStudentFx = jest.fn(() => {
-                return Promise.resolve({
-                    data: null as unknown as RecruitmentFunctionResponse
-                })
-            });
+    it('Should render, specific to diversity', async () => {
+        await act(async () => {
 
             authSpy.mockReturnValue({
                 user: { uid: "123" } as firebase.User,
                 authIsReady: true,
-                studentRecruitFlag: true,
+                studentRecruitFlag: false,
                 systemAdministratorFlag: false,
                 diversityReviewFlag: true,
                 submissionReviewFlag: false,
                 dispatch: dispatch
             })
 
-            collSpy.mockReturnValue({
-                documents: [],
-                error: undefined
-            }).mockReturnValue({
-                documents: [],
-                error: undefined
-            })
+            const mockDiv = jest.fn();
+            mockDiv.mockReturnValue(Promise.resolve({ data: mockDiversityResponse }));
+            divSpy.mockImplementation(mockDiv);
 
-            divSpy.mockImplementation(mockDiversityFx);
-
-            stuSpy.mockImplementation(mockStudentFx);
+            const mockStu = jest.fn();
+            mockStu.mockReturnValue(Promise.resolve({ data: mockStudentFxResult }));
+            stuSpy.mockImplementation(mockStu);
 
             const wrapper = mount(<BasicAdministrator />);
 
-            wrapper.update();
-            wrapper.render();
-
-            expect(wrapper.find('Demographic Information').length).toBe(0)
-            expect(wrapper.find('Authorization for Recruitment').length).toBe(0)
-            expect(wrapper.find('Authorization for Posters').length).toBe(0)
+            await waitFor(() => {
+                expect(wrapper.find('h4').text().includes("Demographic Information")).toBe(true)
+                expect(wrapper.find('h4').text().includes("Authorization for Recruitment")).toBe(false)
+                expect(wrapper.find('h4').text().includes("Authorization for Posters")).toBe(false)
+            })
         })
     })
 
-    it('Should render, badly formed', () => {
-        act(() => {
-            const mockDiversityFx = jest.fn(() => {
-                return Promise.resolve({ data: { fake: '123', otherFake: '123' } as unknown as DiversityFunctionResponse })
-            });
-            const mockStudentFx = jest.fn(() => {
-                return Promise.resolve({
-                    data: { fake: '123' } as unknown as RecruitmentFunctionResponse
-                })
-            });
+    it('Should render, specific to recruitment', async () => {
+        await act(async () => {
 
             authSpy.mockReturnValue({
                 user: { uid: "123" } as firebase.User,
                 authIsReady: true,
                 studentRecruitFlag: true,
                 systemAdministratorFlag: false,
-                diversityReviewFlag: true,
+                diversityReviewFlag: false,
                 submissionReviewFlag: false,
                 dispatch: dispatch
             })
 
-            collSpy.mockReturnValue({
-                documents: [],
-                error: undefined
-            }).mockReturnValue({
-                documents: [],
-                error: undefined
-            })
+            const mockDiv = jest.fn();
+            mockDiv.mockReturnValue(Promise.resolve({ data: mockDiversityResponse }));
+            divSpy.mockImplementation(mockDiv);
 
-            divSpy.mockImplementation(mockDiversityFx);
-
-            stuSpy.mockImplementation(mockStudentFx);
+            const mockStu = jest.fn();
+            mockStu.mockReturnValue(Promise.resolve({ data: mockStudentFxResult }));
+            stuSpy.mockImplementation(mockStu);
 
             const wrapper = mount(<BasicAdministrator />);
 
-            wrapper.update();
-            wrapper.render();
-
-            expect(wrapper.find('Demographic Information').length).toBe(0)
-            expect(wrapper.find('Authorization for Recruitment').length).toBe(0)
-            expect(wrapper.find('Authorization for Posters').length).toBe(0)
+            await waitFor(() => {
+                expect(wrapper.find('h4').text().includes("Demographic Information")).toBe(false)
+                expect(wrapper.find('h4').text().includes("Authorization for Recruitment")).toBe(true)
+                expect(wrapper.find('h4').text().includes("Authorization for Posters")).toBe(false)
+            })
         })
     })
-    */
+
+    it('Should render, specific to posters', async () => {
+        await act(async () => {
+
+            authSpy.mockReturnValue({
+                user: { uid: "123" } as firebase.User,
+                authIsReady: true,
+                studentRecruitFlag: false,
+                systemAdministratorFlag: false,
+                diversityReviewFlag: false,
+                submissionReviewFlag: true,
+                dispatch: dispatch
+            })
+
+            const mockDiv = jest.fn();
+            mockDiv.mockReturnValue(Promise.resolve({ data: mockDiversityResponse }));
+            divSpy.mockImplementation(mockDiv);
+
+            const mockStu = jest.fn();
+            mockStu.mockReturnValue(Promise.resolve({ data: mockStudentFxResult }));
+            stuSpy.mockImplementation(mockStu);
+
+            const wrapper = mount(<BasicAdministrator />);
+
+            await waitFor(() => {
+                expect(wrapper.find('h4').text().includes("Demographic Information")).toBe(false)
+                expect(wrapper.find('h4').text().includes("Authorization for Recruitment")).toBe(false)
+                expect(wrapper.find('h4').text().includes("Authorization for Posters")).toBe(true)
+            })
+        })
+    })
 })

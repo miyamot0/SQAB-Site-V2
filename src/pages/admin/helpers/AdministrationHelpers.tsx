@@ -6,12 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { useFirebaseFunction } from '../../../firebase/hooks/useFirebaseFunction';
+import { createBlankTemplateRecruitment, updateStatusForPoster, updateStatusForRecruitment } from '../../../firebase/hooks/useFirebaseFunction';
 import { PosterSubmission, RecruitmentAd } from '../../../firebase/types/RecordTypes';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
-
-const { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatusForPoster } =
-  useFirebaseFunction();
 
 /** createBlankAdTemplate
  *
@@ -21,12 +18,12 @@ const { updateStatusForRecruitment, createBlankTemplateRecruitment, updateStatus
 export async function createBlankAdTemplate(selectedAdUser: SingleOptionType) {
   if (selectedAdUser.value.trim().length < 1) {
     alert('Select a user to add a recruitment template');
-  }
-
-  try {
-    await createBlankTemplateRecruitment({ recruiterId: selectedAdUser.value });
-  } catch (err) {
-    alert(err);
+  } else {
+    try {
+      await createBlankTemplateRecruitment({ recruiterId: selectedAdUser.value });
+    } catch (err) {
+      alert(err);
+    }
   }
 }
 

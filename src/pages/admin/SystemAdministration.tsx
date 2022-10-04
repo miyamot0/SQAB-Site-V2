@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { } from 'react';
+import React from 'react';
 import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
 import {
   IndividualUserRecordSaved, PosterSubmission,
@@ -14,7 +14,7 @@ import {
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AdministrationUserSummary } from './views/AdministrationUserSummary';
 import { PosterDashboardLayout } from './layouts/PosterDashboardLayout';
-import { AdminUserDashboardLayout } from './layouts/AdminUserDashboardLayout';
+import { UserDashboardLayout } from './layouts/UserDashboardLayout';
 import { AdminEmailDashboardLayout } from './layouts/AdminEmailDashboardLayout';
 import { DiversityDashboardLayout } from './layouts/DiversityDashboardLayout';
 import { RecruitmentDashboardLayout } from './layouts/RecruitmentDashboardLayout';
@@ -56,7 +56,7 @@ export default function SystemAdministration(): JSX.Element {
       {/**
        * Purely sysadmin content
        */}
-      <AdminUserDashboardLayout
+      <UserDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         userDocuments={userDocuments}
       />

@@ -32,6 +32,10 @@
       "json-summary",
       "lcov"
     ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!<rootDir>/node_modules/"
+    ],
     "coveragePathIgnorePatterns": [
       "index.tsx"
     ]

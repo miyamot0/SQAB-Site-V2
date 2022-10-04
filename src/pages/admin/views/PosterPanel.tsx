@@ -47,9 +47,9 @@ export function PosterPanel() {
                 .sort((a, b) => {
                     if (!a.name || a.name.trim().length === 0) {
                         return 1;
+                    } else {
+                        return a.name.localeCompare(b.name);
                     }
-
-                    return a.name.localeCompare(b.name);
                 })
                 .map((posterItem) => {
                     const ret = {
