@@ -202,9 +202,9 @@ export default function Records(): JSX.Element {
             <MDBCardBody>
               <MDBCardTitle>Previous Newsletters</MDBCardTitle>
               <ul className="records-ul">
-                {Newsletters.map((news) => {
+                {Newsletters.map((news, index) => {
                   return (
-                    <li key={`news-${news.Year}`}>
+                    <li key={`news-${news.Year}-${index}`}>
                       <a href={`${news.Path}`} target="_blank" rel="noreferrer">
                         <span>{`${news.Year} SQAB Newsletter`}</span>
                       </a>

@@ -6,73 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { useEffect, useState } from 'react';
-import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
-import { SingleOptionType } from '../tools/types/GeneralTypes';
-import { PosterSubmission, RecruitmentAd } from '../../firebase/types/RecordTypes';
+import React from 'react';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
-import { AdminPosterDashboardLayout } from './layouts/AdminPosterDashboardLayout';
-import { useFirebaseFunction } from '../../firebase/hooks/useFirebaseFunction';
-import {
-  DiversityFunctionResponse,
-  RecruitmentFunctionResponse,
-} from '../../firebase/types/FunctionTypes';
+import { PosterDashboardLayout } from './layouts/PosterDashboardLayout';
 import { DiversityDashboardLayout } from './layouts/DiversityDashboardLayout';
 import { RecruitmentDashboardLayout } from './layouts/RecruitmentDashboardLayout';
 
-const { getAggregatedDiversityInformation, getFilteredRecruitmentInformation } =
-  useFirebaseFunction();
-
 export default function BasicAdministrator(): JSX.Element {
-  const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
-    collectionString: 'recruitment',
-    queryString: undefined,
-    orderString: undefined,
-  });
-  const { documents: submissionDocuments } = useFirebaseCollectionTyped<PosterSubmission>({
-    collectionString: 'submissions',
-    queryString: undefined,
-    orderString: undefined,
-  });
 
-  const [currentDemographics, setCurrentDemographics] = useState<DiversityFunctionResponse>();
-  const [currentUsersLacking, setCurrentUsersLacking] = useState<RecruitmentFunctionResponse>();
-
-  const [userAdArray, setUserAdArray] = useState<SingleOptionType[]>([]);
-  const [selectedAdUser, setSelectedAdUser] = useState<SingleOptionType>({
-    label: '',
-    value: '',
-  });
-
-  const { systemAdministratorFlag, diversityReviewFlag, studentRecruitFlag, submissionReviewFlag } =
-    useAuthorizationContext();
-
-  useEffect(() => {
-    if (diversityReviewFlag || systemAdministratorFlag) {
-      getAggregatedDiversityInformation().then((value) => {
-        if (value && value.data) {
-          const cast = value.data as DiversityFunctionResponse;
-
-          if (cast) {
-            setCurrentDemographics(cast);
-          }
-        }
-      });
-    }
-
-    if (studentRecruitFlag || systemAdministratorFlag) {
-      getFilteredRecruitmentInformation().then((value) => {
-        if (value && value.data) {
-          const cast = value.data as RecruitmentFunctionResponse;
-
-          if (cast && cast.arrayUsersNeedAds) {
-            setCurrentUsersLacking(cast);
-            setUserAdArray(cast.arrayUsersNeedAds);
-          }
-        }
-      });
-    }
-  }, [recruitmentDocuments, submissionDocuments]);
+  const { systemAdministratorFlag,
+    diversityReviewFlag,
+    studentRecruitFlag,
+    submissionReviewFlag } = useAuthorizationContext();
 
   return (
     <>
@@ -82,7 +27,6 @@ export default function BasicAdministrator(): JSX.Element {
       <DiversityDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         diversityReviewFlag={diversityReviewFlag}
-        currentDemographics={currentDemographics}
       />
 
       {/**
@@ -91,19 +35,14 @@ export default function BasicAdministrator(): JSX.Element {
       <RecruitmentDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         recruitmentReviewFlag={studentRecruitFlag}
-        recruitmentDocuments={recruitmentDocuments}
-        selectedAdUser={selectedAdUser}
-        userAdArray={userAdArray}
-        setSelectedAdUser={setSelectedAdUser}
       />
 
       {/**
        * Poster-focus information, for sys and admins with that priv
        */}
-      <AdminPosterDashboardLayout
+      <PosterDashboardLayout
         sysAdminFlag={systemAdministratorFlag}
         submissionReviewFlag={submissionReviewFlag}
-        submissionDocuments={submissionDocuments}
       />
     </>
   );

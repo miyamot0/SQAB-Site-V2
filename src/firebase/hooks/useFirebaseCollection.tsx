@@ -24,7 +24,7 @@ import {
  * @param {string} collectionString collection address
  * @param {string[]} queryString string array for query
  * @param {string[]} orderString string array for order
- * @returns {useFirebaseCollectionTyped}
+ * @returns {}
  */
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export function useFirebaseCollectionTyped<T>({

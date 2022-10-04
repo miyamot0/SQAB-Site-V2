@@ -7,27 +7,29 @@
  */
 
 import firebase from 'firebase';
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react-hooks/dom';
 import { useReducer } from 'react';
 import {
   authorizationReducer,
   AuthorizationStates,
   InitialAuthorizationState,
 } from '../AuthorizationBehavior';
-import { waitFor } from '@testing-library/react';
 
 describe('Authorization Behavior: Reducer behavior', () => {
-  it('Should have persisting state', () => {
-    const { result } = renderHook(() =>
-      useReducer(authorizationReducer, InitialAuthorizationState),
-    );
-    const [state] = result.current;
+  it('Should load with base state', () => {
+    act(() => {
+      const { result } = renderHook(() =>
+        useReducer(authorizationReducer, InitialAuthorizationState),
+      );
 
-    expect(InitialAuthorizationState).toBe(state);
-  });
+      const [state] = result.current;
 
-  it('test dispatch: LOGIN', async () => {
-    await act(async () => {
+      expect(InitialAuthorizationState).toBe(state);
+    })
+  })
+
+  it('Dispatch test: LOGIN', () => {
+    act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
@@ -39,9 +41,10 @@ describe('Authorization Behavior: Reducer behavior', () => {
       dispatch({
         type: AuthorizationStates.LOGIN,
         payloadUser: newAuth,
-        payloadFlagAdmin: false,
+        payloadStudentRecruitmentFlag: false,
         payloadFlagSysAdmin: false,
-        payloadFlagRecruiter: false,
+        payloadDiversityReviewFlag: false,
+        payloadFlagSubmissionReview: false
       });
 
       await waitForValueToChange(() => result.current[0].user);
@@ -52,8 +55,11 @@ describe('Authorization Behavior: Reducer behavior', () => {
 
   it('test dispatch: LOGOUT', async () => {
     await act(async () => {
-      const { result } = renderHook(() =>
-        useReducer(authorizationReducer, InitialAuthorizationState),
+      const { result, waitForValueToChange } = renderHook(() =>
+        useReducer(authorizationReducer, {
+          ...InitialAuthorizationState,
+          user: { uid: "123" } as firebase.User
+        }),
       );
 
       const [, dispatch] = result.current;
@@ -61,20 +67,21 @@ describe('Authorization Behavior: Reducer behavior', () => {
       dispatch({
         type: AuthorizationStates.LOGOUT,
         payloadUser: null,
-        payloadFlagAdmin: false,
+        payloadStudentRecruitmentFlag: false,
         payloadFlagSysAdmin: false,
-        payloadFlagRecruiter: false,
+        payloadDiversityReviewFlag: false,
+        payloadFlagSubmissionReview: false
       });
 
-      await waitFor(() => {
-        expect(result.current[0].user).toBe(null);
-      });
+      await waitForValueToChange(() => result.current[0].user);
+
+      expect(result.current[0].user).toBe(null);
     });
   });
 
   it('test dispatch: READY', async () => {
     await act(async () => {
-      const { result } = renderHook(() =>
+      const { result, waitForValueToChange } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
 
@@ -85,21 +92,22 @@ describe('Authorization Behavior: Reducer behavior', () => {
       dispatch({
         type: AuthorizationStates.READY,
         payloadUser: newAuth,
-        payloadFlagAdmin: true,
-        payloadFlagSysAdmin: false,
-        payloadFlagRecruiter: false,
+        payloadFlagSysAdmin: true,
+        payloadStudentRecruitmentFlag: false,
+        payloadDiversityReviewFlag: false,
+        payloadFlagSubmissionReview: false
       });
 
-      await waitFor(() => {
-        expect(result.current[0].user).toBe(newAuth);
-        expect(result.current[0].adminFlag).toBe(true);
-      });
+      await waitForValueToChange(() => result.current[0].user);
+
+      expect(result.current[0].user).toBe(newAuth);
+      expect(result.current[0].systemAdministratorFlag).toBe(true);
     });
   });
 
   it('test dispatch: CLAIMS', async () => {
     await act(async () => {
-      const { result } = renderHook(() =>
+      const { result, waitForValueToChange } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
 
@@ -110,20 +118,24 @@ describe('Authorization Behavior: Reducer behavior', () => {
       dispatch({
         type: AuthorizationStates.CLAIMS,
         payloadUser: newAuth,
-        payloadFlagAdmin: true,
-        payloadFlagSysAdmin: false,
-        payloadFlagRecruiter: false,
+        payloadFlagSysAdmin: true,
+        payloadStudentRecruitmentFlag: true,
+        payloadDiversityReviewFlag: true,
+        payloadFlagSubmissionReview: true
       });
 
-      await waitFor(() => {
-        expect(result.current[0].user).toBe(newAuth);
-        expect(result.current[0].adminFlag).toBe(true);
-      });
+      await waitForValueToChange(() => result.current[0].user);
+
+      expect(result.current[0].user).toBe(newAuth);
+      expect(result.current[0].systemAdministratorFlag).toBe(true);
+      expect(result.current[0].studentRecruitFlag).toBe(true);
+      expect(result.current[0].diversityReviewFlag).toBe(true);
+      expect(result.current[0].submissionReviewFlag).toBe(true);
     });
   });
 
   it('test dispatch: THROWERR', async () => {
-    await act(async () => {
+    act(async () => {
       const { result } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
@@ -135,15 +147,13 @@ describe('Authorization Behavior: Reducer behavior', () => {
       dispatch({
         type: AuthorizationStates.THROWERR,
         payloadUser: newAuth,
-        payloadFlagAdmin: false,
         payloadFlagSysAdmin: false,
-        payloadFlagRecruiter: false,
+        payloadStudentRecruitmentFlag: false,
+        payloadDiversityReviewFlag: false,
+        payloadFlagSubmissionReview: false
       });
 
-      await waitFor(() => {
-        expect(result.current[0].user).toBe(null);
-        expect(result.current[0].adminFlag).toBe(false);
-      });
+      expect(result.current[0].user).toBe(null);
     });
   });
 });

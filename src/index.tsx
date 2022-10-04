@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
@@ -19,13 +19,9 @@ import { AuthorizationContextProvider } from './context/AuthorizationContext';
 
 import './index.css';
 
-const rootElement = document.getElementById('root');
-
-if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <AuthorizationContextProvider>
-      <App />
-    </AuthorizationContextProvider>,
-  );
-}
+ReactDOM.render(
+  <AuthorizationContextProvider>
+    <App />
+  </AuthorizationContextProvider>,
+  document.getElementById('root')
+);

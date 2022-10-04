@@ -7,22 +7,22 @@
  */
 
 import React from 'react';
-import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import { EmailPanel } from '../views/EmailPanel';
+import {
+  MDBCol,
+  MDBRow,
+} from 'mdb-react-ui-kit';
+import { PosterPanel } from '../views/PosterPanel';
 
-export interface AdminEmailDashboardLayout {
+export interface PosterDashboardLayout {
   sysAdminFlag: boolean;
+  submissionReviewFlag: boolean;
 }
 
-/** AdministrationUserSummary
- *
- * @param param0
- * @returns
- */
-export function AdminEmailDashboardLayout({
+export function PosterDashboardLayout({
   sysAdminFlag,
-}: AdminEmailDashboardLayout) {
-  if (sysAdminFlag === false) {
+  submissionReviewFlag,
+}: PosterDashboardLayout) {
+  if (sysAdminFlag === false && submissionReviewFlag === false) {
     return <></>;
   }
 
@@ -37,12 +37,12 @@ export function AdminEmailDashboardLayout({
               marginBottom: '2rem',
             }}
           >
-            Email and Correspondence
+            Authorization for Posters
           </h4>
         </MDBCol>
       </MDBRow>
 
-      <EmailPanel />
+      <PosterPanel />
     </>
   );
 }

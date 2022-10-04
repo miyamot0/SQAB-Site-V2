@@ -12,22 +12,23 @@
 
 import { projectFunctions } from '../config';
 
+export const updateStatusForRecruitment = projectFunctions.httpsCallable('updateStatusForRecruitment');
+
+export const updateStatusForPoster = projectFunctions.httpsCallable('updateStatusForPoster');
+
+export const createBlankTemplateRecruitment = projectFunctions.httpsCallable(
+  'createBlankTemplateRecruitment',
+);
+
+export const getAggregatedDiversityInformation = projectFunctions.httpsCallable(
+  'getAggregatedDiversityInformation',
+);
+
+export const getFilteredRecruitmentInformation = projectFunctions.httpsCallable(
+  'getFilteredRecruitmentInformation',
+);
+
 export function useFirebaseFunction() {
-  const updateStatusForRecruitment = projectFunctions.httpsCallable('updateStatusForRecruitment');
-
-  const updateStatusForPoster = projectFunctions.httpsCallable('updateStatusForPoster');
-
-  const createBlankTemplateRecruitment = projectFunctions.httpsCallable(
-    'createBlankTemplateRecruitment',
-  );
-
-  const getAggregatedDiversityInformation = projectFunctions.httpsCallable(
-    'getAggregatedDiversityInformation',
-  );
-
-  const getFilteredRecruitmentInformation = projectFunctions.httpsCallable(
-    'getFilteredRecruitmentInformation',
-  );
 
   // get id/name/email/recruitment status
 

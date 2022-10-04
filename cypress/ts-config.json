@@ -1,9 +1,26 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "target": "es5",
+    "lib": [
+      "es5",
+      "dom"
+    ],
     "noEmit": false,
-    "types": ["cypress"],
+    "types": [
+      "cypress",
+      "@testing-library/cypress"
+    ],
     "baseUrl": "/"
   },
-  "include": ["../node_modules/cypress", "./**/*.tsx", "../cypress.config.ts", "e2e/*.tsx"],
-  "exclude": []
+  "include": [
+    "../node_modules/cypress",
+    "./**/*.tsx",
+    "../cypress.config.ts",
+    "e2e/*.tsx"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

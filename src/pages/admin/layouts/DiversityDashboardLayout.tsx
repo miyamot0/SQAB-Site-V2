@@ -6,30 +6,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
-import { IndividualUserRecordSaved } from '../../../firebase/types/RecordTypes';
-import { ColumnType } from '../types/TableTypes';
-import { DemographicsBarChart, DemographicsBarChartInterface } from '../views/DemographicsBarChart';
-import { DemographicsDataTable } from '../views/DemographicsDataTable';
-import {
-  AgeOptions,
-  EducationOptions,
-  GenderOptions,
-  SexualityOptions,
-} from '../../user/helpers/DemographicOptions';
 import { DiversityFunctionResponse } from '../../../firebase/types/FunctionTypes';
+import { getAggregatedDiversityInformation } from '../../../firebase/hooks/useFirebaseFunction';
+import { DemographicPanel } from '../views/DemographicPanel';
 
-export interface DiversityDashboardLayoutInterface {
+export interface DiversityDashboardLayout {
   sysAdminFlag: boolean;
   diversityReviewFlag: boolean;
-  currentDemographics: DiversityFunctionResponse | null | undefined;
 }
-
-export type ChartDataFormat = {
-  name: string;
-  y: number;
-};
 
 /** AdministrationUserSummary
  *
@@ -39,11 +25,29 @@ export type ChartDataFormat = {
 export function DiversityDashboardLayout({
   sysAdminFlag,
   diversityReviewFlag,
-  currentDemographics,
-}: DiversityDashboardLayoutInterface) {
-  if (!currentDemographics || (sysAdminFlag === false && diversityReviewFlag === false)) {
+}: DiversityDashboardLayout) {
+
+  const [currentDemographics, setCurrentDemographics] = useState<DiversityFunctionResponse | null | undefined>(null);
+
+  if (sysAdminFlag === false && diversityReviewFlag === false) {
     return <></>;
   }
+
+  useEffect(() => {
+    getAggregatedDiversityInformation().then((value) => {
+      if (value && value.data) {
+        const cast = value.data as DiversityFunctionResponse;
+
+        if (cast && cast.genderData) {
+          setCurrentDemographics(cast);
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -61,47 +65,7 @@ export function DiversityDashboardLayout({
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="4">
-          <DemographicsBarChart demographicData={currentDemographics.genderData} />
-        </MDBCol>
-
-        <MDBCol sm="4">
-          <DemographicsBarChart demographicData={currentDemographics.eduData} />
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="4">
-          <DemographicsBarChart demographicData={currentDemographics.ageData} />
-        </MDBCol>
-
-        <MDBCol sm="4">
-          <DemographicsBarChart demographicData={currentDemographics.sexData} />
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
-        </MDBCol>
-      </MDBRow>
-
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="4">
-          <DemographicsDataTable demographicData={currentDemographics.dataTableNationality} />
-        </MDBCol>
-
-        <MDBCol sm="4">
-          <DemographicsDataTable demographicData={currentDemographics.dataTableRaceEthnicity} />
-        </MDBCol>
-      </MDBRow>
+      <DemographicPanel currentDemographics={currentDemographics} />
     </>
   );
 }

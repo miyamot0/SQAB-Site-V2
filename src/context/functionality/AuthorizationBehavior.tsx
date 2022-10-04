@@ -17,6 +17,9 @@ export const InitialAuthorizationState = {
   studentRecruitFlag: false,
   adFlag: false,
   sysAdminFlag: false,
+  systemAdministratorFlag: false,
+  diversityReviewFlag: false,
+  submissionReviewFlag: false,
 };
 
 export enum AuthorizationStates {
@@ -48,6 +51,7 @@ export function authorizationReducer(
         studentRecruitFlag: action.payloadStudentRecruitmentFlag,
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
+
       };
     case AuthorizationStates.LOGOUT:
       return {
@@ -65,7 +69,7 @@ export function authorizationReducer(
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
         submissionReviewFlag: action.payloadFlagSubmissionReview,
-      };
+      } as AuthorizationContextStateInterface;
     case AuthorizationStates.CLAIMS:
       return {
         user: action.payloadUser,
@@ -74,7 +78,7 @@ export function authorizationReducer(
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
         submissionReviewFlag: action.payloadFlagSubmissionReview,
-      };
+      } as AuthorizationContextStateInterface;
     default:
       return state;
   }

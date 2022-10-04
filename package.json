@@ -13,8 +13,8 @@
     "iframe-resizer-react": "^1.1.0",
     "mdb-react-ui-kit": "^4.2.0",
     "mdbreact": "^5.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
     "react-modal": "^3.15.1",
     "react-phone-number-input": "^3.2.11",
     "react-router-dom": "5.1",
@@ -22,21 +22,40 @@
     "react-select": "^5.3.2",
     "smallnstats-shared-component-library": "^0.1.6"
   },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|pdf)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    },
+    "coverageReporters": [
+      "json-summary",
+      "lcov"
+    ],
+    "coveragePathIgnorePatterns": [
+      "index.tsx"
+    ]
+  },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "eslint --ext .js,.ts .",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cypress run",
+    "test": "jest",
     "test:runner": "cypress open",
     "test-coverage": "npm run test -- --coverage --watchAll --coverageDirectory='coverage'",
     "test-summarize": "npm run test -- --coverage --watchAll --coverageDirectory='coverage' --coverageReporters='json-summary'",
     "make-badges": "istanbul-badges-readme",
     "eject": "react-scripts eject"
   },
+  "peerDependencies": {
+    "react": "<17.0.0",
+    "react-dom": "<17.0.0"
+  },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "react-app/jest"
     ]
   },
   "browserslist": {
@@ -59,11 +78,14 @@
     "@cypress/instrument-cra": "^1.4.0",
     "@cypress/react": "^6.2.0",
     "@cypress/webpack-dev-server": "^2.3.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^12.8.3",
     "@types/cypress": "^1.1.3",
     "@types/enzyme": "^3.10.12",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/node": "^18.7.13",
+    "@types/jest": "^28.1.8",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-modal": "^3.13.1",
@@ -74,18 +96,20 @@
     "@typescript-eslint/parser": "^5.36.2",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^29.0.3",
-    "cypress": "^10.9.0",
+    "cypress": "10.8.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^8.23.0",
     "eslint-plugin-react": "^7.31.7",
     "firestore-jest-mock": "^0.19.0",
     "html-webpack-plugin": "4.5.x",
+    "identity-obj-proxy": "^3.0.0",
     "istanbul-badges-readme": "^1.8.0",
     "postcss-import": "^14.1.0",
     "react-select-event": "^5.5.1",
+    "react-test-renderer": "16.13.0",
     "source-map-explorer": "^2.5.2",
     "source-map-loader": "^4.0.0",
-    "typescript": "4.7.4"
+    "typescript": "^4.7.4"
   }
 }
