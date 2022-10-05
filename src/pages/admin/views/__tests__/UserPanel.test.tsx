@@ -13,12 +13,28 @@ import ReactModal from 'react-modal';
 import { IndividualUserRecordSaved } from '../../../../firebase/types/RecordTypes';
 import { MDBDataTable } from 'mdbreact';
 import { UserPanel } from '../UserPanel';
+import { projectFunctions } from '../../../../firebase/config';
+
+const jestTotalFunctions = jest.fn().mockResolvedValue(true);
+const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
+spyTotalFunctions.mockImplementation(jestTotalFunctions);
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
 describe('UserPanel', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   it('Should render with data', () => {
     const documents = [
       {

@@ -6,40 +6,49 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react"
+import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import ReactModal from "react-modal";
-import { DemographicsDataTable, DemographicsDataTableInterface } from "../DemographicsDataTable";
-import { MDBCard } from "mdb-react-ui-kit";
-import { ColumnType } from "../../types/TableTypes";
+import ReactModal from 'react-modal';
+import { DemographicsDataTable, DemographicsDataTableInterface } from '../DemographicsDataTable';
+import { MDBCard } from 'mdb-react-ui-kit';
+import { ColumnType } from '../../types/TableTypes';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
 describe('DemographicsDataTable', () => {
-    it('Should render', () => {
-        const demographicData = {
-            name: '',
-            data: {
-                columns: [{}] as ColumnType[],
-                rows: [{}]
-            }
-        } as DemographicsDataTableInterface;
+  const jsdomAlert = window.alert;
 
-        const wrapper = mount(<DemographicsDataTable demographicData={demographicData} />)
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
 
-        expect(wrapper.find(MDBCard).length).toBe(1)
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
 
-    })
+  it('Should render', () => {
+    const demographicData = {
+      name: '',
+      data: {
+        columns: [{}] as ColumnType[],
+        rows: [{}],
+      },
+    } as DemographicsDataTableInterface;
 
-    it('Should not render', () => {
-        const demographicData = null as unknown as DemographicsDataTableInterface;
+    const wrapper = mount(<DemographicsDataTable demographicData={demographicData} />);
 
-        const wrapper = mount(<DemographicsDataTable demographicData={demographicData} />)
+    expect(wrapper.find(MDBCard).length).toBe(1);
+  });
 
-        expect(wrapper.find(MDBCard).length).toBe(0)
+  it('Should not render', () => {
+    const demographicData = null as unknown as DemographicsDataTableInterface;
 
-    })
+    const wrapper = mount(<DemographicsDataTable demographicData={demographicData} />);
+
+    expect(wrapper.find(MDBCard).length).toBe(0);
+  });
 });

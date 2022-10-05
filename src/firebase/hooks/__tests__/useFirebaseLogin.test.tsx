@@ -7,11 +7,10 @@
  */
 
 import firebase from 'firebase';
-import { renderHook } from '@testing-library/react-hooks';
 import { useFirebaseLogin } from '../useFirebaseLogin';
 import { projectAuth } from './../../../firebase/config';
 import { ProviderTypes } from '../../types/AccountTypes';
-import { act } from 'react-dom/test-utils';
+import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
 
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
   return {

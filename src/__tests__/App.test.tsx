@@ -88,6 +88,17 @@ jest.mock('../firebase/hooks/useFirebaseLogout', () => {
 });
 
 describe('Routing tests', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   it('Stubbed', () => {
     expect(1).toBe(1);
   });
@@ -410,6 +421,17 @@ it('Should display conditionally selectively: Has Sign in', async () => {
 });
 
 describe('App', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   it('Should build', () => {
     const wrapper = shallow(<App />);
   });

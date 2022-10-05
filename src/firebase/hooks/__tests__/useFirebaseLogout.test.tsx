@@ -7,10 +7,9 @@
  */
 
 import firebase from 'firebase';
-import { renderHook } from '@testing-library/react-hooks';
-import { act } from 'react-dom/test-utils';
 import { useFirebaseLogout } from '../useFirebaseLogout';
 import { projectAuth } from './../../../firebase/config';
+import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
 
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
   return {
@@ -36,8 +35,8 @@ describe('logout', () => {
     await act(async () => {
       const mockSignOut = jest.fn();
       const docMock = jest.spyOn(projectAuth, 'signOut');
-      docMock.mockImplementation(mockSignOut);
       mockSignOut.mockImplementation(() => Promise.resolve(() => true));
+      docMock.mockImplementation(mockSignOut);
 
       const { result, waitFor } = renderHook(() => useFirebaseLogout());
 

@@ -27,23 +27,7 @@ const mockCallback = jest.fn();
 describe('Footer', () => {
   it('Check render', async () => {
     await act(async () => {
-      const wrapper = mount(
-        <AuthorizationContext.Provider
-          value={{
-            user: { uid: '1234', email: 'asdf@asdf.com' } as firebase.User,
-            authIsReady: false,
-            studentRecruitFlag: false,
-            diversityReviewFlag: false,
-            systemAdministratorFlag: false,
-            submissionReviewFlag: false,
-            dispatch: undefined,
-          }}
-        >
-          <MemoryRouter>
-            <Footer />
-          </MemoryRouter>
-        </AuthorizationContext.Provider>,
-      );
+      const wrapper = mount(<Footer />);
 
       await waitFor(() => {
         expect(wrapper.find(Footer).length).toBe(1);
@@ -51,6 +35,7 @@ describe('Footer', () => {
     });
   });
 
+  /*
   it('Check render and open modal button', async () => {
     await act(async () => {
       const wrapper = mount(
@@ -72,4 +57,5 @@ describe('Footer', () => {
       );
     });
   });
+  */
 });

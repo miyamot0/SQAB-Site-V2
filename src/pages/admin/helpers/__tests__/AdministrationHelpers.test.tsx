@@ -18,63 +18,86 @@ import {
 } from '../AdministrationHelpers';
 import { PosterSubmission, RecruitmentAd } from '../../../../firebase/types/RecordTypes';
 import * as FBFunctions from '../../../../firebase/hooks/useFirebaseFunction';
+import { projectFunctions } from '../../../../firebase/config';
+
+const spyAdTemplate = jest.spyOn(FBFunctions, 'createBlankTemplateRecruitment');
+const spyRecruitStatus = jest.spyOn(FBFunctions, 'updateStatusForRecruitment');
+const spyPosterStatus = jest.spyOn(FBFunctions, 'updateStatusForPoster');
+
+const jestTotalFunctions = jest.fn();
+const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
+spyTotalFunctions.mockImplementation(jestTotalFunctions);
 
 describe('createBlankAdTemplate', () => {
-  it('Should error out, bad option', () => {
-    const mockAlert = jest.fn();
-    jest.spyOn(window, 'alert').mockImplementation(mockAlert);
+  const spyWindow = jest.fn().mockImplementation(() => {});
 
-    const selectedAdUser = { label: '', value: '' } as SingleOptionType;
-    createBlankAdTemplate(selectedAdUser);
-    expect(mockAlert).toBeCalled();
+  beforeAll(() => {
+    window.alert = spyWindow;
   });
 
   it('Should not throw when passing', () => {
-    const spyRecruitment = jest.spyOn(FBFunctions, 'createBlankTemplateRecruitment');
-    const mockBuildTemplate = jest.fn();
-    mockBuildTemplate.mockReturnValue(() => Promise.resolve());
-    spyRecruitment.mockImplementation(mockBuildTemplate);
+    jestTotalFunctions.mockResolvedValue(true);
 
     const selectedAdUser = { label: 'real label', value: 'real value' } as SingleOptionType;
 
     expect(() => createBlankAdTemplate(selectedAdUser)).not.toThrow();
   });
 
-  it('Should throw when erroring', () => {
-    const mockAlert = jest.fn();
-    jest.spyOn(window, 'alert').mockImplementation(mockAlert);
+  it('Should error out, bad option', () => {
+    jestTotalFunctions.mockRejectedValue(new Error('blah'));
 
-    const spyRecruitment = jest.spyOn(FBFunctions, 'createBlankTemplateRecruitment');
-    spyRecruitment.mockImplementation(({ recruiterId: string }) => {
-      throw new Error();
-    });
-
-    const selectedAdUser = { label: 'real label', value: 'real value' } as SingleOptionType;
-
+    const selectedAdUser = { label: '', value: '' } as SingleOptionType;
     createBlankAdTemplate(selectedAdUser);
+    expect(spyWindow).toBeCalled();
   });
 });
 
 describe('toggleRecruitmentStatus', () => {
+  const spyWindow = jest.fn().mockImplementation(() => {});
+
+  beforeAll(() => {
+    window.alert = spyWindow;
+  });
+
+  it('Should not throw when passing', () => {
+    jestTotalFunctions.mockResolvedValue(true);
+
+    const recr = { id: '123', Approved: true } as RecruitmentAd;
+
+    expect(() => toggleRecruitmentStatus(recr)).not.toThrow();
+  });
+
   it('Should error out, bad option', () => {
-    const spyRecruitment = jest.spyOn(FBFunctions, 'updateStatusForRecruitment');
-    spyRecruitment.mockRejectedValue(() => Promise.resolve());
+    spyRecruitStatus.mockRejectedValue(() => Promise.resolve());
 
     const recr = { id: '123', Approved: true } as RecruitmentAd;
 
     toggleRecruitmentStatus(recr);
-    expect(spyRecruitment).toBeCalled();
+    expect(spyRecruitStatus).toBeCalled();
   });
 });
 
 describe('togglePosterStatus', () => {
+  const spyWindow = jest.fn().mockImplementation(() => {});
+
+  beforeAll(() => {
+    window.alert = spyWindow;
+  });
+
+  it('Should not throw when passing', () => {
+    jestTotalFunctions.mockResolvedValue(true);
+
+    const recr = { id: '123', reviewed: true } as PosterSubmission;
+
+    expect(() => togglePosterStatus(recr)).not.toThrow();
+  });
+
   it('Should error out, bad option', () => {
-    const spyRecruitment = jest.spyOn(FBFunctions, 'updateStatusForPoster');
-    spyRecruitment.mockRejectedValue(() => Promise.resolve());
+    spyPosterStatus.mockRejectedValue(() => Promise.resolve());
 
     const recr = { id: '123', reviewed: true } as PosterSubmission;
 
     togglePosterStatus(recr);
-    expect(spyRecruitment).toBeCalled();
+    expect(spyPosterStatus).toBeCalled();
   });
 });

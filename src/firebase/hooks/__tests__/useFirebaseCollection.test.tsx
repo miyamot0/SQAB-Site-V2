@@ -9,7 +9,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useFirebaseCollectionTyped } from '../useFirebaseCollection';
 import { mockFirebase } from 'firestore-jest-mock';
-
 import { mockWhere, mockOrderBy } from 'firestore-jest-mock/mocks/firestore';
 
 describe('useFirebaseCollectionTyped', () => {

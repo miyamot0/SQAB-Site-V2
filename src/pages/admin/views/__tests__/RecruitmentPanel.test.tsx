@@ -16,12 +16,28 @@ import { RecruitmentPanel } from '../RecruitmentPanel';
 import * as FBHooks from '../../../../firebase/hooks/useFirebaseCollection';
 import * as ViewHelpers from '../../helpers/AdministrationHelpers';
 import { RecruitmentFunctionResponse } from '../../../../firebase/types/FunctionTypes';
+import { projectFunctions } from '../../../../firebase/config';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
+const jestTotalFunctions = jest.fn().mockResolvedValue(true);
+const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
+spyTotalFunctions.mockImplementation(jestTotalFunctions);
+
 describe('RecruitmentPanel', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   const collSpy = jest.spyOn(FBHooks, 'useFirebaseCollectionTyped');
 
   it('Should render with data', () => {

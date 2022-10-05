@@ -7,9 +7,8 @@
  */
 
 import { waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
 import { useReducer } from 'react';
-import { act } from 'react-dom/test-utils';
+import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
 import { FirestoreAction } from '../../interfaces/FirebaseInterfaces';
 import { PosterSubmission } from '../../types/RecordTypes';
 import { firestoreReducer, FirestoreStates, useFirestore } from '../useFirestore';
@@ -47,10 +46,13 @@ describe('useFirestore', () => {
     });
   });
 
-  it('Response: PENDING', () => {
-    act(() => {
+  it('Response: PENDING', async () => {
+    await act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
-        useReducer(firestoreReducer, mockInitialState),
+        useReducer(firestoreReducer, {
+          ...mockInitialState,
+          isPending: false,
+        }),
       );
       const [, dispatch] = result.current;
 
@@ -59,6 +61,17 @@ describe('useFirestore', () => {
         payload: {} as FirestoreAction,
         error: null,
       });
+
+      /**
+      const mockInitialState = {
+        isPending: false,
+        document: null,
+        success: false,
+        error: null,
+      };
+       */
+
+      await waitForValueToChange(() => result.current[0].isPending);
 
       expect(result.current[0]).toStrictEqual({
         isPending: true,
@@ -69,30 +82,44 @@ describe('useFirestore', () => {
     });
   });
 
-  it('Response: ADDED', () => {
-    act(() => {
+  it('Response: ADDED', async () => {
+    await act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
-        useReducer(firestoreReducer, mockInitialState),
+        useReducer(firestoreReducer, {
+          ...mockInitialState,
+          success: false,
+        }),
       );
       const [, dispatch] = result.current;
 
       dispatch({
         type: FirestoreStates.ADDED,
-        payload: {} as FirestoreAction,
+        payload: { id: '123' },
         error: null,
-      });
+      } as FirestoreAction);
+
+      /**
+      const mockInitialState = {
+        isPending: false,
+        document: null,
+        success: false,
+        error: null,
+      };
+       */
+
+      await waitForValueToChange(() => result.current[0].success);
 
       expect(result.current[0]).toStrictEqual({
         isPending: false,
-        document: {},
+        document: { id: '123' },
         success: true,
         error: null,
       });
     });
   });
 
-  it('Response: DELETED', () => {
-    act(() => {
+  it('Response: DELETED', async () => {
+    await act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
         useReducer(firestoreReducer, mockInitialState),
       );
@@ -104,6 +131,17 @@ describe('useFirestore', () => {
         error: null,
       });
 
+      /**
+      const mockInitialState = {
+        isPending: false,
+        document: null,
+        success: false,
+        error: null,
+      };
+       */
+
+      await waitForValueToChange(() => result.current[0].success);
+
       expect(result.current[0]).toStrictEqual({
         isPending: false,
         document: null,
@@ -113,10 +151,13 @@ describe('useFirestore', () => {
     });
   });
 
-  it('Response: UPDATED', () => {
-    act(() => {
+  it('Response: UPDATED', async () => {
+    await act(async () => {
       const { result, waitForValueToChange } = renderHook(() =>
-        useReducer(firestoreReducer, mockInitialState),
+        useReducer(firestoreReducer, {
+          ...mockInitialState,
+          success: false,
+        }),
       );
       const [, dispatch] = result.current;
 
@@ -125,6 +166,17 @@ describe('useFirestore', () => {
         payload: {} as FirestoreAction,
         error: null,
       });
+
+      /**
+      const mockInitialState = {
+        isPending: false,
+        document: null,
+        success: false,
+        error: null,
+      };
+       */
+
+      await waitForValueToChange(() => result.current[0].success);
 
       expect(result.current[0]).toStrictEqual({
         isPending: false,

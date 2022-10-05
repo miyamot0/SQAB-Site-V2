@@ -48,8 +48,9 @@
     "build": "react-scripts build",
     "test": "jest",
     "test:runner": "cypress open",
-    "test-coverage": "npm run test -- --coverage --watchAll --coverageDirectory='coverage'",
+    "test-coverage": "npm run test -- --coverage --watchAll --coverageDirectory='coverage' --forceExit",
     "test-summarize": "npm run test -- --coverage --watchAll --coverageDirectory='coverage' --coverageReporters='json-summary'",
+    "test-open-handles": "npm run test -- --detectOpenHandles",
     "make-badges": "istanbul-badges-readme",
     "eject": "react-scripts eject"
   },

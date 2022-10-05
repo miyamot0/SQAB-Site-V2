@@ -17,6 +17,17 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('Home', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   it('Should render', () => {
     const wrapper = mount(<Home />);
 
