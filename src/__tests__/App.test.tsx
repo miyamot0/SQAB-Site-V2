@@ -13,7 +13,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import firebase from 'firebase';
-import Enzyme from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Header from '../components/Header';
 import Home from '../pages/home/Home';
@@ -42,6 +42,8 @@ import UserPoster from '../pages/user/UserPoster';
 import UserRecruitment from '../pages/user/UserRecruitment';
 import SystemAdministration from '../pages/admin/SystemAdministration';
 import BasicAdministrator from '../pages/admin/BasicAdministrator';
+import Loading from '../components/Loading';
+import App from '../App';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -86,162 +88,170 @@ jest.mock('../firebase/hooks/useFirebaseLogout', () => {
 });
 
 describe('Routing tests', () => {
+  it('Stubbed', () => {
+    expect(1).toBe(1);
+  });
 
-  it("Stubbed", () => {
-    expect(1).toBe(1)
-  })
+  it('Should display conditionally selectively: No Sign in', async () => {
+    ReactModal.setAppElement = () => null;
+
+    const unauthedObject = {
+      ...generalAuthObj,
+      user: null,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+    } as AuthorizationContextInterface;
+
+    const history = createMemoryHistory();
+
+    const wrapper = mount(
+      <AuthorizationContext.Provider value={{ ...unauthedObject }}>
+        <Router history={history}>
+          <Header />
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/conference">
+              <AnnualConference />
+            </Route>
+            <Route path="/tutorials/:id">
+              <Tutorials />
+            </Route>
+            <Route path="/registration">
+              <Registration />
+            </Route>
+            <Route path="/submission">
+              {!unauthedObject.user ||
+              unauthedObject.user === null ||
+              unauthedObject.user.uid === null ? (
+                <Redirect to="/signin" />
+              ) : (
+                <Submission userId={unauthedObject.user.uid} />
+              )}
+            </Route>
+            <Route path="/records">
+              <Records />
+            </Route>
+            <Route path="/behavioralprocesses">
+              <BeProcInformation />
+            </Route>
+            <Route path="/executiveboard">
+              <ExecutiveBoard />
+            </Route>
+            <Route path="/resources">
+              <Resources />
+            </Route>
+            <Route exact path="/recruitment">
+              <Recruitment />
+            </Route>
+            <Route path="/recruitment/:id">
+              <MentorPage />
+            </Route>
+            <Route path="/loading">
+              <Loading />
+            </Route>
+            <Route path="/pmax">
+              <AnalyticPmax />
+            </Route>
+            <Route path="/demand">
+              <DemandCurveAnalyzer />
+            </Route>
+            <Route path="/discounting">
+              <DiscountingModelSelector />
+            </Route>
+            <Route path="/signin">
+              <SignIn />
+            </Route>
+            <Route path="/user/:id">
+              {!unauthedObject.user && <Redirect to="/signin" />}
+              {unauthedObject.user && <UserProfile />}
+            </Route>
+            <Route path="/poster/:id">
+              {!unauthedObject.user && <Redirect to="/signin" />}
+              {unauthedObject.user && <UserPoster />}
+            </Route>
+            <Route path="/manage/:id">
+              {!unauthedObject.user && <Redirect to="/signin" />}
+              {unauthedObject.user && <UserRecruitment />}
+            </Route>
+            <Route path="/admin">
+              {!unauthedObject.user && <Redirect to="/signin" />}
+              {unauthedObject.user &&
+                !(
+                  unauthedObject.systemAdministratorFlag ||
+                  unauthedObject.studentRecruitFlag ||
+                  unauthedObject.diversityReviewFlag
+                ) && <Redirect to="/" />}
+              {unauthedObject.user && unauthedObject.systemAdministratorFlag && (
+                <SystemAdministration />
+              )}
+              {unauthedObject.user &&
+                (unauthedObject.studentRecruitFlag ||
+                  unauthedObject.diversityReviewFlag ||
+                  unauthedObject.submissionReviewFlag) && <BasicAdministrator />}
+            </Route>
+          </Switch>
+        </Router>
+      </AuthorizationContext.Provider>,
+    );
+
+    const links = [
+      '/',
+      '/conference',
+      '/tutorials/-1',
+      '/registration',
+      '/records',
+      '/behavioralprocesses',
+      '/executiveboard',
+      '/resources',
+      '/recruitment',
+      '/recruitment/id',
+      '/loading',
+      //'/pmax',
+      //'/demand',
+      //'/discounting'
+      '/user',
+      '/poster',
+      '/manage',
+      '/admin',
+    ];
+
+    const instances = [
+      Home,
+      AnnualConference,
+      Tutorials,
+      Registration,
+      Records,
+      BeProcInformation,
+      ExecutiveBoard,
+      Resources,
+      Recruitment,
+      MentorPage,
+      Loading,
+      //AnalyticPmax,
+      //DemandCurveAnalyzer,
+      //DiscountingModelSelector,
+      UserProfile,
+      Submission,
+      UserRecruitment,
+      SystemAdministration,
+    ];
+
+    for (let i = 0; i < links.length; i++) {
+      const expected = i < 11 ? 1 : 0;
+      history.push(links[i]);
+      wrapper.update();
+      wrapper.render();
+      expect(wrapper.find(instances[i])).toHaveLength(expected);
+      wrapper.update();
+      wrapper.render();
+    }
+  });
+
   /*
-
-it('Should display conditionally selectively: No Sign in', async () => {
-  ReactModal.setAppElement = () => null;
-
-  const unauthedObject = {
-    ...generalAuthObj,
-    user: null,
-    studentRecruitFlag: false,
-    systemAdministratorFlag: false,
-    diversityReviewFlag: false,
-    submissionReviewFlag: false,
-  } as AuthorizationContextInterface;
-
-  const history = createMemoryHistory();
-
-  const wrapper = mount(
-    <AuthorizationContext.Provider value={{ ...unauthedObject }}>
-      <Router history={history}>
-        <Header />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/conference">
-            <AnnualConference />
-          </Route>
-          <Route path="/tutorials/:id">
-            <Tutorials />
-          </Route>
-          <Route path="/registration">
-            <Registration />
-          </Route>
-          <Route path="/submission">
-            {!unauthedObject.user || unauthedObject.user === null || unauthedObject.user.uid === null ? (
-              <Redirect to="/signin" />
-            ) : (
-              <Submission userId={unauthedObject.user.uid} />
-            )}
-          </Route>
-          <Route path="/records">
-            <Records />
-          </Route>
-          <Route path="/behavioralprocesses">
-            <BeProcInformation />
-          </Route>
-          <Route path="/executiveboard">
-            <ExecutiveBoard />
-          </Route>
-          <Route path="/resources">
-            <Resources />
-          </Route>
-          <Route exact path="/recruitment">
-            <Recruitment />
-          </Route>
-          <Route path="/recruitment/:id">
-            <MentorPage />
-          </Route>
-          <Route path="/pmax">
-            <AnalyticPmax />
-          </Route>
-          <Route path="/demand">
-            <DemandCurveAnalyzer />
-          </Route>
-          <Route path="/discounting">
-            <DiscountingModelSelector />
-          </Route>
-          <Route path="/signin">
-            <SignIn />
-          </Route>
-          <Route path="/user/:id">
-            {!unauthedObject.user && <Redirect to="/signin" />}
-            {unauthedObject.user && <UserProfile />}
-          </Route>
-          <Route path="/poster/:id">
-            {!unauthedObject.user && <Redirect to="/signin" />}
-            {unauthedObject.user && <UserPoster />}
-          </Route>
-          <Route path="/manage/:id">
-            {!unauthedObject.user && <Redirect to="/signin" />}
-            {unauthedObject.user && <UserRecruitment />}
-          </Route>
-          <Route path="/admin">
-            {!unauthedObject.user && <Redirect to="/signin" />}
-            {unauthedObject.user &&
-              !(unauthedObject.systemAdministratorFlag ||
-                unauthedObject.studentRecruitFlag || unauthedObject.diversityReviewFlag) && (
-                <Redirect to="/" />
-              )}
-            {unauthedObject.user && unauthedObject.systemAdministratorFlag && <SystemAdministration />}
-            {unauthedObject.user &&
-              (unauthedObject.studentRecruitFlag ||
-                unauthedObject.diversityReviewFlag ||
-                unauthedObject.submissionReviewFlag) && (
-                <BasicAdministrator />
-              )}
-          </Route>
-        </Switch>
-      </Router>
-    </AuthorizationContext.Provider>,
-  );
-
-  const links = [
-    '/',
-    '/conference',
-    '/tutorials/-1',
-    '/registration',
-    '/records',
-    '/behavioralprocesses',
-    '/executiveboard',
-    '/resources',
-    '/recruitment',
-    '/recruitment/id',
-    //'/pmax',
-    //'/demand',
-    //'/discounting'
-    '/user',
-    '/poster',
-    '/manage',
-    '/admin'
-  ]
-
-  const instances = [
-    Home,
-    AnnualConference,
-    Tutorials,
-    Registration,
-    Records,
-    BeProcInformation,
-    ExecutiveBoard,
-    Resources,
-    Recruitment,
-    MentorPage,
-    //AnalyticPmax,
-    //DemandCurveAnalyzer,
-    //DiscountingModelSelector,
-    UserProfile,
-    Submission,
-    UserRecruitment,
-    SystemAdministration
-  ]
-
-  for (let i = 0; i < links.length; i++) {
-    const expected = i < 10 ? 1 : 0;
-    history.push(links[i]);
-    wrapper.update();
-    wrapper.render();
-    expect(wrapper.find(instances[i])).toHaveLength(expected);
-    wrapper.update();
-    wrapper.render();
-  }
-});
 
 it('Should display conditionally selectively: Has Sign in', async () => {
   ReactModal.setAppElement = () => null;
@@ -397,4 +407,10 @@ it('Should display conditionally selectively: Has Sign in', async () => {
 });
 
 */
+});
+
+describe('App', () => {
+  it('Should build', () => {
+    const wrapper = shallow(<App />);
+  });
 });

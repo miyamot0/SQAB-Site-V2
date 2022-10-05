@@ -10,6 +10,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MDBCard } from 'mdb-react-ui-kit';
 import React from 'react';
+require('highcharts/modules/accessibility')(Highcharts);
 
 export type BarChartEntry = {
   name: string;

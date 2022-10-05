@@ -51,7 +51,6 @@ export function authorizationReducer(
         studentRecruitFlag: action.payloadStudentRecruitmentFlag,
         systemAdministratorFlag: action.payloadFlagSysAdmin,
         diversityReviewFlag: action.payloadDiversityReviewFlag,
-
       };
     case AuthorizationStates.LOGOUT:
       return {

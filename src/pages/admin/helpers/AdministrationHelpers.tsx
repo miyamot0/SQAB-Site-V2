@@ -6,7 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { createBlankTemplateRecruitment, updateStatusForPoster, updateStatusForRecruitment } from '../../../firebase/hooks/useFirebaseFunction';
+import {
+  createBlankTemplateRecruitment,
+  updateStatusForPoster,
+  updateStatusForRecruitment,
+} from '../../../firebase/hooks/useFirebaseFunction';
 import { PosterSubmission, RecruitmentAd } from '../../../firebase/types/RecordTypes';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 

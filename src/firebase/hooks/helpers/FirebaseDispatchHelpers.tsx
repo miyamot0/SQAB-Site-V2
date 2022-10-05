@@ -8,28 +8,6 @@
 
 import { FirestoreAction } from '../../interfaces/FirebaseInterfaces';
 
-/** complexCollectionGetter
- *
- * @param collection
- * @param studentId
- * @param projectFirestore
- * @param targetSkill
- * @returns
- */
-export function complexCollectionGetter(
-  collection: string,
-  studentId: string | undefined,
-  projectFirestore: any,
-  targetSkill: string | undefined,
-) {
-  const ref =
-    collection === '' && studentId !== undefined
-      ? projectFirestore.collection('performances').doc(targetSkill).collection(studentId)
-      : projectFirestore.collection(collection);
-
-  return ref;
-}
-
 /** dispatchIfNotCancelledHelper
  *
  * @param param0

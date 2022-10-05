@@ -37,7 +37,8 @@
       "!<rootDir>/node_modules/"
     ],
     "coveragePathIgnorePatterns": [
-      "index.tsx"
+      "index.tsx",
+      "App.tsx"
     ]
   },
   "scripts": {

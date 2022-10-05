@@ -17,6 +17,7 @@ export enum FirestoreStates {
   DELETED = 'DELETED',
   UPDATED = 'UPDATED',
   ERROR = 'ERROR',
+  THROW = 'THROW',
 }
 
 /** firestoreReducer
@@ -27,7 +28,7 @@ export enum FirestoreStates {
  * @param {Object} action Action type
  * @returns {FirestoreState}
  */
-function firestoreReducer(state: FirestoreState, action: FirestoreAction): FirestoreState {
+export function firestoreReducer(state: FirestoreState, action: FirestoreAction): FirestoreState {
   switch (action.type) {
     case FirestoreStates.PENDING:
       return {

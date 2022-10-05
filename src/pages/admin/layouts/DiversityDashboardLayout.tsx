@@ -26,8 +26,9 @@ export function DiversityDashboardLayout({
   sysAdminFlag,
   diversityReviewFlag,
 }: DiversityDashboardLayout) {
-
-  const [currentDemographics, setCurrentDemographics] = useState<DiversityFunctionResponse | null | undefined>(null);
+  const [currentDemographics, setCurrentDemographics] = useState<
+    DiversityFunctionResponse | null | undefined
+  >(null);
 
   if (sysAdminFlag === false && diversityReviewFlag === false) {
     return <></>;
@@ -35,14 +36,9 @@ export function DiversityDashboardLayout({
 
   useEffect(() => {
     getAggregatedDiversityInformation().then((value) => {
-      if (value && value.data) {
+      if (value && value.data && value.data.genderData) {
         const cast = value.data as DiversityFunctionResponse;
-
-        if (cast && cast.genderData) {
-          setCurrentDemographics(cast);
-        } else {
-          return;
-        }
+        setCurrentDemographics(cast);
       } else {
         return;
       }

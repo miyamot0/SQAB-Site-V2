@@ -13,55 +13,56 @@ import { ColumnType } from '../types/TableTypes';
 import { MDBDataTable } from 'mdbreact';
 
 export interface UserPanel {
-    userDocuments: IndividualUserRecordSaved[];
+  userDocuments: IndividualUserRecordSaved[];
 }
 
 export function UserPanel({ userDocuments }: UserPanel) {
+  const columns: ColumnType[] = [
+    { label: 'ID', field: 'id', sort: 'asc' },
+    { label: 'Name', field: 'name', sort: 'asc' },
+    { label: 'Email', field: 'email', sort: 'asc' },
+    { label: 'Ad', field: 'ad', sort: 'asc' },
+    { label: 'Permissions', field: 'perms', sort: 'asc' },
+  ];
 
-    const columns: ColumnType[] = [
-        { label: 'ID', field: 'id', sort: 'asc' },
-        { label: 'Name', field: 'name', sort: 'asc' },
-        { label: 'Email', field: 'email', sort: 'asc' },
-        { label: 'Ad', field: 'ad', sort: 'asc' },
-        { label: 'Permissions', field: 'perms', sort: 'asc' },
-    ];
+  const rows = userDocuments
+    .sort((a, b) => {
+      if (!a.userName || a.userName.trim().length === 0) {
+        return 1;
+      } else {
+        return a.userName.localeCompare(b.userName);
+      }
+    })
+    .map((userItem) => {
+      const ret = {
+        id: userItem.id ?? '',
+        name: userItem.userName,
+        email: userItem.userEmail,
+        ad: userItem.canPostAd ? 'Yes' : '',
+        perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
+      };
 
-    const rows = userDocuments
-        .sort((a, b) => {
-            if (!a.userName || a.userName.trim().length === 0) {
-                return 1;
-            }
+      return ret;
+    });
 
-            return a.userName.localeCompare(b.userName);
-        })
-        .map((userItem) => {
-            const ret = {
-                id: userItem.id ?? '',
-                name: userItem.userName,
-                email: userItem.userEmail,
-                ad: userItem.canPostAd ? 'Yes' : '',
-                perms: userItem.perms === 'baseuser' ? '' : userItem.perms,
-            };
-
-            return ret;
-        });
-
-    return <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="8">
-            <MDBCard>
-                <MDBCardBody>
-                    <MDBCardTitle>User Dashboard</MDBCardTitle>
-                    <MDBDataTable
-                        exportToCSV
-                        noBottomColumns
-                        striped
-                        data={{
-                            columns,
-                            rows,
-                        }}
-                    />
-                </MDBCardBody>
-            </MDBCard>
-        </MDBCol>
+  return (
+    <MDBRow className="d-flex justify-content-center">
+      <MDBCol sm="8">
+        <MDBCard>
+          <MDBCardBody>
+            <MDBCardTitle>User Dashboard</MDBCardTitle>
+            <MDBDataTable
+              exportToCSV
+              noBottomColumns
+              striped
+              data={{
+                columns,
+                rows,
+              }}
+            />
+          </MDBCardBody>
+        </MDBCard>
+      </MDBCol>
     </MDBRow>
+  );
 }

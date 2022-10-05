@@ -7,7 +7,8 @@
  */
 
 import React, { useEffect, useState, useReducer } from 'react';
-
+import CarouselConference from '../../components/CarouselConference';
+import Select from 'react-select';
 import {
   MDBCard,
   MDBCardBody,
@@ -17,24 +18,20 @@ import {
   MDBCol,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-
 import {
   AuthorOptions,
   InitialSubmissionState,
   SubmissionAction,
   SubmissionReducer,
 } from './functionality/SubmissionFunctionality';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
-import { commonHeading, showSubmissionsClosed } from './helper/SubmissionHelper';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { timestamp } from '../../firebase/config';
-
-import CarouselConference from '../../components/CarouselConference';
-import Select from 'react-select';
+import { ShowSubmissionsClosed } from './views/ShowSubmissionsClosed';
 import { IndividualUserRecord, PosterSubmission } from '../../firebase/types/RecordTypes';
+import { CommonHeading } from './views/CommonHeading';
 
 export default function Submission(params: { userId: string }): JSX.Element {
   const { user, authIsReady } = useAuthorizationContext();
@@ -100,7 +97,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
   }
 
   if (showSubmissionPortal === false) {
-    return showSubmissionsClosed();
+    return <ShowSubmissionsClosed />;
   }
 
   return (
@@ -109,7 +106,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
         <MDBCol sm="8">
           <MDBCard>
             <MDBCardBody>
-              {commonHeading()}
+              <CommonHeading />
               <MDBCardText style={CardBodyTextStyle}>
                 Students may choose to be considered for inclusion as a{' '}
                 <b>SQAB 2023 Tony Nevin Student Presenter</b>. If interested, you will need to (1)

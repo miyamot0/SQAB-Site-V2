@@ -291,6 +291,7 @@ export default function Header(): JSX.Element {
                   active
                   aria-current="page"
                   href="#!"
+                  classID="open-modal-header-2"
                   onClick={() => openModal2()}
                   className="mr-2"
                   style={navbarTextStyle}
@@ -304,6 +305,7 @@ export default function Header(): JSX.Element {
                   active
                   aria-current="page"
                   href="#!"
+                  classID="open-modal-header-1"
                   onClick={() => openModal()}
                   className="mr-2"
                   style={navbarTextStyle}

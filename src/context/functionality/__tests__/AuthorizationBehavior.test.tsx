@@ -25,8 +25,8 @@ describe('Authorization Behavior: Reducer behavior', () => {
       const [state] = result.current;
 
       expect(InitialAuthorizationState).toBe(state);
-    })
-  })
+    });
+  });
 
   it('Dispatch test: LOGIN', async () => {
     await act(async () => {
@@ -44,7 +44,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
         payloadStudentRecruitmentFlag: false,
         payloadFlagSysAdmin: false,
         payloadDiversityReviewFlag: false,
-        payloadFlagSubmissionReview: false
+        payloadFlagSubmissionReview: false,
       });
 
       await waitForValueToChange(() => result.current[0].user);
@@ -58,7 +58,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
       const { result, waitForValueToChange } = renderHook(() =>
         useReducer(authorizationReducer, {
           ...InitialAuthorizationState,
-          user: { uid: "123" } as firebase.User
+          user: { uid: '123' } as firebase.User,
         }),
       );
 
@@ -70,7 +70,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
         payloadStudentRecruitmentFlag: false,
         payloadFlagSysAdmin: false,
         payloadDiversityReviewFlag: false,
-        payloadFlagSubmissionReview: false
+        payloadFlagSubmissionReview: false,
       });
 
       await waitForValueToChange(() => result.current[0].user);
@@ -95,7 +95,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
         payloadFlagSysAdmin: true,
         payloadStudentRecruitmentFlag: false,
         payloadDiversityReviewFlag: false,
-        payloadFlagSubmissionReview: false
+        payloadFlagSubmissionReview: false,
       });
 
       await waitForValueToChange(() => result.current[0].user);
@@ -121,7 +121,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
         payloadFlagSysAdmin: true,
         payloadStudentRecruitmentFlag: true,
         payloadDiversityReviewFlag: true,
-        payloadFlagSubmissionReview: true
+        payloadFlagSubmissionReview: true,
       });
 
       await waitForValueToChange(() => result.current[0].user);
@@ -134,8 +134,8 @@ describe('Authorization Behavior: Reducer behavior', () => {
     });
   });
 
-  it('test dispatch: THROWERR', async () => {
-    await act(async () => {
+  it('test dispatch: THROWERR', () => {
+    act(() => {
       const { result } = renderHook(() =>
         useReducer(authorizationReducer, InitialAuthorizationState),
       );
@@ -150,7 +150,7 @@ describe('Authorization Behavior: Reducer behavior', () => {
         payloadFlagSysAdmin: false,
         payloadStudentRecruitmentFlag: false,
         payloadDiversityReviewFlag: false,
-        payloadFlagSubmissionReview: false
+        payloadFlagSubmissionReview: false,
       });
 
       expect(result.current[0].user).toBe(null);

@@ -9,89 +9,70 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
+import firebase from 'firebase';
 import { mount } from 'enzyme';
 import { AuthorizationContextProvider } from '../AuthorizationContext';
 import { waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
-import SignIn from '../../pages/signin/SignIn';
-import { MemoryRouter } from 'react-router';
-import * as FirebaseRef from '../../firebase/config';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const mockAuthChangeCall = jest.fn();
+
+jest.mock('./../../firebase/config', () => {
+  const originalModule = jest.requireActual('./../../firebase/config');
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: () => ({
+      projectAuth: {
+        onAuthStateChanged: mockAuthChangeCall,
+      },
+    }),
+  };
+});
+
 describe('AuthorizationContextProvider', () => {
-  const mockAuthChangeCall = jest.fn();
-  const spyProjectAuth = jest.spyOn(FirebaseRef.projectAuth, 'onAuthStateChanged');
+  it('render as normal', () => {
+    mockAuthChangeCall.mockImplementation(() => true);
 
-  beforeAll(() => {
-    spyProjectAuth.mockImplementation(mockAuthChangeCall);
-  });
+    const mockDiv = <a>asdf</a>;
+    const wrapper = mount(<AuthorizationContextProvider>{mockDiv}</AuthorizationContextProvider>);
 
-  beforeEach(() => {
-    mockAuthChangeCall.mockClear();
-  });
+    expect(wrapper.find('a').length).toBe(1);
 
-  it('STUB', () => {
-    expect(1).toBe(1)
-  })
+    jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
 
-  /*
-  it('render as normal', async () => {
-    await act(async () => {
-      mockAuthChangeCall.mockImplementation(() => true);
-
-      const wrapper = mount(
-        <AuthorizationContextProvider>
-          <MemoryRouter>
-            <SignIn />
-          </MemoryRouter>
-        </AuthorizationContextProvider>,
-      );
-
-      await waitFor(() => {
-        expect(wrapper.find(SignIn).length).toBe(1);
-      });
+    waitFor(() => {
+      expect(mockAuthChangeCall).toBeCalled();
     });
   });
-  */
 
-  /*
-  it('render as normal, with no user result', async () => {
-    await act(async () => {
-      mockAuthChangeCall.mockImplementation(() => true);
+  it('render as normal, with no user result', () => {
+    mockAuthChangeCall.mockImplementation(() => true);
 
-      const wrapper = mount(
-        <AuthorizationContextProvider>
-          <MemoryRouter>
-            <SignIn />
-          </MemoryRouter>
-        </AuthorizationContextProvider>,
-      );
+    const mockDiv = <a>asdf</a>;
+    const wrapper = mount(<AuthorizationContextProvider>{mockDiv}</AuthorizationContextProvider>);
 
-      await waitFor(() => {
-        expect(mockAuthChangeCall).toBeCalled();
-      });
+    jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
+
+    waitFor(() => {
+      expect(mockAuthChangeCall).toBeCalled();
     });
   });
-  */
 
-  /*
   //TODO: need to raise an event in here
-  it('render as normal, with user result', async () => {
-    await act(async () => {
-      const result = { uid: '123' } as firebase.User;
+  it('render as normal, with user result', () => {
+    const result = { uid: '123' } as firebase.User;
 
-      mockAuthChangeCall.mockImplementation(() => result);
+    mockAuthChangeCall.mockImplementation(() => result);
 
-      const mockDiv = <a>asdf</a>;
-      const wrapper = mount(<AuthorizationContextProvider>{mockDiv}</AuthorizationContextProvider>);
+    const mockDiv = <a>asdf</a>;
+    const wrapper = mount(<AuthorizationContextProvider>{mockDiv}</AuthorizationContextProvider>);
 
-      jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
+    jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
 
-      await waitFor(() => {
-        expect(mockAuthChangeCall).toBeCalled();
-      });
+    waitFor(() => {
+      expect(mockAuthChangeCall).toBeCalled();
     });
   });
-    */
 });
