@@ -16,15 +16,17 @@ import { useHistory } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
-import { dateToMDY, dateToYMD } from './helpers/RecruitmentHelpers';
+import { dateToMDY, dateToYMD, handleEditRecruitmentSubmit } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
-import { IndividualUserRecord, RecruitmentAd } from '../../firebase/types/RecordTypes';
+import { RecruitmentAd } from '../../firebase/types/RecordTypes';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 import {
   InitialRecruitmentState,
   RecruitmentEditAction,
   RecruitmentEditReducer,
 } from './functionality/UserRecruitmentFunctionality';
+import { UserOutputLoading } from './views/UserOutputLoading';
+import { LayoutRecruitmentBody } from './layouts/LayoutRecruitmentBody';
 
 export default function UserRecruitment() {
   const { id } = useParams<RoutedAdminSet>();
@@ -32,23 +34,22 @@ export default function UserRecruitment() {
     collectionString: 'recruitment',
     idString: id,
   });
-  const { documentError: docUsrErr, document: docUsr } =
-    useFirebaseDocumentTyped<IndividualUserRecord>({
-      collectionString: 'users',
-      idString: id,
-    });
+  //const { documentError: docUsrErr, document: docUsr } =
+  //  useFirebaseDocumentTyped<IndividualUserRecord>({
+  //    collectionString: 'users',
+  //    idString: id,
+  //  });
 
   const { updateDocument, response } = useFirestore('recruitment');
   const { authIsReady } = useAuthorizationContext();
 
   const [state, dispatch] = useReducer(RecruitmentEditReducer, InitialRecruitmentState);
   const [didBuild, setDidBuild] = useState<boolean>(false);
-  const [formError, setFormError] = useState<string>('');
 
   const history = useHistory();
 
   useEffect(() => {
-    if (docRec && docUsr && !didBuild) {
+    if (docRec && !didBuild) {
       setDidBuild(true);
 
       const modDateRec = {
@@ -56,50 +57,11 @@ export default function UserRecruitment() {
         Cycle: dateToYMD(docRec.Cycle),
       } as unknown as EditRecruitmentState;
 
-      dispatch({ type: RecruitmentEditAction.LoadUser, payload: docUsr });
       dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: modDateRec });
     }
-  }, [docRec, docUsr, didBuild]);
+  }, [docRec, didBuild]);
 
-  /** handleEditFormSubmit
-   *
-   * Submission event for student edit form
-   *
-   */
-  async function handleEditRecruitmentSubmit(): Promise<void> {
-    setFormError('');
-
-    const selectedProperties = {
-      Bio: state.Bio,
-      Contact: state.userEmail,
-      Cycle: state.Cycle,
-      Description: state.Description,
-      Institution: state.userInstitution,
-      LabLink: state.LabLink,
-      Link: state.Link,
-      Mentor: state.userName,
-      Name: state.userName,
-      Position: state.Position,
-    };
-
-    selectedProperties.Cycle = dateToMDY(selectedProperties.Cycle);
-
-    await updateDocument(id, selectedProperties);
-
-    if (response.error) {
-      alert(response.error);
-    } else {
-      history.push('/');
-    }
-
-    return;
-  }
-
-  if (!authIsReady) {
-    return <></>;
-  }
-
-  if (docRecErr || docUsrErr) {
+  if (docRecErr) {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -115,124 +77,10 @@ export default function UserRecruitment() {
         </MDBRow>
       </div>
     );
+  } else if (authIsReady === false) {
+    return <UserOutputLoading />;
+  } else {
+    return <LayoutRecruitmentBody state={state} id={id} updateDocument={updateDocument}
+      history={history} response={response} dispatch={dispatch} />;
   }
-
-  return (
-    <div>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
-          <MDBCard>
-            <MDBCardBody>
-              <MDBCardTitle>Recruitment Details</MDBCardTitle>
-              <form>
-                <label>
-                  <span>Name (Edit in Profile):</span>
-                  <input required type="text" disabled value={state.userName}></input>
-                </label>
-                <label>
-                  <span>Email (Edit in Profile):</span>
-                  <input required type="text" disabled value={state.userEmail}></input>
-                </label>
-                <label>
-                  <span>Institution (Edit in Profile):</span>
-                  <input required type="text" disabled value={state.userInstitution}></input>
-                </label>
-                <label>
-                  <span>Position Title:</span>
-                  <input
-                    required
-                    type="text"
-                    onChange={(e) =>
-                      dispatch({
-                        type: RecruitmentEditAction.EditPosition,
-                        payload: e.target.value,
-                      })
-                    }
-                    value={state.Position}
-                  ></input>
-                </label>
-
-                <label>
-                  <span>Mentor Biography:</span>
-                  <textarea
-                    onChange={(e) =>
-                      dispatch({
-                        type: RecruitmentEditAction.EditMentorBio,
-                        payload: e.target.value,
-                      })
-                    }
-                    value={state.Bio}
-                  ></textarea>
-                </label>
-
-                <label>
-                  <span>Position Description:</span>
-                  <textarea
-                    onChange={(e) =>
-                      dispatch({
-                        type: RecruitmentEditAction.EditDescription,
-                        payload: e.target.value,
-                      })
-                    }
-                    value={state.Description}
-                  ></textarea>
-                </label>
-                <label>
-                  <span>Application Deadline:</span>
-                  <input
-                    required
-                    type="date"
-                    onChange={(e) =>
-                      dispatch({ type: RecruitmentEditAction.EditDate, payload: e.target.value })
-                    }
-                    value={state.Cycle}
-                  ></input>
-                </label>
-                <label>
-                  <span>Link to Lab Webpage:</span>
-                  <input
-                    required
-                    type="text"
-                    onChange={(e) =>
-                      dispatch({ type: RecruitmentEditAction.EditLabLink, payload: e.target.value })
-                    }
-                    value={state.LabLink}
-                  ></input>
-                </label>
-                <label>
-                  <span>Link to Application:</span>
-                  <input
-                    required
-                    type="text"
-                    onChange={(e) =>
-                      dispatch({ type: RecruitmentEditAction.EditLink, payload: e.target.value })
-                    }
-                    value={state.Link}
-                  ></input>
-                </label>
-
-                <MDBBtn
-                  noRipple
-                  style={{
-                    width: '100%',
-                    marginBottom: '25px',
-                  }}
-                  tag="a"
-                  href="#!"
-                  className="button-fit-card"
-                  onClick={() => handleEditRecruitmentSubmit()}
-                >
-                  Edit Profile
-                </MDBBtn>
-
-                {formError && <p className="error">{formError}</p>}
-              </form>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-
-      <br></br>
-    </div>
-  );
 }

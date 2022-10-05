@@ -23,7 +23,7 @@ export default function UserPoster() {
 
   const { authIsReady } = useAuthorizationContext();
 
-  if (!authIsReady || documentError) {
+  if (authIsReady === false || documentError) {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -40,9 +40,7 @@ export default function UserPoster() {
         </MDBRow>
       </div>
     );
-  }
-
-  if (document) {
+  } else if (document) {
     return (
       <div>
         <MDBRow center className="row-eq-height">

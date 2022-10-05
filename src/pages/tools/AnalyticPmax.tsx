@@ -19,15 +19,11 @@ import {
 } from 'mdb-react-ui-kit';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { WorkerPmaxResult } from './helpers/PmaxHelpers';
-import { HotTableTwoParamZBE } from './views/HotTableTwoParamZBE';
 import { clearConsumptionData, loadExampleData } from './behavior/DemandBehavior';
-import { HotTableThreeParamZBE } from './views/HotTableThreeParamZBE';
-import { ResultsZBE2 } from './views/ResultsZBE2';
 import { round } from './helpers/GeneralHelpers';
-import { ResultsZBE3 } from './views/ResultsZBE3';
-import { ResultsHS } from './views/ResultsHS';
-import { HotTableThreeParamHS } from './views/HotTableThreeParamHS';
 import './styles/Tools.css';
+import { HotTableThreeParam, HotTableThreeParamZBE, HotTableTwoParamZBE } from './views/HotTables';
+import { ResultsHS, ResultsZBE2, ResultsZBE3 } from './views/DemandResults';
 
 const ModelOptions = [
   { value: 'ZBE-2', label: '2-Parameter ZBE (no K)' },
@@ -234,7 +230,7 @@ export default function AnalyticPmax(): JSX.Element {
 
               {modelOption === ModelOptions[0] ? <HotTableTwoParamZBE hotData={hotData} /> :
                 modelOption === ModelOptions[1] ? <HotTableThreeParamZBE hotData={hotData} /> :
-                  <HotTableThreeParamHS hotData={hotData} />
+                  <HotTableThreeParam hotData={hotData} />
               }
 
               <MDBBtn

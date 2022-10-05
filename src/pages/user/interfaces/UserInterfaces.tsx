@@ -6,15 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IndividualUserRecord } from "../../../firebase/types/RecordTypes";
-import { ProfileActions } from "../types/ProfileActionTypes";
-
-export interface LayoutProfileBodyInterface {
-    state: IndividualUserRecord;
-    submitCallback: () => Promise<void>;
-    dispatch: (value: ProfileActions) => void;
-}
-
 export interface OutputUserErrorInterface {
     documentError: string | undefined | null;
 }

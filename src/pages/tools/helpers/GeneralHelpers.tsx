@@ -24,8 +24,6 @@ export function isValidNumber(num: string): boolean {
 
   if (parseFloat(num.trim()) === 1) return true;
 
-  if (num.trim() === '0') return true;
-
   return num.trim().length > 1 && !isNaN(parseFloat(num));
 }
 

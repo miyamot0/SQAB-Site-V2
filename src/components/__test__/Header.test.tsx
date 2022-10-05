@@ -15,17 +15,43 @@ import { MemoryRouter } from 'react-router-dom';
 import Header from '../Header';
 import { render, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { AuthorizationContext } from '../../context/AuthorizationContext';
+import { AuthorizationContext, AuthorizationContextProvider } from '../../context/AuthorizationContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
-const mockCallback = jest.fn();
+let mockUserStatus: jest.Mock<any, any>;
+let mockReadyStatus: jest.Mock<any, any>;
+
+jest.mock('../../context/hooks/useAuthorizationContext', () => {
+  mockUserStatus = jest.fn();
+  mockReadyStatus = jest.fn();
+
+  return {
+    ...jest.requireActual('../../context/hooks/useAuthorizationContext'),
+    user: mockUserStatus.mockReturnValue(undefined),
+    authIsReady: mockReadyStatus.mockReturnValue(false)
+  }
+})
+
+// TODO: stopped her
 
 describe('Navbar', () => {
-  it('', () => {
-    expect(1).toBe(1);
+  it('On load', async () => {
+    mockUserStatus.mockReturnValue({ uid: '456' } as unknown as firebase.User);
+    mockReadyStatus.mockReturnValue(false)
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Header />
+        </AuthorizationContextProvider>
+      );
+    })
   });
   /*
   it('Check render', async () => {

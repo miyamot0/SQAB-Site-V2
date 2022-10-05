@@ -6,6 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { FirestoreState } from "../../../firebase/interfaces/FirebaseInterfaces";
+import { RecruitmentAd } from "../../../firebase/types/RecordTypes";
+
 /** dateToYMD
  *
  * @param {string} dateString
@@ -34,4 +37,38 @@ export function dateToMDY(dateString: string) {
   const m = date.getMonth() + 1; //Month from 0 to 11
   const y = date.getFullYear();
   return '' + (m <= 9 ? '0' + m : m) + '/' + (d <= 9 ? '0' + d : d) + '/' + y;
+}
+
+/** handleEditFormSubmit
+ *
+ * Submission event for student edit form
+ *
+ */
+export async function handleEditRecruitmentSubmit(state: RecruitmentAd, id: string | undefined,
+  updateDocument: any, history: any, response: FirestoreState): Promise<void> {
+
+  const selectedProperties = {
+    Bio: state.Bio,
+    Contact: state.Contact,
+    Cycle: state.Cycle,
+    Description: state.Description,
+    Institution: state.Institution,
+    LabLink: state.LabLink,
+    Link: state.Link,
+    Mentor: state.Mentor,
+    Name: state.Name,
+    Position: state.Position,
+  };
+
+  selectedProperties.Cycle = dateToMDY(selectedProperties.Cycle);
+
+  await updateDocument(id, selectedProperties);
+
+  if (response.error) {
+    alert(response.error);
+  } else {
+    history.push('/');
+  }
+
+  return;
 }

@@ -10,16 +10,16 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
-import Registration from '../../registration/Registration';
+import Resources from '../Resources';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
-describe('Registration', () => {
+describe('Resources', () => {
   it('Should render', () => {
-    const wrapper = mount(<Registration />);
+    const wrapper = mount(<Resources />);
 
-    expect(wrapper.find(Registration).length).toBe(1);
+    expect(wrapper.find(Resources).length).toBe(1);
   });
 });

@@ -4,14 +4,14 @@ import { DiscountingFit } from '../types/DiscountingTypes';
  *
  * @param {DiscountingFit[]} arr array of fits
  * @param {string} value model name to match
- * @returns {DiscountingFit | null}
+ * @returns {DiscountingFit | undefined}
  */
-export function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | null {
+export function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | undefined {
   const result = arr.filter(function (o) {
     return o.Model === value;
-  });
+  })[0];
 
-  return result ? result[0] : null;
+  return result;
 }
 
 /** getExponentialProjection

@@ -26,7 +26,6 @@ import {
   GenderOptions,
   SexualityOptions,
 } from '../helpers/DemographicOptions';
-import { LayoutProfileBodyInterface } from '../interfaces/UserInterfaces';
 import {
   StandardEntryFieldText,
   StandardEntryFieldEmail,
@@ -35,6 +34,19 @@ import { StandardEntryFieldSelectSingle } from '../views/StandardEntryFieldSelec
 import { CountryList } from '../../../utilities/CountryCodes';
 
 import './../styles/UserFieldStyles.css';
+import { updateProfileCallback } from '../helpers/ProfileHelpers';
+import { IndividualUserRecord } from '../../../firebase/types/RecordTypes';
+import { ProfileActions } from '../types/ProfileActionTypes';
+import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
+
+export interface LayoutProfileBody {
+  state: IndividualUserRecord;
+  id: string;
+  history: any;
+  updateDocument: any;
+  response: FirestoreState,
+  dispatch: (value: ProfileActions) => void;
+}
 
 /** UserOutputBody
  *
@@ -43,9 +55,13 @@ import './../styles/UserFieldStyles.css';
  */
 export function LayoutProfileBody({
   state,
-  submitCallback,
+  id,
+  history,
+  updateDocument,
+  response,
   dispatch,
-}: LayoutProfileBodyInterface): JSX.Element {
+}: LayoutProfileBody): JSX.Element {
+
   /** handleEditFormSubmit
    *
    * Submission event for student edit form
@@ -57,17 +73,11 @@ export function LayoutProfileBody({
     dispatch({ type: UserEditAction.EditFormError, payload: undefined });
 
     if (
-      !state.userEducation ||
       state.userEducation.label === '' ||
-      !state.userGender ||
       state.userGender.label === '' ||
-      !state.userAge ||
       state.userAge.label === '' ||
-      !state.userRaceEthnicity ||
       state.userRaceEthnicity.length === 0 ||
-      !state.userOrientation ||
       state.userOrientation.label === '' ||
-      !state.userNationality ||
       state.userNationality.label === ''
     ) {
       console.log(state);
@@ -78,7 +88,7 @@ export function LayoutProfileBody({
 
       return;
     } else {
-      submitCallback();
+      await updateProfileCallback(state, id, updateDocument, response, history);
 
       return;
     }
@@ -126,7 +136,7 @@ export function LayoutProfileBody({
                   dispatch={dispatch}
                 />
 
-                {state.phoneAuthed && (
+                {state.phoneAuthed === true && (
                   <label>
                     <span>Phone on Record (Only for Phone Login):</span>
                     <input type="text" disabled value={state.userPhone}></input>

@@ -24,19 +24,25 @@ import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
 import { AgeOptions, DemographicOptions, EducationOptions, GenderOptions, SexualityOptions } from './helpers/DemographicOptions';
 import { CountryList } from '../../utilities/CountryCodes';
+import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 
 export default function UserProfile() {
-  const history = useHistory();
   const { id } = useParams<RoutedAdminSet>();
+  const { updateDocument, response } = useFirestore('users');
+  const { authIsReady } = useAuthorizationContext();
   const { document, documentError } = useFirebaseDocumentTyped<IndividualUserRecordSaved>({
     collectionString: 'users',
     idString: id,
   });
+
   const [state, dispatch] = useReducer(UserEditReducer, InitialUserState);
-  const { updateDocument, response } = useFirestore('users');
+
+  const history = useHistory();
 
   useEffect(() => {
+
     if (document && !state.didBuild) {
+
       dispatch({ type: UserEditAction.EditDidBuild, payload: true });
 
       if (document.userPhone) {
@@ -93,44 +99,12 @@ export default function UserProfile() {
     }
   }, [document]);
 
-  /** handleEditFormSubmit
-   *
-   * Submission event for student edit form
-   *
-   */
-  async function submitCallback(): Promise<void> {
-
-    const uploadObject = {
-      userName: state.userName,
-      userEmail: state.userEmail,
-      userInstitution: state.userInstitution,
-
-      userAge: state.userAge?.value,
-      userEducation: state.userEducation?.value,
-      userGender: state.userGender?.value,
-      userOrientation: state.userOrientation?.value,
-      userNationality: state.userNationality?.label,
-      userRaceEthnicity: state.userRaceEthnicity?.map((resp: SingleOptionType) => {
-        return resp.value
-      }).join(":"),
-    } as IndividualUserRecordSaved;
-
-    await updateDocument(id, uploadObject);
-
-    if (response.error) {
-      alert(response.error);
-    } else {
-      history.push(`/user/${id}`);
-    }
-
-    return;
-  }
-
-  if (documentError) {
+  if (documentError || !id) {
     return <OutputUserError documentError={documentError} />;
-  } else if (!document && !documentError) {
+  } else if (authIsReady === false) {
     return <UserOutputLoading />;
   } else {
-    return <LayoutProfileBody state={state} submitCallback={submitCallback} dispatch={dispatch} />;
+
+    return <LayoutProfileBody state={state} dispatch={dispatch} id={id} history={history} updateDocument={updateDocument} response={response} />;
   }
 }

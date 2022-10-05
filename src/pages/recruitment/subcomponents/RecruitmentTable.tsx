@@ -14,7 +14,11 @@ import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 
 import './../styles/Recruitment.css';
 
-export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Element {
+export interface RecruitmentTable {
+  documents: RecruitmentAd[] | null
+}
+
+export default function RecruitmentTable({ documents }: RecruitmentTable): JSX.Element {
   return (
     <>
       <MDBTable responsive>
@@ -40,32 +44,32 @@ export default function RecruitmentTable(documents: RecruitmentAd[]): JSX.Elemen
         <MDBTableBody>
           {documents
             ? documents
-                .filter((ad) => ad.Approved)
-                .sort((a, b) => {
-                  return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
-                    moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
-                  )
-                    ? 1
-                    : -1;
-                })
-                .map((recr) => {
-                  return (
-                    <tr key={recr.Contact} className="recruitment-table-tr">
-                      <td>{recr.Mentor}</td>
-                      <td>{recr.Institution}</td>
-                      <td>
-                        {' '}
-                        <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
-                          {recr.Contact}
-                        </a>
-                      </td>
-                      <td>
-                        <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
-                      </td>
-                      <td>{recr.Cycle}</td>
-                    </tr>
-                  );
-                })
+              .filter((ad) => ad.Approved)
+              .sort((a, b) => {
+                return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
+                  moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
+                )
+                  ? 1
+                  : -1;
+              })
+              .map((recr) => {
+                return (
+                  <tr key={recr.Contact} className="recruitment-table-tr">
+                    <td>{recr.Mentor}</td>
+                    <td>{recr.Institution}</td>
+                    <td>
+                      {' '}
+                      <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
+                        {recr.Contact}
+                      </a>
+                    </td>
+                    <td>
+                      <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
+                    </td>
+                    <td>{recr.Cycle}</td>
+                  </tr>
+                );
+              })
             : null}
         </MDBTableBody>
       </MDBTable>

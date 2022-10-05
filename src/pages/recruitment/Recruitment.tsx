@@ -40,7 +40,9 @@ export default function Recruitment(): JSX.Element {
                 student representative and request a review. The student representative will approve
                 your ad before it goes live on the site.{' '}
               </MDBCardText>
-              {documents && RecruitmentTable(documents)}
+
+              <RecruitmentTable documents={documents} />
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
