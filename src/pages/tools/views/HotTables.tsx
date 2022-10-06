@@ -6,9 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { HotColumn, HotTable } from "@handsontable/react";
+import React from "react";
+import { HotColumn, HotTable } from "@handsontable/react";
 import { HOTTableStyleDemand } from "../styles/DemandTableStyles";
-
 
 export function HotTableThreeParam({ hotData }: { hotData: string[][] | undefined }) {
     return <HotTable

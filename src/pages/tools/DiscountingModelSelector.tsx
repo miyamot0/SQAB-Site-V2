@@ -7,7 +7,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-
+import Select from 'react-select';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import {
   MDBCard,
   MDBCardBody,
@@ -18,25 +20,11 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 import { HotColumn, HotTable } from '@handsontable/react';
-import Select from 'react-select';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import {
-  getExponentialProjection,
-  getHyperbolicProjection,
-  getQuasiHyperbolicProjection,
-  getMyersonProjection,
-  getRachlinProjection,
-  getRodriguezLogueProjection,
-  getEbertPrelecProjection,
-  getbleichrodtProjection,
-  getElementByModel,
-} from './helpers/DiscountingHelpers';
-import { PointArray, DiscountingResult, ModelOptions } from './types/DiscountingTypes';
+import { ModelOptions } from './types/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
 import { SingleOptionType } from './types/GeneralTypes';
+import { handleDiscountingWorkerOutput, InitialDiscountingChartState } from './helpers/DiscountingCharting';
 
 import './styles/Tools.css';
 
@@ -49,222 +37,7 @@ export default function DiscountingModelSelector(): JSX.Element {
   });
   const [buttonStatusMsg, setButtonStatusMsg] = useState<string>('Calculate');
   const [resultsSummary, setResultsSummary] = useState<JSX.Element[]>([]);
-  const [chartOptions, setChartOptions] = useState({
-    chart: {
-      height: '600px',
-    },
-    title: {
-      text: 'Discounting Model Selection Procedure',
-    },
-    series: [
-      {
-        name: 'Noise',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(190,128,255,1)',
-        borderColor: 'rgba(190,128,255,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Exponential',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(12,21,42,1)',
-        borderColor: 'rgba(12,21,42,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Hyperbolic',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(152,36,56,1)',
-        borderColor: 'rgba(152,36,56,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Quasi-Hyperbolic',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(235,84,10,1)',
-        borderColor: 'rgba(235,84,10,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Green-Myerson',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(50,124,203,1)',
-        borderColor: 'rgba(50,124,203,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Rachlin',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(20,182,148,1)',
-        borderColor: 'rgba(20,182,148,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Loewenstein-Prelec',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(67,162,202,1)',
-        borderColor: 'rgba(67,162,202,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Ebert-Prelec',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(255,237,160,1)',
-        borderColor: 'rgba(255,237,160,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Bleichrodt et al.',
-        data: [] as PointArray[],
-        fill: false,
-        lineTension: 0,
-        backgroundColor: 'rgba(44,162,95,1)',
-        borderColor: 'rgba(44,162,95,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 1,
-        borderJoinStyle: 'miter',
-        pointBorderWidth: 0,
-        pointHoverRadius: 0,
-        pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-        pointHoverBorderColor: 'rgba(0,0,0,0)',
-        pointHoverBorderWidth: 0,
-      },
-      {
-        name: 'Raw Data',
-        data: [] as PointArray[],
-        fill: false,
-        color: 'black',
-        lineTension: 0,
-        backgroundColor: 'rgba(0,0,0,1)',
-        borderColor: 'rgba(0,0,0,0)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderWidth: 3,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(0,0,0,1)',
-        pointBackgroundColor: '#000',
-        pointBorderWidth: 3,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(0,0,0,1)',
-        pointHoverBorderColor: 'rgba(0,0,0,1)',
-        pointHoverBorderWidth: 4,
-        pointRadius: 20,
-        pointHitRadius: 10,
-        spanGaps: false,
-        lineWidth: 0,
-        lineWidthPlus: 0,
-        states: {
-          hover: {
-            enabled: false,
-          },
-        },
-      },
-    ],
-    yAxis: {
-      title: {
-        text: 'Subjective Value',
-      },
-      min: 0,
-      max: 1,
-    },
-    xAxis: {
-      title: {
-        text: 'Unit Price',
-      },
-      type: 'logarithmic',
-    },
-  });
+  const [chartOptions, setChartOptions] = useState(InitialDiscountingChartState);
 
   let worker: Worker | undefined = undefined;
 
@@ -314,10 +87,6 @@ export default function DiscountingModelSelector(): JSX.Element {
    *
    */
   function calculateDiscounting(): void {
-    if (worker !== undefined) {
-      return;
-    }
-
     const thing = hotData;
 
     if (thing === null || thing === undefined) {
@@ -345,7 +114,12 @@ export default function DiscountingModelSelector(): JSX.Element {
     }
 
     worker = new Worker('./workers/worker_discounting.js');
-    worker.onmessage = handleWorkerOutput;
+    worker.onmessage = (ev: MessageEvent<any>) => {
+      handleDiscountingWorkerOutput({
+        ev, worker, setRunningCalculation, setResultsSummary,
+        setButtonStatusMsg, setChartOptions
+      });
+    };
 
     worker.postMessage({
       boundRachlin: modelOption.value !== 'Do not Bound',
@@ -353,423 +127,6 @@ export default function DiscountingModelSelector(): JSX.Element {
       x: mX,
       y: mY,
     });
-  }
-
-  /** handleWorkerOutput
-   *
-   * Receiver from worker
-   *
-   * @param {WorkerOutput} obj
-   */
-  function handleWorkerOutput(obj: any): void {
-    if (obj.data.done) {
-      const data = obj.data as DiscountingResult;
-
-      const mFinalDelay = Math.max(...obj.data.x);
-      let plotLast = false;
-
-      const noiseElement = getElementByModel(data.results, 'Noise');
-      const expElement = getElementByModel(data.results, 'Exponential');
-      const hypElement = getElementByModel(data.results, 'Hyperbolic');
-      const bdElement = getElementByModel(data.results, 'Beta-Delta');
-      const mgElement = getElementByModel(data.results, 'Green-Myerson');
-      const rachElement = getElementByModel(data.results, 'Rachlin');
-      const lpElement = getElementByModel(data.results, 'Loewstein-Prelec');
-      const epElement = getElementByModel(data.results, 'Ebert-Prelec');
-      const belElement = getElementByModel(data.results, 'Beleichrodt');
-
-      // Map points
-      const temp = [];
-      for (let k = 0; k < obj.data.x.length; k++) {
-        temp.push({
-          x: obj.data.x[k],
-          y: obj.data.y[k],
-        });
-      }
-
-      const tempN = [];
-      const tempE = [];
-      const tempH = [];
-      const tempBD = [];
-      const tempMG = [];
-      const tempR = [];
-      const tempLP = [];
-      const tempEP = [];
-      const tempB = [];
-
-      for (let i = 1; i <= mFinalDelay; ) {
-        if (noiseElement) {
-          tempN.push({
-            x: i,
-            y: noiseElement.Params[0],
-          });
-        }
-
-        if (expElement) {
-          tempE.push({
-            x: i,
-            y: getExponentialProjection(i, expElement.Params),
-          });
-        }
-
-        if (hypElement) {
-          tempH.push({
-            x: i,
-            y: getHyperbolicProjection(i, hypElement.Params),
-          });
-        }
-
-        if (bdElement) {
-          tempBD.push({
-            x: i,
-            y: getQuasiHyperbolicProjection(i, bdElement.Params),
-          });
-        }
-
-        if (mgElement) {
-          tempMG.push({
-            x: i,
-            y: getMyersonProjection(i, mgElement.Params),
-          });
-        }
-
-        if (rachElement) {
-          tempR.push({
-            x: i,
-            y: getRachlinProjection(i, rachElement.Params),
-          });
-        }
-
-        if (lpElement) {
-          tempLP.push({
-            x: i,
-            y: getRodriguezLogueProjection(i, lpElement.Params),
-          });
-        }
-
-        if (epElement) {
-          tempEP.push({
-            x: i,
-            y: getEbertPrelecProjection(i, epElement.Params),
-          });
-        }
-
-        if (belElement) {
-          tempB.push({
-            x: i,
-            y: getbleichrodtProjection(i, belElement.Params),
-          });
-        }
-
-        if (i > 0 && i <= 10) i = i + 1;
-        else if (i > 10 && i <= 100) i = i + 10;
-        else if (i > 100 && i <= 1000) i = i + 100;
-        else if (i > 1000 && i <= 10000) i = i + 1000;
-        else if (i > 10000 && i <= 100000) i = i + 10000;
-        else if (i > 100000 && i <= 1000000) i = i + 100000;
-        else if (i > 1000000 && i <= 10000000) i = i + 1000000;
-
-        if (plotLast) {
-          i = mFinalDelay + 1;
-        } else if (i > mFinalDelay) {
-          i = mFinalDelay;
-          plotLast = true;
-        }
-      }
-
-      setChartOptions({
-        chart: {
-          height: '600px',
-        },
-        title: {
-          text: 'Discounting Model Selection Procedure',
-        },
-        series: [
-          {
-            name: 'Noise',
-            data: tempN,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(190,128,255,1)',
-            borderColor: 'rgba(190,128,255,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Exponential',
-            data: tempE,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(12,21,42,1)',
-            borderColor: 'rgba(12,21,42,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Hyperbolic',
-            data: tempH,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(152,36,56,1)',
-            borderColor: 'rgba(152,36,56,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Quasi-Hyperbolic',
-            data: tempBD,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(235,84,10,1)',
-            borderColor: 'rgba(235,84,10,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Green-Myerson',
-            data: tempMG,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(50,124,203,1)',
-            borderColor: 'rgba(50,124,203,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Rachlin',
-            data: tempR,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(20,182,148,1)',
-            borderColor: 'rgba(20,182,148,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Loewenstein-Prelec',
-            data: tempLP,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(67,162,202,1)',
-            borderColor: 'rgba(67,162,202,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Ebert-Prelec',
-            data: tempEP,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(255,237,160,1)',
-            borderColor: 'rgba(255,237,160,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Bleichrodt et al.',
-            data: tempB,
-            fill: false,
-            lineTension: 0,
-            backgroundColor: 'rgba(44,162,95,1)',
-            borderColor: 'rgba(44,162,95,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 1,
-            borderJoinStyle: 'miter',
-            pointBorderWidth: 0,
-            pointHoverRadius: 0,
-            pointHoverBackgroundColor: 'rgba(0,0,0,0)',
-            pointHoverBorderColor: 'rgba(0,0,0,0)',
-            pointHoverBorderWidth: 0,
-          },
-          {
-            name: 'Raw Data',
-            data: temp,
-            fill: false,
-            color: 'black',
-            lineTension: 0,
-            backgroundColor: 'rgba(0,0,0,1)',
-            borderColor: 'rgba(0,0,0,0)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderWidth: 3,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(0,0,0,1)',
-            pointBackgroundColor: '#000',
-            pointBorderWidth: 3,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(0,0,0,1)',
-            pointHoverBorderColor: 'rgba(0,0,0,1)',
-            pointHoverBorderWidth: 4,
-            pointRadius: 20,
-            pointHitRadius: 10,
-            spanGaps: false,
-            lineWidth: 0,
-            lineWidthPlus: 0,
-            states: {
-              hover: {
-                enabled: false,
-              },
-            },
-          },
-        ],
-        yAxis: {
-          title: {
-            text: 'Subjective Value',
-          },
-          min: 0,
-          max: 1,
-        },
-        xAxis: {
-          title: {
-            text: 'Delay',
-          },
-          type: 'logarithmic',
-        },
-      });
-
-      const resArray: JSX.Element[] = data.results.map((res, index) => {
-        const out = res.Params.map((param, j) => {
-          return (
-            <>
-              <b>
-                {res.Model} Param[{j}]:
-              </b>{' '}
-              {param}
-              <br />
-            </>
-          );
-        });
-
-        const isTopRanked = index === 0;
-
-        let extraMetrics: JSX.Element | null = null;
-
-        if (isTopRanked && res.Model === 'noise') {
-          extraMetrics = (
-            <>
-              <b>
-                {res.Model} Area (Natural): {res.AUC.toFixed(6)}{' '}
-              </b>
-              <br />
-              <b>
-                {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
-              </b>
-              <br />
-            </>
-          );
-        } else if (isTopRanked) {
-          console.log(res);
-          extraMetrics = (
-            <>
-              <b>
-                {res.Model} ln(ED50): {Math.log(res.ED50).toFixed(6)}{' '}
-              </b>
-              <br />
-              <b>
-                {res.Model} Area (Natural): {res.AUC.toFixed(6)}{' '}
-              </b>
-              <br />
-              <b>
-                {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
-              </b>
-              <br />
-            </>
-          );
-        }
-
-        return (
-          <p key={res.Model}>
-            <b>Rank #{index + 1}</b>
-            <br />
-            {out}
-            <b>{res.Model} BIC:</b> {res.BIC.toFixed(6)}
-            <br />
-            <b>{res.Model} AIC:</b> {res.AIC.toFixed(6)}
-            <br />
-            <b>{res.Model} RMS Error:</b> {res.RMSE.toFixed(6)}
-            <br />
-            <b>{res.Model} Avg Error:</b> {res.MSE.toFixed(6)}
-            <br />
-            <b>{res.Model} Probability:</b> {res.Probability.toFixed(6)}
-            <br />
-            {extraMetrics !== null && extraMetrics}
-          </p>
-        );
-      });
-
-      setResultsSummary(resArray);
-      setButtonStatusMsg('Calculate');
-      setRunningCalculation(false);
-    } else {
-      setButtonStatusMsg(obj.data.msg);
-    }
   }
 
   return (
@@ -872,25 +229,26 @@ export default function DiscountingModelSelector(): JSX.Element {
                 <HotColumn title="Values" />
               </HotTable>
 
-              <label style={{ width: '100%', marginTop: '25px' }}>
-                <span>Rachlin Behavior:</span>
-                <Select
-                  options={ModelOptions}
-                  onChange={(option) => {
-                    if (option) {
-                      setModelOption(option);
-                    }
-                  }}
-                  value={modelOption}
-                  styles={{
-                    menu: (base) => ({
-                      ...base,
-                      width: 'max-content',
-                      minWidth: '100%',
-                    }),
-                  }}
-                />
-              </label>
+              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">Rachlin Behavior:</label>
+              <Select
+                name={"framework-field"}
+                inputId={"framework-field"}
+                options={ModelOptions}
+                onChange={(option) => {
+                  if (option) {
+                    setModelOption(option);
+                  }
+                }}
+                value={modelOption}
+                styles={{
+                  menu: (base) => ({
+                    ...base,
+                    width: 'max-content',
+                    minWidth: '100%',
+                  }),
+                }}
+              />
+
 
               <MDBBtn
                 noRipple

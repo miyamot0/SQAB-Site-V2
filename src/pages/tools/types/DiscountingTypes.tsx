@@ -18,6 +18,8 @@ export interface DiscountingFit {
 export interface DiscountingResult {
   done: boolean;
   results: DiscountingFit[];
+  x: number[],
+  y: number[],
 }
 
 export interface PointArray {

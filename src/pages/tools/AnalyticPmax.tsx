@@ -18,12 +18,14 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
-import { WorkerPmaxResult } from './helpers/PmaxHelpers';
 import { clearConsumptionData, loadExampleData } from './behavior/DemandBehavior';
 import { round } from './helpers/GeneralHelpers';
-import './styles/Tools.css';
 import { HotTableThreeParam, HotTableThreeParamZBE, HotTableTwoParamZBE } from './views/HotTables';
-import { ResultsHS, ResultsZBE2, ResultsZBE3 } from './views/DemandResults';
+import { PmaxOutput } from './views/PmaxOutput';
+
+import './styles/Tools.css';
+import { PmaxHeading } from './views/PmaxHeading';
+import { handleWorkerOutput } from './helpers/PmaxHelpers';
 
 const ModelOptions = [
   { value: 'ZBE-2', label: '2-Parameter ZBE (no K)' },
@@ -31,6 +33,11 @@ const ModelOptions = [
   { value: 'Exponentiated', label: 'Exponentiated Model' },
   { value: 'Exponential', label: 'Exponential Model' },
 ]
+
+export interface WorkerPmaxResult {
+  done: boolean;
+  sheet: any[][] | undefined;
+}
 
 export default function AnalyticPmax(): JSX.Element {
   const [hotData, setHotData] = useState<string[][]>();
@@ -64,12 +71,12 @@ export default function AnalyticPmax(): JSX.Element {
    *
    */
   function startPmaxWorker(): void {
-    if (worker !== undefined) {
-      return;
-    }
-
     worker = new Worker('./workers/worker_pmax.js');
-    worker.onmessage = handleWorkerOutput;
+    worker.onmessage = (ev: MessageEvent<any>) => {
+      handleWorkerOutput({
+        ev, modelOption, setHotData, setHotData2, setRunningCalculation, worker
+      });
+    };
     worker.postMessage({
       data: hotData,
       isZBE: modelOption.value.includes('ZBE'),
@@ -77,74 +84,9 @@ export default function AnalyticPmax(): JSX.Element {
     });
   }
 
-  /** handleWorkerOutput
-   *
-   * @param {WorkerOutput} obj
-   */
-  function handleWorkerOutput(obj: any): void {
-    const data = obj.data as WorkerPmaxResult;
-
-    if (data.done && data.sheet) {
-      worker = undefined;
-
-      const pmaxRow = modelOption.value.includes("ZBE-2") ? 2 : 3;
-
-      const trimmedPrecision = data.sheet.map((sheet) => {
-        const iSheet = sheet;
-        const pmaxValue = iSheet[pmaxRow].toString();
-
-        if (pmaxValue.trim().length === 0) {
-          return iSheet
-        } else {
-          iSheet[pmaxRow] = round(pmaxValue, 4);
-          return iSheet
-        }
-      })
-
-      setHotData(trimmedPrecision);
-      setHotData2(data.sheet);
-
-      setRunningCalculation(false);
-      return;
-    }
-  }
-
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
-          <MDBCard>
-            <MDBCardBody>
-              <MDBCardTitle>
-                Analytical P<sub>MAX</sub> Calculator
-              </MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
-                The Analytical P<sub>MAX</sub> Calculator is a web-based tool for determining the
-                point of unit elasticity, or more literally, peak work. This calculator streamlines
-                the determination of an exact (Analytic) unit elasticity (i.e., slope = -1) using a
-                simple, copy-paste interface. This is a more accurate method of calculating P
-                <sub>MAX</sub>, one free from the error of approximations. Both the Approximate and
-                Exact (Analytic) P<sub>MAX</sub> measures are provided here, though the approximated
-                value is presented here purely for historical purposes.
-                <br />
-                <br />
-                <b>Based on the following works:</b>
-                <br />
-                Gilroy, S.P., Kaplan, B.A., Reed, D.D., Hantula, D.A., &#38; Hursh, S. R. (2019). An
-                Exact Solution for Unit Elasticity in the Exponential Model of Demand.{' '}
-                <i>Journal of Experimental and Clinical Psychopharmacology, 27(6)</i>, 588-597. doi:{' '}
-                <a href="https://psycnet.apa.org/doi/10.1037/pha0000268">10.1037/pha0000268</a>.
-                <br />
-                <br />
-                Gilroy, S. P., Kaplan, B. A., &#38; Reed, D. D. (2020). Interpretation (s) of
-                elasticity in operant demand.{' '}
-                <i>Journal of the Experimental Analysis of Behavior, 114(1)</i>, 106-115. doi:{' '}
-                <a href="https://doi.org/10.1002/jeab.610">10.1002/jeab.610</a>.
-              </MDBCardText>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
+      <PmaxHeading />
 
       <MDBRow center>
         <MDBCol sm="8">
@@ -183,31 +125,31 @@ export default function AnalyticPmax(): JSX.Element {
                 <sub>MAX</sub>.
               </MDBCardText>
 
-              <label style={{ width: '100%', marginTop: '25px' }}>
-                <span>Select Implementation of Framework:</span>
-                <Select
-                  options={ModelOptions}
-                  onChange={(option) => {
-                    if (option) {
-                      setModelOption(option);
-                      clearConsumptionData({
-                        setHotData,
-                        hasTwoParameters: modelOption === ModelOptions[0]
-                      })
-                      setHotData2(undefined)
-                    }
-                  }}
-                  value={modelOption}
-                  styles={{
-                    menu: (base) => ({
-                      ...base,
-                      width: 'max-content',
-                      minWidth: '100%',
-                      zIndex: 9999
-                    }),
-                  }}
-                />
-              </label>
+              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">Select Implementation of Framework:</label>
+              <Select
+                name={"framework-field"}
+                inputId={"framework-field"}
+                options={ModelOptions}
+                onChange={(option) => {
+                  if (option) {
+                    setModelOption(option);
+                    clearConsumptionData({
+                      setHotData,
+                      hasTwoParameters: modelOption === ModelOptions[0]
+                    })
+                    setHotData2(undefined)
+                  }
+                }}
+                value={modelOption}
+                styles={{
+                  menu: (base) => ({
+                    ...base,
+                    width: 'max-content',
+                    minWidth: '100%',
+                    zIndex: 9999
+                  }),
+                }}
+              />
 
               <MDBBtn
                 noRipple
@@ -257,12 +199,9 @@ export default function AnalyticPmax(): JSX.Element {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol md="4">
-          {modelOption === ModelOptions[0] ? <ResultsZBE2 hotData2={hotData2} /> :
-            modelOption === ModelOptions[1] ? <ResultsZBE3 hotData2={hotData2} /> :
-              <ResultsHS hotData2={hotData2} model={modelOption.value} />
-          }
-        </MDBCol>
+
+        <PmaxOutput modelOption={modelOption} ModelOptions={ModelOptions} hotData2={hotData2} />
+
       </MDBRow>
     </>
   );
