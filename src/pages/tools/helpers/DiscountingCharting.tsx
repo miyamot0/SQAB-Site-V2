@@ -579,13 +579,13 @@ export function handleDiscountingWorkerOutput({ ev, worker, setRunningCalculatio
         const resArray: JSX.Element[] = data.results.map((res, index) => {
             const out = res.Params.map((param, j) => {
                 return (
-                    <>
+                    <div key={`param-${res.Model}-${index}`}>
                         <b>
                             {res.Model} Param[{j}]:
                         </b>{' '}
                         {param}
                         <br />
-                    </>
+                    </div>
                 );
             });
 
@@ -595,7 +595,7 @@ export function handleDiscountingWorkerOutput({ ev, worker, setRunningCalculatio
 
             if (isTopRanked && res.Model === 'noise') {
                 extraMetrics = (
-                    <>
+                    <div key={`area-${res.Model}-${index}`}>
                         <b>
                             {res.Model} Area (Natural): {res.AUC.toFixed(6)}{' '}
                         </b>
@@ -604,12 +604,11 @@ export function handleDiscountingWorkerOutput({ ev, worker, setRunningCalculatio
                             {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
                         </b>
                         <br />
-                    </>
+                    </div>
                 );
             } else if (isTopRanked) {
-                console.log(res);
                 extraMetrics = (
-                    <>
+                    <div key={`ed50-${res.Model}-${index}`}>
                         <b>
                             {res.Model} ln(ED50): {Math.log(res.ED50).toFixed(6)}{' '}
                         </b>
@@ -622,12 +621,12 @@ export function handleDiscountingWorkerOutput({ ev, worker, setRunningCalculatio
                             {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
                         </b>
                         <br />
-                    </>
+                    </div>
                 );
             }
 
             return (
-                <p key={res.Model}>
+                <p key={`${res.Model}-rank-${index}`}>
                     <b>Rank #{index + 1}</b>
                     <br />
                     {out}

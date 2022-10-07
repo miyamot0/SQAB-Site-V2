@@ -10,8 +10,6 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
-import { waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { RecruitmentAd } from '../../../../firebase/types/RecordTypes';
 import RecruitmentTable from '../RecruitmentTable';
 
@@ -20,6 +18,18 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('RecruitmentTable', () => {
+    const jsdomAlert = window.alert;
+
+    beforeAll(() => {
+        // remember the jsdom alert
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.alert = () => { }; // provide an empty implementation for window.alert
+    });
+
+    afterAll(() => {
+        window.alert = jsdomAlert; // restore the jsdom alert
+    });
+
     it('Should render, basic content', () => {
         const documents = [
             {

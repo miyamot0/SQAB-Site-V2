@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import ExecutiveBoard from '../ExecutiveBoard';
@@ -21,7 +21,8 @@ describe('ExecutiveBoard', () => {
 
   beforeAll(() => {
     // remember the jsdom alert
-    window.alert = () => {}; // provide an empty implementation for window.alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -29,8 +30,8 @@ describe('ExecutiveBoard', () => {
   });
 
   it('Should render', () => {
-    const wrapper = mount(<ExecutiveBoard />);
+    const wrapper = shallow(<ExecutiveBoard />);
 
-    expect(wrapper.find(ExecutiveBoard).length).toBe(1);
+    expect(wrapper.html().toString().includes('Leadership and Executive Board')).toBe(true);
   });
 });

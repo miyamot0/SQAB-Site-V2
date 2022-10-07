@@ -80,7 +80,6 @@ export function LayoutProfileBody({
       state.userOrientation.label === '' ||
       state.userNationality.label === ''
     ) {
-      console.log(state);
       dispatch({
         type: UserEditAction.EditFormError,
         payload: 'Please provide an answer to all areas',

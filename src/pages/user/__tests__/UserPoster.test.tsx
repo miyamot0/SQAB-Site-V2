@@ -9,7 +9,7 @@
 import React from 'react';
 import firebase from 'firebase';
 import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import UserPoster from '../UserPoster';
 import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
 import { mount } from 'enzyme';
@@ -94,11 +94,11 @@ describe('UserPoster', () => {
     })
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+    let wrapper: Enzyme.ShallowWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     await act(async () => {
 
-      wrapper = mount(
+      wrapper = shallow(
         <AuthorizationContextProvider>
           <UserPoster />
         </AuthorizationContextProvider>
@@ -119,11 +119,11 @@ describe('UserPoster', () => {
     })
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+    let wrapper: Enzyme.ShallowWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     await act(async () => {
 
-      wrapper = mount(
+      wrapper = shallow(
         <AuthorizationContextProvider>
           <UserPoster />
         </AuthorizationContextProvider>

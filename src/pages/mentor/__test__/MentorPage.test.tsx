@@ -17,7 +17,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
-
 const mockId = '123';
 
 let mockUseFirebaseDocumentTyped: jest.Mock<any, any>;

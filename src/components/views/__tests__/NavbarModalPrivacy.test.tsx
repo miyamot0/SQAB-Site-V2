@@ -15,6 +15,18 @@ import { NavbarModalPrivacy } from './../NavbarModalPrivacy';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('NavbarModalPrivacy', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // remember the jsdom alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   it('On load', async () => {
     const modalIsOpen = true;
     const setIsOpen = jest.fn();

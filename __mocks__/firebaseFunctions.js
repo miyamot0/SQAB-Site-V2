@@ -1,3 +1,4 @@
+/*
 const firebase = jest.genMockFromModule('firebase');
 
 firebase.initializeApp = jest.fn();
@@ -25,3 +26,4 @@ firebase.functions = jest.fn(() => ({
 }));
 
 module.exports = firebase;
+*/

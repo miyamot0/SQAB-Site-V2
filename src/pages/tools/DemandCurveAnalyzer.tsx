@@ -9,6 +9,8 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Highcharts from 'highcharts';
+import highchartsAccessibility from "highcharts/modules/accessibility";
+highchartsAccessibility(Highcharts);
 import HighchartsReact from 'highcharts-react-official';
 import {
   MDBCard,
@@ -138,7 +140,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       return;
     }
 
-    worker = new Worker('./workers/worker_demand2.js');
+    worker = new Worker('https://sqab.org/workers/worker_demand2.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleDemandWorkerOutput({
         ev, worker, setRunningCalculation,

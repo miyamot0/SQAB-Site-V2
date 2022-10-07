@@ -52,9 +52,9 @@ export default function RecruitmentTable({ documents }: RecruitmentTable): JSX.E
                   ? 1
                   : -1;
               })
-              .map((recr) => {
+              .map((recr, index) => {
                 return (
-                  <tr key={recr.Contact} className="recruitment-table-tr">
+                  <tr key={`${recr.Contact}-${index}`} className="recruitment-table-tr">
                     <td>{recr.Mentor}</td>
                     <td>{recr.Institution}</td>
                     <td>

@@ -9,6 +9,8 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Highcharts from 'highcharts';
+import highchartsAccessibility from "highcharts/modules/accessibility";
+highchartsAccessibility(Highcharts);
 import HighchartsReact from 'highcharts-react-official';
 import {
   MDBCard,
@@ -113,7 +115,7 @@ export default function DiscountingModelSelector(): JSX.Element {
       return;
     }
 
-    worker = new Worker('./workers/worker_discounting.js');
+    worker = new Worker('https://sqab.org/workers/worker_discounting.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleDiscountingWorkerOutput({
         ev, worker, setRunningCalculation, setResultsSummary,

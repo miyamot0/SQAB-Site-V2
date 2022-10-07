@@ -8,7 +8,6 @@
 
 import React from 'react';
 import ReactModal from 'react-modal';
-import firebase from 'firebase';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { DiversityDashboardLayout } from '../DiversityDashboardLayout';

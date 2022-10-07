@@ -49,7 +49,7 @@ export const InitialRecruitmentState: EditRecruitmentState = {
 export function RecruitmentEditReducer(
   state: EditRecruitmentState,
   action: RecruitmentActions,
-): any {
+): EditRecruitmentState {
   switch (action.type) {
     case RecruitmentEditAction.LoadUser:
       return { ...state, ...action.payload };

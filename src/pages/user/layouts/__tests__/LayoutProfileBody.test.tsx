@@ -24,6 +24,18 @@ spyProfileCallback.mockResolvedValue(Promise.resolve());
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('LayoutProfileBody', () => {
+    const jsdomAlert = window.alert;
+
+    beforeAll(() => {
+        // remember the jsdom alert
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.alert = () => { }; // provide an empty implementation for window.alert
+    });
+
+    afterAll(() => {
+        window.alert = jsdomAlert; // restore the jsdom alert
+    });
+
     it('Should render, not phone authed', async () => {
 
         const state = {

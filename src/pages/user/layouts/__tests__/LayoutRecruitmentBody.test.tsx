@@ -21,6 +21,18 @@ import * as RecruitmentHelpers from '../../helpers/RecruitmentHelpers'
 const spyProfileCallback = jest.spyOn(RecruitmentHelpers, 'handleEditRecruitmentSubmit');
 spyProfileCallback.mockResolvedValue(Promise.resolve());
 
+jest.mock('../../../../firebase/hooks/useFirestore', () => {
+    const originalModule = jest.requireActual('../../../../firebase/hooks/useFirestore');
+    return {
+        __esModule: true,
+        ...originalModule,
+        default: () => ({
+            updateDocument: jest.fn(),
+            response: {} as FirestoreState,
+        }),
+    };
+});
+
 Enzyme.configure({ adapter: new Adapter() });
 
 const mockId = '123';

@@ -71,7 +71,7 @@ export default function AnalyticPmax(): JSX.Element {
    *
    */
   function startPmaxWorker(): void {
-    worker = new Worker('./workers/worker_pmax.js');
+    worker = new Worker('https://sqab.org/workers/worker_pmax.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleWorkerOutput({
         ev, modelOption, setHotData, setHotData2, setRunningCalculation, worker

@@ -7,33 +7,114 @@
  */
 
 import React from 'react';
+import firebase from 'firebase';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import SignIn from '../SignIn';
+import { act, waitFor } from '@testing-library/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
+
+let mockUserStatus: firebase.User | null;
+let mockReadyStatus: boolean;
+jest.mock('../../../context/hooks/useAuthorizationContext', () => {
+  mockUserStatus = {} as unknown as firebase.User;
+  mockReadyStatus = false;
+  //...jest.requireActual('../../../context/hooks/useAuthorizationContext'),
+
+  return {
+    useAuthorizationContext: () => ({
+      user: mockUserStatus,
+      authIsReady: mockReadyStatus
+    })
+  }
+})
+
+jest.mock('../../../firebase/hooks/useFirebaseLogin', () => {
+  return {
+    ...jest.requireActual('../../../firebase/hooks/useFirebaseLogin'),
+    login: jest.fn(() => true),
+    //    loginPending: false,
+    //    loginError: null
+  }
+})
+
+const mockHistory = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistory,
+  }),
+  useRouteMatch: () => ({ url: `/signin` }),
+}));
 
 describe('SignIn', () => {
   const jsdomAlert = window.alert;
 
   beforeAll(() => {
     // remember the jsdom alert
-    window.alert = () => {}; // provide an empty implementation for window.alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
+
   });
 
   afterAll(() => {
     window.alert = jsdomAlert; // restore the jsdom alert
   });
 
-  it('Should render', () => {
-    // TODO
-    //const wrapper = mount(<SignIn />);
+  it('Should render, not ready', async () => {
+    await act(async () => {
+      const wrapper = mount(<SignIn />);
 
-    //expect(wrapper.find(SignIn).length).toBe(1);
+      expect(wrapper.find(SignIn).length).toBe(1);
 
-    expect(1).toBe(1);
+      expect(wrapper.find('.button-fit-card').at(0).text()).toBe("Authenticate via Text Message")
+      expect(wrapper.find('.button-fit-card').at(1).text()).toBe("Authenticate via Text Message")
+
+      //wrapper.find('.button-fit-card').at(1).simulate('click')
+
+      expect(wrapper.find('.button-fit-card').at(2).text()).toBe("Authenticate via Google Account")
+      expect(wrapper.find('.button-fit-card').at(3).text()).toBe("Authenticate via Google Account")
+
+      //wrapper.find('.button-fit-card').at(3).simulate('click')
+
+      expect(wrapper.find('.button-fit-card').at(4).text()).toBe("Authenticate via Facebook Account")
+      expect(wrapper.find('.button-fit-card').at(5).text()).toBe("Authenticate via Facebook Account")
+
+      //wrapper.find('.button-fit-card').at(5).simulate('click')
+    })
   });
+
+  it('Should render, ready', async () => {
+    mockUserStatus = { uid: "123" } as firebase.User;
+    mockReadyStatus = true;
+
+    await act(async () => {
+      const wrapper = mount(<SignIn />);
+
+      await waitFor(() => {
+        expect(mockHistory).toBeCalled();
+
+        expect(wrapper.find('.button-fit-card').at(0).text()).toBe("Authenticate via Text Message")
+        expect(wrapper.find('.button-fit-card').at(1).text()).toBe("Authenticate via Text Message")
+
+        wrapper.find('.button-fit-card').at(1).simulate('click')
+
+        expect(wrapper.find('.button-fit-card').at(2).text()).toBe("Authenticate via Google Account")
+        expect(wrapper.find('.button-fit-card').at(3).text()).toBe("Authenticate via Google Account")
+
+        wrapper.find('.button-fit-card').at(3).simulate('click')
+
+        expect(wrapper.find('.button-fit-card').at(4).text()).toBe("Authenticate via Facebook Account")
+        expect(wrapper.find('.button-fit-card').at(5).text()).toBe("Authenticate via Facebook Account")
+
+        wrapper.find('.button-fit-card').at(5).simulate('click')
+      })
+    })
+  });
+
 });

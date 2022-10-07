@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import { TutorialVideo } from '../TutorialVideo';
@@ -17,11 +17,23 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('TutorialVideo', () => {
+    const jsdomAlert = window.alert;
+
+    beforeAll(() => {
+        // remember the jsdom alert
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.alert = () => { }; // provide an empty implementation for window.alert
+    });
+
+    afterAll(() => {
+        window.alert = jsdomAlert; // restore the jsdom alert
+    });
+
     it('Should draw when appropriate video info found', () => {
         const id = "1"
         const showDirectory = false;
 
-        const wrapper = mount(<TutorialVideo id={id} showDirectory={showDirectory} />)
+        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
 
         expect(wrapper.find('.blank-div-video').length).toBe(0);
     })
@@ -30,7 +42,7 @@ describe('TutorialVideo', () => {
         const id = "a"
         const showDirectory = false;
 
-        const wrapper = mount(<TutorialVideo id={id} showDirectory={showDirectory} />)
+        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
 
         expect(wrapper.find('.blank-div-video').length).toBeGreaterThanOrEqual(1)
     })
@@ -39,7 +51,7 @@ describe('TutorialVideo', () => {
         const id = "0"
         const showDirectory = false;
 
-        const wrapper = mount(<TutorialVideo id={id} showDirectory={showDirectory} />)
+        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
 
         expect(wrapper.find('.blank-div-video').length).toBe(0);
     })
@@ -49,7 +61,7 @@ describe('TutorialVideo', () => {
         const id = "77"
         const showDirectory = false;
 
-        const wrapper = mount(<TutorialVideo id={id} showDirectory={showDirectory} />)
+        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
 
         expect(wrapper.find('.blank-div-video').length).toBe(0);
     })

@@ -13,10 +13,10 @@ import ReactModal from 'react-modal';
 import selectEvent from 'react-select-event';
 import { SingleOptionType } from '../../../tools/types/GeneralTypes';
 import { AdministrationRecruitmentGenerator } from '../AdministrationRecruitmentGenerator';
-import * as Helpers from '../../helpers/AdministrationHelpers';
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { projectFunctions } from '../../../../firebase/config';
+import * as Helpers from '../../helpers/AdministrationHelpers';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -34,7 +34,8 @@ describe('AdministrationRecruitmentGenerator', () => {
 
   beforeAll(() => {
     // remember the jsdom alert
-    window.alert = () => {}; // provide an empty implementation for window.alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {

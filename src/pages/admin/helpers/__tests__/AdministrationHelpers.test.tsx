@@ -29,7 +29,8 @@ const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
 spyTotalFunctions.mockImplementation(jestTotalFunctions);
 
 describe('createBlankAdTemplate', () => {
-  const spyWindow = jest.fn().mockImplementation(() => {});
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const spyWindow = jest.fn().mockImplementation(() => { });
 
   beforeAll(() => {
     window.alert = spyWindow;
@@ -53,7 +54,8 @@ describe('createBlankAdTemplate', () => {
 });
 
 describe('toggleRecruitmentStatus', () => {
-  const spyWindow = jest.fn().mockImplementation(() => {});
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const spyWindow = jest.fn().mockImplementation(() => { });
 
   beforeAll(() => {
     window.alert = spyWindow;
@@ -78,7 +80,8 @@ describe('toggleRecruitmentStatus', () => {
 });
 
 describe('togglePosterStatus', () => {
-  const spyWindow = jest.fn().mockImplementation(() => {});
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const spyWindow = jest.fn().mockImplementation(() => { });
 
   beforeAll(() => {
     window.alert = spyWindow;

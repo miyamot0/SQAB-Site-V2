@@ -154,6 +154,17 @@ const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
 spyTotalFunctions.mockImplementation(jestTotalFunctions);
 
 describe('Basic Administrator', () => {
+  const jsdomAlert = window.alert;
+
+  beforeAll(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
   const dispatch = jest.fn();
   const authSpy = jest.spyOn(AuthHooks, 'useAuthorizationContext');
   const divSpy = jest.spyOn(FBFunctions, 'getAggregatedDiversityInformation');

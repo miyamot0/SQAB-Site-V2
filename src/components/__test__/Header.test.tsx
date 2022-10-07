@@ -9,15 +9,12 @@
 import React from 'react';
 import Modal from 'react-modal';
 import firebase from 'firebase';
-import Enzyme, { mount, shallow } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
-import { MemoryRouter } from 'react-router-dom';
 import Header from '../Header';
-import { render, waitFor, waitForOptions } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { AuthorizationContext, AuthorizationContextProvider } from '../../context/AuthorizationContext';
-import { WaitOptions } from '@testing-library/react-hooks';
+import { AuthorizationContextProvider } from '../../context/AuthorizationContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -35,7 +32,6 @@ jest.mock('../../context/hooks/useAuthorizationContext', () => {
   }
 })
 
-// TODO: stopped here
 ReactModal.setAppElement(document.createElement('div'));
 describe('Navbar', () => {
 
@@ -48,7 +44,8 @@ describe('Navbar', () => {
 
     jest
       .spyOn(Modal, "setAppElement")
-      .mockImplementation(param => console.log(`setAppElement:'${param}'`));
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .mockImplementation(param => { });
 
     await act(async () => {
       wrapper = mount(

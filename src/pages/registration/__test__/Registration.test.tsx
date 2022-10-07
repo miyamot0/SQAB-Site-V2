@@ -21,7 +21,8 @@ describe('Registration', () => {
 
   beforeAll(() => {
     // remember the jsdom alert
-    window.alert = () => {}; // provide an empty implementation for window.alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => { }; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {

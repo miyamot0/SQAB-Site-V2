@@ -1,3 +1,7 @@
+| Statements                  | Branches                | Functions                 | Lines             |
+| --------------------------- | ----------------------- | ------------------------- | ----------------- |
+| ![Statements](https://img.shields.io/badge/statements-89.5%25-yellow.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-84.14%25-yellow.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-88.05%25-yellow.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-89.43%25-yellow.svg?style=flat) |
+
 # Society for the Quantitative Analyses of Behavior (SQAB)
 
 The SQAB repository is an openly-shared collection of information and software designed to support dissemination and replication of applied and experimental research.

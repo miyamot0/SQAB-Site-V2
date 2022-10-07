@@ -1,4 +1,3 @@
-
 /** @license
  *
  * Copyright (c) Shawn P. Gilroy, Louisiana State University.
@@ -7,9 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { renderHook } from "@testing-library/react-hooks";
+import { waitFor } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react-hooks";
 import { useReducer } from "react";
 import { InitialRecruitmentState, RecruitmentEditAction, RecruitmentEditReducer } from "../UserRecruitmentFunctionality";
+
+//const waitForComponentToPaint = async (wrapper) => {
+//    await act(async () => {
+//        await new Promise(resolve => setTimeout(resolve));
+//        wrapper.update();
+//    });
+//};
 
 describe("UserRecruitmentFunctionality", () => {
     it("Should return base state", () => {
@@ -22,21 +29,48 @@ describe("UserRecruitmentFunctionality", () => {
         expect(InitialRecruitmentState).toBe(state);
     });
 
-    it("dispatch: Mass fire all", () => {
+    it("dispatch: Mass fire all", async () => {
         const { result } = renderHook(() =>
             useReducer(RecruitmentEditReducer, InitialRecruitmentState)
         );
 
         const [, dispatch] = result.current;
 
-        dispatch({ type: RecruitmentEditAction.LoadUser, payload: {}, });
-        dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: {}, });
-        dispatch({ type: RecruitmentEditAction.EditPosition, payload: '', });
-        dispatch({ type: RecruitmentEditAction.EditMentorBio, payload: '', });
-        dispatch({ type: RecruitmentEditAction.EditDescription, payload: '', });
-        dispatch({ type: RecruitmentEditAction.EditLink, payload: '', });
-        dispatch({ type: RecruitmentEditAction.EditDate, payload: '', });
-        dispatch({ type: RecruitmentEditAction.EditLabLink, payload: '', });
-        dispatch({ type: 999, payload: '', });
+
+        await act(async () => {
+            dispatch({ type: RecruitmentEditAction.EditPosition, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].Position).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.EditMentorBio, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].Bio).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.EditDescription, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].Description).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.EditLink, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].Link).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.EditDate, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].Cycle).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.EditLabLink, payload: '1', });
+            await waitFor(() => {
+                expect(result.current[0].LabLink).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.LoadUser, payload: { Position: '1' }, });
+            await waitFor(() => {
+                expect(result.current[0].Position).toBe('1')
+            })
+            dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: { Position: '1' }, });
+            await waitFor(() => {
+                expect(result.current[0].Position).toBe('1')
+            })
+            dispatch({ type: 999, payload: '', });
+        })
     });
 });

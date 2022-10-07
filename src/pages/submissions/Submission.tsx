@@ -32,6 +32,8 @@ import { timestamp } from '../../firebase/config';
 import { ShowSubmissionsClosed } from './views/ShowSubmissionsClosed';
 import { IndividualUserRecord, PosterSubmission } from '../../firebase/types/RecordTypes';
 import { CommonHeading } from './views/CommonHeading';
+import { checkIfSubmissionsOpen } from './helpers/SubmissionDateHelper';
+import { handleCreateStudentSubmit } from './helpers/SubmissionSender';
 
 export default function Submission(params: { userId: string }): JSX.Element {
   const { user, authIsReady } = useAuthorizationContext();
@@ -41,7 +43,6 @@ export default function Submission(params: { userId: string }): JSX.Element {
     idString: params.userId,
   });
   const [state, dispatch] = useReducer(SubmissionReducer, InitialSubmissionState);
-  const [showSubmissionPortal] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>('Submit Poster Application');
 
   useEffect(() => {
@@ -54,51 +55,18 @@ export default function Submission(params: { userId: string }): JSX.Element {
       });
       dispatch({ type: SubmissionAction.Email, payload: userDoc.userEmail });
     }
+    else {
+      return;
+    }
   }, [authIsReady, user, document]);
 
-  /** handleCreateStudentSubmit
-   *
-   * @param {HTMLFormElement} e
-   */
-  async function handleCreateStudentSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
-    e.preventDefault();
 
-    if (state.submittingAuthor && state.posterTitle && state.posterAbstract) {
-      if (state.submittingAuthor.split(/\w\w+/).length - 1 < 2) {
-        alert('Please enter a full name (i.e., First and Last)!');
-        return;
-      } else if (state.posterTitle.split(/\w\w+/).length - 1 < 2) {
-        alert('Please enter a full title (i.e., 3+ Words)!');
-      } else if (state.posterAbstract.split(/\w\w+/).length - 1 > 120) {
-        alert('Abstract is too long (i.e., over 120 words)!');
-        return;
-      }
 
-      const posterSubmission: PosterSubmission = {
-        name: state.submittingAuthor,
-        title: state.posterTitle,
-        email: state.correspondingEmail,
-        abstract: state.posterAbstract,
-        list: state.posterAuthorsFull,
-        time: timestamp.fromDate(new Date()),
-        presenter: state.authorChoice.value === 'I am interested.',
-        reviewed: false,
-      };
-
-      await addDocument(posterSubmission, user?.uid);
-
-      if (response.error) {
-        alert(`There was an issue uploading your submission: ${response.error}`);
-      } else {
-        setButtonText('Submission Completed');
-        alert('Your submission has been received and is currently under consideration.');
-      }
-    }
-  }
-
-  if (showSubmissionPortal === false) {
+  if (checkIfSubmissionsOpen() === false) {
     return <ShowSubmissionsClosed />;
   }
+
+  console.log(state)
 
   return (
     <>
@@ -137,7 +105,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                   maxWidth: '600px',
                 }}
               >
-                <form onSubmit={handleCreateStudentSubmit}>
+                <form >
                   <label>
                     <span>Submitting Author (Edit in Profile):</span>
                     <input required disabled type="text" value={state.submittingAuthor}></input>
@@ -181,16 +149,16 @@ export default function Submission(params: { userId: string }): JSX.Element {
                       value={state.posterAuthorsFull}
                     ></textarea>
                   </label>
-                  <label>
-                    <span>Tony Nevin Student Presenter Award:</span>
-                    <Select
-                      options={AuthorOptions}
-                      value={state.authorChoice}
-                      onChange={(option: any) =>
-                        dispatch({ type: SubmissionAction.Choice, payload: option })
-                      }
-                    />
-                  </label>
+                  <label htmlFor="framework-field">Tony Nevin Student Presenter Award:</label>
+                  <Select
+                    name={"framework-field"}
+                    inputId={"framework-field"}
+                    options={AuthorOptions}
+                    value={state.authorChoice}
+                    onChange={(option: any) =>
+                      dispatch({ type: SubmissionAction.Choice, payload: option })
+                    }
+                  />
 
                   <MDBBtn
                     noRipple
@@ -198,6 +166,12 @@ export default function Submission(params: { userId: string }): JSX.Element {
                     style={{
                       width: '100%',
                       marginTop: '25px',
+                    }}
+                    onClick={async (e) => {
+                      await handleCreateStudentSubmit({
+                        state, user, addDocument,
+                        setButtonText, response, dispatch
+                      })
                     }}
                   >
                     {buttonText}

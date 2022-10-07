@@ -39,12 +39,12 @@ describe('AnalyticPmax', () => {
       await selectEvent.select(getByLabelText("Select Implementation of Framework:"), "3-Parameter ZBE (with K)");
       await selectEvent.select(getByLabelText("Select Implementation of Framework:"), "Exponential Model");
 
-      expect(getAllByText("Load Example Data").length).toBe(1)
-      expect(getAllByText("Calculate").length).toBe(1)
+      expect(getAllByText("Load Example Data").length).toBe(1);
+      expect(getAllByText("Calculate").length).toBe(1);
 
-      getAllByText("Load Example Data").at(0)?.click()
+      getAllByText("Load Example Data").at(0)?.click();
 
-      getAllByText("Calculate").at(0)?.click()
+      getAllByText("Calculate").at(0)?.click();
     })
   });
 });

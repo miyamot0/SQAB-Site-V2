@@ -39,8 +39,6 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
     const { user, authIsReady, studentRecruitFlag, diversityReviewFlag, systemAdministratorFlag } =
         useAuthorizationContext();
 
-    console.log(`user: ${user} authIsReady: ${authIsReady}`)
-
     return <>
         <MDBNavbar expand="sm md lg xl xxl" style={{ backgroundColor: '#7f007f' }}>
             <MDBContainer fluid>
