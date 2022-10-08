@@ -89,6 +89,32 @@ jest.mock('../../../firebase/hooks/useFirestore', () => {
   };
 });
 
+jest.mock('../../../firebase/hooks/useFirebaseFunction', () => {
+  return {
+    updateStatusForRecruitment: jest.fn(),
+    createBlankTemplateRecruitment: jest.fn(),
+    updateStatusForPoster: jest.fn(),
+    getAggregatedDiversityInformation: jest.fn(),
+    getFilteredRecruitmentInformation: jest.fn(),
+    useFirebaseFunction: () => ({
+      updateStatusForRecruitment: jest.fn(),
+      createBlankTemplateRecruitment: jest.fn(),
+      updateStatusForPoster: jest.fn(),
+      getAggregatedDiversityInformation: jest.fn(),
+      getFilteredRecruitmentInformation: jest.fn(),
+    }),
+  };
+});
+
+jest.mock('../../admin/helpers/AdministrationHelpers', () => {
+  return {
+    createBlankAdTemplate: jest.fn(),
+    toggleRecruitmentStatus: jest.fn(),
+    togglePosterStatus: jest.fn(),
+    pullAggregatedDiversityInformation: jest.fn(),
+  };
+});
+
 describe('UserRecruitment', () => {
   const jsdomAlert = window.alert;
 

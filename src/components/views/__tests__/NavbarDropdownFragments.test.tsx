@@ -16,6 +16,46 @@ import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+// TODO: rep GOOD logout mock
+jest.mock('../../../firebase/hooks/useFirebaseLogout', () => {
+  return {
+    useFirebaseLogout: {
+      logout: jest.fn(),
+      logoutError: null,
+      logoutPending: false,
+    },
+  };
+});
+
+let mockUpdateStatusForRecruitment: jest.Mock<any, any>;
+jest.mock('../../../firebase/hooks/useFirebaseFunction', () => {
+  mockUpdateStatusForRecruitment = jest.fn();
+
+  return {
+    updateStatusForRecruitment: jest.fn(),
+    createBlankTemplateRecruitment: jest.fn(),
+    updateStatusForPoster: jest.fn(),
+    getAggregatedDiversityInformation: jest.fn(),
+    getFilteredRecruitmentInformation: jest.fn(),
+    useFirebaseFunction: () => ({
+      updateStatusForRecruitment: jest.fn(),
+      createBlankTemplateRecruitment: jest.fn(),
+      updateStatusForPoster: jest.fn(),
+      getAggregatedDiversityInformation: jest.fn(),
+      getFilteredRecruitmentInformation: jest.fn(),
+    }),
+  };
+});
+
+jest.mock('../../../pages/admin/helpers/AdministrationHelpers', () => {
+  return {
+    createBlankAdTemplate: jest.fn(),
+    toggleRecruitmentStatus: jest.fn(),
+    togglePosterStatus: jest.fn(),
+    pullAggregatedDiversityInformation: jest.fn(),
+  };
+});
+
 describe('NavbarDropdownFragments', () => {
   it('Should render, auth not ready, just dropdown', async () => {
     const user = { uid: '456' } as unknown as firebase.User;

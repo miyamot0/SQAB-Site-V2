@@ -24,30 +24,108 @@ describe('DemandCurveAnalyzer', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
     window.alert = jsdomAlert; // restore the jsdom alert
   });
 
-  it('Should render', async () => {
+  /*
+  it('Should render, [0]', async () => {
     await act(async () => {
       const { getByLabelText, getAllByText } = render(<DemandCurveAnalyzer />);
 
-      await selectEvent.select(getByLabelText("Modeling Option:"), "Zero-bounded Model (with K)");
-      await selectEvent.select(getByLabelText("Modeling Option:"), "Zero-bounded Model (no K)");
-      await selectEvent.select(getByLabelText("Modeling Option:"), "Exponentiated Model");
+      expect(getAllByText('Calculate').length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
 
-      await selectEvent.select(getByLabelText("Scaling parameter (K) Value:"), "Fit as Parameter");
-      await selectEvent.select(getByLabelText("Scaling parameter (K) Value:"), "Log Range");
+      getAllByText('Load Example Data').at(0)?.click();
 
-      expect(getAllByText("Load Example Data").length).toBe(1)
-      expect(getAllByText("Calculate").length).toBe(1)
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Zero-bounded Model (with K)');
+      getAllByText('Calculate').at(0)?.click();
 
-      getAllByText("Load Example Data").at(0)?.click()
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Zero-bounded Model (no K)');
+      getAllByText('Calculate').at(0)?.click();
 
-      getAllByText("Calculate").at(0)?.click()
-    })
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Exponentiated Model');
+      getAllByText('Calculate').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Fit as Parameter');
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Log Range');
+    });
+  });
+  */
+
+  it('Should render, [0]', async () => {
+    await act(async () => {
+      const { getByLabelText, getAllByText } = render(<DemandCurveAnalyzer />);
+
+      expect(getAllByText('Calculate').length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
+
+      getAllByText('Load Example Data').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Fit as Parameter');
+      //await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Log Range');
+
+      getAllByText('Calculate').at(0)?.click();
+    });
+  });
+
+  it('Should render, [1]', async () => {
+    await act(async () => {
+      const { getByLabelText, getAllByText } = render(<DemandCurveAnalyzer />);
+
+      expect(getAllByText('Calculate').length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
+
+      getAllByText('Load Example Data').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Zero-bounded Model (with K)');
+      getAllByText('Calculate').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Fit as Parameter');
+      //await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Log Range');
+
+      getAllByText('Calculate').at(0)?.click();
+    });
+  });
+
+  it('Should render, [2]', async () => {
+    await act(async () => {
+      const { getByLabelText, getAllByText } = render(<DemandCurveAnalyzer />);
+
+      expect(getAllByText('Calculate').length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
+
+      getAllByText('Load Example Data').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Zero-bounded Model (no K)');
+      getAllByText('Calculate').at(0)?.click();
+
+      //await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Fit as Parameter');
+      //await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Log Range');
+
+      getAllByText('Calculate').at(0)?.click();
+    });
+  });
+
+  it('Should render, [3]', async () => {
+    await act(async () => {
+      const { getByLabelText, getAllByText } = render(<DemandCurveAnalyzer />);
+
+      expect(getAllByText('Calculate').length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
+
+      getAllByText('Load Example Data').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Modeling Option:'), 'Exponentiated Model');
+      getAllByText('Calculate').at(0)?.click();
+
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Fit as Parameter');
+      await selectEvent.select(getByLabelText('Scaling parameter (K) Value:'), 'Log Range');
+
+      getAllByText('Calculate').at(0)?.click();
+    });
   });
 });

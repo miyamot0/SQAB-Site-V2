@@ -11,7 +11,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import AnalyticPmax from '../AnalyticPmax';
-import { render, act } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import selectEvent from 'react-select-event';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -24,7 +24,7 @@ describe('AnalyticPmax', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -35,16 +35,29 @@ describe('AnalyticPmax', () => {
     await act(async () => {
       const { getByLabelText, getAllByText } = render(<AnalyticPmax />);
 
-      await selectEvent.select(getByLabelText("Select Implementation of Framework:"), "2-Parameter ZBE (no K)");
-      await selectEvent.select(getByLabelText("Select Implementation of Framework:"), "3-Parameter ZBE (with K)");
-      await selectEvent.select(getByLabelText("Select Implementation of Framework:"), "Exponential Model");
+      await selectEvent.select(
+        getByLabelText('Select Implementation of Framework:'),
+        '2-Parameter ZBE (no K)',
+      );
+      await selectEvent.select(
+        getByLabelText('Select Implementation of Framework:'),
+        '3-Parameter ZBE (with K)',
+      );
+      await selectEvent.select(
+        getByLabelText('Select Implementation of Framework:'),
+        'Exponential Model',
+      );
 
-      expect(getAllByText("Load Example Data").length).toBe(1);
-      expect(getAllByText("Calculate").length).toBe(1);
+      expect(getAllByText('Load Example Data').length).toBe(1);
+      expect(getAllByText('Calculate').length).toBe(1);
 
-      getAllByText("Load Example Data").at(0)?.click();
+      getAllByText('Load Example Data').at(0)?.click();
 
-      getAllByText("Calculate").at(0)?.click();
-    })
+      getAllByText('Calculate').at(0)?.click();
+
+      await setTimeout(() => {
+        expect(1).toBe(1);
+      }, 5000);
+    });
   });
 });

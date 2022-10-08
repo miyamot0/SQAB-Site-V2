@@ -17,9 +17,10 @@ import { FirestoreState } from '../../../../firebase/interfaces/FirebaseInterfac
 import { LayoutRecruitmentBody } from '../LayoutRecruitmentBody';
 
 import * as RecruitmentHelpers from '../../helpers/RecruitmentHelpers';
+import { EditRecruitmentState } from '../../../recruitment/types/RecruitmentTypes';
 
-const spyProfileCallback = jest.spyOn(RecruitmentHelpers, 'handleEditRecruitmentSubmit');
-spyProfileCallback.mockResolvedValue(Promise.resolve());
+//const spyProfileCallback = jest.spyOn(RecruitmentHelpers, 'handleEditRecruitmentSubmit');
+//spyProfileCallback.mockResolvedValue(Promise.resolve());
 
 // TODO good useFirestoreReducer
 jest.mock('../../../../firebase/hooks/useFirestore', () => {
@@ -33,11 +34,52 @@ jest.mock('../../../../firebase/hooks/useFirestore', () => {
   };
 });
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: mockId,
+  }),
+  useHistory: () => ({
+    push: jest.fn(),
+  }),
+  useRouteMatch: () => ({ url: `/user/${mockId}` }),
+}));
+
 Enzyme.configure({ adapter: new Adapter() });
 
 const mockId = '123';
 
+jest.mock('../../../../firebase/hooks/useFirebaseFunction', () => {
+  return {
+    updateStatusForRecruitment: jest.fn(),
+    createBlankTemplateRecruitment: jest.fn(),
+    updateStatusForPoster: jest.fn(),
+    getAggregatedDiversityInformation: jest.fn(),
+    getFilteredRecruitmentInformation: jest.fn(),
+    useFirebaseFunction: () => ({
+      updateStatusForRecruitment: jest.fn(),
+      createBlankTemplateRecruitment: jest.fn(),
+      updateStatusForPoster: jest.fn(),
+      getAggregatedDiversityInformation: jest.fn(),
+      getFilteredRecruitmentInformation: jest.fn(),
+    }),
+  };
+});
+
+jest.mock('../../../admin/helpers/AdministrationHelpers', () => {
+  return {
+    createBlankAdTemplate: jest.fn(),
+    toggleRecruitmentStatus: jest.fn(),
+    togglePosterStatus: jest.fn(),
+    pullAggregatedDiversityInformation: jest.fn(),
+  };
+});
+
 const mockRecruitmentAd = {
+  userEmail: 'string',
+  userInstitution: 'string',
+  userName: 'string',
+  userPhone: 'string',
   Bio: 'string',
   Contact: 'string',
   Cycle: 'string',
@@ -54,7 +96,7 @@ const mockRecruitmentAd = {
 
 describe('LayoutRecruitmentBody', () => {
   it('Should render, but data is incomplete', async () => {
-    const state = mockRecruitmentAd as RecruitmentAd;
+    const state = mockRecruitmentAd as EditRecruitmentState;
 
     const updateDocument = jest.fn();
     const response = {} as FirestoreState;
@@ -68,10 +110,10 @@ describe('LayoutRecruitmentBody', () => {
         <LayoutRecruitmentBody
           state={{
             ...state,
-            Name: '',
+            userName: '1',
           }}
           id={'123'}
-          history={undefined}
+          history={{ push: jest.fn }}
           updateDocument={updateDocument}
           response={response}
           dispatch={dispatch}
@@ -97,7 +139,7 @@ describe('LayoutRecruitmentBody', () => {
   });
 
   it('Should render, data is complete', async () => {
-    const state = mockRecruitmentAd as RecruitmentAd;
+    const state = mockRecruitmentAd as EditRecruitmentState;
 
     const updateDocument = jest.fn();
     const response = {} as FirestoreState;
@@ -111,7 +153,7 @@ describe('LayoutRecruitmentBody', () => {
         <LayoutRecruitmentBody
           state={state}
           id={'123'}
-          history={undefined}
+          history={{ push: jest.fn }}
           updateDocument={updateDocument}
           response={response}
           dispatch={dispatch}

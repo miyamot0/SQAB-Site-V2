@@ -11,6 +11,7 @@ import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import { DiversityFunctionResponse } from '../../../firebase/types/FunctionTypes';
 import { getAggregatedDiversityInformation } from '../../../firebase/hooks/useFirebaseFunction';
 import { DemographicPanel } from '../views/DemographicPanel';
+import { pullAggregatedDiversityInformation } from '../helpers/AdministrationHelpers';
 
 export interface DiversityDashboardLayout {
   sysAdminFlag: boolean;
@@ -35,6 +36,8 @@ export function DiversityDashboardLayout({
   }
 
   useEffect(() => {
+    pullAggregatedDiversityInformation(setCurrentDemographics);
+    /*
     getAggregatedDiversityInformation().then((value) => {
       if (value && value.data && value.data.genderData) {
         const cast = value.data as DiversityFunctionResponse;
@@ -43,6 +46,7 @@ export function DiversityDashboardLayout({
         return;
       }
     });
+    */
   }, []);
 
   return (

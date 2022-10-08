@@ -13,8 +13,11 @@ import Adapter from 'enzyme-adapter-react-16';
 import { act, fireEvent, render } from '@testing-library/react';
 import { SignInModal } from '../SignInModal';
 import ReactDOM from 'react-dom';
+import ReactModal from 'react-modal';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+ReactModal.setAppElement = () => null;
 
 jest.mock('../../../../firebase/hooks/useFirebaseLogin', () => {
   return {

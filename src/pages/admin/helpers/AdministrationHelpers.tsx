@@ -8,9 +8,11 @@
 
 import {
   createBlankTemplateRecruitment,
+  getAggregatedDiversityInformation,
   updateStatusForPoster,
   updateStatusForRecruitment,
 } from '../../../firebase/hooks/useFirebaseFunction';
+import { DiversityFunctionResponse } from '../../../firebase/types/FunctionTypes';
 import { PosterSubmission, RecruitmentAd } from '../../../firebase/types/RecordTypes';
 import { SingleOptionType } from '../../tools/types/GeneralTypes';
 
@@ -23,11 +25,7 @@ export async function createBlankAdTemplate(selectedAdUser: SingleOptionType) {
   if (selectedAdUser.value.trim().length < 1) {
     alert('Select a user to add a recruitment template');
   } else {
-    try {
-      await createBlankTemplateRecruitment({ recruiterId: selectedAdUser.value });
-    } catch (err) {
-      alert(err);
-    }
+    await createBlankTemplateRecruitment({ recruiterId: selectedAdUser.value });
   }
 }
 
@@ -38,14 +36,10 @@ export async function createBlankAdTemplate(selectedAdUser: SingleOptionType) {
  * @param {RecruitmentAd} recr objec
  */
 export async function toggleRecruitmentStatus(recr: RecruitmentAd) {
-  try {
-    await updateStatusForRecruitment({
-      recruitmentId: recr.id,
-      recruitmentApproval: !recr.Approved,
-    });
-  } catch (err) {
-    alert(err);
-  }
+  await updateStatusForRecruitment({
+    recruitmentId: recr.id,
+    recruitmentApproval: !recr.Approved,
+  });
 }
 
 /** toggleRecruitmentStatus
@@ -55,12 +49,25 @@ export async function toggleRecruitmentStatus(recr: RecruitmentAd) {
  * @param {PosterSubmission} poster objec
  */
 export async function togglePosterStatus(poster: PosterSubmission) {
-  try {
-    await updateStatusForPoster({
-      posterId: poster.id,
-      posterApproval: !poster.reviewed,
-    });
-  } catch (err) {
-    alert(err);
+  await updateStatusForPoster({
+    posterId: poster.id,
+    posterApproval: !poster.reviewed,
+  });
+}
+
+/** toggleRecruitmentStatus
+ *
+ * Modify recruitment status on the back end
+ *
+ * @param {PosterSubmission} poster objec
+ */
+export async function pullAggregatedDiversityInformation(setCurrentDemographics: any) {
+  const value = await getAggregatedDiversityInformation();
+
+  if (value && value.data && value.data.genderData) {
+    const cast = value.data as DiversityFunctionResponse;
+    setCurrentDemographics(cast);
+  } else {
+    setCurrentDemographics(null);
   }
 }

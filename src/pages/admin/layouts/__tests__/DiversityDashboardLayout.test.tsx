@@ -8,12 +8,11 @@
 
 import React from 'react';
 import ReactModal from 'react-modal';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { DiversityDashboardLayout } from '../DiversityDashboardLayout';
 import { DiversityFunctionResponse } from '../../../../firebase/types/FunctionTypes';
 import { BarChartEntry, DemographicsBarChartInterface } from '../../views/DemographicsBarChart';
-import * as FBFunctions from '../../../../firebase/hooks/useFirebaseFunction';
 import { act } from 'react-dom/test-utils';
 import { DemographicPanel } from '../../views/DemographicPanel';
 
@@ -96,53 +95,62 @@ const mockDiversityResponse: DiversityFunctionResponse = {
   },
 };
 
+let mockUpdateStatusForRecruitment: jest.Mock<any, any>;
+
+jest.mock('../../../../firebase/hooks/useFirebaseFunction', () => {
+  mockUpdateStatusForRecruitment = jest.fn();
+
+  return {
+    updateStatusForRecruitment: jest.fn(),
+    createBlankTemplateRecruitment: jest.fn(),
+    updateStatusForPoster: jest.fn(),
+    getAggregatedDiversityInformation: jest.fn(),
+    getFilteredRecruitmentInformation: jest.fn(),
+    useFirebaseFunction: () => ({
+      updateStatusForRecruitment: jest.fn(),
+      createBlankTemplateRecruitment: jest.fn(),
+      updateStatusForPoster: jest.fn(),
+      getAggregatedDiversityInformation: jest.fn(),
+      getFilteredRecruitmentInformation: jest.fn(),
+    }),
+  };
+});
+
+jest.mock('../../helpers/AdministrationHelpers', () => {
+  return {
+    createBlankAdTemplate: jest.fn(),
+    toggleRecruitmentStatus: jest.fn(),
+    togglePosterStatus: jest.fn(),
+    pullAggregatedDiversityInformation: jest.fn(),
+  };
+});
+
 describe('DiversityDashboardLayout', () => {
   it('Should render, good data', () => {
     act(() => {
-      const divSpy = jest.spyOn(FBFunctions, 'getAggregatedDiversityInformation');
-      const sysAdminFlag = true;
-      const diversityReviewFlag = true;
-
-      const mockDiv = jest.fn();
-      mockDiv.mockReturnValue(Promise.resolve({ data: mockDiversityResponse }));
-      divSpy.mockImplementation(mockDiv);
-
-      const wrapper = shallow(
-        <DiversityDashboardLayout
-          sysAdminFlag={sysAdminFlag}
-          diversityReviewFlag={diversityReviewFlag}
-        />,
+      const wrapper = mount(
+        <DiversityDashboardLayout sysAdminFlag={true} diversityReviewFlag={true} />,
       );
 
       expect(wrapper.find(DemographicPanel).length).toBe(1);
     });
   });
 
-  it('Should not render, quirky data', () => {
+  it('Should render, no sys privs', () => {
     act(() => {
-      const divSpy = jest.spyOn(FBFunctions, 'getAggregatedDiversityInformation');
-      const sysAdminFlag = true;
-      const diversityReviewFlag = true;
-
-      const mockDiv = jest.fn();
-      mockDiv.mockReturnValue(
-        Promise.resolve({
-          data: {
-            ...mockDiversityResponse,
-            genderData: null,
-          },
-        }),
-      );
-      divSpy.mockImplementation(mockDiv);
-
       const wrapper = shallow(
-        <DiversityDashboardLayout
-          sysAdminFlag={sysAdminFlag}
-          diversityReviewFlag={diversityReviewFlag}
-        />,
+        <DiversityDashboardLayout sysAdminFlag={false} diversityReviewFlag={true} />,
       );
 
       expect(wrapper.find(DemographicPanel).length).toBe(1);
+    });
+  });
+
+  it('Should not render, no privs', () => {
+    act(() => {
+      const wrapper = shallow(
+        <DiversityDashboardLayout sysAdminFlag={false} diversityReviewFlag={false} />,
+      );
     });
   });
 });

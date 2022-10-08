@@ -8,6 +8,12 @@
 
 import { FirestoreAction } from '../../interfaces/FirebaseInterfaces';
 
+export interface dispatchIfNotCancelledHelper {
+  action: FirestoreAction;
+  isCancelled: boolean;
+  dispatch: any;
+}
+
 /** dispatchIfNotCancelledHelper
  *
  * @param param0
@@ -17,11 +23,7 @@ export function dispatchIfNotCancelledHelper({
   action,
   isCancelled,
   dispatch,
-}: {
-  action: FirestoreAction;
-  isCancelled: boolean;
-  dispatch: any;
-}) {
+}: dispatchIfNotCancelledHelper) {
   if (!isCancelled) {
     dispatch(action);
   } else {

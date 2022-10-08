@@ -6,115 +6,235 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { DiscountingResult } from "../../types/DiscountingTypes";
-import { handleDiscountingWorkerOutput } from "../DiscountingCharting"
+import { DiscountingResult } from '../../types/DiscountingTypes';
+import { handleDiscountingWorkerOutput } from '../DiscountingCharting';
 
 describe('DiscountingCharting', () => {
-    it('Fire end', () => {
+  it('Fire end', () => {
+    const worker = null as unknown as Worker;
+    const setRunningCalculation = jest.fn();
+    const setResultsSummary = jest.fn();
+    const setButtonStatusMsg = jest.fn();
+    const setChartOptions = jest.fn();
 
-        const worker = null as unknown as Worker;
-        const setRunningCalculation = jest.fn();
-        const setResultsSummary = jest.fn();
-        const setButtonStatusMsg = jest.fn();
-        const setChartOptions = jest.fn();
+    const baseState = {
+      AIC: 0,
+      AUC: 0,
+      AUClog10: 0,
+      BF: 1,
+      BIC: 0,
+      ED50: 1,
+      MSE: 0,
+      Model: '',
+      Params: [1, 1, 1],
+      Probability: 0,
+      RMSE: 0,
+      done: true,
+    };
 
+    const totalFits = [
+      { ...baseState, Model: 'Noise' },
+      { ...baseState, Model: 'Exponential' },
+      { ...baseState, Model: 'Hyperbolic' },
+      { ...baseState, Model: 'Beta-Delta' },
+      { ...baseState, Model: 'Green-Myerson' },
+      { ...baseState, Model: 'Rachlin' },
+      { ...baseState, Model: 'Loewstein-Prelec' },
+      { ...baseState, Model: 'Ebert-Prelec' },
+      { ...baseState, Model: 'Beleichrodt' },
+    ];
 
-        const baseState = {
-            AIC: 0,
-            AUC: 0,
-            AUClog10: 0,
-            BF: 1,
-            BIC: 0,
-            ED50: 1,
-            MSE: 0,
-            Model: '',
-            Params: [1, 1, 1],
-            Probability: 0,
-            RMSE: 0,
-            done: true
-        }
+    const res = {
+      done: true,
+      results: totalFits,
+      x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
+      y: [1000, 100, 10, 1, 0.1, 0.01, 0.001],
+    } as DiscountingResult;
 
-        const totalFits = [
-            { ...baseState, Model: 'Noise' },
-            { ...baseState, Model: 'Exponential' },
-            { ...baseState, Model: 'Hyperbolic' },
-            { ...baseState, Model: 'Beta-Delta' },
-            { ...baseState, Model: 'Green-Myerson' },
-            { ...baseState, Model: 'Rachlin' },
-            { ...baseState, Model: 'Loewstein-Prelec' },
-            { ...baseState, Model: 'Ebert-Prelec' },
-            { ...baseState, Model: 'Beleichrodt' },
-        ]
+    const ev = {
+      data: res,
+      done: true,
+      msg: 'finish',
+    } as unknown as MessageEvent<any>;
 
-        const res = {
-            done: true,
-            results: totalFits,
-            x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
-            y: [1000, 100, 10, 1, .1, .01, .001]
-        } as DiscountingResult;
+    handleDiscountingWorkerOutput({
+      ev,
+      worker,
+      setRunningCalculation,
+      setResultsSummary,
+      setButtonStatusMsg,
+      setChartOptions,
+    });
+  });
 
-        const ev = {
-            data: res,
-            done: true,
-            msg: 'finish'
-        } as unknown as MessageEvent<any>;
+  it('Fire ongoing', () => {
+    const worker = null as unknown as Worker;
+    const setRunningCalculation = jest.fn();
+    const setResultsSummary = jest.fn();
+    const setButtonStatusMsg = jest.fn();
+    const setChartOptions = jest.fn();
 
-        handleDiscountingWorkerOutput({
-            ev, worker, setRunningCalculation, setResultsSummary, setButtonStatusMsg, setChartOptions
-        })
-    })
+    const baseState = {
+      AIC: 0,
+      AUC: 0,
+      AUClog10: 0,
+      BF: 1,
+      BIC: 0,
+      ED50: 1,
+      MSE: 0,
+      Model: '',
+      Params: [1, 1, 1],
+      Probability: 0,
+      RMSE: 0,
+      done: true,
+    };
 
-    it('Fire ongoing', () => {
+    const totalFits = [
+      { ...baseState, Model: 'Noise' },
+      { ...baseState, Model: 'Exponential' },
+      { ...baseState, Model: 'Hyperbolic' },
+      { ...baseState, Model: 'Beta-Delta' },
+      { ...baseState, Model: 'Green-Myerson' },
+      { ...baseState, Model: 'Rachlin' },
+      { ...baseState, Model: 'Loewstein-Prelec' },
+      { ...baseState, Model: 'Ebert-Prelec' },
+      { ...baseState, Model: 'Beleichrodt' },
+    ];
 
-        const worker = null as unknown as Worker;
-        const setRunningCalculation = jest.fn();
-        const setResultsSummary = jest.fn();
-        const setButtonStatusMsg = jest.fn();
-        const setChartOptions = jest.fn();
+    const res = {
+      done: true,
+      results: totalFits,
+      x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
+      y: [1000, 100, 10, 1, 0.1, 0.01, 0.001],
+    } as DiscountingResult;
 
+    const ev = {
+      data: res,
+      done: false,
+      msg: 'finish',
+    } as unknown as MessageEvent<any>;
 
-        const baseState = {
-            AIC: 0,
-            AUC: 0,
-            AUClog10: 0,
-            BF: 1,
-            BIC: 0,
-            ED50: 1,
-            MSE: 0,
-            Model: '',
-            Params: [1, 1, 1],
-            Probability: 0,
-            RMSE: 0,
-            done: true
-        }
+    handleDiscountingWorkerOutput({
+      ev,
+      worker,
+      setRunningCalculation,
+      setResultsSummary,
+      setButtonStatusMsg,
+      setChartOptions,
+    });
+  });
 
-        const totalFits = [
-            { ...baseState, Model: 'Noise' },
-            { ...baseState, Model: 'Exponential' },
-            { ...baseState, Model: 'Hyperbolic' },
-            { ...baseState, Model: 'Beta-Delta' },
-            { ...baseState, Model: 'Green-Myerson' },
-            { ...baseState, Model: 'Rachlin' },
-            { ...baseState, Model: 'Loewstein-Prelec' },
-            { ...baseState, Model: 'Ebert-Prelec' },
-            { ...baseState, Model: 'Beleichrodt' },
-        ]
+  it('Fire ongoing, Noise won', () => {
+    const worker = null as unknown as Worker;
+    const setRunningCalculation = jest.fn();
+    const setResultsSummary = jest.fn();
+    const setButtonStatusMsg = jest.fn();
+    const setChartOptions = jest.fn();
 
-        const res = {
-            done: true,
-            results: totalFits,
-            x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
-            y: [1000, 100, 10, 1, .1, .01, .001]
-        } as DiscountingResult;
+    const baseState = {
+      AIC: 0,
+      AUC: 0,
+      AUClog10: 0,
+      BF: 1,
+      BIC: 0,
+      ED50: 1,
+      MSE: 0,
+      Model: '',
+      Params: [1, 1, 1],
+      Probability: 0,
+      RMSE: 0,
+      done: true,
+    };
 
-        const ev = {
-            data: res,
-            done: false,
-            msg: 'finish'
-        } as unknown as MessageEvent<any>;
+    const totalFits = [
+      { ...baseState, Model: 'noise', Probability: 0.9 },
+      { ...baseState, Model: 'Exponential' },
+      { ...baseState, Model: 'Hyperbolic' },
+      { ...baseState, Model: 'Beta-Delta' },
+      { ...baseState, Model: 'Green-Myerson' },
+      { ...baseState, Model: 'Rachlin' },
+      { ...baseState, Model: 'Loewstein-Prelec' },
+      { ...baseState, Model: 'Ebert-Prelec' },
+      { ...baseState, Model: 'Beleichrodt' },
+    ];
 
-        handleDiscountingWorkerOutput({
-            ev, worker, setRunningCalculation, setResultsSummary, setButtonStatusMsg, setChartOptions
-        })
-    })
-})
+    const res = {
+      done: true,
+      results: totalFits,
+      x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
+      y: [1000, 100, 10, 1, 0.1, 0.01, 0.001],
+    } as DiscountingResult;
+
+    const ev = {
+      data: res,
+      done: false,
+      msg: 'finish',
+    } as unknown as MessageEvent<any>;
+
+    handleDiscountingWorkerOutput({
+      ev,
+      worker,
+      setRunningCalculation,
+      setResultsSummary,
+      setButtonStatusMsg,
+      setChartOptions,
+    });
+  });
+
+  it('Fire ongoing, Noise won, not done', () => {
+    const worker = null as unknown as Worker;
+    const setRunningCalculation = jest.fn();
+    const setResultsSummary = jest.fn();
+    const setButtonStatusMsg = jest.fn();
+    const setChartOptions = jest.fn();
+
+    const baseState = {
+      AIC: 0,
+      AUC: 0,
+      AUClog10: 0,
+      BF: 1,
+      BIC: 0,
+      ED50: 1,
+      MSE: 0,
+      Model: '',
+      Params: [1, 1, 1],
+      Probability: 0,
+      RMSE: 0,
+      done: false,
+    };
+
+    const totalFits = [
+      { ...baseState, Model: 'noise', Probability: 0.9 },
+      { ...baseState, Model: 'Exponential' },
+      { ...baseState, Model: 'Hyperbolic' },
+      { ...baseState, Model: 'Beta-Delta' },
+      { ...baseState, Model: 'Green-Myerson' },
+      { ...baseState, Model: 'Rachlin' },
+      { ...baseState, Model: 'Loewstein-Prelec' },
+      { ...baseState, Model: 'Ebert-Prelec' },
+      { ...baseState, Model: 'Beleichrodt' },
+    ];
+
+    const res = {
+      done: false,
+      results: totalFits,
+      x: [1, 100, 1000, 10000, 100000, 1000000, 10000000],
+      y: [1000, 100, 10, 1, 0.1, 0.01, 0.001],
+    } as DiscountingResult;
+
+    const ev = {
+      data: res,
+      done: false,
+      msg: 'finish',
+    } as unknown as MessageEvent<any>;
+
+    handleDiscountingWorkerOutput({
+      ev,
+      worker,
+      setRunningCalculation,
+      setResultsSummary,
+      setButtonStatusMsg,
+      setChartOptions,
+    });
+  });
+});

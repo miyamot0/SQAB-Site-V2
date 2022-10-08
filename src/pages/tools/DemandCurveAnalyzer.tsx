@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Highcharts from 'highcharts';
-import highchartsAccessibility from "highcharts/modules/accessibility";
+import highchartsAccessibility from 'highcharts/modules/accessibility';
 highchartsAccessibility(Highcharts);
 import HighchartsReact from 'highcharts-react-official';
 import {
@@ -37,7 +37,23 @@ const ModelOptions: SingleOptionType[] = [
 ];
 
 export default function DemandCurveAnalyzer(): JSX.Element {
-  const [hotData, setHotData] = useState<string[][]>();
+  const [hotData, setHotData] = useState<string[][]>([
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+    ['', ''],
+  ]);
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
 
   const [kOptionsAvailable, setKOptionsAvailable] = useState<SingleOptionType[]>([
@@ -60,26 +76,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
   const [chartOptions, setChartOptions] = useState({});
 
   let worker: Worker | undefined = undefined;
-
-  useEffect(() => {
-    setHotData([
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-      ['', ''],
-    ]);
-  }, []);
 
   /**
    * loadExampleData
@@ -108,10 +104,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
    *
    */
   function calculateDemand(): void {
-    if (hotData === null || hotData === undefined) {
-      return;
-    }
-
     const thing = hotData;
 
     const mX = [];
@@ -140,11 +132,14 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       return;
     }
 
-    worker = new Worker('https://sqab.org/workers/worker_demand2.js');
+    worker = new Worker('https://sqab.org/workers/worker_demand.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleDemandWorkerOutput({
-        ev, worker, setRunningCalculation,
-        setResultsSummary, setChartOptions
+        ev,
+        worker,
+        setRunningCalculation,
+        setResultsSummary,
+        setChartOptions,
       });
     };
 
@@ -276,15 +271,17 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 <HotColumn title="Consumption" />
               </HotTable>
 
-              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">Modeling Option:</label>
+              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">
+                Modeling Option:
+              </label>
               <Select
-                name={"framework-field"}
-                inputId={"framework-field"}
+                name={'framework-field'}
+                inputId={'framework-field'}
                 options={ModelOptions}
                 onChange={(option) => {
                   if (option) {
                     setModelOption(option);
-                    setChartOptions({})
+                    setChartOptions({});
 
                     if (option.value.includes('Zero')) {
                       setKOptionsAvailable([
@@ -312,10 +309,12 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
               {modelOption !== ModelOptions[3] && (
                 <>
-                  <label style={{ width: '100%' }} htmlFor="span-field">Scaling parameter (K) Value:</label>
+                  <label style={{ width: '100%' }} htmlFor="span-field">
+                    Scaling parameter (K) Value:
+                  </label>
                   <Select
-                    name={"span-field"}
-                    inputId={"span-field"}
+                    name={'span-field'}
+                    inputId={'span-field'}
                     options={kOptionsAvailable}
                     onChange={(option) => {
                       if (option) {
@@ -328,7 +327,6 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                   />
                 </>
               )}
-
 
               <MDBBtn
                 noRipple
