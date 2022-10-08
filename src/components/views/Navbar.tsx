@@ -24,6 +24,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { useFirebaseLogout } from '../../firebase/hooks/useFirebaseLogout';
+import { NavbarDropdownAdmin } from './NavbarDropdownAdmin';
 
 export interface Navbar {
   toggleView: any;
@@ -36,8 +37,14 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
   const navbarTextStyle = { color: 'white' };
 
   const { logout, logoutPending } = useFirebaseLogout();
-  const { user, authIsReady, studentRecruitFlag, diversityReviewFlag, systemAdministratorFlag } =
-    useAuthorizationContext();
+  const {
+    user,
+    authIsReady,
+    studentRecruitFlag,
+    diversityReviewFlag,
+    systemAdministratorFlag,
+    submissionReviewFlag,
+  } = useAuthorizationContext();
 
   return (
     <>
@@ -162,78 +169,16 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
                 </MDBNavbarLink>
               </MDBNavbarItem>
 
-              <MDBNavbarItem className="ml-auto">
-                {authIsReady && !user && (
-                  <MDBNavbarLink
-                    active
-                    aria-current="page"
-                    href="/signin"
-                    className="mr-2"
-                    style={navbarTextStyle}
-                  >
-                    Log In
-                  </MDBNavbarLink>
-                )}
-
-                {authIsReady && user && (
-                  <>
-                    {logoutPending === false && (
-                      <>
-                        <MDBDropdown style={navbarTextStyle}>
-                          <MDBDropdownToggle tag="a" className="nav-link mr-2">
-                            Resources
-                          </MDBDropdownToggle>
-                          <MDBDropdownMenu>
-                            {authIsReady ? (
-                              <MDBDropdownItem link href={`/manage/${user.uid}`}>
-                                Manage Recruitment
-                              </MDBDropdownItem>
-                            ) : (
-                              <></>
-                            )}
-                            {authIsReady &&
-                            (studentRecruitFlag ||
-                              diversityReviewFlag ||
-                              systemAdministratorFlag) ? (
-                              <MDBDropdownItem
-                                link
-                                href={'/admin'}
-                                data-testid={'administration-link'}
-                              >
-                                Administration
-                              </MDBDropdownItem>
-                            ) : (
-                              <></>
-                            )}
-                            <MDBDropdownItem link href={`/poster/${user.uid}`}>
-                              Manage Poster Submission
-                            </MDBDropdownItem>
-                            <MDBDropdownItem link href={`/user/${user.uid}`}>
-                              Manage Profile
-                            </MDBDropdownItem>
-                            <MDBDropdownItem link onClick={() => logout()}>
-                              Log Out
-                            </MDBDropdownItem>
-                          </MDBDropdownMenu>
-                        </MDBDropdown>
-                      </>
-                    )}
-
-                    {logoutPending && (
-                      <MDBNavbarLink
-                        active
-                        aria-current="page"
-                        href="#!"
-                        className="mr-2"
-                        onClick={() => logout()}
-                        style={navbarTextStyle}
-                      >
-                        Logging Out
-                      </MDBNavbarLink>
-                    )}
-                  </>
-                )}
-              </MDBNavbarItem>
+              <NavbarDropdownAdmin
+                user={user}
+                authIsReady={authIsReady}
+                studentRecruitFlag={studentRecruitFlag}
+                diversityReviewFlag={diversityReviewFlag}
+                systemAdministratorFlag={systemAdministratorFlag}
+                logoutPending={logoutPending}
+                logout={logout}
+                submissionReviewFlag={submissionReviewFlag}
+              />
             </MDBNavbarNav>
           </MDBCollapse>
         </MDBContainer>

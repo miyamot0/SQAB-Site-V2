@@ -54,19 +54,14 @@ export default function Submission(params: { userId: string }): JSX.Element {
         payload: `${userDoc.userName} (${userDoc.userInstitution})`,
       });
       dispatch({ type: SubmissionAction.Email, payload: userDoc.userEmail });
-    }
-    else {
+    } else {
       return;
     }
   }, [authIsReady, user, document]);
 
-
-
   if (checkIfSubmissionsOpen() === false) {
     return <ShowSubmissionsClosed />;
   }
-
-  console.log(state)
 
   return (
     <>
@@ -105,7 +100,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                   maxWidth: '600px',
                 }}
               >
-                <form >
+                <form>
                   <label>
                     <span>Submitting Author (Edit in Profile):</span>
                     <input required disabled type="text" value={state.submittingAuthor}></input>
@@ -151,8 +146,8 @@ export default function Submission(params: { userId: string }): JSX.Element {
                   </label>
                   <label htmlFor="framework-field">Tony Nevin Student Presenter Award:</label>
                   <Select
-                    name={"framework-field"}
-                    inputId={"framework-field"}
+                    name={'framework-field'}
+                    inputId={'framework-field'}
                     options={AuthorOptions}
                     value={state.authorChoice}
                     onChange={(option: any) =>
@@ -169,9 +164,13 @@ export default function Submission(params: { userId: string }): JSX.Element {
                     }}
                     onClick={async (e) => {
                       await handleCreateStudentSubmit({
-                        state, user, addDocument,
-                        setButtonText, response, dispatch
-                      })
+                        state,
+                        user,
+                        addDocument,
+                        setButtonText,
+                        response,
+                        dispatch,
+                      });
                     }}
                   >
                     {buttonText}

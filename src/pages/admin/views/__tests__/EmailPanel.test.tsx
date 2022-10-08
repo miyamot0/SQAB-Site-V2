@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import firebase from 'firebase';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
@@ -28,51 +29,17 @@ const jestTotalFunctions = jest.fn().mockResolvedValue(true);
 const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
 spyTotalFunctions.mockImplementation(jestTotalFunctions);
 
-const mockTime1 = timestamp.fromDate(new Date());
-const mockTime2 = timestamp.fromDate(new Date('10/3/2022'));
+let mockUseFirebaseCollectionTyped: jest.Mock<any, any>;
 
+// TODO: rep GOOD document mock
 jest.mock('../../../../firebase/hooks/useFirebaseCollection', () => {
-  const originalModule = jest.requireActual('../../../../firebase/hooks/useFirebaseCollection');
-  return {
-    __esModule: true,
-    ...originalModule,
-    default: () => ({
-      useFirebaseCollectionTyped: {
-        documents: [
-          {
-            delivery: {
-              attempts: 1,
-              endTime: mockTime1,
-              error: 'string',
-              leaseExpireTime: 'string',
-              startTime: mockTime1,
-              state: 'string',
-            },
-            template: null,
-            to: ['string[]'],
-          } as EmailStatus,
+  mockUseFirebaseCollectionTyped = jest.fn();
 
-          {
-            delivery: {
-              attempts: 1,
-              endTime: mockTime2,
-              error: 'string',
-              leaseExpireTime: 'string',
-              startTime: mockTime2,
-              state: 'string',
-            },
-            template: {
-              data: {
-                name: 'string',
-                title: 'string',
-              },
-              name: 'string',
-            },
-            to: ['string[]'],
-          } as EmailStatus,
-        ] as EmailStatus[],
-      },
-    }),
+  //const mockTime1 = firebase.firestore.Timestamp.now();
+  //const mockTime2 = firebase.firestore.Timestamp.now();
+
+  return {
+    useFirebaseCollectionTyped: mockUseFirebaseCollectionTyped,
   };
 });
 
@@ -88,10 +55,62 @@ describe('EmailPanel', () => {
     window.alert = jsdomAlert; // restore the jsdom alert
   });
 
-  it('Should render with data', () => {
+  it('Should render with data, docs should be good', () => {
     const spyRecruitment = jest.spyOn(FBFunctions, 'updateStatusForRecruitment');
     const jestFn = jest.fn();
     spyRecruitment.mockImplementation(jestFn);
+
+    mockUseFirebaseCollectionTyped.mockReturnValue({
+      documents: [
+        {
+          delivery: {
+            attempts: 1,
+            endTime: timestamp.now(),
+            error: 'string',
+            leaseExpireTime: 'string',
+            startTime: timestamp.now(),
+            state: 'string',
+          },
+          template: null,
+          to: ['string[]'],
+        } as EmailStatus,
+
+        {
+          delivery: {
+            attempts: 1,
+            endTime: timestamp.now(),
+            error: 'string',
+            leaseExpireTime: 'string',
+            startTime: timestamp.now(),
+            state: 'string',
+          },
+          template: {
+            data: {
+              name: 'string',
+              title: 'string',
+            },
+            name: 'string',
+          },
+          to: ['string[]'],
+        } as EmailStatus,
+      ] as EmailStatus[],
+      error: null,
+    });
+
+    const wrapper = mount(<EmailPanel />);
+
+    expect(wrapper.find(MDBDataTable).length).toBe(1);
+  });
+
+  it('Should render without data', () => {
+    const spyRecruitment = jest.spyOn(FBFunctions, 'updateStatusForRecruitment');
+    const jestFn = jest.fn();
+    spyRecruitment.mockImplementation(jestFn);
+
+    mockUseFirebaseCollectionTyped.mockReturnValue({
+      documents: null,
+      error: 'Error',
+    });
 
     const wrapper = mount(<EmailPanel />);
 

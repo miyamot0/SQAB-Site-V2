@@ -136,7 +136,7 @@ describe('UserRecruitment', () => {
   it('Should render, errored out', async () => {
     mockUseAuthContext.mockImplementation(() => ({
       user: { uid: '456' } as unknown as firebase.User,
-      authIsReady: false,
+      authIsReady: true,
       studentRecruitFlag: false,
       systemAdministratorFlag: false,
       diversityReviewFlag: false,
@@ -172,7 +172,7 @@ describe('UserRecruitment', () => {
   it('Should render, good data', async () => {
     mockUseAuthContext.mockImplementation(() => ({
       user: { uid: '456' } as unknown as firebase.User,
-      authIsReady: false,
+      authIsReady: true,
       studentRecruitFlag: false,
       systemAdministratorFlag: false,
       diversityReviewFlag: false,

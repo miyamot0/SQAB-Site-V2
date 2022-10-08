@@ -23,24 +23,7 @@ export default function UserPoster() {
 
   const { authIsReady } = useAuthorizationContext();
 
-  if (authIsReady === false || documentError) {
-    return (
-      <div>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="8">
-            <MDBCard>
-              <MDBCardBody>
-                <MDBCardTitle>Poster Details</MDBCardTitle>
-                At present, you currently do not have a poster on record as being submitted. If you
-                have previously submitted a poster, but it is not shown here, contact the site
-                administrator.
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    );
-  } else if (document) {
+  if (authIsReady === true && document) {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -97,6 +80,21 @@ export default function UserPoster() {
       </div>
     );
   } else {
-    return <></>;
+    return (
+      <div>
+        <MDBRow center className="row-eq-height">
+          <MDBCol sm="8">
+            <MDBCard>
+              <MDBCardBody>
+                <MDBCardTitle>Poster Details</MDBCardTitle>
+                At present, you currently do not have a poster on record as being submitted. If you
+                have previously submitted a poster, but it is not shown here, contact the site
+                administrator.
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </div>
+    );
   }
 }

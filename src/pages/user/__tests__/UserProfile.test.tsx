@@ -63,7 +63,7 @@ jest.mock('react-router-dom', () => ({
   useRouteMatch: () => ({ url: `/user/${mockId}` }),
 }));
 
-// TODO good useFirestoreReducer
+// TODO GOOD useFirestore
 jest.mock('../../../firebase/hooks/useFirestore', () => {
   return {
     useFirestore: () => ({
@@ -328,7 +328,7 @@ describe('UserProfile', () => {
         userEducation: 'undefined',
         userGender: 'undefined',
         userAge: 'undefined',
-        userRaceEthnicity: undefined as unknown as string,
+        userRaceEthnicity: null as unknown as string,
         userOrientation: 'undefined',
         userLanguage: 'undefined',
         userNationality: 'undefined',

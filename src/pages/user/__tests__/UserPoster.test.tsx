@@ -155,7 +155,7 @@ describe('UserPoster', () => {
     });
   });
 
-  it('Should render, good auth, docs', async () => {
+  it('Should render, good auth/read, docs', async () => {
     mockUseAuthContext.mockImplementation(() => ({
       user: { uid: '123' } as unknown as firebase.User,
       authIsReady: true,
@@ -195,6 +195,87 @@ describe('UserPoster', () => {
         // Should not display
         expect(wrapper.html().toString().includes('Status of Review')).toBe(true);
       });
+    });
+  });
+
+  it('Should render, good auth/read, docs, scored', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '123' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    mockUseFirebaseDocumentTyped.mockReturnValue({
+      document: {
+        name: '',
+        title: '',
+        email: '',
+        abstract: '',
+        list: '',
+        time: timestamp.fromDate(new Date()),
+        presenter: true,
+        reviewed: true,
+        id: '',
+      } as PosterSubmission,
+      documentError: undefined,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <UserPoster />
+        </AuthorizationContextProvider>,
+      );
+
+      await waitFor(() => {
+        // Should not display
+        expect(wrapper.html().toString().includes('Status of Review')).toBe(true);
+      });
+    });
+  });
+
+  it('Should render, good auth/read, docs, blank out', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '123' } as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    mockUseFirebaseDocumentTyped.mockReturnValue({
+      document: {
+        name: '',
+        title: '',
+        email: '',
+        abstract: '',
+        list: '',
+        time: timestamp.fromDate(new Date()),
+        presenter: true,
+        reviewed: false,
+        id: '',
+      } as PosterSubmission,
+      documentError: undefined,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <UserPoster />
+        </AuthorizationContextProvider>,
+      );
     });
   });
 });

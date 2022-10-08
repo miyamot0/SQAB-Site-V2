@@ -16,7 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
-import { dateToMDY, dateToYMD, handleEditRecruitmentSubmit } from './helpers/RecruitmentHelpers';
+import { dateToYMD } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { RecruitmentAd } from '../../firebase/types/RecordTypes';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
@@ -30,15 +30,10 @@ import { LayoutRecruitmentBody } from './layouts/LayoutRecruitmentBody';
 
 export default function UserRecruitment() {
   const { id } = useParams<RoutedAdminSet>();
-  const { documentError: docRecErr, document: docRec } = useFirebaseDocumentTyped<RecruitmentAd>({
+  const { document } = useFirebaseDocumentTyped<RecruitmentAd>({
     collectionString: 'recruitment',
     idString: id,
   });
-  //const { documentError: docUsrErr, document: docUsr } =
-  //  useFirebaseDocumentTyped<IndividualUserRecord>({
-  //    collectionString: 'users',
-  //    idString: id,
-  //  });
 
   const { updateDocument, response } = useFirestore('recruitment');
   const { authIsReady } = useAuthorizationContext();
@@ -49,19 +44,32 @@ export default function UserRecruitment() {
   const history = useHistory();
 
   useEffect(() => {
-    if (docRec && !didBuild) {
+    if (document && !didBuild) {
       setDidBuild(true);
 
       const modDateRec = {
-        ...docRec,
-        Cycle: dateToYMD(docRec.Cycle),
+        ...document,
+        Cycle: dateToYMD(document.Cycle),
       } as unknown as EditRecruitmentState;
 
       dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: modDateRec });
     }
-  }, [docRec, didBuild]);
+  }, [document, didBuild]);
 
-  if (docRecErr) {
+  if (authIsReady === true && document) {
+    return (
+      <LayoutRecruitmentBody
+        state={state}
+        id={id}
+        updateDocument={updateDocument}
+        history={history}
+        response={response}
+        dispatch={dispatch}
+      />
+    );
+  } else if (authIsReady === false) {
+    return <UserOutputLoading />;
+  } else {
     return (
       <div>
         <MDBRow center className="row-eq-height">
@@ -77,10 +85,5 @@ export default function UserRecruitment() {
         </MDBRow>
       </div>
     );
-  } else if (authIsReady === false) {
-    return <UserOutputLoading />;
-  } else {
-    return <LayoutRecruitmentBody state={state} id={id} updateDocument={updateDocument}
-      history={history} response={response} dispatch={dispatch} />;
   }
 }

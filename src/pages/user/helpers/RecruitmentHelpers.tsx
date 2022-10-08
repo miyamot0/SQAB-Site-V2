@@ -6,8 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { FirestoreState } from "../../../firebase/interfaces/FirebaseInterfaces";
-import { RecruitmentAd } from "../../../firebase/types/RecordTypes";
+import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
+import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
+import { EditRecruitmentState } from '../../recruitment/types/RecruitmentTypes';
 
 /** dateToYMD
  *
@@ -44,19 +45,23 @@ export function dateToMDY(dateString: string) {
  * Submission event for student edit form
  *
  */
-export async function handleEditRecruitmentSubmit(state: RecruitmentAd, id: string | undefined,
-  updateDocument: any, history: any, response: FirestoreState): Promise<void> {
-
+export async function handleEditRecruitmentSubmit(
+  state: EditRecruitmentState,
+  id: string | undefined,
+  updateDocument: any,
+  history: any,
+  response: FirestoreState,
+): Promise<void> {
   const selectedProperties = {
     Bio: state.Bio,
-    Contact: state.Contact,
+    Contact: state.userEmail,
     Cycle: state.Cycle,
     Description: state.Description,
     Institution: state.Institution,
     LabLink: state.LabLink,
     Link: state.Link,
-    Mentor: state.Mentor,
-    Name: state.Name,
+    Mentor: state.userName,
+    Name: state.userName,
     Position: state.Position,
   };
 

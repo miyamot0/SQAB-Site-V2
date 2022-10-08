@@ -22,7 +22,13 @@ import { UserOutputLoading } from './views/UserOutputLoading';
 import { LayoutProfileBody } from './layouts/LayoutProfileBody';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 import { SingleOptionType } from '../tools/types/GeneralTypes';
-import { AgeOptions, DemographicOptions, EducationOptions, GenderOptions, SexualityOptions } from './helpers/DemographicOptions';
+import {
+  AgeOptions,
+  DemographicOptions,
+  EducationOptions,
+  GenderOptions,
+  SexualityOptions,
+} from './helpers/DemographicOptions';
 import { CountryList } from '../../utilities/CountryCodes';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 
@@ -40,9 +46,7 @@ export default function UserProfile() {
   const history = useHistory();
 
   useEffect(() => {
-
     if (document && !state.didBuild) {
-
       dispatch({ type: UserEditAction.EditDidBuild, payload: true });
 
       if (document.userPhone) {
@@ -57,9 +61,11 @@ export default function UserProfile() {
       let raceEthnicityOptions: string[] | undefined = undefined;
 
       if (document.userRaceEthnicity && document.userRaceEthnicity.includes(':')) {
-        raceEthnicityOptions = document.userRaceEthnicity.split(':')
+        raceEthnicityOptions = document.userRaceEthnicity.split(':');
       } else if (document.userRaceEthnicity && !document.userRaceEthnicity.includes(':')) {
-        raceEthnicityOptions = [document.userRaceEthnicity]
+        raceEthnicityOptions = [document.userRaceEthnicity];
+      } else {
+        raceEthnicityOptions = [];
       }
 
       const modDocument = {
@@ -88,12 +94,14 @@ export default function UserProfile() {
         }),
       };
 
-      modDocument.userEducation = modDocument.userEducation ?? null as unknown as SingleOptionType;
-      modDocument.userGender = modDocument.userGender ?? null as unknown as SingleOptionType;
-      modDocument.userAge = modDocument.userAge ?? null as unknown as SingleOptionType;
-      modDocument.userOrientation = modDocument.userOrientation ?? null as unknown as SingleOptionType;
-      modDocument.userNationality = modDocument.userNationality ?? null as unknown as SingleOptionType;
-      modDocument.userRaceEthnicity = modDocument.userRaceEthnicity ?? []
+      modDocument.userEducation =
+        modDocument.userEducation ?? (null as unknown as SingleOptionType);
+      modDocument.userGender = modDocument.userGender ?? (null as unknown as SingleOptionType);
+      modDocument.userAge = modDocument.userAge ?? (null as unknown as SingleOptionType);
+      modDocument.userOrientation =
+        modDocument.userOrientation ?? (null as unknown as SingleOptionType);
+      modDocument.userNationality =
+        modDocument.userNationality ?? (null as unknown as SingleOptionType);
 
       dispatch({ type: UserEditAction.Load, payload: modDocument });
     }
@@ -104,7 +112,15 @@ export default function UserProfile() {
   } else if (authIsReady === false) {
     return <UserOutputLoading />;
   } else {
-
-    return <LayoutProfileBody state={state} dispatch={dispatch} id={id} history={history} updateDocument={updateDocument} response={response} />;
+    return (
+      <LayoutProfileBody
+        state={state}
+        dispatch={dispatch}
+        id={id}
+        history={history}
+        updateDocument={updateDocument}
+        response={response}
+      />
+    );
   }
 }
