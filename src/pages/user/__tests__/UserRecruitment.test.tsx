@@ -15,6 +15,7 @@ import { AuthorizationContextProvider } from '../../../context/AuthorizationCont
 import { act } from 'react-dom/test-utils';
 import { waitFor } from '@testing-library/react';
 import UserRecruitment from '../UserRecruitment';
+import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -36,31 +37,34 @@ const mockRecruitmentAd = {
 };
 
 let mockUseFirebaseDocumentTyped: jest.Mock<any, any>;
-let mockUserStatus: jest.Mock<any, any>;
-let mockReadyStatus: jest.Mock<any, any>;
+let mockUseAuthContext: jest.Mock<any, any>;
 
+// TODO: rep GOOD document mock
 jest.mock('../../../firebase/hooks/useFirebaseDocument', () => {
   mockUseFirebaseDocumentTyped = jest.fn();
-
   return {
-    ...jest.requireActual("../../../firebase/hooks/useFirebaseDocument"),
     useFirebaseDocumentTyped: mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
-  }
-})
+      documentError: null,
+    }),
+  };
+});
 
+// TODO: rep GOOD auth mock
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
-  mockUserStatus = jest.fn();
-  mockReadyStatus = jest.fn();
-
+  mockUseAuthContext = jest.fn();
   return {
-    ...jest.requireActual('../../../context/hooks/useAuthorizationContext'),
-    user: mockUserStatus.mockReturnValue(undefined),
-    authIsReady: mockReadyStatus.mockReturnValue(false)
-  }
-})
+    useAuthorizationContext: mockUseAuthContext.mockImplementation(() => ({
+      user: null,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    })),
+  };
+});
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -73,19 +77,17 @@ jest.mock('react-router-dom', () => ({
   useRouteMatch: () => ({ url: `/user/${mockId}` }),
 }));
 
-/*
+// TODO good useFirestoreReducer
 jest.mock('../../../firebase/hooks/useFirestore', () => {
-  const originalModule = jest.requireActual('../../../firebase/hooks/useFirestore');
   return {
-    __esModule: true,
-    ...originalModule,
-    default: () => ({
+    useFirestore: () => ({
+      dispatchIfNotCancelled: jest.fn(),
       updateDocument: jest.fn(),
+      addDocument: jest.fn(),
       response: {} as FirestoreState,
     }),
   };
 });
-*/
 
 describe('UserRecruitment', () => {
   const jsdomAlert = window.alert;
@@ -93,7 +95,7 @@ describe('UserRecruitment', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -101,12 +103,19 @@ describe('UserRecruitment', () => {
   });
 
   it('Should render, still loading', async () => {
-    mockUserStatus.mockReturnValue({ uid: '456' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(false)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
+      documentError: null,
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
@@ -115,22 +124,29 @@ describe('UserRecruitment', () => {
       wrapper = mount(
         <AuthorizationContextProvider>
           <UserRecruitment />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
       await waitFor(() => {
-        expect(wrapper.html().toString().includes('Loading')).toBe(true)
-      })
-    })
+        expect(wrapper.html().toString().includes('Loading')).toBe(true);
+      });
+    });
   });
 
   it('Should render, errored out', async () => {
-    mockUserStatus.mockReturnValue({ uid: '456' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(false)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: "Error"
-    })
+      documentError: 'Error',
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
@@ -139,23 +155,34 @@ describe('UserRecruitment', () => {
       wrapper = mount(
         <AuthorizationContextProvider>
           <UserRecruitment />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
       await waitFor(() => {
-        expect(wrapper.html().toString().includes('you currently do not have a recruitment advertisement')).toBe(true)
-      })
-    })
+        expect(
+          wrapper
+            .html()
+            .toString()
+            .includes('you currently do not have a recruitment advertisement'),
+        ).toBe(true);
+      });
+    });
   });
 
-
   it('Should render, good data', async () => {
-    mockUserStatus.mockReturnValue({ uid: '456' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(false)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: mockRecruitmentAd,
-      documentError: null
-    })
+      documentError: null,
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
@@ -164,8 +191,8 @@ describe('UserRecruitment', () => {
       wrapper = mount(
         <AuthorizationContextProvider>
           <UserRecruitment />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
-    })
+    });
   });
 });

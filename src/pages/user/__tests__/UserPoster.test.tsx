@@ -22,31 +22,34 @@ import { waitFor } from '@testing-library/react';
 Enzyme.configure({ adapter: new Adapter() });
 
 let mockUseFirebaseDocumentTyped: jest.Mock<any, any>;
-let mockUserStatus: jest.Mock<any, any>;
-let mockReadyStatus: jest.Mock<any, any>;
+let mockUseAuthContext: jest.Mock<any, any>;
 
+// TODO: rep GOOD document mock
 jest.mock('../../../firebase/hooks/useFirebaseDocument', () => {
   mockUseFirebaseDocumentTyped = jest.fn();
-
   return {
-    ...jest.requireActual("../../../firebase/hooks/useFirebaseDocument"),
     useFirebaseDocumentTyped: mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
-  }
-})
+      documentError: null,
+    }),
+  };
+});
 
+// TODO: rep GOOD auth mock
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
-  mockUserStatus = jest.fn();
-  mockReadyStatus = jest.fn();
-
+  mockUseAuthContext = jest.fn();
   return {
-    ...jest.requireActual('../../../context/hooks/useAuthorizationContext'),
-    user: mockUserStatus.mockReturnValue(undefined),
-    authIsReady: mockReadyStatus.mockReturnValue(false)
-  }
-})
+    useAuthorizationContext: mockUseAuthContext.mockImplementation(() => ({
+      user: null,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    })),
+  };
+});
 
 const mockId = '123';
 
@@ -61,13 +64,13 @@ jest.mock('react-router-dom', () => ({
   useRouteMatch: () => ({ url: `/user/${mockId}` }),
 }));
 
+// TODO good useFirestoreReducer
 jest.mock('../../../firebase/hooks/useFirestore', () => {
-  const originalModule = jest.requireActual('../../../firebase/hooks/useFirestore');
   return {
-    __esModule: true,
-    ...originalModule,
-    default: () => ({
+    useFirestore: () => ({
+      dispatchIfNotCancelled: jest.fn(),
       updateDocument: jest.fn(),
+      addDocument: jest.fn(),
       response: {} as FirestoreState,
     }),
   };
@@ -78,7 +81,7 @@ describe('UserPoster', () => {
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -86,58 +89,82 @@ describe('UserPoster', () => {
   });
 
   it('Should render non-entry screen, since auth not ready, null docs', async () => {
-    mockUserStatus.mockReturnValue({ uid: '123' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(false)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '123' } as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
+      documentError: null,
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ShallowWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     await act(async () => {
-
       wrapper = shallow(
         <AuthorizationContextProvider>
           <UserPoster />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
+      wrapper.update();
+      wrapper.render();
+
       await waitFor(() => {
-        expect(wrapper.html().toString().includes('you currently do not have a poster on record as being submitted')).toBe(true)
-      })
-    })
+        expect(wrapper.html().toString().includes('contact the site administrator')).toBe(true);
+      });
+    });
   });
 
   it('Should render non-entry screen, docs are bad', async () => {
-    mockUserStatus.mockReturnValue({ uid: '123' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(true)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '123' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
+      documentError: 'Error',
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ShallowWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     await act(async () => {
-
       wrapper = shallow(
         <AuthorizationContextProvider>
           <UserPoster />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
       await waitFor(() => {
-        expect(wrapper.html().toString().includes('you currently do not have a poster on record as being submitted')).toBe(true)
-      })
-    })
+        expect(wrapper.html().toString().includes('contact the site administrator')).toBe(true);
+      });
+    });
   });
 
   it('Should render, good auth, docs', async () => {
-    mockUserStatus.mockReturnValue({ uid: '123' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(true)
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '123' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
 
     mockUseFirebaseDocumentTyped.mockReturnValue({
       document: {
@@ -151,8 +178,8 @@ describe('UserPoster', () => {
         reviewed: false,
         id: '',
       } as PosterSubmission,
-      documentError: undefined
-    })
+      documentError: undefined,
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
@@ -161,13 +188,13 @@ describe('UserPoster', () => {
       wrapper = mount(
         <AuthorizationContextProvider>
           <UserPoster />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
       await waitFor(() => {
         // Should not display
-        expect(wrapper.html().toString().includes("Status of Review")).toBe(true);
-      })
-    })
+        expect(wrapper.html().toString().includes('Status of Review')).toBe(true);
+      });
+    });
   });
 });
