@@ -7,70 +7,319 @@
  */
 
 import React from 'react';
-import Modal from 'react-modal';
 import firebase from 'firebase';
-import Enzyme, { mount, shallow } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import ReactModal from 'react-modal';
-import { MemoryRouter } from 'react-router-dom';
-import { render, waitFor, waitForOptions } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { WaitOptions } from '@testing-library/react-hooks';
 import { Navbar } from '../Navbar';
 import { AuthorizationContextProvider } from '../../../context/AuthorizationContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-let mockUserStatus: jest.Mock<any, any>;
-let mockReadyStatus: jest.Mock<any, any>;
+let mockUseAuthContext: jest.Mock<any, any>;
+let mockUseLogout: jest.Mock<any, any>;
 
+// TODO: rep GOOD auth mock
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
-    mockUserStatus = jest.fn();
-    mockReadyStatus = jest.fn();
+  mockUseAuthContext = jest.fn();
+  return {
+    useAuthorizationContext: mockUseAuthContext.mockImplementation(() => ({
+      user: null,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    })),
+  };
+});
 
-    return {
-        ...jest.requireActual('../../../context/hooks/useAuthorizationContext'),
-        user: mockUserStatus.mockReturnValue({ uid: '456' }),
-        authIsReady: mockReadyStatus.mockReturnValue(false)
-    }
-})
-
+// TODO: rep GOOD logout mock
+jest.mock('../../../firebase/hooks/useFirebaseLogout', () => {
+  mockUseLogout = jest.fn();
+  return {
+    useFirebaseLogout: mockUseLogout.mockImplementation(() => ({
+      logout: jest.fn(),
+      logoutError: null,
+      logoutPending: false,
+    })),
+  };
+});
 
 describe('Navbar', () => {
-    it('On load', async () => {
-        mockUserStatus.mockReturnValue({ uid: '456' });
-        mockReadyStatus.mockReturnValue(true)
+  it('On load, not ready', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: null as unknown as firebase.User,
+      authIsReady: false,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
 
-        const toggleView = jest.fn();
-        const showBasic = true;
-        const openModal = jest.fn();
-        const operModal2 = jest.fn();
+    const toggleView = jest.fn();
+    const showBasic = true;
+    const openModal = jest.fn();
+    const operModal2 = jest.fn();
 
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
-        await act(async () => {
-            wrapper = mount(
-                <AuthorizationContextProvider>
-                    <Navbar toggleView={toggleView} showBasic={showBasic} openModal={openModal} openModal2={operModal2} />
-                </AuthorizationContextProvider>
-            );
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Navbar
+            toggleView={toggleView}
+            showBasic={showBasic}
+            openModal={openModal}
+            openModal2={operModal2}
+          />
+        </AuthorizationContextProvider>,
+      );
 
-            wrapper = wrapper.update()
-            wrapper.render();
+      wrapper = wrapper.update();
+      wrapper.render();
 
-            wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
+      wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
 
-            wrapper = wrapper.update()
-            wrapper.render()
+      wrapper = wrapper.update();
+      wrapper.render();
 
-            wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
+      wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
 
-            wrapper = wrapper.update()
-            wrapper.render()
+      wrapper = wrapper.update();
+      wrapper.render();
 
-            wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
-            //TODO: issue overriding user
-        })
+      wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
+      //TODO: issue overriding user
     });
+  });
+
+  it('On load, ready, user null', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: null as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    const toggleView = jest.fn();
+    const showBasic = true;
+    const openModal = jest.fn();
+    const operModal2 = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Navbar
+            toggleView={toggleView}
+            showBasic={showBasic}
+            openModal={openModal}
+            openModal2={operModal2}
+          />
+        </AuthorizationContextProvider>,
+      );
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
+      //TODO: issue overriding user
+    });
+  });
+
+  it('On load, ready, user good, not pending', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    mockUseLogout.mockImplementation(() => ({
+      logout: jest.fn(),
+      logoutError: null,
+      logoutPending: false,
+    }));
+
+    const toggleView = jest.fn();
+    const showBasic = true;
+    const openModal = jest.fn();
+    const operModal2 = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Navbar
+            toggleView={toggleView}
+            showBasic={showBasic}
+            openModal={openModal}
+            openModal2={operModal2}
+          />
+        </AuthorizationContextProvider>,
+      );
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
+      //TODO: issue overriding user
+    });
+  });
+
+  it('On load, ready, user good, pending logout', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: false,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    mockUseLogout.mockImplementation(() => ({
+      logout: jest.fn(),
+      logoutError: null,
+      logoutPending: true,
+    }));
+
+    const toggleView = jest.fn();
+    const showBasic = true;
+    const openModal = jest.fn();
+    const operModal2 = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Navbar
+            toggleView={toggleView}
+            showBasic={showBasic}
+            openModal={openModal}
+            openModal2={operModal2}
+          />
+        </AuthorizationContextProvider>,
+      );
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
+      //TODO: issue overriding user
+    });
+  });
+
+  it('On load, ready, user good, not pending, admin', async () => {
+    mockUseAuthContext.mockImplementation(() => ({
+      user: { uid: '456' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      systemAdministratorFlag: true,
+      diversityReviewFlag: false,
+      submissionReviewFlag: false,
+      dispatch: undefined,
+    }));
+
+    mockUseLogout.mockImplementation(() => ({
+      logout: jest.fn(),
+      logoutError: null,
+      logoutPending: false,
+    }));
+
+    const toggleView = jest.fn();
+    const showBasic = true;
+    const openModal = jest.fn();
+    const operModal2 = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <AuthorizationContextProvider>
+          <Navbar
+            toggleView={toggleView}
+            showBasic={showBasic}
+            openModal={openModal}
+            openModal2={operModal2}
+          />
+        </AuthorizationContextProvider>,
+      );
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
+      //TODO: issue overriding user
+
+      expect(wrapper.find('a.dropdown-toggle').length).toBe(3);
+      wrapper.find('a.dropdown-toggle').at(0).simulate('click');
+      wrapper.find('a.dropdown-toggle').at(1).simulate('click');
+      wrapper.find('a.dropdown-toggle').at(2).simulate('click');
+
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      expect(wrapper.find('a.dropdown-item').length).toBe(0);
+
+      //expect(wrapper.find('[aria-expanded="false"]').at(0).text()).toStrictEqual({});
+    });
+  });
 });
