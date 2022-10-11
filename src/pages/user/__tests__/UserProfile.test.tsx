@@ -22,6 +22,19 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const mockId = '123';
 
+jest.mock('../../../firebase/config', () => {
+  return {
+    projectFirestore: jest.fn(),
+    projectAuth: {
+      onAuthStateChanged: jest.fn(),
+      signOut: () => jest.fn(),
+    },
+    projectFunctions: jest.fn(),
+    googleAuthProvider: jest.fn(),
+    fbAuthProvider: jest.fn(),
+  };
+});
+
 let mockUseFirebaseDocumentTyped: jest.Mock<any, any>;
 let mockUseAuthContext: jest.Mock<any, any>;
 

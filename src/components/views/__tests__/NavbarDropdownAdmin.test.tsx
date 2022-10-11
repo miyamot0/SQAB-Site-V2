@@ -16,6 +16,20 @@ import { waitFor } from '@testing-library/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+    firestore: {
+      Timestamp: jest.fn(),
+    },
+    auth: {
+      GoogleAuthProvider: jest.fn(),
+      FacebookAuthProvider: jest.fn(),
+    },
+    functions: jest.fn(),
+  };
+});
+
 // TODO: rep GOOD logout mock
 jest.mock('../../../firebase/hooks/useFirebaseLogout', () => {
   return {
@@ -24,6 +38,19 @@ jest.mock('../../../firebase/hooks/useFirebaseLogout', () => {
       logoutError: null,
       logoutPending: false,
     },
+  };
+});
+
+jest.mock('../../../firebase/config', () => {
+  return {
+    projectFirestore: jest.fn(),
+    projectAuth: {
+      onAuthStateChanged: () => jest.fn(),
+      signOut: () => jest.fn(),
+    },
+    projectFunctions: jest.fn(),
+    googleAuthProvider: jest.fn(),
+    fbAuthProvider: jest.fn(),
   };
 });
 

@@ -6,91 +6,77 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react"
+import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import Enzyme, { mount } from 'enzyme';
-import { ResultsHS, ResultsZBE2, ResultsZBE3 } from "../DemandResults"
+import { ResultsHS, ResultsZBE2, ResultsZBE3 } from '../DemandResults';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
 describe('ResultsHS', () => {
-    it('Should render with flat numbers, HS', () => {
-        const model = "Exponential";
-        const hotData = [
-            ["1", "1", "1", "1"]
-        ]
+  it('Should render with flat numbers, HS', () => {
+    const model = 'Exponential';
+    const hotData = [['1', '1', '1', '1']];
 
-        const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />)
+    const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(true);
-    })
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(true);
+  });
 
-    it('Should render with blank numbers, HS', () => {
-        const model = "Exponential";
-        const hotData = [
-            ["", "", "", ""]
-        ]
+  it('Should render with blank numbers, HS', () => {
+    const model = 'Exponential';
+    const hotData = [['', '', '', '']];
 
-        const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />)
+    const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(false);
-    })
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(false);
+  });
 
-    it('Should render with flat numbers, Koff', () => {
-        const model = "Exponentiated";
-        const hotData = [
-            ["1", "1", "3", "1"]
-        ]
+  it('Should render with flat numbers, Koff', () => {
+    const model = 'Exponentiated';
+    const hotData = [['1', '1', '3', '1']];
 
-        const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />)
+    const wrapper = mount(<ResultsHS hotData2={hotData} model={model} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(true);
-    })
-})
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(true);
+  });
+});
 
 describe('ResultsZBE2', () => {
-    it('Should render with flat numbers', () => {
-        const hotData = [
-            ["1", "1", "1"]
-        ]
+  it('Should render with flat numbers', () => {
+    const hotData = [['1', '1', '1']];
 
-        const wrapper = mount(<ResultsZBE2 hotData2={hotData} />)
+    const wrapper = mount(<ResultsZBE2 hotData2={hotData} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(true);
-    })
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(true);
+  });
 
-    it('Should render with blank numbers', () => {
-        const hotData = [
-            ["", "", ""]
-        ]
+  it('Should render with blank numbers', () => {
+    const hotData = [['', '', '']];
 
-        const wrapper = mount(<ResultsZBE2 hotData2={hotData} />)
+    const wrapper = mount(<ResultsZBE2 hotData2={hotData} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(false);
-    })
-})
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(false);
+  });
+});
 
 describe('ResultsZBE3', () => {
-    it('Should render with flat numbers', () => {
-        const hotData = [
-            ["1", "1", "1", "1"]
-        ]
+  it('Should render with flat numbers', () => {
+    const hotData = [['1', '1', '1', '1']];
 
-        const wrapper = mount(<ResultsZBE3 hotData2={hotData} />)
+    const wrapper = mount(<ResultsZBE3 hotData2={hotData} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(true);
-    })
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(true);
+  });
 
-    it('Should render with blank numbers', () => {
-        const hotData = [
-            ["", "", "", ""]
-        ]
+  it('Should render with blank numbers', () => {
+    const hotData = [['', '', '', '']];
 
-        const wrapper = mount(<ResultsZBE3 hotData2={hotData} />)
+    const wrapper = mount(<ResultsZBE3 hotData2={hotData} />);
 
-        expect(wrapper.html().toString().includes("Increase Unit Price")).toBe(false);
-    })
-})
+    expect(wrapper.html().toString().includes('Increase UP')).toBe(false);
+  });
+});

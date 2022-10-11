@@ -11,6 +11,13 @@ import Enzyme, { mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { act } from 'react-dom/test-utils';
 import { NavbarDropdownLogout } from '../NavbarDropdownLogout';
+import {
+  MDBCollapse,
+  MDBDropdown,
+  MDBDropdownMenu,
+  MDBNavbarItem,
+  MDBNavbarNav,
+} from 'mdb-react-ui-kit';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -19,13 +26,26 @@ describe('NavbarDropdownLogout', () => {
     const logout = jest.fn();
 
     act(() => {
-      const wrapper = shallow(<NavbarDropdownLogout logout={logout} />);
+      let wrapper = mount(
+        <MDBCollapse navbar show={false}>
+          <MDBNavbarNav>
+            <MDBNavbarItem>
+              <MDBDropdown isOpen={true}>
+                <MDBDropdownMenu>
+                  <NavbarDropdownLogout logout={logout} />
+                </MDBDropdownMenu>
+              </MDBDropdown>
+            </MDBNavbarItem>
+          </MDBNavbarNav>
+        </MDBCollapse>,
+      );
 
-      //expect(wrapper.html().toString()).toStrictEqual({});
+      wrapper.find('a.dropdown-item').last().simulate('click');
 
-      //expect(wrapper.find('a').length).toBe(1);
-      //expect(wrapper.find('li').length).toBe(1);
-      //const a = wrapper.find('a').last().simulate('click');
+      wrapper = wrapper.update();
+      wrapper.render();
+
+      expect(logout).toBeCalled();
     });
   });
 });

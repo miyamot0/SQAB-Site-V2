@@ -13,7 +13,6 @@ import Enzyme, { shallow } from 'enzyme';
 import UserPoster from '../UserPoster';
 import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
 import { mount } from 'enzyme';
-import { timestamp } from '../../../firebase/config';
 import { PosterSubmission } from '../../../firebase/types/RecordTypes';
 import { AuthorizationContextProvider } from '../../../context/AuthorizationContext';
 import { act } from 'react-dom/test-utils';
@@ -173,7 +172,7 @@ describe('UserPoster', () => {
         email: '',
         abstract: '',
         list: '',
-        time: timestamp.fromDate(new Date()),
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
         presenter: true,
         reviewed: false,
         id: '',
@@ -216,7 +215,7 @@ describe('UserPoster', () => {
         email: '',
         abstract: '',
         list: '',
-        time: timestamp.fromDate(new Date()),
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
         presenter: true,
         reviewed: true,
         id: '',
@@ -259,7 +258,7 @@ describe('UserPoster', () => {
         email: '',
         abstract: '',
         list: '',
-        time: timestamp.fromDate(new Date()),
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
         presenter: true,
         reviewed: false,
         id: '',

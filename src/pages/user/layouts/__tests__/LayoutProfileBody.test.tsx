@@ -16,149 +16,182 @@ import { LayoutProfileBody } from '../LayoutProfileBody';
 import { IndividualUserRecord } from '../../../../firebase/types/RecordTypes';
 import { SingleOptionType } from '../../../tools/types/GeneralTypes';
 import { FirestoreState } from '../../../../firebase/interfaces/FirebaseInterfaces';
-import * as ProfileHelpers from '../../helpers/ProfileHelpers'
 
-const spyProfileCallback = jest.spyOn(ProfileHelpers, 'updateProfileCallback');
-spyProfileCallback.mockResolvedValue(Promise.resolve());
+let mockProfileCallback: jest.Mock<any, any>;
+jest.mock('../../helpers/ProfileHelpers', () => {
+  mockProfileCallback = jest.fn();
+  mockProfileCallback.mockResolvedValue(Promise.resolve());
+
+  return {
+    updateProfileCallback: () => mockProfileCallback,
+  };
+});
+
+const mockHistory = {
+  push: () => jest.fn().mockImplementation(() => true),
+};
+
+//const spyProfileCallback = jest.spyOn(ProfileHelpers, 'updateProfileCallback');
+//spyProfileCallback.mockResolvedValue(Promise.resolve());
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('LayoutProfileBody', () => {
-    const jsdomAlert = window.alert;
+  const jsdomAlert = window.alert;
 
-    beforeAll(() => {
-        // remember the jsdom alert
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        window.alert = () => { }; // provide an empty implementation for window.alert
+  beforeAll(() => {
+    // remember the jsdom alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
+
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
+  it('Should render, not phone authed', async () => {
+    const state = {
+      userEmail: '',
+      userInstitution: '',
+      userName: '',
+      userPhone: '',
+      canPostAd: false,
+      perms: '',
+      id: undefined,
+      formError: undefined,
+      phoneAuthed: false,
+      didBuild: false,
+      userEducation: { label: '', value: '' } as SingleOptionType,
+      userGender: { label: '', value: '' } as SingleOptionType,
+      userAge: { label: '', value: '' } as SingleOptionType,
+      userRaceEthnicity: [{ label: '', value: '' } as SingleOptionType],
+      userOrientation: { label: '', value: '' } as SingleOptionType,
+      userLanguage: { label: '', value: '' } as SingleOptionType,
+      userNationality: { label: '', value: '' } as SingleOptionType,
+    } as IndividualUserRecord;
+
+    const updateDocument = jest.fn();
+    const response = {} as FirestoreState;
+    const dispatch = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <LayoutProfileBody
+          state={state}
+          id={'123'}
+          history={mockHistory}
+          updateDocument={updateDocument}
+          response={response}
+          dispatch={dispatch}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(wrapper.html().toString().includes('Edit Profile Information')).toBe(true);
+      });
+    });
+  });
+
+  it('Should render, phone authed', async () => {
+    const state = {
+      userEmail: '',
+      userInstitution: '',
+      userName: '',
+      userPhone: '12345678910',
+      canPostAd: false,
+      perms: '',
+      id: undefined,
+      formError: undefined,
+      phoneAuthed: true,
+      didBuild: false,
+      userEducation: { label: '', value: '' } as SingleOptionType,
+      userGender: { label: '', value: '' } as SingleOptionType,
+      userAge: { label: '', value: '' } as SingleOptionType,
+      userRaceEthnicity: [{ label: '', value: '' } as SingleOptionType],
+      userOrientation: { label: '', value: '' } as SingleOptionType,
+      userLanguage: { label: '', value: '' } as SingleOptionType,
+      userNationality: { label: '', value: '' } as SingleOptionType,
+    } as IndividualUserRecord;
+
+    const updateDocument = jest.fn();
+    const response = {} as FirestoreState;
+    const dispatch = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <LayoutProfileBody
+          state={state}
+          id={'123'}
+          history={mockHistory}
+          updateDocument={updateDocument}
+          response={response}
+          dispatch={dispatch}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(wrapper.html().toString().includes('Edit Profile Information')).toBe(true);
+      });
     });
 
-    afterAll(() => {
-        window.alert = jsdomAlert; // restore the jsdom alert
+    act(() => {
+      wrapper.find('.button-fit-card').first().simulate('submit');
+    });
+  });
+
+  it('Should render, complete data', async () => {
+    const state = {
+      userEmail: '',
+      userInstitution: '',
+      userName: '',
+      userPhone: '12345678910',
+      canPostAd: false,
+      perms: '',
+      id: undefined,
+      formError: undefined,
+      phoneAuthed: true,
+      didBuild: false,
+      userEducation: { label: '1', value: '1' } as SingleOptionType,
+      userGender: { label: '1', value: '1' } as SingleOptionType,
+      userAge: { label: '1', value: '1' } as SingleOptionType,
+      userRaceEthnicity: [{ label: '1', value: '1' } as SingleOptionType],
+      userOrientation: { label: '1', value: '1' } as SingleOptionType,
+      userLanguage: { label: '1', value: '1' } as SingleOptionType,
+      userNationality: { label: '1', value: '1' } as SingleOptionType,
+    } as IndividualUserRecord;
+
+    const updateDocument = jest.fn();
+    const response = {} as FirestoreState;
+    const dispatch = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+
+    await act(async () => {
+      wrapper = mount(
+        <LayoutProfileBody
+          state={state}
+          id={'123'}
+          history={mockHistory}
+          updateDocument={updateDocument}
+          response={response}
+          dispatch={dispatch}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(wrapper.html().toString().includes('Edit Profile Information')).toBe(true);
+      });
     });
 
-    it('Should render, not phone authed', async () => {
-
-        const state = {
-            userEmail: '',
-            userInstitution: '',
-            userName: '',
-            userPhone: '',
-            canPostAd: false,
-            perms: '',
-            id: undefined,
-            formError: undefined,
-            phoneAuthed: false,
-            didBuild: false,
-            userEducation: { label: '', value: '' } as SingleOptionType,
-            userGender: { label: '', value: '' } as SingleOptionType,
-            userAge: { label: '', value: '' } as SingleOptionType,
-            userRaceEthnicity: [{ label: '', value: '' } as SingleOptionType],
-            userOrientation: { label: '', value: '' } as SingleOptionType,
-            userLanguage: { label: '', value: '' } as SingleOptionType,
-            userNationality: { label: '', value: '' } as SingleOptionType,
-        } as IndividualUserRecord;
-
-        const updateDocument = jest.fn();
-        const response = {} as FirestoreState;
-        const dispatch = jest.fn();
-
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
-
-        await act(async () => {
-            wrapper = mount(<LayoutProfileBody state={state}
-                id={'123'}
-                history={undefined} updateDocument={updateDocument} response={response} dispatch={dispatch} />)
-
-            await waitFor(() => {
-                expect(wrapper.html().toString().includes("Edit Profile Information")).toBe(true)
-            })
-        })
-    })
-
-    it('Should render, phone authed', async () => {
-        const state = {
-            userEmail: '',
-            userInstitution: '',
-            userName: '',
-            userPhone: '12345678910',
-            canPostAd: false,
-            perms: '',
-            id: undefined,
-            formError: undefined,
-            phoneAuthed: true,
-            didBuild: false,
-            userEducation: { label: '', value: '' } as SingleOptionType,
-            userGender: { label: '', value: '' } as SingleOptionType,
-            userAge: { label: '', value: '' } as SingleOptionType,
-            userRaceEthnicity: [{ label: '', value: '' } as SingleOptionType],
-            userOrientation: { label: '', value: '' } as SingleOptionType,
-            userLanguage: { label: '', value: '' } as SingleOptionType,
-            userNationality: { label: '', value: '' } as SingleOptionType,
-        } as IndividualUserRecord;
-
-        const updateDocument = jest.fn();
-        const response = {} as FirestoreState;
-        const dispatch = jest.fn();
-
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
-
-        await act(async () => {
-            wrapper = mount(<LayoutProfileBody state={state}
-                id={'123'}
-                history={undefined} updateDocument={updateDocument} response={response} dispatch={dispatch} />)
-
-            await waitFor(() => {
-                expect(wrapper.html().toString().includes("Edit Profile Information")).toBe(true)
-            })
-        })
-
-        act(() => {
-            wrapper.find('.button-fit-card').first().simulate('submit')
-        })
-    })
-
-    it('Should render, complete data', async () => {
-        const state = {
-            userEmail: '',
-            userInstitution: '',
-            userName: '',
-            userPhone: '12345678910',
-            canPostAd: false,
-            perms: '',
-            id: undefined,
-            formError: undefined,
-            phoneAuthed: true,
-            didBuild: false,
-            userEducation: { label: '1', value: '1' } as SingleOptionType,
-            userGender: { label: '1', value: '1' } as SingleOptionType,
-            userAge: { label: '1', value: '1' } as SingleOptionType,
-            userRaceEthnicity: [{ label: '1', value: '1' } as SingleOptionType],
-            userOrientation: { label: '1', value: '1' } as SingleOptionType,
-            userLanguage: { label: '1', value: '1' } as SingleOptionType,
-            userNationality: { label: '1', value: '1' } as SingleOptionType,
-        } as IndividualUserRecord;
-
-        const updateDocument = jest.fn();
-        const response = {} as FirestoreState;
-        const dispatch = jest.fn();
-
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
-
-        await act(async () => {
-            wrapper = mount(<LayoutProfileBody state={state}
-                id={'123'}
-                history={undefined} updateDocument={updateDocument} response={response} dispatch={dispatch} />)
-
-            await waitFor(() => {
-                expect(wrapper.html().toString().includes("Edit Profile Information")).toBe(true)
-            })
-        })
-
-        act(() => {
-            wrapper.find('.button-fit-card').first().simulate('submit')
-        })
-    })
-})
+    act(() => {
+      wrapper.find('.button-fit-card').first().simulate('submit');
+    });
+  });
+});

@@ -16,6 +16,33 @@ import { AuthorizationContextProvider } from '../../../context/AuthorizationCont
 
 Enzyme.configure({ adapter: new Adapter() });
 
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+    firestore: {
+      Timestamp: jest.fn(),
+    },
+    auth: {
+      GoogleAuthProvider: jest.fn(),
+      FacebookAuthProvider: jest.fn(),
+    },
+    functions: jest.fn(),
+  };
+});
+
+jest.mock('../../../firebase/config', () => {
+  return {
+    projectFirestore: jest.fn(),
+    projectAuth: {
+      onAuthStateChanged: () => jest.fn(),
+      signOut: () => jest.fn(),
+    },
+    projectFunctions: jest.fn(),
+    googleAuthProvider: jest.fn(),
+    fbAuthProvider: jest.fn(),
+  };
+});
+
 let mockUseAuthContext: jest.Mock<any, any>;
 let mockUseLogout: jest.Mock<any, any>;
 

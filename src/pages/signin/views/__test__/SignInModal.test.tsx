@@ -6,14 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { ReactNode, ReactPortal } from 'react';
+import React, { ReactPortal } from 'react';
 import Modal from 'react-modal';
-import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { act, fireEvent, render } from '@testing-library/react';
-import { SignInModal } from '../SignInModal';
 import ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
+import Enzyme, { shallow } from 'enzyme';
+import { act, fireEvent, render } from '@testing-library/react';
+import { SignInModal } from '../SignInModal';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -21,8 +21,9 @@ ReactModal.setAppElement = () => null;
 
 jest.mock('../../../../firebase/hooks/useFirebaseLogin', () => {
   return {
-    ...jest.requireActual('../../../../firebase/hooks/useFirebaseLogin'),
     login: jest.fn(() => true),
+    loginPending: false,
+    loginError: undefined,
   };
 });
 
@@ -136,9 +137,9 @@ describe('SignInModal - No Portal', () => {
     });
   });
 
-  afterEach(() => {
-    ReactDOM.createPortal = oldCreatePortal;
-  });
+  //afterEach(() => {
+  //  ReactDOM.createPortal = oldCreatePortal;
+  //});
 
   it('should render correctly', async () => {
     const showModal = true;

@@ -11,7 +11,6 @@ import firebase from 'firebase';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
-import { timestamp } from '../../../../firebase/config';
 import { EmailStatus, PosterSubmission } from '../../../../firebase/types/RecordTypes';
 import { PosterPanel } from '../PosterPanel';
 import * as FBHooks from '../../../../firebase/hooks/useFirebaseCollection';
@@ -65,10 +64,10 @@ describe('EmailPanel', () => {
         {
           delivery: {
             attempts: 1,
-            endTime: timestamp.now(),
+            endTime: firebase.firestore.Timestamp.now(),
             error: 'string',
             leaseExpireTime: 'string',
-            startTime: timestamp.now(),
+            startTime: firebase.firestore.Timestamp.now(),
             state: 'string',
           },
           template: null,
@@ -78,10 +77,10 @@ describe('EmailPanel', () => {
         {
           delivery: {
             attempts: 1,
-            endTime: timestamp.now(),
+            endTime: firebase.firestore.Timestamp.now(),
             error: 'string',
             leaseExpireTime: 'string',
-            startTime: timestamp.now(),
+            startTime: firebase.firestore.Timestamp.now(),
             state: 'string',
           },
           template: {

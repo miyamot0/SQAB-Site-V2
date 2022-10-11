@@ -28,48 +28,47 @@ jest.mock('../../context/hooks/useAuthorizationContext', () => {
   return {
     ...jest.requireActual('../../context/hooks/useAuthorizationContext'),
     user: mockUserStatus.mockReturnValue(undefined),
-    authIsReady: mockReadyStatus.mockReturnValue(false)
-  }
-})
+    authIsReady: mockReadyStatus.mockReturnValue(false),
+  };
+});
 
 ReactModal.setAppElement(document.createElement('div'));
 describe('Navbar', () => {
-
   it('On load', async () => {
     mockUserStatus.mockReturnValue({ uid: '456' } as unknown as firebase.User);
-    mockReadyStatus.mockReturnValue(true)
+    mockReadyStatus.mockReturnValue(true);
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     let wrapper: Enzyme.ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     jest
-      .spyOn(Modal, "setAppElement")
+      .spyOn(Modal, 'setAppElement')
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .mockImplementation(param => { });
+      .mockImplementation((param) => {});
 
     await act(async () => {
       wrapper = mount(
         <AuthorizationContextProvider>
           <Header />
-        </AuthorizationContextProvider>
+        </AuthorizationContextProvider>,
       );
 
-      wrapper = wrapper.update()
-      wrapper.render()
+      wrapper = wrapper.update();
+      wrapper.render();
 
       wrapper.find('[aria-label="Toggle navigation bar"]').at(0).simulate('click');
 
-      wrapper = wrapper.update()
-      wrapper.render()
+      wrapper = wrapper.update();
+      wrapper.render();
 
       wrapper.find('[aria-label="Open listserv modal"]').at(0).simulate('click');
 
-      wrapper = wrapper.update()
-      wrapper.render()
+      wrapper = wrapper.update();
+      wrapper.render();
 
       wrapper.find('[aria-label="Open privacy modal"]').at(0).simulate('click');
 
       // TODO: portal quirks
-    })
+    });
   });
 });

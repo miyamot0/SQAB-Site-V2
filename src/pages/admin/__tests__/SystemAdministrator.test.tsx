@@ -20,7 +20,6 @@ import {
 } from '../../../firebase/types/FunctionTypes';
 import { BarChartEntry, DemographicsBarChartInterface } from '../views/DemographicsBarChart';
 import { act } from 'react-dom/test-utils';
-import { timestamp } from '../../../firebase/config';
 import { waitFor } from '@testing-library/react';
 import SystemAdministration from '../SystemAdministration';
 import { projectFunctions } from '../../../firebase/config';
@@ -110,7 +109,7 @@ const mockStudentFxResult: RecruitmentFunctionResponse = {
   arrayUsersNeedAds: [{ value: '', label: '' }],
 };
 
-const mockDate = timestamp.fromDate(new Date());
+const mockDate = firebase.firestore.Timestamp.fromDate(new Date());
 
 /*
 jest.mock("../../../firebase/hooks/useFirebaseCollection", () => ({
@@ -157,7 +156,7 @@ describe('System Administrator', () => {
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {

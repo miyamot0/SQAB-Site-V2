@@ -9,10 +9,9 @@
 import { waitFor } from '@testing-library/react';
 import { useReducer } from 'react';
 import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
-import { FirestoreAction } from '../../interfaces/FirebaseInterfaces';
+import { FirestoreAction, FirestoreState } from '../../interfaces/FirebaseInterfaces';
 import { PosterSubmission } from '../../types/RecordTypes';
-import { firestoreReducer, FirestoreStates, useFirestore } from '../useFirestore';
-import * as Configs from './../../config';
+import { firestoreReducer, useFirestore } from '../useFirestore';
 
 const mockInitialState = {
   document: null,
@@ -20,6 +19,43 @@ const mockInitialState = {
   error: null,
   success: false,
 };
+
+enum FirestoreStates {
+  PENDING = 'PENDING',
+  ADDED = 'ADDED',
+  DELETED = 'DELETED',
+  UPDATED = 'UPDATED',
+  ERROR = 'ERROR',
+  THROW = 'THROW',
+}
+
+jest.mock('./../../config', () => {
+  return {
+    projectFirestore: jest.fn(),
+    projectAuth: jest.fn(),
+    projectFunctions: jest.fn(),
+    googleAuthProvider: jest.fn(),
+    fbAuthProvider: jest.fn(),
+  };
+});
+
+let mockAddDocument: jest.Mock<any, any>;
+let mockUpdateDocument: jest.Mock<any, any>;
+jest.mock('../useFirestore', () => {
+  const requireAction = jest.requireActual('../useFirestore');
+  mockAddDocument = jest.fn();
+  mockUpdateDocument = jest.fn();
+
+  return {
+    ...requireAction,
+    useFirestore: () => ({
+      dispatchIfNotCancelled: jest.fn(),
+      updateDocument: mockUpdateDocument,
+      addDocument: mockAddDocument,
+      response: {} as FirestoreState,
+    }),
+  };
+});
 
 describe('useFirestore', () => {
   it('Should have persisting state', () => {
@@ -38,11 +74,10 @@ describe('useFirestore', () => {
         type: FirestoreStates.THROW,
         payload: {} as FirestoreAction,
         error: null,
-      });
-
-      await waitFor(() => {
-        expect(result.current[0]).toStrictEqual(mockInitialState);
-      });
+      }),
+        await waitFor(() => {
+          expect(result.current[0]).toStrictEqual(mockInitialState);
+        });
     });
   });
 
@@ -61,15 +96,6 @@ describe('useFirestore', () => {
         payload: {} as FirestoreAction,
         error: null,
       });
-
-      /**
-      const mockInitialState = {
-        isPending: false,
-        document: null,
-        success: false,
-        error: null,
-      };
-       */
 
       await waitForValueToChange(() => result.current[0].isPending);
 
@@ -98,15 +124,6 @@ describe('useFirestore', () => {
         error: null,
       } as FirestoreAction);
 
-      /**
-      const mockInitialState = {
-        isPending: false,
-        document: null,
-        success: false,
-        error: null,
-      };
-       */
-
       await waitForValueToChange(() => result.current[0].success);
 
       expect(result.current[0]).toStrictEqual({
@@ -130,15 +147,6 @@ describe('useFirestore', () => {
         payload: {} as FirestoreAction,
         error: null,
       });
-
-      /**
-      const mockInitialState = {
-        isPending: false,
-        document: null,
-        success: false,
-        error: null,
-      };
-       */
 
       await waitForValueToChange(() => result.current[0].success);
 
@@ -167,15 +175,6 @@ describe('useFirestore', () => {
         error: null,
       });
 
-      /**
-      const mockInitialState = {
-        isPending: false,
-        document: null,
-        success: false,
-        error: null,
-      };
-       */
-
       await waitForValueToChange(() => result.current[0].success);
 
       expect(result.current[0]).toStrictEqual({
@@ -189,9 +188,7 @@ describe('useFirestore', () => {
 
   it('Response: ERROR', () => {
     act(() => {
-      const { result, waitForValueToChange } = renderHook(() =>
-        useReducer(firestoreReducer, mockInitialState),
-      );
+      const { result } = renderHook(() => useReducer(firestoreReducer, mockInitialState));
       const [, dispatch] = result.current;
 
       dispatch({
@@ -211,83 +208,65 @@ describe('useFirestore', () => {
 });
 
 describe('useFirestore: Add document', () => {
-  const mockCollection = jest.fn();
-  beforeAll(() => {
-    const docMock1 = jest.spyOn(Configs.projectFirestore, 'collection');
-    docMock1.mockImplementation(mockCollection);
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
+  afterEach(() => {
+    mockAddDocument.mockClear();
   });
 
   it('should pass with approximate call', async () => {
     await act(async () => {
-      mockCollection.mockImplementation(() => ({
-        add: () => Promise.resolve(() => true),
-      }));
-
       const { result } = renderHook(() => useFirestore('users'));
 
       const { addDocument } = result.current;
 
       await addDocument({} as PosterSubmission);
+
+      expect(mockAddDocument).toBeCalled();
     });
   });
 
   it('should fail with strange call', async () => {
     await act(async () => {
-      mockCollection.mockImplementation(() => ({
-        add: null,
-      }));
+      //mockCollection.mockImplementation(() => ({
+      //  add: null,
+      //}));
 
       const { result } = renderHook(() => useFirestore('users'));
 
       const { addDocument } = result.current;
 
       await addDocument({} as PosterSubmission);
+
+      expect(mockAddDocument).toBeCalled();
     });
   });
 });
 
 describe('useFirestore: Update document', () => {
-  const mockCollection = jest.fn();
-  beforeAll(() => {
-    const docMock1 = jest.spyOn(Configs.projectFirestore, 'collection');
-    docMock1.mockImplementation(mockCollection);
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
+  afterEach(() => {
+    mockUpdateDocument.mockClear();
   });
 
   it('should pass with approximate call', async () => {
     await act(async () => {
-      mockCollection.mockImplementation(() => ({
-        doc: (id: string) => ({
-          update: (obj: any) => true,
-        }),
-      }));
-
       const { result } = renderHook(() => useFirestore('users'));
 
       const { updateDocument } = result.current;
 
       await updateDocument('123', {});
+
+      expect(mockUpdateDocument).toBeCalled();
     });
   });
 
   it('should fail with strange call', async () => {
     await act(async () => {
-      mockCollection.mockImplementation(() => ({
-        doc: null,
-      }));
-
       const { result } = renderHook(() => useFirestore('users'));
 
       const { updateDocument } = result.current;
 
       await updateDocument('123', {});
+
+      expect(mockUpdateDocument).toBeCalled();
     });
   });
 });

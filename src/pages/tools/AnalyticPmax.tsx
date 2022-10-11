@@ -31,7 +31,7 @@ const ModelOptions = [
   { value: 'ZBE-3', label: '3-Parameter ZBE (with K)' },
   { value: 'Exponentiated', label: 'Exponentiated Model' },
   { value: 'Exponential', label: 'Exponential Model' },
-]
+];
 
 export interface WorkerPmaxResult {
   done: boolean;
@@ -41,7 +41,7 @@ export interface WorkerPmaxResult {
 export default function AnalyticPmax(): JSX.Element {
   const [hotData, setHotData] = useState<string[][]>();
   const [hotData2, setHotData2] = useState<string[][]>();
-  const [modelOption, setModelOption] = useState(ModelOptions[0])
+  const [modelOption, setModelOption] = useState(ModelOptions[0]);
   const [runningCalculation, setRunningCalculation] = useState<boolean>(false);
 
   let worker: Worker | undefined = undefined;
@@ -73,13 +73,18 @@ export default function AnalyticPmax(): JSX.Element {
     worker = new Worker('./workers/worker_pmax.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleWorkerOutput({
-        ev, modelOption, setHotData, setHotData2, setRunningCalculation, worker
+        ev,
+        modelOption,
+        setHotData,
+        setHotData2,
+        setRunningCalculation,
+        worker,
       });
     };
     worker.postMessage({
       data: hotData,
       isZBE: modelOption.value.includes('ZBE'),
-      hasTwoParams: modelOption.value.includes('ZBE-2')
+      hasTwoParams: modelOption.value.includes('ZBE-2'),
     });
   }
 
@@ -124,20 +129,21 @@ export default function AnalyticPmax(): JSX.Element {
                 <sub>MAX</sub>.
               </MDBCardText>
 
-              <label style={{ width: '100%', 
-              margin: '15px 0' }} htmlFor="framework-field">Select Implementation of Framework:</label>
+              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">
+                Select Implementation of Framework:
+              </label>
               <Select
-                name={"framework-field"}
-                inputId={"framework-field"}
+                name={'framework-field'}
+                inputId={'framework-field'}
                 options={ModelOptions}
                 onChange={(option) => {
                   if (option) {
                     setModelOption(option);
                     clearConsumptionData({
                       setHotData,
-                      hasTwoParameters: modelOption === ModelOptions[0]
-                    })
-                    setHotData2(undefined)
+                      hasTwoParameters: modelOption === ModelOptions[0],
+                    });
+                    setHotData2(undefined);
                   }
                 }}
                 value={modelOption}
@@ -146,12 +152,12 @@ export default function AnalyticPmax(): JSX.Element {
                     ...base,
                     width: 'max-content',
                     minWidth: '100%',
-                    zIndex: 9999
+                    zIndex: 9999,
                   }),
                 }}
               />
 
-              <br/>
+              <br />
 
               <MDBBtn
                 noRipple
@@ -163,19 +169,24 @@ export default function AnalyticPmax(): JSX.Element {
                 href="#!"
                 className="button-fit-card"
                 disabled={runningCalculation}
-                onClick={() => loadExampleData({
-                  setHotData,
-                  isZBE: modelOption.label.includes("ZBE"),
-                  hasTwoParameters: modelOption === ModelOptions[0]
-                })}
+                onClick={() =>
+                  loadExampleData({
+                    setHotData,
+                    isZBE: modelOption.label.includes('ZBE'),
+                    hasTwoParameters: modelOption === ModelOptions[0],
+                  })
+                }
               >
                 Load Example Data
               </MDBBtn>
 
-              {modelOption === ModelOptions[0] ? <HotTableTwoParamZBE hotData={hotData} /> :
-                modelOption === ModelOptions[1] ? <HotTableThreeParamZBE hotData={hotData} /> :
-                  <HotTableThreeParam hotData={hotData} />
-              }
+              {modelOption === ModelOptions[0] ? (
+                <HotTableTwoParamZBE hotData={hotData} />
+              ) : modelOption === ModelOptions[1] ? (
+                <HotTableThreeParamZBE hotData={hotData} />
+              ) : (
+                <HotTableThreeParam hotData={hotData} />
+              )}
 
               <MDBBtn
                 noRipple
@@ -188,8 +199,12 @@ export default function AnalyticPmax(): JSX.Element {
                 className="button-fit-card"
                 disabled={runningCalculation}
                 onClick={() => {
-                  if (!hotData || hotData[0][0].trim().length === 0 || hotData[0][1].trim().length === 0) {
-                    return
+                  if (
+                    !hotData ||
+                    hotData[0][0].trim().length === 0 ||
+                    hotData[0][1].trim().length === 0
+                  ) {
+                    return;
                   } else {
                     setRunningCalculation(true);
                     startPmaxWorker();
@@ -203,7 +218,6 @@ export default function AnalyticPmax(): JSX.Element {
         </MDBCol>
 
         <PmaxOutput modelOption={modelOption} ModelOptions={ModelOptions} hotData2={hotData2} />
-
       </MDBRow>
     </>
   );

@@ -42,6 +42,9 @@
     ],
     "setupFiles": [
       "jsdom-worker"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jestSetup.js"
     ]
   },
   "scripts": {

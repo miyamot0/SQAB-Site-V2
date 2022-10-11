@@ -19,6 +19,20 @@ Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+    firestore: {
+      Timestamp: jest.fn(),
+    },
+    auth: {
+      GoogleAuthProvider: jest.fn(),
+      FacebookAuthProvider: jest.fn(),
+    },
+    functions: jest.fn(),
+  };
+});
+
 let mockUserStatus: firebase.User | null;
 let mockReadyStatus: boolean;
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
@@ -29,6 +43,19 @@ jest.mock('../../../context/hooks/useAuthorizationContext', () => {
       user: mockUserStatus,
       authIsReady: mockReadyStatus,
     }),
+  };
+});
+
+jest.mock('../../../firebase/config', () => {
+  return {
+    projectFirestore: jest.fn(),
+    projectAuth: {
+      onAuthStateChanged: jest.fn(),
+      signOut: () => jest.fn(),
+    },
+    projectFunctions: jest.fn(),
+    googleAuthProvider: jest.fn(),
+    fbAuthProvider: jest.fn(),
   };
 });
 

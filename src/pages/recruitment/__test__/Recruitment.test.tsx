@@ -12,9 +12,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import Recruitment from '../Recruitment';
 import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
-import { timestamp } from '../../../firebase/config';
-import RecruitmentTable from '../subcomponents/RecruitmentTable';
-import { waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as UseCollectionMethods from '../../../firebase/hooks/useFirebaseCollection';
 
@@ -22,8 +19,24 @@ Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
-const mockTime1 = timestamp.fromDate(new Date());
-const mockTime2 = timestamp.fromDate(new Date('10/3/2022'));
+/*
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+    firestore: {
+      Timestamp: jest.fn(),
+    },
+    auth: {
+      GoogleAuthProvider: jest.fn(),
+      FacebookAuthProvider: jest.fn(),
+    },
+    functions: jest.fn(),
+  };
+});
+*/
+
+//const mockTime1 = timestamp.fromDate(new Date());
+//const mockTime2 = timestamp.fromDate(new Date('10/3/2022'));
 /*
 jest.mock('../../../firebase/hooks/useFirebaseCollection', () => {
   const originalModule = jest.requireActual('../../../firebase/hooks/useFirebaseCollection');

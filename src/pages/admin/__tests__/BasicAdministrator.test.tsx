@@ -22,7 +22,6 @@ import {
 } from '../../../firebase/types/FunctionTypes';
 import { BarChartEntry, DemographicsBarChartInterface } from '../views/DemographicsBarChart';
 import { act } from 'react-dom/test-utils';
-import { timestamp } from '../../../firebase/config';
 import { waitFor } from '@testing-library/react';
 import { projectFunctions } from '../../../firebase/config';
 
@@ -111,43 +110,7 @@ const mockStudentFxResult: RecruitmentFunctionResponse = {
   arrayUsersNeedAds: [{ value: '', label: '' }],
 };
 
-const mockDate = timestamp.fromDate(new Date());
-
-/*
-jest.mock("../../../firebase/hooks/useFirebaseCollection", () => ({
-    useFirebaseCollectionTyped: jest.fn()
-        .mockReturnValueOnce({
-            documents: [{
-                Bio: '',
-                Contact: '',
-                Cycle: '',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: false,
-                id: 'string',
-            }],
-        })
-        .mockReturnValueOnce({
-            documents: [{
-                name: 'string',
-                title: 'string',
-                email: 'string',
-                abstract: 'string',
-                list: 'string',
-                time: mockDate,
-                presenter: true,
-                reviewed: true,
-                id: ''
-            }],
-        }),
-
-}));
-*/
+const mockDate = firebase.firestore.Timestamp.fromDate(new Date());
 
 const jestTotalFunctions = jest.fn().mockResolvedValue(true);
 const spyTotalFunctions = jest.spyOn(projectFunctions, 'httpsCallable');
@@ -158,7 +121,7 @@ describe('Basic Administrator', () => {
 
   beforeAll(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {

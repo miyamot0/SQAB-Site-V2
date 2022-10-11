@@ -6,8 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import firebase from 'firebase';
 import { useReducer, useEffect, useState } from 'react';
-import { projectFirestore, timestamp } from '../config';
+import { projectFirestore } from '../config';
 import { FirestoreAction, FirestoreState, UseFirestore } from '../interfaces/FirebaseInterfaces';
 import { PosterSubmission } from '../types/RecordTypes';
 
@@ -110,7 +111,7 @@ export function useFirestore(collection: string): UseFirestore {
     });
 
     try {
-      const createdAt = timestamp.fromDate(new Date());
+      const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
 
       if (uid !== null) {
         const addedDocument = await ref.doc(uid).set({ ...doc, createdAt });

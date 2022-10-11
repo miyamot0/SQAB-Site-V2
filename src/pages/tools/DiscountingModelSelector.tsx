@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import highchartsAccessibility from "highcharts/modules/accessibility";
+import highchartsAccessibility from 'highcharts/modules/accessibility';
 highchartsAccessibility(Highcharts);
 
 import {
@@ -27,7 +27,10 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { ModelOptions } from './types/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
 import { SingleOptionType } from './types/GeneralTypes';
-import { handleDiscountingWorkerOutput, InitialDiscountingChartState } from './helpers/DiscountingCharting';
+import {
+  handleDiscountingWorkerOutput,
+  InitialDiscountingChartState,
+} from './helpers/DiscountingCharting';
 import { DiscountingHeading } from './views/DiscountingHeading';
 
 import './styles/Tools.css';
@@ -120,8 +123,12 @@ export default function DiscountingModelSelector(): JSX.Element {
     worker = new Worker('./workers/worker_discounting.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleDiscountingWorkerOutput({
-        ev, worker, setRunningCalculation, setResultsSummary,
-        setButtonStatusMsg, setChartOptions
+        ev,
+        worker,
+        setRunningCalculation,
+        setResultsSummary,
+        setButtonStatusMsg,
+        setChartOptions,
       });
     };
 
@@ -135,7 +142,7 @@ export default function DiscountingModelSelector(): JSX.Element {
 
   return (
     <>
-      <DiscountingHeading/>
+      <DiscountingHeading />
 
       <MDBRow center>
         <MDBCol sm="8">
@@ -194,10 +201,12 @@ export default function DiscountingModelSelector(): JSX.Element {
                 <HotColumn title="Values" />
               </HotTable>
 
-              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">Rachlin Behavior:</label>
+              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">
+                Rachlin Behavior:
+              </label>
               <Select
-                name={"framework-field"}
-                inputId={"framework-field"}
+                name={'framework-field'}
+                inputId={'framework-field'}
                 options={ModelOptions}
                 onChange={(option) => {
                   if (option) {
@@ -214,7 +223,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 }}
               />
 
-                <br/>
+              <br />
 
               <MDBBtn
                 noRipple

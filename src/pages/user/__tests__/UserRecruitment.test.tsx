@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import firebase from 'firebase';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
@@ -16,6 +15,12 @@ import { act } from 'react-dom/test-utils';
 import { waitFor } from '@testing-library/react';
 import UserRecruitment from '../UserRecruitment';
 import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
+
+// full FB mock
+
+import firebase from 'firebase/app';
+
+//
 
 Enzyme.configure({ adapter: new Adapter() });
 

@@ -158,7 +158,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
   return (
     <>
-      <DemandHeading/>
+      <DemandHeading />
 
       <MDBRow center>
         <MDBCol sm="8">
@@ -282,7 +282,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 </>
               )}
 
-              <br/>
+              <br />
 
               <MDBBtn
                 noRipple

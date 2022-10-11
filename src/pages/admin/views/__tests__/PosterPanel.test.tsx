@@ -11,11 +11,11 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReactModal from 'react-modal';
 import { PosterSubmission } from '../../../../firebase/types/RecordTypes';
-import { timestamp } from '../../../../firebase/config';
 import { PosterPanel } from '../PosterPanel';
 import * as FBHooks from '../../../../firebase/hooks/useFirebaseCollection';
 import * as FBFunctions from '../../../../firebase/hooks/useFirebaseFunction';
 import { projectFunctions } from '../../../../firebase/config';
+import firebase from 'firebase';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -52,7 +52,7 @@ describe('PosterPanel', () => {
           email: '',
           abstract: '',
           list: '',
-          time: timestamp.fromDate(new Date()),
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
           presenter: true,
           reviewed: true,
           id: '',
@@ -63,7 +63,7 @@ describe('PosterPanel', () => {
           email: '',
           abstract: '',
           list: '',
-          time: timestamp.fromDate(new Date()),
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
           presenter: false,
           reviewed: false,
           id: '',
@@ -74,7 +74,7 @@ describe('PosterPanel', () => {
           email: '',
           abstract: '',
           list: '',
-          time: timestamp.fromDate(new Date()),
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
           presenter: false,
           reviewed: false,
           id: undefined,
@@ -85,7 +85,7 @@ describe('PosterPanel', () => {
           email: '',
           abstract: '',
           list: '',
-          time: timestamp.fromDate(new Date()),
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
           presenter: false,
           reviewed: false,
           id: undefined,
