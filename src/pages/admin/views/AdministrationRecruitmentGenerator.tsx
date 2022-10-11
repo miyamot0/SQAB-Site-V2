@@ -40,7 +40,8 @@ export function AdministrationRecruitmentGenerator({
             &quot;create entry&quot; button to create a blank ad for them.
           </MDBCardText>
 
-          <label htmlFor="single-field">Template Creator:</label>
+          <label htmlFor="single-field" style={{ width: '100%', 
+              margin: '15px 0' }}>Template Creator:</label>
           <Select
             name="single-field"
             inputId="single-field"
@@ -49,11 +50,16 @@ export function AdministrationRecruitmentGenerator({
             value={selectedAdUser}
           />
 
+          <br/>
+
           <MDBBtn
             noRipple
             tag="a"
             href="#!"
-            style={{ width: '100%' }}
+            style={{ 
+              width: '100%',
+              margin: '15px 0',
+           }}
             className="button-fit-card"
             onClick={() => createBlankAdTemplate(selectedAdUser)}
           >

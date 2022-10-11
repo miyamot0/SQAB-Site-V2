@@ -105,15 +105,13 @@ export function LayoutProfileBody({
             <MDBCardBody>
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
               <MDBCardText>
-                Please complete your profile. In the near future, both recruitment and poster
+              The SQAB Executive Board and Diversity, Equity, and Inclusion (DEI) Subcommittee is interested in characterizing and understanding the needs of our membership. One initiative has been to collect profile information from SQAB members and attendees. Please complete your profile. In the near future, both recruitment and poster
                 submissions will link directly to your profile. This will help with timely
                 communication as well as inform on-going DEI initiatives. Indicating a preference
                 not to answer will in no way affect the functionality of the site or your account.{' '}
                 <br />
                 <br />
-                Any personal information provided here is carefully handled. The system
-                administrator has access restricted to the daily functioning of the site. Only a
-                single member of SQAB, the one tasked with quantifying DEI information, will have
+                SQAB values the privacy of your profile information. Any personal information provided here is carefully handled. The system administrator has access restricted to the daily functioning of the site. Only a single member of SQAB, the one tasked with quantifying DEI information, will have
                 access to data in aggregate form (i.e., no personally-identifiable information).
               </MDBCardText>
 
