@@ -11,6 +11,8 @@ const mockWhere = jest.fn();
 const mockOrderBy = jest.fn();
 const mockCollection = jest.fn();
 const mockDoc = jest.fn();
+const mockSignInWithPopup = jest.fn();
+const mockConfirmOtp = jest.fn();
 
 jest.mock('firebase/app', () => {
   const firestoreObj = {
@@ -30,7 +32,26 @@ jest.mock('firebase/app', () => {
     createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
     sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
     signInAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
-    signInWithPopup: jest.fn(() => Promise.resolve(true)),
+    signInWithPopup: mockSignInWithPopup.mockResolvedValue(
+      Promise.resolve({
+        user: {
+          uid: '123',
+          getIdTokenResult: () =>
+            Promise.resolve({
+              claims: {
+                permissions: {
+                  Recruitment: false,
+                  Administration: false,
+                  Demographics: false,
+                  Submissions: false,
+                },
+              },
+            }),
+        },
+        providerId: null,
+        operationType: undefined,
+      }),
+    ),
     signInWithPhoneNumber: mockSignInWithPhoneNumber.mockImplementation(() =>
       Promise.resolve(true),
     ),
@@ -48,6 +69,9 @@ jest.mock('firebase/app', () => {
   auth.GoogleAuthProvider = jest.fn();
   auth.FacebookAuthProvider = jest.fn();
   auth.RecaptchaVerifier = jest.fn();
+  auth.ConfirmationResult = {
+    confirm: mockConfirmOtp.mockImplementation(() => Promise.resolve(true)),
+  };
 
   const cloudFunction = jest.fn(() => {
     return Promise.resolve({});
@@ -65,4 +89,12 @@ jest.mock('firebase/app', () => {
   };
 });
 
-export { mockSignInWithPhoneNumber, mockWhere, mockOrderBy, mockCollection, mockDoc };
+export {
+  mockSignInWithPopup,
+  mockSignInWithPhoneNumber,
+  mockWhere,
+  mockOrderBy,
+  mockCollection,
+  mockDoc,
+  mockConfirmOtp,
+};

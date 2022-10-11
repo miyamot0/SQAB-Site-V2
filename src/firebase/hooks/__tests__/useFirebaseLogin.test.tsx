@@ -11,30 +11,57 @@ import { useFirebaseLogin } from '../useFirebaseLogin';
 import { projectAuth } from './../../../firebase/config';
 import { ProviderTypes } from '../../types/AccountTypes';
 import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
+import { mockConfirmOtp, mockSignInWithPopup } from '../../../../jestSetup';
+
+let mockDispatch: jest.Mock<any, any>;
 
 jest.mock('../../../context/hooks/useAuthorizationContext', () => {
+  mockDispatch = jest.fn();
   return {
     useAuthorizationContext: () => ({
-      dispatch: jest.fn(),
+      user: { id: '123' } as unknown as firebase.User,
+      authIsReady: true,
+      studentRecruitFlag: false,
+      diversityReviewFlag: false,
+      systemAdministratorFlag: false,
+      submissionReviewFlag: false,
+      dispatch: mockDispatch,
     }),
   };
 });
 
-describe('useFirebaseLogin.test.tsx', () => {
+describe('useFirebaseLogin', () => {
+  beforeEach(() => {
+    mockSignInWithPopup.mockClear();
+    mockConfirmOtp.mockClear();
+  });
+
   it('mock successful login, Google', async () => {
     await act(async () => {
-      const mockLogin = jest.fn();
-      const loginSpy = jest.spyOn(projectAuth, 'signInWithPopup');
-      loginSpy.mockImplementation(mockLogin);
-
       try {
-        const { result, waitFor } = renderHook(() => useFirebaseLogin());
+        const { result } = renderHook(() => useFirebaseLogin());
 
         const { login } = result.current;
 
         await login(ProviderTypes.Google);
 
-        expect(firebase.auth().signInWithPopup).toBeCalled();
+        expect(mockSignInWithPopup).toBeCalled();
+      } catch (err: any) {
+        expect(1).toBe(1);
+      }
+    });
+  });
+
+  it('mock successful login, Facebook', async () => {
+    await act(async () => {
+      try {
+        const { result } = renderHook(() => useFirebaseLogin());
+
+        const { login } = result.current;
+
+        await login(ProviderTypes.Facebook);
+
+        expect(mockSignInWithPopup).toBeCalled();
       } catch (err: any) {
         expect(1).toBe(1);
       }
@@ -43,21 +70,40 @@ describe('useFirebaseLogin.test.tsx', () => {
 
   it('mock successful login, Phone', async () => {
     await act(async () => {
-      const mockLogin = jest.fn();
-      const loginSpy = jest.spyOn(projectAuth, 'signInWithPopup');
-      loginSpy.mockImplementation(mockLogin);
+      const mockConfirm = jest.fn();
+      const confirmationResult = {
+        confirm: mockConfirm.mockImplementation(() => Promise.resolve(true)),
+        verificationId: '123',
+      } as firebase.auth.ConfirmationResult;
 
       const { result, waitFor } = renderHook(() => useFirebaseLogin());
-
       const { login } = result.current;
 
-      await login(ProviderTypes.Phone, undefined, '123456');
+      await login(ProviderTypes.Phone, confirmationResult, '123456');
 
-      await waitFor(() => {
-        expect(loginSpy).toBeCalled();
-        expect(result.current.loginPending).toBe(false);
-        expect(result.current.loginError).toStrictEqual(undefined);
-      });
+      expect(mockConfirm).toBeCalled();
+      expect(result.current.loginPending).toBe(false);
+      expect(result.current.loginError).toStrictEqual(undefined);
+    });
+  });
+
+  it('mock successful login, Phone, but bad dispatch', async () => {
+    await act(async () => {
+      mockDispatch.mockReturnValueOnce(null);
+      const mockConfirm = jest.fn();
+      const confirmationResult = {
+        confirm: mockConfirm.mockImplementation(() => Promise.resolve(true)),
+        verificationId: '123',
+      } as firebase.auth.ConfirmationResult;
+
+      const { result, waitFor } = renderHook(() => useFirebaseLogin());
+      const { login } = result.current;
+
+      await login(ProviderTypes.Phone, confirmationResult, '123456');
+
+      expect(mockConfirm).toBeCalled();
+      expect(result.current.loginPending).toBe(false);
+      expect(result.current.loginError).toStrictEqual(undefined);
     });
   });
 
@@ -73,21 +119,19 @@ describe('useFirebaseLogin.test.tsx', () => {
 
   it('mock errored login', async () => {
     await act(async () => {
-      const mockJestSignIn = jest.fn();
-      mockJestSignIn.mockImplementation(() => {
-        throw Error('Error');
-      });
-
-      const loginSpy = jest.spyOn(projectAuth, 'signInWithPopup');
-      loginSpy.mockImplementation(mockJestSignIn);
+      const mockConfirm = jest.fn();
+      const confirmationResult = {
+        confirm: mockConfirm.mockImplementation(() => Promise.resolve(true)),
+        verificationId: '123',
+      } as firebase.auth.ConfirmationResult;
 
       const { result } = renderHook(() => useFirebaseLogin());
 
       const { login } = result.current;
 
-      await login(ProviderTypes.Phone, undefined, 'otp');
+      await login(ProviderTypes.Phone, confirmationResult, 'otp');
 
-      expect(loginSpy).toBeCalled();
+      expect(mockConfirm).toBeCalled();
       expect(result.current.loginPending).toBe(false);
       expect(result.current.loginError).toStrictEqual(undefined);
     });
