@@ -7,6 +7,10 @@
  */
 
 const mockSignInWithPhoneNumber = jest.fn();
+const mockWhere = jest.fn();
+const mockOrderBy = jest.fn();
+const mockCollection = jest.fn();
+const mockDoc = jest.fn();
 
 jest.mock('firebase/app', () => {
   const firestoreObj = {
@@ -14,9 +18,11 @@ jest.mock('firebase/app', () => {
       fromDate: jest.fn(() => ({ seconds: 0, nanoseconds: 0 })),
       new: jest.fn(() => ({ seconds: 0, nanoseconds: 0 })),
     })),
-    collection: jest.fn().mockReturnThis(),
-    doc: jest.fn(() => Promise.resolve(true)),
+    collection: mockCollection.mockReturnThis(),
+    doc: mockDoc.mockImplementation(() => Promise.resolve(true)),
     onSnapshot: jest.fn(() => Promise.resolve(true)),
+    where: mockWhere.mockImplementation(() => Promise.resolve(true)),
+    orderBy: mockOrderBy.mockImplementation(() => Promise.resolve(true)),
   };
   const firestore = jest.fn(() => firestoreObj);
 
@@ -59,4 +65,4 @@ jest.mock('firebase/app', () => {
   };
 });
 
-export { mockSignInWithPhoneNumber };
+export { mockSignInWithPhoneNumber, mockWhere, mockOrderBy, mockCollection, mockDoc };

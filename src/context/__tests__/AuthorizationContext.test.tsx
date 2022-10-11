@@ -8,15 +8,23 @@
 
 import firebase from 'firebase';
 import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
-import { setUpRecaptcha } from '../AuthorizationContext';
+import Enzyme, { mount } from 'enzyme';
+import { AuthorizationContextProvider, setUpRecaptcha } from '../AuthorizationContext';
 import { mockSignInWithPhoneNumber } from '../../../jestSetup';
+import Home from '../../pages/home/Home';
+import React from 'react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('AuthorizationContextProvider', () => {
-  it('STUB', () => {
-    expect(1).toBe(1);
+  it('Should render', () => {
+    const wrapper = mount(
+      <AuthorizationContextProvider>
+        <Home />
+      </AuthorizationContextProvider>,
+    );
+
+    expect(wrapper.find(AuthorizationContextProvider).length).toBe(1);
   });
 });
 

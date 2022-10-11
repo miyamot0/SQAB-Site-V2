@@ -11,20 +11,18 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useFirebaseDocumentTyped } from '../useFirebaseDocument';
 import { PosterSubmission } from '../../types/RecordTypes';
+import { mockCollection, mockDoc } from '../../../../jestSetup';
 
 describe('useFirebaseCollectionTyped', () => {
   it('Should fail on bogus query', async () => {
-    await act(async () => {
-      const { result, waitFor } = renderHook(() =>
-        useFirebaseDocumentTyped<PosterSubmission>({
-          collectionString: 'posters',
-          idString: '123',
-        }),
-      );
+    const { result } = renderHook(() =>
+      useFirebaseDocumentTyped<PosterSubmission>({
+        collectionString: 'posters',
+        idString: '123',
+      }),
+    );
 
-      expect(1).toBe(1);
-    });
+    expect(mockCollection).toBeCalled();
+    expect(mockDoc).toBeCalled();
   });
-
-  // TODO: clean up on snapshot change
 });

@@ -12,7 +12,9 @@
 
 import { projectFunctions } from '../config';
 
-export const updateStatusForRecruitment = projectFunctions.httpsCallable('updateStatusForRecruitment');
+export const updateStatusForRecruitment = projectFunctions.httpsCallable(
+  'updateStatusForRecruitment',
+);
 
 export const updateStatusForPoster = projectFunctions.httpsCallable('updateStatusForPoster');
 
@@ -29,9 +31,6 @@ export const getFilteredRecruitmentInformation = projectFunctions.httpsCallable(
 );
 
 export function useFirebaseFunction() {
-
-  // get id/name/email/recruitment status
-
   return {
     updateStatusForRecruitment,
     createBlankTemplateRecruitment,
