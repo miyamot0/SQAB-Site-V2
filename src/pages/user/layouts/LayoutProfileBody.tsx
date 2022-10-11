@@ -89,6 +89,10 @@ export function LayoutProfileBody({
     } else {
       await updateProfileCallback(state, id, updateDocument, response, history);
 
+      if (!response.error) {
+        history.push('/')
+      }
+
       return;
     }
   }
