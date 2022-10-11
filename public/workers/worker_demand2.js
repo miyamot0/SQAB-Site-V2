@@ -2,9 +2,10 @@ self.importScripts('random.min.js');
 self.importScripts('math.min.js');
 self.importScripts('utilities_demand2.js');
 self.importScripts('utilities_de.js');
+self.importScripts('numeric.min.js');
 
 // eslint-disable-next-line no-undef
-importScripts('https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js');
+// importScripts('https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js');
 
 var boundUpper, boundLower, hiP, loP;
 

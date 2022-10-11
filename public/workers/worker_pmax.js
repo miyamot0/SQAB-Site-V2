@@ -20,8 +20,10 @@ var result = null;
 
 var maxIts = 1000;
 
+self.importScripts('numeric.min.js');
+
 // eslint-disable-next-line no-undef
-importScripts('https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js');
+// importScripts('https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js');
 
 var Q, A, K, oldPmax;
 

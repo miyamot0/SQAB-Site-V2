@@ -57,7 +57,7 @@ function generateStringOutputHS(model: string, row: string[], index: number): JS
             <p className="toolTextOutputStyle">
                 Analytic{" "}<i>P<sub>MAX</sub></i>{' '} = {round(rowInNumbers[3], 4)}
                 <br />
-                ((&Delta;Q)/(&Delta;P %1 Increase Unit Price)) = {generateOutputScore(QD, PD)} ={' '}
+                ((&Delta;Q)/(&Delta;P %1 Increase UP)) = {generateOutputScore(QD, PD)} ={' '}
                 {generateSlope(QD, PD)}
                 <br />
                 {noteString}{' '}
@@ -112,7 +112,7 @@ function generateStringOutputZBE2(row: string[], index: number): JSX.Element {
             <p className="toolTextOutputStyle">
                 Fitted{" "}<i>P<sub>MAX</sub></i>{' '} = {round(rowInNumbers[2], 4)}
                 <br />
-                ((&Delta;Q)/(&Delta;P %1 Increase Unit Price)) = {generateOutputScore(QD, PD)} ={' '}
+                ((&Delta;Q)/(&Delta;P %1 Increase UP)) = {generateOutputScore(QD, PD)} ={' '}
                 {generateSlope(QD, PD)}
                 <br />
                 {noteString}{' '}
@@ -167,7 +167,7 @@ function generateStringOutputZBE3(row: string[], index: number): JSX.Element {
             <p className="toolTextOutputStyle">
                 Fitted{" "}<i>P<sub>MAX</sub></i>{' '} = {round(rowInNumbers[2], 4)}
                 <br />
-                ((&Delta;Q)/(&Delta;P %1 Increase Unit Price)) = {generateOutputScore(QD, PD)} ={' '}
+                ((&Delta;Q)/(&Delta;P %1 Increase UP)) = {generateOutputScore(QD, PD)} ={' '}
                 {generateSlope(QD, PD)}
                 <br />
                 {noteString}{' '}

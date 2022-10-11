@@ -9,9 +9,10 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import highchartsAccessibility from "highcharts/modules/accessibility";
 highchartsAccessibility(Highcharts);
-import HighchartsReact from 'highcharts-react-official';
+
 import {
   MDBCard,
   MDBCardBody,
@@ -27,6 +28,7 @@ import { ModelOptions } from './types/DiscountingTypes';
 import { isValidNumber } from './helpers/GeneralHelpers';
 import { SingleOptionType } from './types/GeneralTypes';
 import { handleDiscountingWorkerOutput, InitialDiscountingChartState } from './helpers/DiscountingCharting';
+import { DiscountingHeading } from './views/DiscountingHeading';
 
 import './styles/Tools.css';
 
@@ -115,7 +117,7 @@ export default function DiscountingModelSelector(): JSX.Element {
       return;
     }
 
-    worker = new Worker('https://sqab.org/workers/worker_discounting.js');
+    worker = new Worker('./workers/worker_discounting.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleDiscountingWorkerOutput({
         ev, worker, setRunningCalculation, setResultsSummary,
@@ -133,46 +135,7 @@ export default function DiscountingModelSelector(): JSX.Element {
 
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
-          <MDBCard>
-            <MDBCardBody>
-              <MDBCardTitle>Discounting Model Selector</MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
-                The Discounting Model Selector (Web) is a web-based tool for applying approximate
-                Bayesian model selection for delay discounting applications. This program allows
-                researchers and clinicians with to perform an empirical comparison of Discounting
-                models for individual series of data. This method has been simplified by Discounting
-                Model Selector through the use of an easy-to-use interface resembling common
-                spreadsheet software. At present, the online version of the DMS is performed with
-                only one discounting series at a time.
-                <br />
-                <br />
-                <b>Based on the following works:</b>
-                <br />
-                Franck, C. T., Koffarnus, M. N., House, L. L., &#38; Bickel, W. K. (2015). Accurate
-                characterization of delay discounting: a multiple model approach using approximate
-                Bayesian model selection and a unified discounting measure.{' '}
-                <i>Journal of the Experimental Analysis of Behavior, 103(1)</i>, 218-233.
-                https://doi.org/10.1002/jeab.128.{' '}
-                <a href="https://doi.org/10.1002/jeab.128">doi: 10.1002/jeab.128</a>.
-                <br />
-                <br />
-                Gilroy, S. P., Franck, C. T. &#38; Hantula, D. A. (2017). The discounting model
-                selector: Statistical software for delay discounting applications.{' '}
-                <i>Journal of the Experimental Analysis of Behavior, 107(3)</i>, 388-401.{' '}
-                <a href="https://doi.org/10.1002/jeab.257">doi: 10.1002/jeab.257</a>.
-                <br />
-                <br />
-                Gilroy, S. P. &#38; Hantula, D. A. (2018). Discounting model selection with
-                area-based measures: A case for numerical integration.{' '}
-                <i>Journal of the Experimental Analysis of Behavior, 109(2)</i>, 433-449.{' '}
-                <a href="https://doi.org/10.1002/jeab.318">doi: 10.1002/jeab.318</a>.
-              </MDBCardText>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
+      <DiscountingHeading/>
 
       <MDBRow center>
         <MDBCol sm="8">
@@ -201,7 +164,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 noRipple
                 style={{
                   width: '100%',
-                  marginBottom: '25px',
+                  margin: '15px',
                 }}
                 tag="a"
                 href="#!"
@@ -231,7 +194,7 @@ export default function DiscountingModelSelector(): JSX.Element {
                 <HotColumn title="Values" />
               </HotTable>
 
-              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">Rachlin Behavior:</label>
+              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">Rachlin Behavior:</label>
               <Select
                 name={"framework-field"}
                 inputId={"framework-field"}
@@ -251,12 +214,13 @@ export default function DiscountingModelSelector(): JSX.Element {
                 }}
               />
 
+                <br/>
 
               <MDBBtn
                 noRipple
                 style={{
                   width: '100%',
-                  marginTop: '25px',
+                  margin: '15px',
                 }}
                 tag="a"
                 href="#!"

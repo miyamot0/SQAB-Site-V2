@@ -595,13 +595,13 @@ export function handleDiscountingWorkerOutput({
     const resArray: JSX.Element[] = data.results.map((res, index) => {
       const out = res.Params.map((param, j) => {
         return (
-          <div key={`param-${res.Model}-${index}`}>
+          <span key={`param-${res.Model}-${index}-${param}-${j}`}>
             <b>
               {res.Model} Param[{j}]:
             </b>{' '}
             {param}
             <br />
-          </div>
+          </span>
         );
       });
 
@@ -624,7 +624,7 @@ export function handleDiscountingWorkerOutput({
         );
       } else if (isTopRanked) {
         extraMetrics = (
-          <div key={`ed50-${res.Model}-${index}`}>
+          <span key={`ed50-${res.Model}-${index}`}>
             <b>
               {res.Model} ln(ED50): {Math.log(res.ED50).toFixed(6)}{' '}
             </b>
@@ -637,7 +637,7 @@ export function handleDiscountingWorkerOutput({
               {res.Model} Area (Log10 Scale): {res.AUClog10.toFixed(6)}{' '}
             </b>
             <br />
-          </div>
+          </span>
         );
       }
 

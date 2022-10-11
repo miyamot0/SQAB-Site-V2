@@ -19,13 +19,12 @@ import {
 } from 'mdb-react-ui-kit';
 import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 import { clearConsumptionData, loadExampleData } from './behavior/DemandBehavior';
-import { round } from './helpers/GeneralHelpers';
 import { HotTableThreeParam, HotTableThreeParamZBE, HotTableTwoParamZBE } from './views/HotTables';
 import { PmaxOutput } from './views/PmaxOutput';
-
-import './styles/Tools.css';
 import { PmaxHeading } from './views/PmaxHeading';
 import { handleWorkerOutput } from './helpers/PmaxHelpers';
+
+import './styles/Tools.css';
 
 const ModelOptions = [
   { value: 'ZBE-2', label: '2-Parameter ZBE (no K)' },
@@ -71,7 +70,7 @@ export default function AnalyticPmax(): JSX.Element {
    *
    */
   function startPmaxWorker(): void {
-    worker = new Worker('https://sqab.org/workers/worker_pmax.js');
+    worker = new Worker('./workers/worker_pmax.js');
     worker.onmessage = (ev: MessageEvent<any>) => {
       handleWorkerOutput({
         ev, modelOption, setHotData, setHotData2, setRunningCalculation, worker
@@ -125,7 +124,8 @@ export default function AnalyticPmax(): JSX.Element {
                 <sub>MAX</sub>.
               </MDBCardText>
 
-              <label style={{ width: '100%', marginTop: '25px' }} htmlFor="framework-field">Select Implementation of Framework:</label>
+              <label style={{ width: '100%', 
+              margin: '15px 0' }} htmlFor="framework-field">Select Implementation of Framework:</label>
               <Select
                 name={"framework-field"}
                 inputId={"framework-field"}
@@ -151,11 +151,13 @@ export default function AnalyticPmax(): JSX.Element {
                 }}
               />
 
+              <br/>
+
               <MDBBtn
                 noRipple
                 style={{
                   width: '100%',
-                  marginBottom: '25px',
+                  marginBottom: '15px',
                 }}
                 tag="a"
                 href="#!"
