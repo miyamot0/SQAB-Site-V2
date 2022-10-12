@@ -29,7 +29,7 @@ import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { useFirebaseDocumentTyped } from '../../firebase/hooks/useFirebaseDocument';
 import { ShowSubmissionsClosed } from './views/ShowSubmissionsClosed';
-import { IndividualUserRecord, PosterSubmission } from '../../firebase/types/RecordTypes';
+import { IndividualUserRecord } from '../../firebase/types/RecordTypes';
 import { CommonHeading } from './views/CommonHeading';
 import { checkIfSubmissionsOpen } from './helpers/SubmissionDateHelper';
 import { handleCreateStudentSubmit } from './helpers/SubmissionSender';
