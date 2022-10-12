@@ -8,7 +8,6 @@
 
 import { useEffect, useState } from 'react';
 import { projectFirestore } from '../config';
-
 import { DocumentInputInterface } from '../interfaces/FirebaseInterfaces';
 import {
   onSnapshotEventDocument,

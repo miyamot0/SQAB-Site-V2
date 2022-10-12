@@ -6,10 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import firebase from 'firebase';
 import { waitFor } from '@testing-library/react';
 import { useReducer } from 'react';
 import { renderHook, act } from '@testing-library/react-hooks/lib/dom';
-import { FirestoreAction, FirestoreState } from '../../interfaces/FirebaseInterfaces';
+import { FirestoreAction } from '../../interfaces/FirebaseInterfaces';
 import { PosterSubmission } from '../../types/RecordTypes';
 import { firestoreReducer, useFirestore } from '../useFirestore';
 
@@ -29,35 +30,7 @@ enum FirestoreStates {
   THROW = 'THROW',
 }
 
-jest.mock('./../../config', () => {
-  return {
-    projectFirestore: jest.fn(),
-    projectAuth: jest.fn(),
-    projectFunctions: jest.fn(),
-    googleAuthProvider: jest.fn(),
-    fbAuthProvider: jest.fn(),
-  };
-});
-
-let mockAddDocument: jest.Mock<any, any>;
-let mockUpdateDocument: jest.Mock<any, any>;
-jest.mock('../useFirestore', () => {
-  const requireAction = jest.requireActual('../useFirestore');
-  mockAddDocument = jest.fn();
-  mockUpdateDocument = jest.fn();
-
-  return {
-    ...requireAction,
-    useFirestore: () => ({
-      dispatchIfNotCancelled: jest.fn(),
-      updateDocument: mockUpdateDocument,
-      addDocument: mockAddDocument,
-      response: {} as FirestoreState,
-    }),
-  };
-});
-
-describe('useFirestore', () => {
+describe('firestoreReducer', () => {
   it('Should have persisting state', () => {
     const { result } = renderHook(() => useReducer(firestoreReducer, mockInitialState));
     const [state] = result.current;
@@ -208,53 +181,71 @@ describe('useFirestore', () => {
 });
 
 describe('useFirestore: Add document', () => {
-  afterEach(() => {
-    mockAddDocument.mockClear();
-  });
-
   it('should pass with approximate call', async () => {
     await act(async () => {
       const { result } = renderHook(() => useFirestore('users'));
 
       const { addDocument } = result.current;
 
-      await addDocument({} as PosterSubmission);
+      const poster = {
+        name: 'string',
+        title: 'string',
+        email: 'string',
+        abstract: 'string',
+        list: 'string',
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
+        presenter: false,
+        reviewed: false,
+        id: undefined,
+      } as PosterSubmission;
 
-      expect(mockAddDocument).toBeCalled();
+      await addDocument(poster, '123');
     });
   });
 
   it('should fail with strange call', async () => {
     await act(async () => {
-      //mockCollection.mockImplementation(() => ({
-      //  add: null,
-      //}));
-
       const { result } = renderHook(() => useFirestore('users'));
 
       const { addDocument } = result.current;
 
-      await addDocument({} as PosterSubmission);
+      const poster = {
+        name: 'string',
+        title: 'string',
+        email: 'string',
+        abstract: 'string',
+        list: 'string',
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
+        presenter: false,
+        reviewed: false,
+        id: undefined,
+      } as PosterSubmission;
 
-      expect(mockAddDocument).toBeCalled();
+      await addDocument(poster, undefined);
     });
   });
 });
 
 describe('useFirestore: Update document', () => {
-  afterEach(() => {
-    mockUpdateDocument.mockClear();
-  });
-
   it('should pass with approximate call', async () => {
     await act(async () => {
       const { result } = renderHook(() => useFirestore('users'));
 
       const { updateDocument } = result.current;
 
-      await updateDocument('123', {});
+      const poster = {
+        name: 'string',
+        title: 'string',
+        email: 'string',
+        abstract: 'string',
+        list: 'string',
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
+        presenter: false,
+        reviewed: false,
+        id: undefined,
+      } as PosterSubmission;
 
-      expect(mockUpdateDocument).toBeCalled();
+      await updateDocument('123', poster);
     });
   });
 
@@ -264,9 +255,20 @@ describe('useFirestore: Update document', () => {
 
       const { updateDocument } = result.current;
 
-      await updateDocument('123', {});
+      const poster = {
+        name: 'string',
+        title: 'string',
+        email: 'string',
+        abstract: 'string',
+        list: 'string',
+        time: firebase.firestore.Timestamp.fromDate(new Date()),
+        presenter: false,
+        reviewed: false,
+        id: undefined,
+      } as PosterSubmission;
 
-      expect(mockUpdateDocument).toBeCalled();
+      await updateDocument(null, poster);
+      await updateDocument(undefined, poster);
     });
   });
 });

@@ -113,7 +113,7 @@ export function useFirestore(collection: string): UseFirestore {
     try {
       const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
 
-      if (uid !== null) {
+      if (uid !== undefined) {
         const addedDocument = await ref.doc(uid).set({ ...doc, createdAt });
 
         dispatchIfNotCancelled({

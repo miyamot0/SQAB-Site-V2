@@ -29,14 +29,4 @@ const projectFunctions = firebase.functions();
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 const fbAuthProvider = new firebase.auth.FacebookAuthProvider();
 
-// Timestamp
-//const timestamp = firebase.firestore.Timestamp;
-
-export {
-  projectFirestore,
-  projectAuth,
-  projectFunctions,
-  googleAuthProvider,
-  fbAuthProvider,
-  //timestamp,
-};
+export { projectFirestore, projectAuth, projectFunctions, googleAuthProvider, fbAuthProvider };

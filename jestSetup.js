@@ -13,6 +13,7 @@ const mockCollection = jest.fn();
 const mockDoc = jest.fn();
 const mockSignInWithPopup = jest.fn();
 const mockConfirmOtp = jest.fn();
+const mockSignOut = jest.fn();
 
 jest.mock('firebase/app', () => {
   const firestoreObj = {
@@ -22,6 +23,8 @@ jest.mock('firebase/app', () => {
     })),
     collection: mockCollection.mockReturnThis(),
     doc: mockDoc.mockImplementation(() => Promise.resolve(true)),
+    set: jest.fn(),
+    update: jest.fn(),
     onSnapshot: jest.fn(() => Promise.resolve(true)),
     where: mockWhere.mockImplementation(() => Promise.resolve(true)),
     orderBy: mockOrderBy.mockImplementation(() => Promise.resolve(true)),
@@ -56,7 +59,7 @@ jest.mock('firebase/app', () => {
       Promise.resolve(true),
     ),
     fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
-    signOut: jest.fn(() => {
+    signOut: mockSignOut.mockImplementation(() => {
       Promise.resolve(true);
     }),
     onAuthStateChanged: jest.fn(),
@@ -92,6 +95,7 @@ jest.mock('firebase/app', () => {
 export {
   mockSignInWithPopup,
   mockSignInWithPhoneNumber,
+  mockSignOut,
   mockWhere,
   mockOrderBy,
   mockCollection,
