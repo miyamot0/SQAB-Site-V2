@@ -16,7 +16,7 @@ import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 
 export default function UserPoster() {
   const { id } = useParams<RoutedAdminSet>();
-  const { document, documentError } = useFirebaseDocumentTyped<PosterSubmission>({
+  const { document } = useFirebaseDocumentTyped<PosterSubmission>({
     collectionString: 'submissions',
     idString: id,
   });

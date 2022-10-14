@@ -18,7 +18,7 @@ import { useFirestore } from '../../firebase/hooks/useFirestore';
 import { EditRecruitmentState } from '../recruitment/types/RecruitmentTypes';
 import { dateToYMD } from './helpers/RecruitmentHelpers';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
-import { RecruitmentAd } from '../../firebase/types/RecordTypes';
+import { IndividualUserRecordSaved, RecruitmentAd } from '../../firebase/types/RecordTypes';
 import { RoutedAdminSet } from '../../firebase/types/RoutingTypes';
 import {
   InitialRecruitmentState,
@@ -34,6 +34,10 @@ export default function UserRecruitment() {
     collectionString: 'recruitment',
     idString: id,
   });
+  const { document: userDocument } = useFirebaseDocumentTyped<IndividualUserRecordSaved>({
+    collectionString: 'users',
+    idString: id,
+  });
 
   const { updateDocument, response } = useFirestore('recruitment');
   const { authIsReady } = useAuthorizationContext();
@@ -44,17 +48,23 @@ export default function UserRecruitment() {
   const history = useHistory();
 
   useEffect(() => {
-    if (document && !didBuild) {
+    if (document && userDocument && !didBuild) {
       setDidBuild(true);
 
       const modDateRec = {
         ...document,
+        userEmail: userDocument.userEmail,
+        userInstitution: userDocument.userInstitution,
+        userName: userDocument.userName,
         Cycle: dateToYMD(document.Cycle),
       } as unknown as EditRecruitmentState;
 
-      dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: modDateRec });
+      dispatch({
+        type: RecruitmentEditAction.LoadRecruitment,
+        payload: modDateRec
+      });
     }
-  }, [document, didBuild]);
+  }, [document, userDocument, didBuild]);
 
   if (authIsReady === true && document) {
     return (
