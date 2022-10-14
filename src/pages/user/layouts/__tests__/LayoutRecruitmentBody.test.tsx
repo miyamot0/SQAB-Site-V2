@@ -126,11 +126,11 @@ describe('LayoutRecruitmentBody', () => {
     });
 
     act(() => {
-      wrapper.find('input').forEach((input) => {
+      wrapper.find('input').forEach(input => {
         input.simulate('change', { target: { value: '1' } });
       });
 
-      wrapper.find('textarea').forEach((input) => {
+      wrapper.find('textarea').forEach(input => {
         input.simulate('change', { target: { value: '1' } });
       });
 

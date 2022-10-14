@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import { AuthorizationContextProvider } from "../../AuthorizationContext";
+import React from 'react';
+import { AuthorizationContextProvider } from '../../AuthorizationContext';
 
-describe("Authorization Context", () => {
-  it("...", () => {
+describe('Authorization Context', () => {
+  it('...', () => {
     const val = (
       <AuthorizationContextProvider>
         <></>

@@ -13,8 +13,8 @@ import { CommonHeading } from '../views/CommonHeading';
 
 export function ShowSubmissionsClosed(): JSX.Element {
   return (
-    <MDBRow center className="row-eq-height">
-      <MDBCol sm="6">
+    <MDBRow center className='row-eq-height'>
+      <MDBCol sm='6'>
         <MDBCard>
           <MDBCardBody>
             <CommonHeading />

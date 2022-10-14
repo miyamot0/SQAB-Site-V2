@@ -6,23 +6,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { generateOutputScore, generateSlope } from "../DemandHelpers";
+import { generateOutputScore, generateSlope } from '../DemandHelpers';
 
 describe('generateSlope', () => {
-    it('value check', () => {
-        const qd = 1.0001;
-        const pd = 1.0001;
+  it('value check', () => {
+    const qd = 1.0001;
+    const pd = 1.0001;
 
-        const result = generateSlope(qd, pd);
-
-    })
-})
+    const result = generateSlope(qd, pd);
+  });
+});
 
 describe('generateOutputScore', () => {
-    it('value check', () => {
-        const qd = 1.0001;
-        const pd = 1.0001;
+  it('value check', () => {
+    const qd = 1.0001;
+    const pd = 1.0001;
 
-        const result = generateOutputScore(qd, pd);
-    })
-})
+    const result = generateOutputScore(qd, pd);
+  });
+});

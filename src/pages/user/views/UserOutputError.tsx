@@ -15,6 +15,12 @@ import { OutputUserErrorInterface } from '../interfaces/UserInterfaces';
  * @param param0
  * @returns
  */
-export function OutputUserError({ documentError, }: OutputUserErrorInterface): JSX.Element {
-  return documentError ? <><MDBCardTitle className='error' >{documentError}</MDBCardTitle ></> : <br />;
+export function OutputUserError({ documentError }: OutputUserErrorInterface): JSX.Element {
+  return documentError ? (
+    <>
+      <MDBCardTitle className='error'>{documentError}</MDBCardTitle>
+    </>
+  ) : (
+    <br />
+  );
 }

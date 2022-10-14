@@ -30,7 +30,6 @@ export function AdministrationUserSummary({
   userDocuments,
   submissionDocuments,
 }: AdministrationUserSummary) {
-
   const { documents: recruitmentDocuments } = useFirebaseCollectionTyped<RecruitmentAd>({
     collectionString: 'recruitment',
     queryString: undefined,
@@ -38,8 +37,8 @@ export function AdministrationUserSummary({
   });
 
   return (
-    <MDBRow className="d-flex justify-content-center">
-      <MDBCol sm="8">
+    <MDBRow className='d-flex justify-content-center'>
+      <MDBCol sm='8'>
         <UserSummaryCard
           userDocuments={userDocuments}
           recruitmentDocuments={recruitmentDocuments}

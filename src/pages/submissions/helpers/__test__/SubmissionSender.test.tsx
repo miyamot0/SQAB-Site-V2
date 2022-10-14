@@ -6,191 +6,223 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import firebase from "firebase";
-import { FirestoreState } from "../../../../firebase/interfaces/FirebaseInterfaces";
-import { handleCreateStudentSubmit } from "../SubmissionSender";
+import firebase from 'firebase';
+import { FirestoreState } from '../../../../firebase/interfaces/FirebaseInterfaces';
+import { handleCreateStudentSubmit } from '../SubmissionSender';
 
 const mockAddDoc = jest.fn();
 
 jest.mock('../../../../firebase/hooks/useFirestore', () => {
-    const originalModule = jest.requireActual('../../../../firebase/hooks/useFirestore');
-    return {
-        __esModule: true,
-        ...originalModule,
-        default: () => ({
-            updateDocument: mockAddDoc,
-            response: {} as FirestoreState,
-        }),
-    };
+  const originalModule = jest.requireActual('../../../../firebase/hooks/useFirestore');
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: () => ({
+      updateDocument: mockAddDoc,
+      response: {} as FirestoreState,
+    }),
+  };
 });
 
 describe('SubmissionSender', () => {
-    const jsdomAlert = window.alert;
-    const windowMock = jest.fn();
+  const jsdomAlert = window.alert;
+  const windowMock = jest.fn();
 
-    beforeAll(() => {
-        // remember the jsdom alert
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        window.alert = windowMock; // provide an empty implementation for window.alert
+  beforeAll(() => {
+    // remember the jsdom alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = windowMock; // provide an empty implementation for window.alert
+  });
 
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
+
+  it('Success', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: 'First Last',
+      posterTitle: 'This is the title',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'This is the abstract',
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
+
+    await handleCreateStudentSubmit({
+      state,
+      user,
+      addDocument,
+      setButtonText,
+      response: {} as FirestoreState,
+      dispatch,
     });
 
-    afterAll(() => {
-        window.alert = jsdomAlert; // restore the jsdom alert
+    expect(addDocument).toBeCalled();
+    expect(setButtonText).toBeCalled();
+  });
+
+  it('Bad user', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: 'First Last',
+      posterTitle: 'This is the title',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'This is the abstract',
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
+
+    await handleCreateStudentSubmit({
+      state,
+      user: null as unknown as firebase.User,
+      addDocument,
+      setButtonText,
+      response: {} as FirestoreState,
+      dispatch,
     });
 
-    it('Success', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: 'First Last',
-            posterTitle: 'This is the title',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'This is the abstract',
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
+    expect(addDocument).not.toBeCalled();
+    expect(setButtonText).not.toBeCalled();
+  });
 
-        await handleCreateStudentSubmit({ state, user, addDocument, setButtonText, response: {} as FirestoreState, dispatch })
+  it('Short name', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: '',
+      posterTitle: 'This is the title',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'This is the abstract',
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
 
-        expect(addDocument).toBeCalled();
-        expect(setButtonText).toBeCalled();
-    })
+    await handleCreateStudentSubmit({
+      state,
+      user,
+      addDocument,
+      setButtonText,
+      response: {} as FirestoreState,
+      dispatch,
+    });
 
-    it('Bad user', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: 'First Last',
-            posterTitle: 'This is the title',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'This is the abstract',
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
+    expect(dispatch).toBeCalled();
+  });
 
-        await handleCreateStudentSubmit({
-            state, user: (null as unknown as firebase.User),
-            addDocument, setButtonText, response: {} as FirestoreState, dispatch
-        })
+  it('Short title', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: 'First Last',
+      posterTitle: '',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'This is the abstract',
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
 
-        expect(addDocument).not.toBeCalled();
-        expect(setButtonText).not.toBeCalled();
-    })
+    await handleCreateStudentSubmit({
+      state,
+      user,
+      addDocument,
+      setButtonText,
+      response: {} as FirestoreState,
+      dispatch,
+    });
 
-    it('Short name', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: '',
-            posterTitle: 'This is the title',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'This is the abstract',
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
+    expect(dispatch).toBeCalled();
+  });
 
-        await handleCreateStudentSubmit({ state, user, addDocument, setButtonText, response: {} as FirestoreState, dispatch })
+  it('Abstract long', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: 'First Last',
+      posterTitle: 'This is the title',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'word '.repeat(121),
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
 
-        expect(dispatch).toBeCalled();
-    })
+    await handleCreateStudentSubmit({
+      state,
+      user: user,
+      addDocument,
+      setButtonText,
+      response: {} as FirestoreState,
+      dispatch,
+    });
 
-    it('Short title', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: 'First Last',
-            posterTitle: '',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'This is the abstract',
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
+    expect(dispatch).toBeCalled();
+  });
 
-        await handleCreateStudentSubmit({ state, user, addDocument, setButtonText, response: {} as FirestoreState, dispatch })
+  it('bad send', async () => {
+    const state = {
+      formError: '',
+      submittingAuthor: 'First Last',
+      posterTitle: 'This is the title',
+      correspondingEmail: 'fake@test.com',
+      posterAbstract: 'word '.repeat(10),
+      posterAuthorsFull: 'John Doe',
+      studentPresenter: true,
+      authorChoice: {
+        label: 'I am interested.',
+        value: 'I am interested.',
+      },
+    };
+    const user = { uid: '123' } as firebase.User;
+    const addDocument = jest.fn();
+    const setButtonText = jest.fn();
+    const dispatch = jest.fn();
 
-        expect(dispatch).toBeCalled();
-    })
+    await handleCreateStudentSubmit({
+      state,
+      user: user,
+      addDocument,
+      setButtonText,
+      response: { error: 'failure' } as FirestoreState,
+      dispatch,
+    });
 
-    it('Abstract long', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: 'First Last',
-            posterTitle: 'This is the title',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'word '.repeat(121),
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
-
-        await handleCreateStudentSubmit({
-            state, user: user,
-            addDocument, setButtonText, response: {} as FirestoreState, dispatch
-        })
-
-        expect(dispatch).toBeCalled();
-    })
-
-    it('bad send', async () => {
-        const state = {
-            formError: '',
-            submittingAuthor: 'First Last',
-            posterTitle: 'This is the title',
-            correspondingEmail: 'fake@test.com',
-            posterAbstract: 'word '.repeat(10),
-            posterAuthorsFull: 'John Doe',
-            studentPresenter: true,
-            authorChoice: {
-                label: 'I am interested.',
-                value: 'I am interested.',
-            }
-        };
-        const user = { uid: '123' } as firebase.User;
-        const addDocument = jest.fn();
-        const setButtonText = jest.fn();
-        const dispatch = jest.fn();
-
-        await handleCreateStudentSubmit({
-            state, user: user,
-            addDocument, setButtonText, response: { error: 'failure' } as FirestoreState, dispatch
-        })
-
-        expect(windowMock).toBeCalled();
-    })
-})
+    expect(windowMock).toBeCalled();
+  });
+});

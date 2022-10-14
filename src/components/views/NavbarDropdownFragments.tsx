@@ -36,7 +36,7 @@ export function NavbarDropdownFragmentOpen({
   if (hasAccess === true) {
     return (
       <MDBDropdown style={navbarTextStyle}>
-        <MDBDropdownToggle tag="a" className="nav-link mr-2">
+        <MDBDropdownToggle tag='a' className='nav-link mr-2'>
           Resources
         </MDBDropdownToggle>
 
@@ -63,7 +63,7 @@ export function NavbarDropdownFragmentOpen({
   } else {
     return (
       <MDBDropdown style={navbarTextStyle}>
-        <MDBDropdownToggle tag="a" className="nav-link mr-2">
+        <MDBDropdownToggle tag='a' className='nav-link mr-2'>
           Resources
         </MDBDropdownToggle>
 

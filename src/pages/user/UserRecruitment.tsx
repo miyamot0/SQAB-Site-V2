@@ -61,7 +61,7 @@ export default function UserRecruitment() {
 
       dispatch({
         type: RecruitmentEditAction.LoadRecruitment,
-        payload: modDateRec
+        payload: modDateRec,
       });
     }
   }, [document, userDocument, didBuild]);
@@ -82,8 +82,8 @@ export default function UserRecruitment() {
   } else {
     return (
       <div>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="8">
+        <MDBRow center className='row-eq-height'>
+          <MDBCol sm='8'>
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Recruitment Details</MDBCardTitle>

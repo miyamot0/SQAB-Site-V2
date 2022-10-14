@@ -24,8 +24,8 @@ export function RecruitmentFunctionality({
   setSelectedAdUser,
 }: RecruitmentFunctionalityInterface) {
   return (
-    <MDBRow className="d-flex justify-content-center">
-      <MDBCol sm="4">
+    <MDBRow className='d-flex justify-content-center'>
+      <MDBCol sm='4'>
         <MDBCard>
           <MDBCardBody>
             <MDBCardTitle>Recruitment Settings/Options</MDBCardTitle>

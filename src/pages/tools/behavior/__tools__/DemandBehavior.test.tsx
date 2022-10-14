@@ -6,17 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { clearConsumptionData, loadExampleData } from "../DemandBehavior"
+import { clearConsumptionData, loadExampleData } from '../DemandBehavior';
 
 describe('DemandBehavior', () => {
-    it('Confirm that values are passed', () => {
-        const setHotData = jest.fn();
+  it('Confirm that values are passed', () => {
+    const setHotData = jest.fn();
 
-        loadExampleData({ setHotData, isZBE: false, hasTwoParameters: false })
-        loadExampleData({ setHotData, isZBE: true, hasTwoParameters: false })
-        loadExampleData({ setHotData, isZBE: true, hasTwoParameters: true })
+    loadExampleData({ setHotData, isZBE: false, hasTwoParameters: false });
+    loadExampleData({ setHotData, isZBE: true, hasTwoParameters: false });
+    loadExampleData({ setHotData, isZBE: true, hasTwoParameters: true });
 
-        clearConsumptionData({ setHotData, hasTwoParameters: true })
-        clearConsumptionData({ setHotData, hasTwoParameters: false })
-    })
-})
+    clearConsumptionData({ setHotData, hasTwoParameters: true });
+    clearConsumptionData({ setHotData, hasTwoParameters: false });
+  });
+});

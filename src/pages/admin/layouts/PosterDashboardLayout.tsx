@@ -7,10 +7,7 @@
  */
 
 import React from 'react';
-import {
-  MDBCol,
-  MDBRow,
-} from 'mdb-react-ui-kit';
+import { MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import { PosterPanel } from '../views/PosterPanel';
 
 export interface PosterDashboardLayout {
@@ -29,7 +26,7 @@ export function PosterDashboardLayout({
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',

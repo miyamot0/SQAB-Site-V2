@@ -19,9 +19,7 @@ export interface AdminEmailDashboardLayout {
  * @param param0
  * @returns
  */
-export function AdminEmailDashboardLayout({
-  sysAdminFlag,
-}: AdminEmailDashboardLayout) {
+export function AdminEmailDashboardLayout({ sysAdminFlag }: AdminEmailDashboardLayout) {
   if (sysAdminFlag === false) {
     return <></>;
   }
@@ -29,7 +27,7 @@ export function AdminEmailDashboardLayout({
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',

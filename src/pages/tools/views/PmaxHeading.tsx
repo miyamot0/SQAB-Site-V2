@@ -13,14 +13,14 @@ import { CardBodyTextStyle } from '../../../utilities/StyleHelper';
 
 export function PmaxHeading() {
   return (
-    <MDBRow center className="row-eq-height">
-      <MDBCol sm="8">
+    <MDBRow center className='row-eq-height'>
+      <MDBCol sm='8'>
         <MDBCard>
           <MDBCardBody>
             <MDBCardTitle>
               Analytical P<sub>MAX</sub> Calculator
             </MDBCardTitle>
-            <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
+            <MDBCardText style={CardBodyTextStyle} className='toolsDescription'>
               The Analytical P<sub>MAX</sub> Calculator is a web-based tool for determining the
               point of unit elasticity, or more literally, peak work. This calculator streamlines
               the determination of an exact (Analytic) unit elasticity (i.e., slope = -1) using a
@@ -35,13 +35,13 @@ export function PmaxHeading() {
               Gilroy, S.P., Kaplan, B.A., Reed, D.D., Hantula, D.A., &#38; Hursh, S. R. (2019). An
               Exact Solution for Unit Elasticity in the Exponential Model of Demand.{' '}
               <i>Journal of Experimental and Clinical Psychopharmacology, 27(6)</i>, 588-597. doi:{' '}
-              <a href="https://psycnet.apa.org/doi/10.1037/pha0000268">10.1037/pha0000268</a>.
+              <a href='https://psycnet.apa.org/doi/10.1037/pha0000268'>10.1037/pha0000268</a>.
               <br />
               <br />
               Gilroy, S. P., Kaplan, B. A., &#38; Reed, D. D. (2020). Interpretation (s) of
               elasticity in operant demand.{' '}
               <i>Journal of the Experimental Analysis of Behavior, 114(1)</i>, 106-115. doi:{' '}
-              <a href="https://doi.org/10.1002/jeab.610">10.1002/jeab.610</a>.
+              <a href='https://doi.org/10.1002/jeab.610'>10.1002/jeab.610</a>.
             </MDBCardText>
           </MDBCardBody>
         </MDBCard>

@@ -161,13 +161,13 @@ export default function DemandCurveAnalyzer(): JSX.Element {
       <DemandHeading />
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Demand Curve Analyzer</MDBCardTitle>
@@ -189,9 +189,9 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 style={{
                   width: '100%',
                 }}
-                tag="a"
-                href="#!"
-                className="button-fit-card"
+                tag='a'
+                href='#!'
+                className='button-fit-card'
                 disabled={runningCalculation}
                 onClick={() => loadExampleData()}
               >
@@ -203,21 +203,21 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 colHeaders={true}
                 rowHeaders={true}
                 style={{ marginTop: '25px' }}
-                height="auto"
-                stretchH="all"
+                height='auto'
+                stretchH='all'
                 columnSorting={false}
                 columns={[
                   { data: 0, type: 'string' },
                   { data: 1, type: 'string' },
                 ]}
                 contextMenu={true}
-                licenseKey="non-commercial-and-evaluation"
+                licenseKey='non-commercial-and-evaluation'
               >
-                <HotColumn title="Price/Unit Price" />
-                <HotColumn title="Consumption" />
+                <HotColumn title='Price/Unit Price' />
+                <HotColumn title='Consumption' />
               </HotTable>
 
-              <label style={{ width: '100%', margin: '15px auto' }} htmlFor="framework-field">
+              <label style={{ width: '100%', margin: '15px auto' }} htmlFor='framework-field'>
                 Modeling Option:
               </label>
 
@@ -225,7 +225,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 name={'framework-field'}
                 inputId={'framework-field'}
                 options={ModelOptions}
-                onChange={(option) => {
+                onChange={option => {
                   if (option) {
                     setModelOption(option);
                     setChartOptions({});
@@ -246,7 +246,7 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                 }}
                 value={modelOption}
                 styles={{
-                  menu: (base) => ({
+                  menu: base => ({
                     ...base,
                     width: 'max-content',
                     minWidth: '100%',
@@ -256,28 +256,28 @@ export default function DemandCurveAnalyzer(): JSX.Element {
 
               {modelOption !== ModelOptions[3] && (
                 <>
-                  <label style={{ width: '100%', margin: '15px auto' }} htmlFor="span-field">
+                  <label style={{ width: '100%', margin: '15px auto' }} htmlFor='span-field'>
                     Scaling parameter (K) Value:
                   </label>
                   <Select
                     name={'span-field'}
                     inputId={'span-field'}
                     options={kOptionsAvailable}
-                    onChange={(option) => {
+                    onChange={option => {
                       if (option) {
                         setKOption(option);
                       }
                     }}
                     value={kOption}
                     styles={{
-                      menu: (base) => ({
+                      menu: base => ({
                         ...base,
                         width: 'max-content',
                         minWidth: '100%',
                       }),
                     }}
-                    menuPlacement="auto"
-                    menuPosition="fixed"
+                    menuPlacement='auto'
+                    menuPosition='fixed'
                   />
                 </>
               )}
@@ -290,10 +290,10 @@ export default function DemandCurveAnalyzer(): JSX.Element {
                   width: '100%',
                   margin: '15px auto',
                 }}
-                tag="a"
-                href="#!"
+                tag='a'
+                href='#!'
                 disabled={runningCalculation}
-                className="button-fit-card"
+                className='button-fit-card'
                 onClick={() => {
                   setRunningCalculation(true);
                   calculateDemand();
@@ -304,8 +304,8 @@ export default function DemandCurveAnalyzer(): JSX.Element {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol md="4">
-          <MDBCard className="outputPanel">
+        <MDBCol md='4'>
+          <MDBCard className='outputPanel'>
             <MDBCardBody>
               <MDBCardTitle>Fitting Results</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}></MDBCardText>

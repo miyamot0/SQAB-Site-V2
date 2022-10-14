@@ -26,10 +26,10 @@ export default function MentorPage(): JSX.Element {
   if (document) {
     return (
       <>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="6">
+        <MDBRow center className='row-eq-height'>
+          <MDBCol sm='6'>
             <MDBCard>
-              <MDBCardBody className="recruitment-mentor">
+              <MDBCardBody className='recruitment-mentor'>
                 <MDBCardTitle>
                   {document.Name} ({document.Institution})
                 </MDBCardTitle>

@@ -64,8 +64,8 @@ export default function Submission(params: { userId: string }): JSX.Element {
 
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <CommonHeading />
@@ -81,16 +81,16 @@ export default function Submission(params: { userId: string }): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <CarouselConference />
         </MDBCol>
-        <MDBCol md="4">
+        <MDBCol md='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Poster Submission Portal</MDBCardTitle>
@@ -102,17 +102,17 @@ export default function Submission(params: { userId: string }): JSX.Element {
                 <form>
                   <label>
                     <span>Submitting Author (Edit in Profile):</span>
-                    <input required disabled type="text" value={state.submittingAuthor}></input>
+                    <input required disabled type='text' value={state.submittingAuthor}></input>
                   </label>
                   <label>
                     <span>Corresponding Email (Edit in Profile):</span>
-                    <input required disabled type="email" value={state.correspondingEmail}></input>
+                    <input required disabled type='email' value={state.correspondingEmail}></input>
                   </label>
                   <label>
                     <span>Poster Title:</span>
                     <textarea
                       required
-                      onChange={(e) =>
+                      onChange={e =>
                         dispatch({ type: SubmissionAction.Title, payload: e.target.value })
                       }
                       placeholder={'Experimental comparison of...'}
@@ -123,7 +123,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                     <span>Poster Abstract (Maximum 120 Words):</span>
                     <textarea
                       required
-                      onChange={(e) =>
+                      onChange={e =>
                         dispatch({ type: SubmissionAction.Abstract, payload: e.target.value })
                       }
                       placeholder={'In this study...'}
@@ -133,7 +133,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                   <label>
                     <span>Full Author List (One per line, please):</span>
                     <textarea
-                      onChange={(e) =>
+                      onChange={e =>
                         dispatch({
                           type: SubmissionAction.AuthorsFull,
                           payload: e.target.value,
@@ -143,7 +143,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                       value={state.posterAuthorsFull}
                     ></textarea>
                   </label>
-                  <label htmlFor="framework-field">Tony Nevin Student Presenter Award:</label>
+                  <label htmlFor='framework-field'>Tony Nevin Student Presenter Award:</label>
                   <Select
                     name={'framework-field'}
                     inputId={'framework-field'}
@@ -161,7 +161,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                       width: '100%',
                       marginTop: '25px',
                     }}
-                    onClick={async (e) => {
+                    onClick={async e => {
                       await handleCreateStudentSubmit({
                         state,
                         user,
@@ -175,7 +175,7 @@ export default function Submission(params: { userId: string }): JSX.Element {
                     {buttonText}
                   </MDBBtn>
 
-                  {state.formError && <p className="error">{state.formError}</p>}
+                  {state.formError && <p className='error'>{state.formError}</p>}
                 </form>
                 <br></br>
               </div>

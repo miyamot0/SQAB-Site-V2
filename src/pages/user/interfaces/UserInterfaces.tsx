@@ -7,5 +7,5 @@
  */
 
 export interface OutputUserErrorInterface {
-    documentError: string | undefined | null;
+  documentError: string | undefined | null;
 }

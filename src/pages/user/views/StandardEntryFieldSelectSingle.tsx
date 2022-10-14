@@ -6,17 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import Select, { SingleValue } from "react-select";
-import { SingleOptionType } from "../../tools/types/GeneralTypes";
-import { ProfileActions } from "../types/ProfileActionTypes";
+import React from 'react';
+import Select, { SingleValue } from 'react-select';
+import { SingleOptionType } from '../../tools/types/GeneralTypes';
+import { ProfileActions } from '../types/ProfileActionTypes';
 
 export interface SelectFieldEntryProps {
-    label: string;
-    options: SingleOptionType[];
-    currentValue: SingleOptionType;
-    type: number;
-    dispatch: (value: ProfileActions) => void;
+  label: string;
+  options: SingleOptionType[];
+  currentValue: SingleOptionType;
+  type: number;
+  dispatch: (value: ProfileActions) => void;
 }
 
 /** StandardEntryFieldSelectSingle
@@ -28,24 +28,30 @@ export interface SelectFieldEntryProps {
  * @param {function} dispatch dispatch callback
  * @returns {JSX.Element}
  */
-export function StandardEntryFieldSelectSingle({ label, options, currentValue, type, dispatch }: SelectFieldEntryProps): JSX.Element {
-    return (
-        <>
-            <label htmlFor="single-field" className="select-label">
-                {label}:
-            </label>
-            <Select
-                name={"single-field"}
-                inputId={"single-field"}
-                options={options}
-                onChange={(option: SingleValue<SingleOptionType>) => {
-                    dispatch({
-                        type: type,
-                        payload: option,
-                    });
-                }}
-                value={currentValue}
-            />
-        </>
-    );
+export function StandardEntryFieldSelectSingle({
+  label,
+  options,
+  currentValue,
+  type,
+  dispatch,
+}: SelectFieldEntryProps): JSX.Element {
+  return (
+    <>
+      <label htmlFor='single-field' className='select-label'>
+        {label}:
+      </label>
+      <Select
+        name={'single-field'}
+        inputId={'single-field'}
+        options={options}
+        onChange={(option: SingleValue<SingleOptionType>) => {
+          dispatch({
+            type: type,
+            payload: option,
+          });
+        }}
+        value={currentValue}
+      />
+    </>
+  );
 }

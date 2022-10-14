@@ -63,7 +63,7 @@ export function SignInModal({
     recapchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
 
     try {
-      setUpRecaptcha(phoneNumber, recapchaVerifier).then((confirmationResult) => {
+      setUpRecaptcha(phoneNumber, recapchaVerifier).then(confirmationResult => {
         setConfirmResult(confirmationResult);
       });
 
@@ -80,29 +80,29 @@ export function SignInModal({
       shouldCloseOnOverlayClick={false}
       preventScroll={true}
       style={CommonModalStyleSignin}
-      contentLabel="Example Modal"
+      contentLabel='Example Modal'
     >
       <h2>Phone Login</h2>
 
-      <button onClick={() => setShowModal(false)} className="button-close-modal">
+      <button onClick={() => setShowModal(false)} className='button-close-modal'>
         X
       </button>
 
-      <div className="navbar-modal">
+      <div className='navbar-modal'>
         <div
-          id="captcha-wrapper"
+          id='captcha-wrapper'
           style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
         >
-          <div id="recaptcha-container"></div>
+          <div id='recaptcha-container'></div>
         </div>
 
         <label hidden={!showPhoneNumber}>
           <span>Phone Number:</span>
           <PhoneInput
-            defaultCountry="US"
+            defaultCountry='US'
             value={phoneNumber}
             onChange={(e: string) => setPhoneNumber(e)}
-            placeholder="Enter phone number"
+            placeholder='Enter phone number'
           ></PhoneInput>
         </label>
 
@@ -110,8 +110,8 @@ export function SignInModal({
           <span>One Time Password (OTP):</span>
           <input
             required
-            type="text"
-            onChange={(e) => setOTPNumber(e.target.value)}
+            type='text'
+            onChange={e => setOTPNumber(e.target.value)}
             placeholder={'e.g., 123456'}
             value={otpNumber}
           ></input>
@@ -124,8 +124,8 @@ export function SignInModal({
 
         <MDBBtn
           noRipple
-          tag="a"
-          href="#!"
+          tag='a'
+          href='#!'
           style={{ width: '100%' }}
           hidden={!showPhoneNumber}
           onClick={() => postPhoneEntryCall()}
@@ -135,8 +135,8 @@ export function SignInModal({
 
         <MDBBtn
           noRipple
-          tag="a"
-          href="#!"
+          tag='a'
+          href='#!'
           hidden={!showOTP}
           style={{ width: '100%' }}
           onClick={() => postOTPEntryCall(login, confirmResult, otpNumber, setShowModal)}

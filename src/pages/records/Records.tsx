@@ -157,8 +157,8 @@ const Newsletters = [
 export default function Records(): JSX.Element {
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Yearly Programs and Newsletters</MDBCardTitle>
@@ -172,21 +172,21 @@ export default function Records(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Previous Programs</MDBCardTitle>
-              <ul className="records-ul">
-                {Programs.map((prog) => {
+              <ul className='records-ul'>
+                {Programs.map(prog => {
                   return (
                     <li key={`program-${prog.Year}`}>
-                      <a href={`${prog.Path}`} target="_blank" rel="noreferrer">
+                      <a href={`${prog.Path}`} target='_blank' rel='noreferrer'>
                         <span>{`${prog.Year} SQAB Program`}</span>
                       </a>
                     </li>
@@ -197,15 +197,15 @@ export default function Records(): JSX.Element {
           </MDBCard>
         </MDBCol>
 
-        <MDBCol md="4">
+        <MDBCol md='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Previous Newsletters</MDBCardTitle>
-              <ul className="records-ul">
+              <ul className='records-ul'>
                 {Newsletters.map((news, index) => {
                   return (
                     <li key={`news-${news.Year}-${index}`}>
-                      <a href={`${news.Path}`} target="_blank" rel="noreferrer">
+                      <a href={`${news.Path}`} target='_blank' rel='noreferrer'>
                         <span>{`${news.Year} SQAB Newsletter`}</span>
                       </a>
                     </li>

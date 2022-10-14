@@ -44,7 +44,7 @@ describe('Navbar', () => {
     jest
       .spyOn(Modal, 'setAppElement')
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .mockImplementation((param) => {});
+      .mockImplementation(param => {});
 
     await act(async () => {
       wrapper = mount(

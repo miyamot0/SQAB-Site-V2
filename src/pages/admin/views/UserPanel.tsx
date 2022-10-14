@@ -33,7 +33,7 @@ export function UserPanel({ userDocuments }: UserPanel) {
         return a.userName.localeCompare(b.userName);
       }
     })
-    .map((userItem) => {
+    .map(userItem => {
       const ret = {
         id: userItem.id ?? '',
         name: userItem.userName,
@@ -46,8 +46,8 @@ export function UserPanel({ userDocuments }: UserPanel) {
     });
 
   return (
-    <MDBRow className="d-flex justify-content-center">
-      <MDBCol sm="8">
+    <MDBRow className='d-flex justify-content-center'>
+      <MDBCol sm='8'>
         <MDBCard>
           <MDBCardBody>
             <MDBCardTitle>User Dashboard</MDBCardTitle>

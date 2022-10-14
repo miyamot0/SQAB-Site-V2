@@ -97,13 +97,13 @@ describe('PosterPanel', () => {
     const wrapper = mount(<PosterPanel />);
 
     wrapper
-      .findWhere((node) => {
+      .findWhere(node => {
         return node.type() === 'a' && node.text() === 'Send Confirmation Emails';
       })
       .simulate('click');
 
     wrapper
-      .findWhere((node) => {
+      .findWhere(node => {
         return node.type() === 'a' && node.text() === 'Download Results to File';
       })
       .simulate('click');

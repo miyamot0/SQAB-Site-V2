@@ -36,8 +36,8 @@ export function useFirebaseDocumentTyped<T>({
     const ref = projectFirestore.collection(collectionString).doc(idString);
 
     const unsubscribe = ref.onSnapshot(
-      (snapshot) => onSnapshotEventDocument(snapshot, setDocument, setError),
-      (err) => onSnapshotEventDocumentErr(err, setError),
+      snapshot => onSnapshotEventDocument(snapshot, setDocument, setError),
+      err => onSnapshotEventDocumentErr(err, setError),
     );
 
     return () => unsubscribe();

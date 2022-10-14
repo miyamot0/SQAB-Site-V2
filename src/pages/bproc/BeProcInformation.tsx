@@ -17,8 +17,8 @@ import './styles/BeProcInformation.css';
 export default function BeProcInformation(): JSX.Element {
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>
@@ -34,18 +34,18 @@ export default function BeProcInformation(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Available Issues</MDBCardTitle>
-              <ul className="beproc-ul">
-                {specialIssueJson.Specials.map((issue) => {
+              <ul className='beproc-ul'>
+                {specialIssueJson.Specials.map(issue => {
                   return (
                     <li key={`index-${issue.Title}`}>
                       <a

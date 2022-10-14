@@ -65,8 +65,8 @@ export function useFirebaseCollectionTyped<T>({
     }
 
     const unsubscribe = ref.onSnapshot(
-      (snapshot) => onSnapshotEventCollection<T>(snapshot, setDocuments, setError),
-      (err) => onSnapshotEventCollectionErr(err, setError),
+      snapshot => onSnapshotEventCollection<T>(snapshot, setDocuments, setError),
+      err => onSnapshotEventCollectionErr(err, setError),
     );
 
     return () => unsubscribe();

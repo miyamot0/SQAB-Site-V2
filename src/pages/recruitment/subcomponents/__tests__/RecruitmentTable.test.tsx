@@ -18,132 +18,131 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('RecruitmentTable', () => {
-    const jsdomAlert = window.alert;
+  const jsdomAlert = window.alert;
 
-    beforeAll(() => {
-        // remember the jsdom alert
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        window.alert = () => { }; // provide an empty implementation for window.alert
-    });
+  beforeAll(() => {
+    // remember the jsdom alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
 
-    afterAll(() => {
-        window.alert = jsdomAlert; // restore the jsdom alert
-    });
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
 
-    it('Should render, basic content', () => {
-        const documents = [
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: false,
-                id: 'string',
-            } as RecruitmentAd,
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: false,
-                id: 'string',
-            } as RecruitmentAd,
-        ] as RecruitmentAd[];
+  it('Should render, basic content', () => {
+    const documents = [
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: false,
+        id: 'string',
+      } as RecruitmentAd,
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: false,
+        id: 'string',
+      } as RecruitmentAd,
+    ] as RecruitmentAd[];
 
-        const wrapper = mount(<RecruitmentTable documents={documents} />)
-    })
+    const wrapper = mount(<RecruitmentTable documents={documents} />);
+  });
 
-    it('Should render, despite null array', () => {
-        const wrapper = mount(<RecruitmentTable documents={null as unknown as RecruitmentAd[]} />)
-    })
+  it('Should render, despite null array', () => {
+    const wrapper = mount(<RecruitmentTable documents={null as unknown as RecruitmentAd[]} />);
+  });
 
-    it('Should render, shuffled content', () => {
-        const documents = [
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '10/05/2022',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: true,
-                id: 'string',
-            } as RecruitmentAd,
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '09/05/2022',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: true,
-                id: 'string',
-            } as RecruitmentAd,
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '10/05/2022',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: true,
-                id: 'string',
-            } as RecruitmentAd,
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '09/05/2022',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: true,
-                id: 'string',
-            } as RecruitmentAd,
-            {
-                Bio: '',
-                Contact: '',
-                Cycle: '10/05/2022',
-                Mentor: '',
-                Position: '',
-                Name: '',
-                Description: 'string',
-                Institution: 'string',
-                Link: 'string',
-                LabLink: 'string',
-                Approved: false,
-                id: 'string',
-            } as RecruitmentAd,
-        ] as RecruitmentAd[];
+  it('Should render, shuffled content', () => {
+    const documents = [
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '10/05/2022',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: true,
+        id: 'string',
+      } as RecruitmentAd,
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '09/05/2022',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: true,
+        id: 'string',
+      } as RecruitmentAd,
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '10/05/2022',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: true,
+        id: 'string',
+      } as RecruitmentAd,
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '09/05/2022',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: true,
+        id: 'string',
+      } as RecruitmentAd,
+      {
+        Bio: '',
+        Contact: '',
+        Cycle: '10/05/2022',
+        Mentor: '',
+        Position: '',
+        Name: '',
+        Description: 'string',
+        Institution: 'string',
+        Link: 'string',
+        LabLink: 'string',
+        Approved: false,
+        id: 'string',
+      } as RecruitmentAd,
+    ] as RecruitmentAd[];
 
-        const wrapper = mount(<RecruitmentTable documents={documents} />)
-    })
-
-})
+    const wrapper = mount(<RecruitmentTable documents={documents} />);
+  });
+});

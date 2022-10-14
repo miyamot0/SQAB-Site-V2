@@ -8,9 +8,7 @@
 
 import React from 'react';
 import { useFirebaseCollectionTyped } from '../../firebase/hooks/useFirebaseCollection';
-import {
-  IndividualUserRecordSaved, PosterSubmission,
-} from '../../firebase/types/RecordTypes';
+import { IndividualUserRecordSaved, PosterSubmission } from '../../firebase/types/RecordTypes';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { AdministrationUserSummary } from './views/AdministrationUserSummary';
 import { PosterDashboardLayout } from './layouts/PosterDashboardLayout';
@@ -31,10 +29,8 @@ export default function SystemAdministration(): JSX.Element {
     orderString: undefined,
   });
 
-  const { systemAdministratorFlag,
-    diversityReviewFlag,
-    studentRecruitFlag,
-    submissionReviewFlag } = useAuthorizationContext();
+  const { systemAdministratorFlag, diversityReviewFlag, studentRecruitFlag, submissionReviewFlag } =
+    useAuthorizationContext();
 
   return (
     <>
@@ -49,17 +45,12 @@ export default function SystemAdministration(): JSX.Element {
       {/**
        * Purely sysadmin content
        */}
-      <AdminEmailDashboardLayout
-        sysAdminFlag={systemAdministratorFlag}
-      />
+      <AdminEmailDashboardLayout sysAdminFlag={systemAdministratorFlag} />
 
       {/**
        * Purely sysadmin content
        */}
-      <UserDashboardLayout
-        sysAdminFlag={systemAdministratorFlag}
-        userDocuments={userDocuments}
-      />
+      <UserDashboardLayout sysAdminFlag={systemAdministratorFlag} userDocuments={userDocuments} />
 
       {/**
        * Diversity-focus information, for sys and admins with that priv

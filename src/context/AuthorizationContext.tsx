@@ -66,9 +66,9 @@ export function AuthorizationContextProvider({
   });
 
   useEffect(() => {
-    const unsub = projectAuth.onAuthStateChanged((user) => {
+    const unsub = projectAuth.onAuthStateChanged(user => {
       if (user) {
-        user.getIdTokenResult().then((res) => {
+        user.getIdTokenResult().then(res => {
           dispatch({
             type: AuthorizationStates.READY,
             payloadUser: user,

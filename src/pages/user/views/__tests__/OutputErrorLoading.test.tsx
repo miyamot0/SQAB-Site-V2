@@ -1,4 +1,3 @@
-
 /** @license
  *
  * Copyright (c) Shawn P. Gilroy, Louisiana State University.
@@ -7,17 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow } from "enzyme";
-import { UserOutputLoading } from "../UserOutputLoading";
+import React from 'react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { shallow } from 'enzyme';
+import { UserOutputLoading } from '../UserOutputLoading';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("UserOutputLoading", () => {
-    it("Should output if called", async () => {
-        const wrapper = shallow(<UserOutputLoading />)
+describe('UserOutputLoading', () => {
+  it('Should output if called', async () => {
+    const wrapper = shallow(<UserOutputLoading />);
 
-        expect(wrapper.html().toString().includes('Loading...')).toBe(true)
-    });
+    expect(wrapper.html().toString().includes('Loading...')).toBe(true);
+  });
 });

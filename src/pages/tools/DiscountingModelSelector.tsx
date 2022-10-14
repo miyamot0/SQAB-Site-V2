@@ -145,13 +145,13 @@ export default function DiscountingModelSelector(): JSX.Element {
       <DiscountingHeading />
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Discounting Model Selection</MDBCardTitle>
@@ -173,9 +173,9 @@ export default function DiscountingModelSelector(): JSX.Element {
                   width: '100%',
                   margin: '15px',
                 }}
-                tag="a"
-                href="#!"
-                className="button-fit-card"
+                tag='a'
+                href='#!'
+                className='button-fit-card'
                 disabled={runningCalculation}
                 onClick={() => loadExampleData()}
               >
@@ -186,8 +186,8 @@ export default function DiscountingModelSelector(): JSX.Element {
                 data={hotData}
                 colHeaders={true}
                 rowHeaders={true}
-                height="auto"
-                stretchH="all"
+                height='auto'
+                stretchH='all'
                 columnSorting={false}
                 style={{ marginTop: '25px' }}
                 columns={[
@@ -195,27 +195,27 @@ export default function DiscountingModelSelector(): JSX.Element {
                   { data: 1, type: 'string' },
                 ]}
                 contextMenu={true}
-                licenseKey="non-commercial-and-evaluation"
+                licenseKey='non-commercial-and-evaluation'
               >
-                <HotColumn title="Delays" />
-                <HotColumn title="Values" />
+                <HotColumn title='Delays' />
+                <HotColumn title='Values' />
               </HotTable>
 
-              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">
+              <label style={{ width: '100%', margin: '15px 0' }} htmlFor='framework-field'>
                 Rachlin Behavior:
               </label>
               <Select
                 name={'framework-field'}
                 inputId={'framework-field'}
                 options={ModelOptions}
-                onChange={(option) => {
+                onChange={option => {
                   if (option) {
                     setModelOption(option);
                   }
                 }}
                 value={modelOption}
                 styles={{
-                  menu: (base) => ({
+                  menu: base => ({
                     ...base,
                     width: 'max-content',
                     minWidth: '100%',
@@ -231,9 +231,9 @@ export default function DiscountingModelSelector(): JSX.Element {
                   width: '100%',
                   margin: '15px',
                 }}
-                tag="a"
-                href="#!"
-                className="button-fit-card"
+                tag='a'
+                href='#!'
+                className='button-fit-card'
                 disabled={runningCalculation}
                 onClick={() => {
                   setRunningCalculation(true);
@@ -245,8 +245,8 @@ export default function DiscountingModelSelector(): JSX.Element {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol md="4">
-          <MDBCard className="outputPanel">
+        <MDBCol md='4'>
+          <MDBCard className='outputPanel'>
             <MDBCardBody>
               <MDBCardTitle>Fitting Results</MDBCardTitle>
               <MDBCardText style={CardBodyTextStyle}></MDBCardText>

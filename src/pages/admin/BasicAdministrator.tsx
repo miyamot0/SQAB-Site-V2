@@ -13,11 +13,8 @@ import { DiversityDashboardLayout } from './layouts/DiversityDashboardLayout';
 import { RecruitmentDashboardLayout } from './layouts/RecruitmentDashboardLayout';
 
 export default function BasicAdministrator(): JSX.Element {
-
-  const { systemAdministratorFlag,
-    diversityReviewFlag,
-    studentRecruitFlag,
-    submissionReviewFlag } = useAuthorizationContext();
+  const { systemAdministratorFlag, diversityReviewFlag, studentRecruitFlag, submissionReviewFlag } =
+    useAuthorizationContext();
 
   return (
     <>

@@ -6,19 +6,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ProviderTypes } from "../../../firebase/types/AccountTypes";
+import { ProviderTypes } from '../../../firebase/types/AccountTypes';
 
 /** postOTPEntryCall
  *
  * Call to auth obj to challenge codes
  *
  */
-export async function postOTPEntryCall(login: any, confirmResult: any, otpNumber: string, setShowModal: any) {
-    try {
-        await login(ProviderTypes.Phone, confirmResult, otpNumber);
+export async function postOTPEntryCall(
+  login: any,
+  confirmResult: any,
+  otpNumber: string,
+  setShowModal: any,
+) {
+  try {
+    await login(ProviderTypes.Phone, confirmResult, otpNumber);
 
-        setShowModal(false);
-    } catch (err) {
-        alert(err);
-    }
+    setShowModal(false);
+  } catch (err) {
+    alert(err);
+  }
 }

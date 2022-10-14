@@ -44,7 +44,7 @@ export function RecruitmentPanel() {
   ];
 
   useEffect(() => {
-    getFilteredRecruitmentInformation().then((value) => {
+    getFilteredRecruitmentInformation().then(value => {
       if (value && value.data && value.data.arrayUsersNeedAds) {
         const cast = value.data as RecruitmentFunctionResponse;
         setUserAdArray(cast.arrayUsersNeedAds);
@@ -78,7 +78,7 @@ export function RecruitmentPanel() {
             ? 1
             : -1;
         })
-        .map((userItem) => {
+        .map(userItem => {
           const ret = {
             mentor: userItem.Mentor,
             institution: userItem.Institution,
@@ -92,13 +92,14 @@ export function RecruitmentPanel() {
             approval: (
               <MDBBtn
                 noRipple
-                tag="a"
-                href="#!"
+                tag='a'
+                href='#!'
                 style={{
                   width: '100%',
                 }}
-                className={`button-fit-card ${userItem.Approved ? 'button-color-override-red' : 'button-color-override-green'
-                  }`}
+                className={`button-fit-card ${
+                  userItem.Approved ? 'button-color-override-red' : 'button-color-override-green'
+                }`}
                 onClick={() => toggleRecruitmentStatus(userItem)}
               >
                 {userItem.Approved ? 'Revoke Approval' : 'Approve'}
@@ -126,13 +127,13 @@ export function RecruitmentPanel() {
       />
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow className='d-flex justify-content-center'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Recruitment Dashboard</MDBCardTitle>

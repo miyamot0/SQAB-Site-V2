@@ -35,10 +35,10 @@ jest.mock('../../../context/hooks/useAuthorizationContext', () => {
   return {
     useAuthorizationContext: () => ({
       user: mockUserStatus,
-      authIsReady: mockReadyStatus
-    })
-  }
-})
+      authIsReady: mockReadyStatus,
+    }),
+  };
+});
 
 let mockInitialSubmissionState = {
   formError: '',
@@ -51,31 +51,32 @@ let mockInitialSubmissionState = {
   authorChoice: {
     label: 'I am interested.',
     value: 'I am interested.',
-  }
+  },
 };
 
-jest.mock('./../functionality/SubmissionFunctionality'), () => {
-  return {
-    AuthorOptions,
-    SubmissionAction,
-    SubmissionReducer,
-    InitialSubmissionState: mockInitialSubmissionState
-  }
-}
+jest.mock('./../functionality/SubmissionFunctionality'),
+  () => {
+    return {
+      AuthorOptions,
+      SubmissionAction,
+      SubmissionReducer,
+      InitialSubmissionState: mockInitialSubmissionState,
+    };
+  };
 
 let mockPortalOpen = false;
 jest.mock('./../helpers/SubmissionDateHelper', () => {
   return {
-    checkIfSubmissionsOpen: () => mockPortalOpen
-  }
-})
+    checkIfSubmissionsOpen: () => mockPortalOpen,
+  };
+});
 
 let mockUseFirebaseDocumentTyped: jest.Mock<any, any>;
 jest.mock('../../../firebase/hooks/useFirebaseDocument', () => {
   mockUseFirebaseDocumentTyped = jest.fn();
 
   return {
-    ...jest.requireActual("../../../firebase/hooks/useFirebaseDocument"),
+    ...jest.requireActual('../../../firebase/hooks/useFirebaseDocument'),
     useFirebaseDocumentTyped: mockUseFirebaseDocumentTyped.mockReturnValue({
       document: {
         userEmail: 'string@test.com',
@@ -98,11 +99,10 @@ jest.mock('../../../firebase/hooks/useFirebaseDocument', () => {
         userLanguage: undefined,
         userNationality: undefined,
       } as IndividualUserRecordSaved,
-      documentError: null
-    }
-    )
-  }
-})
+      documentError: null,
+    }),
+  };
+});
 
 describe('Submission', () => {
   const jsdomAlert = window.alert;
@@ -110,8 +110,7 @@ describe('Submission', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
-
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -124,7 +123,7 @@ describe('Submission', () => {
 
     const wrapper = mount(<Submission userId={'123'} />);
 
-    expect(wrapper.html().toString().includes("currently closed")).toBe(true)
+    expect(wrapper.html().toString().includes('currently closed')).toBe(true);
   });
 
   it('Should render, testing select', async () => {
@@ -135,9 +134,15 @@ describe('Submission', () => {
 
       const { getByLabelText } = render(<Submission userId={'123'} />);
 
-      await selectEvent.select(getByLabelText("Tony Nevin Student Presenter Award:"), "I am NOT interested.");
-      await selectEvent.select(getByLabelText("Tony Nevin Student Presenter Award:"), "I am interested.");
-    })
+      await selectEvent.select(
+        getByLabelText('Tony Nevin Student Presenter Award:'),
+        'I am NOT interested.',
+      );
+      await selectEvent.select(
+        getByLabelText('Tony Nevin Student Presenter Award:'),
+        'I am interested.',
+      );
+    });
   });
 
   it('Should render', async () => {
@@ -146,7 +151,6 @@ describe('Submission', () => {
     mockPortalOpen = true;
 
     await act(async () => {
-
       const wrapper = mount(<Submission userId={'123'} />);
 
       const form = wrapper.find('form');
@@ -156,26 +160,26 @@ describe('Submission', () => {
       expect(wrapper.find(Submission).length).toBe(1);
 
       const textAreas = wrapper.find('textarea');
-      expect(textAreas.length).toBe(3)
+      expect(textAreas.length).toBe(3);
 
-      textAreas.at(0).simulate('change')
+      textAreas.at(0).simulate('change');
       form.simulate('submit');
 
-      textAreas.at(0).simulate('change', { target: { value: 'poster title string' } })
+      textAreas.at(0).simulate('change', { target: { value: 'poster title string' } });
       form.simulate('submit');
 
-      textAreas.at(1).simulate('change', { target: { value: 'poster abstract string' } })
+      textAreas.at(1).simulate('change', { target: { value: 'poster abstract string' } });
       form.simulate('submit');
-      textAreas.at(1).simulate('change', { target: { value: 'string '.repeat(121) } })
+      textAreas.at(1).simulate('change', { target: { value: 'string '.repeat(121) } });
       form.simulate('submit');
 
-      textAreas.at(2).simulate('change', { target: { value: 'poster author list' } })
+      textAreas.at(2).simulate('change', { target: { value: 'poster author list' } });
       form.simulate('submit');
 
       const button = wrapper.find('.btn');
-      expect(button.length).toBe(1)
-      button.simulate('click')
-    })
+      expect(button.length).toBe(1);
+      button.simulate('click');
+    });
   });
 
   it('Should finish', async () => {
@@ -193,7 +197,7 @@ describe('Submission', () => {
       authorChoice: {
         label: 'I am interested.',
         value: 'I am interested.',
-      }
+      },
     };
 
     await act(async () => {
@@ -208,22 +212,22 @@ describe('Submission', () => {
       const textAreas = wrapper.find('textarea');
       expect(textAreas.length).toBe(3);
 
-      const title = textAreas.at(0).getDOMNode<HTMLInputElement>()
-      title.value = "wee"
-      textAreas.at(0).simulate('change')
+      const title = textAreas.at(0).getDOMNode<HTMLInputElement>();
+      title.value = 'wee';
+      textAreas.at(0).simulate('change');
       wrapper.update();
 
-      const abstract = textAreas.at(1).getDOMNode<HTMLInputElement>()
-      abstract.value = 'string '.repeat(121)
-      textAreas.at(1).simulate('change')
+      const abstract = textAreas.at(1).getDOMNode<HTMLInputElement>();
+      abstract.value = 'string '.repeat(121);
+      textAreas.at(1).simulate('change');
       wrapper.update();
 
-      const authorList = textAreas.at(2).getDOMNode<HTMLInputElement>()
-      authorList.value = 'poster author list'
-      textAreas.at(2).simulate('change')
+      const authorList = textAreas.at(2).getDOMNode<HTMLInputElement>();
+      authorList.value = 'poster author list';
+      textAreas.at(2).simulate('change');
       wrapper.update();
 
       wrapper.find('form').simulate('submit');
-    })
+    });
   });
 });

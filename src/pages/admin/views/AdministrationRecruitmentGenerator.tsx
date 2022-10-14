@@ -30,7 +30,7 @@ export function AdministrationRecruitmentGenerator({
   setSelectedAdUser,
 }: AdministrationRecruitmentGeneratorInterface) {
   return (
-    <MDBCol sm="4">
+    <MDBCol sm='4'>
       <MDBCard>
         <MDBCardBody>
           <MDBCardTitle>Create Recruitment Entry</MDBCardTitle>
@@ -40,27 +40,28 @@ export function AdministrationRecruitmentGenerator({
             &quot;create entry&quot; button to create a blank ad for them.
           </MDBCardText>
 
-          <label htmlFor="single-field" style={{ width: '100%', 
-              margin: '15px 0' }}>Template Creator:</label>
+          <label htmlFor='single-field' style={{ width: '100%', margin: '15px 0' }}>
+            Template Creator:
+          </label>
           <Select
-            name="single-field"
-            inputId="single-field"
+            name='single-field'
+            inputId='single-field'
             options={userAdArray ?? []}
-            onChange={(option) => setSelectedAdUser(option as SingleOptionType)}
+            onChange={option => setSelectedAdUser(option as SingleOptionType)}
             value={selectedAdUser}
           />
 
-          <br/>
+          <br />
 
           <MDBBtn
             noRipple
-            tag="a"
-            href="#!"
-            style={{ 
+            tag='a'
+            href='#!'
+            style={{
               width: '100%',
               margin: '15px 0',
-           }}
-            className="button-fit-card"
+            }}
+            className='button-fit-card'
             onClick={() => createBlankAdTemplate(selectedAdUser)}
           >
             Create Template for Editing

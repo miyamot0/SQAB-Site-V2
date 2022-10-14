@@ -7,16 +7,16 @@
  */
 
 /** unIHS
- * 
+ *
  */
 export function unIHS(x: number): number {
   return (1 / Math.pow(10, 1 * x)) * (Math.pow(10, 2 * x) - 1);
 }
 
 /** ihsTransform
- * 
- * @param x 
- * @returns 
+ *
+ * @param x
+ * @returns
  */
 export function ihsTransform(x: number): number {
   return Math.log(0.5 * x + Math.sqrt(Math.pow(0.5, 2) * Math.pow(x, 2) + 1)) / Math.log(10);
@@ -76,7 +76,6 @@ export function renderIHS3Demand(Q: number, A: number, K: number, x: number): nu
 export function renderIHS2Demand(Q: number, A: number, x: number): number {
   return ihsTransform(Q) * Math.exp(-(A / ihsTransform(Q)) * Q * x);
 }
-
 
 /** generateOutputScore
  *

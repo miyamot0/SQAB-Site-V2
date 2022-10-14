@@ -33,7 +33,7 @@ export function EmailPanel() {
         .sort(
           (a, b) => b.delivery.endTime.toDate().valueOf() - a.delivery.endTime.toDate().valueOf(),
         )
-        .map((mail) => {
+        .map(mail => {
           let template = null;
 
           if (mail.template && mail.template.name) {
@@ -53,8 +53,8 @@ export function EmailPanel() {
   }, [documents]);
 
   return (
-    <MDBRow className="d-flex justify-content-center">
-      <MDBCol sm="8">
+    <MDBRow className='d-flex justify-content-center'>
+      <MDBCol sm='8'>
         <MDBCard>
           <MDBCardBody>
             <MDBCardTitle>Email Status Dashboard</MDBCardTitle>

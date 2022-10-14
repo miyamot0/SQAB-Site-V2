@@ -6,10 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { checkIfSubmissionsOpen } from "../SubmissionDateHelper"
+import { checkIfSubmissionsOpen } from '../SubmissionDateHelper';
 
 describe('SubmissionDateHelper', () => {
-    it('Should return', () => {
-        expect(checkIfSubmissionsOpen()).toBe(false)
-    })
-})
+  it('Should return', () => {
+    expect(checkIfSubmissionsOpen()).toBe(false);
+  });
+});

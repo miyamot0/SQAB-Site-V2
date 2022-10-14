@@ -17,52 +17,51 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('TutorialVideo', () => {
-    const jsdomAlert = window.alert;
+  const jsdomAlert = window.alert;
 
-    beforeAll(() => {
-        // remember the jsdom alert
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        window.alert = () => { }; // provide an empty implementation for window.alert
-    });
+  beforeAll(() => {
+    // remember the jsdom alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    window.alert = () => {}; // provide an empty implementation for window.alert
+  });
 
-    afterAll(() => {
-        window.alert = jsdomAlert; // restore the jsdom alert
-    });
+  afterAll(() => {
+    window.alert = jsdomAlert; // restore the jsdom alert
+  });
 
-    it('Should draw when appropriate video info found', () => {
-        const id = "1"
-        const showDirectory = false;
+  it('Should draw when appropriate video info found', () => {
+    const id = '1';
+    const showDirectory = false;
 
-        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
+    const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />);
 
-        expect(wrapper.find('.blank-div-video').length).toBe(0);
-    })
+    expect(wrapper.find('.blank-div-video').length).toBe(0);
+  });
 
-    it('Should fail when no video info found', () => {
-        const id = "a"
-        const showDirectory = false;
+  it('Should fail when no video info found', () => {
+    const id = 'a';
+    const showDirectory = false;
 
-        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
+    const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />);
 
-        expect(wrapper.find('.blank-div-video').length).toBeGreaterThanOrEqual(1)
-    })
+    expect(wrapper.find('.blank-div-video').length).toBeGreaterThanOrEqual(1);
+  });
 
-    it('Should draw when appropriate video info found, omit prev at 0', () => {
-        const id = "0"
-        const showDirectory = false;
+  it('Should draw when appropriate video info found, omit prev at 0', () => {
+    const id = '0';
+    const showDirectory = false;
 
-        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
+    const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />);
 
-        expect(wrapper.find('.blank-div-video').length).toBe(0);
-    })
+    expect(wrapper.find('.blank-div-video').length).toBe(0);
+  });
 
+  it('Should draw when appropriate video info found, omit prev at 77', () => {
+    const id = '77';
+    const showDirectory = false;
 
-    it('Should draw when appropriate video info found, omit prev at 77', () => {
-        const id = "77"
-        const showDirectory = false;
+    const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />);
 
-        const wrapper = shallow(<TutorialVideo id={id} showDirectory={showDirectory} />)
-
-        expect(wrapper.find('.blank-div-video').length).toBe(0);
-    })
-})
+    expect(wrapper.find('.blank-div-video').length).toBe(0);
+  });
+});

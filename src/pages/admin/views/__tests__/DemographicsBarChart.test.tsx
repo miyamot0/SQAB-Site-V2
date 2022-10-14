@@ -6,36 +6,38 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react"
+import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import ReactModal from "react-modal";
-import { MDBCard } from "mdb-react-ui-kit";
-import { BarChartEntry, DemographicsBarChart, DemographicsBarChartInterface } from "../DemographicsBarChart";
+import ReactModal from 'react-modal';
+import { MDBCard } from 'mdb-react-ui-kit';
+import {
+  BarChartEntry,
+  DemographicsBarChart,
+  DemographicsBarChartInterface,
+} from '../DemographicsBarChart';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 ReactModal.setAppElement = () => null;
 
 describe('BarChartEntry', () => {
-    it('Should render', () => {
-        const demographicData = {
-            name: '',
-            data: [{}] as BarChartEntry[]
-        } as DemographicsBarChartInterface;
+  it('Should render', () => {
+    const demographicData = {
+      name: '',
+      data: [{}] as BarChartEntry[],
+    } as DemographicsBarChartInterface;
 
-        const wrapper = mount(<DemographicsBarChart demographicData={demographicData} />)
+    const wrapper = mount(<DemographicsBarChart demographicData={demographicData} />);
 
-        expect(wrapper.find(MDBCard).length).toBe(1)
+    expect(wrapper.find(MDBCard).length).toBe(1);
+  });
 
-    })
+  it('Should not render', () => {
+    const demographicData = null as unknown as DemographicsBarChartInterface;
 
-    it('Should not render', () => {
-        const demographicData = null as unknown as DemographicsBarChartInterface;
+    const wrapper = mount(<DemographicsBarChart demographicData={demographicData} />);
 
-        const wrapper = mount(<DemographicsBarChart demographicData={demographicData} />)
-
-        expect(wrapper.find(MDBCard).length).toBe(0)
-
-    })
+    expect(wrapper.find(MDBCard).length).toBe(0);
+  });
 });

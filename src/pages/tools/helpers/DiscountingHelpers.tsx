@@ -6,7 +6,10 @@ import { DiscountingFit } from '../types/DiscountingTypes';
  * @param {string} value model name to match
  * @returns {DiscountingFit | undefined}
  */
-export function getElementByModel(arr: DiscountingFit[], value: string): DiscountingFit | undefined {
+export function getElementByModel(
+  arr: DiscountingFit[],
+  value: string,
+): DiscountingFit | undefined {
   const result = arr.filter(function (o) {
     return o.Model === value;
   })[0];

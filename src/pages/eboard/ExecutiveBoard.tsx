@@ -18,7 +18,7 @@ export default function ExecutiveBoard(): JSX.Element {
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Leadership and Executive Board (2021-2022)</MDBCardTitle>
@@ -29,7 +29,7 @@ export default function ExecutiveBoard(): JSX.Element {
                 <br />
                 <br />
                 The most recent copy of the organization&apos;s bylaws are available{' '}
-                <a href={Bylaws} className="bylawsLink">
+                <a href={Bylaws} className='bylawsLink'>
                   here
                 </a>
                 .
@@ -39,8 +39,8 @@ export default function ExecutiveBoard(): JSX.Element {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow center className='justify-content-center'>
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',
@@ -54,12 +54,12 @@ export default function ExecutiveBoard(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="4">
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Board Members/Board Directors</MDBCardTitle>
-              <ul className="board-ul">
-                {boardJson.Board.map((member) => {
+              <ul className='board-ul'>
+                {boardJson.Board.map(member => {
                   return (
                     <li key={`board-${member.Name}`}>
                       <p>{`${member.Name}`}</p>
@@ -71,12 +71,12 @@ export default function ExecutiveBoard(): JSX.Element {
           </MDBCard>
         </MDBCol>
 
-        <MDBCol md="4">
+        <MDBCol md='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Board Officers</MDBCardTitle>
-              <ul className="board-ul">
-                {boardJson.Officers.map((member) => {
+              <ul className='board-ul'>
+                {boardJson.Officers.map(member => {
                   if (member.Role === 'Webmaster') {
                     return (
                       <li key={`board-${member.Name}`}>
@@ -97,8 +97,8 @@ export default function ExecutiveBoard(): JSX.Element {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow center className='justify-content-center'>
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',
@@ -112,12 +112,12 @@ export default function ExecutiveBoard(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="4">
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Past Board Members</MDBCardTitle>
-              <ul className="board-ul">
-                {boardJson.PastDirectors.map((member) => {
+              <ul className='board-ul'>
+                {boardJson.PastDirectors.map(member => {
                   return (
                     <li key={`past-board-${member.Name}`}>
                       <p>{`${member.Name}`}</p>
@@ -129,12 +129,12 @@ export default function ExecutiveBoard(): JSX.Element {
           </MDBCard>
         </MDBCol>
 
-        <MDBCol md="4">
+        <MDBCol md='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Past President</MDBCardTitle>
-              <ul className="board-ul">
-                {boardJson.PastPresident.map((member) => {
+              <ul className='board-ul'>
+                {boardJson.PastPresident.map(member => {
                   return (
                     <li key={`past-pres-${member.Name}`}>
                       <p>{`${member.Name} (${member.Term})`}</p>

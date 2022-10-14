@@ -15,8 +15,8 @@ import { CardBodyTextStyle } from '../../utilities/StyleHelper';
 export default function Registration(): JSX.Element {
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard style={{ height: '100%' }}>
             <MDBCardBody>
               <MDBCardTitle>SQAB Membership and Registration (2022)</MDBCardTitle>
@@ -32,7 +32,7 @@ export default function Registration(): JSX.Element {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol sm="4">
+        <MDBCol sm='4'>
           <MDBCard style={{ height: '100%' }}>
             <MDBCardBody>
               <MDBCardTitle>Ethics and Diversity Policy</MDBCardTitle>
@@ -53,13 +53,13 @@ export default function Registration(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard style={{ height: '100%' }}>
             <MDBCardBody>
               <MDBCardTitle>Terms of Registration</MDBCardTitle>
@@ -89,8 +89,8 @@ export default function Registration(): JSX.Element {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow center className='justify-content-center'>
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',
@@ -103,8 +103,8 @@ export default function Registration(): JSX.Element {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard style={{ height: '100%' }}>
             <MDBCardBody>
               <MDBCardTitle>Conference Registration</MDBCardTitle>

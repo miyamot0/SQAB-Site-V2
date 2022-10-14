@@ -26,12 +26,12 @@ import './styles/Home.css';
 export default function Home(): JSX.Element {
   return (
     <>
-      <MDBRow className="d-flex justify-content-center" style={{ paddingBottom: '20px' }}>
+      <MDBRow className='d-flex justify-content-center' style={{ paddingBottom: '20px' }}>
         <Logo />
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Ethics and Diversity Policy</MDBCardTitle>
@@ -49,7 +49,7 @@ export default function Home(): JSX.Element {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol sm="4">
+        <MDBCol sm='4'>
           <MDBCard style={{ height: '100%' }}>
             <MDBCardBody>
               <MDBCardTitle>Society for the Quantitative Analyses of Behavior</MDBCardTitle>
@@ -69,19 +69,19 @@ export default function Home(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow className='d-flex justify-content-center'>
+        <MDBCol sm='8'>
           <MDBCard>
-            <MDBRow className="g-0">
-              <MDBCol md="6">
+            <MDBRow className='g-0'>
+              <MDBCol md='6'>
                 <CarouselConference />
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md='6'>
                 <MDBCardBody>
                   <MDBCardTitle>2022 Annual Conference</MDBCardTitle>
                   <MDBCardText style={CardBodyTextStyle}>
@@ -94,7 +94,7 @@ export default function Home(): JSX.Element {
                     Details regarding SQAB 2023 have not yet been finalized. Additional information
                     will be listed on the Annual Conference page in the future.
                   </MDBCardText>
-                  <MDBBtn noRipple className="float-right" tag="a" href="/conference">
+                  <MDBBtn noRipple className='float-right' tag='a' href='/conference'>
                     See Conference Page
                   </MDBBtn>
                 </MDBCardBody>
@@ -105,19 +105,19 @@ export default function Home(): JSX.Element {
       </MDBRow>
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="d-flex justify-content-center">
-        <MDBCol sm="8">
+      <MDBRow className='d-flex justify-content-center'>
+        <MDBCol sm='8'>
           <MDBCard>
-            <MDBRow className="g-0">
-              <MDBCol md="6">
+            <MDBRow className='g-0'>
+              <MDBCol md='6'>
                 <CarouselTutorial />
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md='6'>
                 <MDBCardBody>
                   <MDBCardTitle>Invited Tutorials</MDBCardTitle>
                   <MDBCardText style={CardBodyTextStyle}>
@@ -125,7 +125,7 @@ export default function Home(): JSX.Element {
                     areas of research to provide introductory tutorials. These are offered as a
                     means for encouraging dissemination of novel methods and approaches.
                   </MDBCardText>
-                  <MDBBtn noRipple className="float-right" tag="a" href="/tutorials/-1">
+                  <MDBBtn noRipple className='float-right' tag='a' href='/tutorials/-1'>
                     See Recorded Tutorials
                   </MDBBtn>
                 </MDBCardBody>

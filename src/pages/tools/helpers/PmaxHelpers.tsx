@@ -29,7 +29,7 @@ export function handleWorkerOutput({
 
     const pmaxRow = modelOption.value.includes('ZBE-2') ? 2 : 3;
 
-    const trimmedPrecision = data.sheet.map((sheet) => {
+    const trimmedPrecision = data.sheet.map(sheet => {
       const iSheet = sheet;
       const pmaxValue = iSheet[pmaxRow].toString();
 

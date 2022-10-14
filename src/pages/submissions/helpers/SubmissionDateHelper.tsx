@@ -10,5 +10,5 @@
  * checkIfSubmissionsOpen
  */
 export function checkIfSubmissionsOpen() {
-    return false;
+  return false;
 }

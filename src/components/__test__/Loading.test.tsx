@@ -17,9 +17,9 @@ Enzyme.configure({ adapter: new Adapter() });
 ReactModal.setAppElement = () => null;
 
 describe('Loading', () => {
-    it('Should render', () => {
-        const wrapper = mount(<Loading />);
+  it('Should render', () => {
+    const wrapper = mount(<Loading />);
 
-        expect(wrapper.find(Loading).length).toBe(1);
-    });
+    expect(wrapper.find(Loading).length).toBe(1);
+  });
 });

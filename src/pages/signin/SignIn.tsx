@@ -9,10 +9,7 @@
 import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import { useHistory } from 'react-router-dom';
-import {
-  MDBRow,
-  MDBCol,
-} from 'mdb-react-ui-kit';
+import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useFirebaseLogin } from '../../firebase/hooks/useFirebaseLogin';
 import { useAuthorizationContext } from '../../context/hooks/useAuthorizationContext';
 import { SignInButtons } from './views/SignInButtons';
@@ -35,29 +32,43 @@ export default function SignIn(): JSX.Element {
 
   useEffect(() => {
     if (user && authIsReady === true) {
-      console.log('in push')
+      console.log('in push');
       history.push(`/user/${user.uid}`);
     }
-  }, [user, authIsReady])
+  }, [user, authIsReady]);
 
   return (
     <>
-      <SignInModal showModal={showModal} showPhoneNumber={showPhoneNumber} showOTP={showOTP}
-        setShowModal={setShowModal} setPhoneNumber={setPhoneNumber} setOTPNumber={setOTPNumber}
-        phoneNumber={phoneNumber} otpNumber={otpNumber} login={login} confirmResult={confirmResult}
-        setShowPhoneNumber={setShowPhoneNumber} setConfirmResult={setConfirmResult} setShowOTP={setShowOTP} />
+      <SignInModal
+        showModal={showModal}
+        showPhoneNumber={showPhoneNumber}
+        showOTP={showOTP}
+        setShowModal={setShowModal}
+        setPhoneNumber={setPhoneNumber}
+        setOTPNumber={setOTPNumber}
+        phoneNumber={phoneNumber}
+        otpNumber={otpNumber}
+        login={login}
+        confirmResult={confirmResult}
+        setShowPhoneNumber={setShowPhoneNumber}
+        setConfirmResult={setConfirmResult}
+        setShowOTP={setShowOTP}
+      />
 
       <SignInInstructions />
 
       <MDBRow center>
-        <MDBCol sm="6">
-          <hr className="additional-margin" />
+        <MDBCol sm='6'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <SignInButtons user={user} authIsReady={authIsReady}
-        login={login} setShowModal={setShowModal} />
-
+      <SignInButtons
+        user={user}
+        authIsReady={authIsReady}
+        login={login}
+        setShowModal={setShowModal}
+      />
     </>
   );
 }

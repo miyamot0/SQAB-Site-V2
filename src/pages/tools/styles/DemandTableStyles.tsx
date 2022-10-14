@@ -6,4 +6,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export const HOTTableStyleDemand = { marginTop: '25px', marginBottom: '25px' }
+export const HOTTableStyleDemand = { marginTop: '25px', marginBottom: '25px' };

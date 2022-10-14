@@ -23,5 +23,5 @@ ReactDOM.render(
   <AuthorizationContextProvider>
     <App />
   </AuthorizationContextProvider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

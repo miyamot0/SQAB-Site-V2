@@ -6,17 +6,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
-import Select, { MultiValue } from "react-select";
-import { SingleOptionType } from "../../tools/types/GeneralTypes";
-import { ProfileActions } from "../types/ProfileActionTypes";
+import React from 'react';
+import Select, { MultiValue } from 'react-select';
+import { SingleOptionType } from '../../tools/types/GeneralTypes';
+import { ProfileActions } from '../types/ProfileActionTypes';
 
 export interface MultipleSelectFieldEntryProps {
-    label: string;
-    options: SingleOptionType[];
-    currentValue: MultiValue<SingleOptionType>;
-    type: number;
-    dispatch: (value: ProfileActions) => void;
+  label: string;
+  options: SingleOptionType[];
+  currentValue: MultiValue<SingleOptionType>;
+  type: number;
+  dispatch: (value: ProfileActions) => void;
 }
 
 /** StandardEntryFieldSelectMultiple
@@ -28,25 +28,31 @@ export interface MultipleSelectFieldEntryProps {
  * @param {function} dispatch dispatch callback
  * @returns {JSX.Element}
  */
-export default function StandardEntryFieldSelectMultiple({ label, options, currentValue, type, dispatch }: MultipleSelectFieldEntryProps): JSX.Element {
-    return (
-        <>
-            <label htmlFor="multi-field" className="select-label">
-                {label}:
-            </label>
-            <Select
-                name={"multi-field"}
-                inputId={"multi-field"}
-                options={options}
-                onChange={(option) => {
-                    dispatch({
-                        type: type,
-                        payload: option,
-                    });
-                }}
-                value={currentValue}
-                isMulti={true}
-            />
-        </>
-    );
+export default function StandardEntryFieldSelectMultiple({
+  label,
+  options,
+  currentValue,
+  type,
+  dispatch,
+}: MultipleSelectFieldEntryProps): JSX.Element {
+  return (
+    <>
+      <label htmlFor='multi-field' className='select-label'>
+        {label}:
+      </label>
+      <Select
+        name={'multi-field'}
+        inputId={'multi-field'}
+        options={options}
+        onChange={option => {
+          dispatch({
+            type: type,
+            payload: option,
+          });
+        }}
+        value={currentValue}
+        isMulti={true}
+      />
+    </>
+  );
 }

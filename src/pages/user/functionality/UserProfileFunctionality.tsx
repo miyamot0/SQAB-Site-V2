@@ -66,53 +66,63 @@ export function UserEditReducer(
   switch (action.type) {
     case UserEditAction.Email:
       return {
-        ...state, userEmail: action.payload,
-        formError: undefined
+        ...state,
+        userEmail: action.payload,
+        formError: undefined,
       };
     case UserEditAction.Institution:
       return {
-        ...state, userInstitution: action.payload,
-        formError: undefined
+        ...state,
+        userInstitution: action.payload,
+        formError: undefined,
       };
     case UserEditAction.Name:
       return {
-        ...state, userName: action.payload,
-        formError: undefined
+        ...state,
+        userName: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditEducation:
       return {
-        ...state, userEducation: action.payload,
-        formError: undefined
+        ...state,
+        userEducation: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditGender:
       return {
-        ...state, userGender: action.payload,
-        formError: undefined
+        ...state,
+        userGender: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditAge:
       return {
-        ...state, userAge: action.payload,
-        formError: undefined
+        ...state,
+        userAge: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditRaceEthnicity:
       return {
-        ...state, userRaceEthnicity: action.payload,
-        formError: undefined
+        ...state,
+        userRaceEthnicity: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditOrientation:
       return {
-        ...state, userOrientation: action.payload,
-        formError: undefined
+        ...state,
+        userOrientation: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditLanguage:
       return {
-        ...state, userLanguage: action.payload,
-        formError: undefined
+        ...state,
+        userLanguage: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditNationality:
       return {
-        ...state, userNationality: action.payload,
-        formError: undefined
+        ...state,
+        userNationality: action.payload,
+        formError: undefined,
       };
     case UserEditAction.EditPhoneAuthed:
       return { ...state, phoneAuthed: action.payload };
@@ -122,7 +132,7 @@ export function UserEditReducer(
       return {
         ...state,
         didBuild: action.payload,
-        formError: undefined
+        formError: undefined,
       };
     case UserEditAction.Load:
       return { ...action.payload };

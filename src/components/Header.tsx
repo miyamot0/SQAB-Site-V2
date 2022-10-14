@@ -22,24 +22,42 @@ export default function Header(): JSX.Element {
     useAuthorizationContext();
 
     */
-  function openModal(): void { setIsOpen(true); }
-  function closeModal(): void { setIsOpen(false); }
+  function openModal(): void {
+    setIsOpen(true);
+  }
+  function closeModal(): void {
+    setIsOpen(false);
+  }
 
-  function openModal2(): void { setIsOpen2(true); }
-  function closeModal2(): void { setIsOpen2(false); }
+  function openModal2(): void {
+    setIsOpen2(true);
+  }
+  function closeModal2(): void {
+    setIsOpen2(false);
+  }
 
-  function toggleView(): void { setShowBasic(!showBasic); }
+  function toggleView(): void {
+    setShowBasic(!showBasic);
+  }
 
   Modal.setAppElement('#root');
 
-  return <>
-    <NavbarModalPrivacy modalIsOpen={modalIsOpen}
-      setIsOpen={setIsOpen} closeModal={closeModal} />
+  return (
+    <>
+      <NavbarModalPrivacy modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} closeModal={closeModal} />
 
-    <NavbarModalListserv modalIsOpen={modalIsOpen2}
-      setIsOpen={setIsOpen2} closeModal={closeModal2} />
+      <NavbarModalListserv
+        modalIsOpen={modalIsOpen2}
+        setIsOpen={setIsOpen2}
+        closeModal={closeModal2}
+      />
 
-    <Navbar toggleView={toggleView} showBasic={showBasic}
-      openModal={openModal} openModal2={openModal2} />
-  </>;
+      <Navbar
+        toggleView={toggleView}
+        showBasic={showBasic}
+        openModal={openModal}
+        openModal2={openModal2}
+      />
+    </>
+  );
 }

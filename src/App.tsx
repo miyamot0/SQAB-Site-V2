@@ -77,75 +77,75 @@ function App(): JSX.Element {
               >
                 <Suspense fallback={<Loading />}>
                   <Switch>
-                    <Route exact path="/">
+                    <Route exact path='/'>
                       <Home />
                     </Route>
-                    <Route exact path="/loading">
+                    <Route exact path='/loading'>
                       <Loading />
                     </Route>
-                    <Route path="/conference">
+                    <Route path='/conference'>
                       <AnnualConference />
                     </Route>
-                    <Route path="/tutorials/:id">
+                    <Route path='/tutorials/:id'>
                       <Tutorials />
                     </Route>
-                    <Route path="/registration">
+                    <Route path='/registration'>
                       <Registration />
                     </Route>
-                    <Route path="/submission">
+                    <Route path='/submission'>
                       {!user || user === null || user.uid === null ? (
-                        <Redirect to="/signin" />
+                        <Redirect to='/signin' />
                       ) : (
                         <Submission userId={user.uid} />
                       )}
                     </Route>
-                    <Route path="/records">
+                    <Route path='/records'>
                       <Records />
                     </Route>
-                    <Route path="/behavioralprocesses">
+                    <Route path='/behavioralprocesses'>
                       <BeProcInformation />
                     </Route>
-                    <Route path="/executiveboard">
+                    <Route path='/executiveboard'>
                       <ExecutiveBoard />
                     </Route>
-                    <Route path="/resources">
+                    <Route path='/resources'>
                       <Resources />
                     </Route>
-                    <Route exact path="/recruitment">
+                    <Route exact path='/recruitment'>
                       <Recruitment />
                     </Route>
-                    <Route path="/recruitment/:id">
+                    <Route path='/recruitment/:id'>
                       <MentorPage />
                     </Route>
-                    <Route path="/pmax">
+                    <Route path='/pmax'>
                       <AnalyticPmax />
                     </Route>
-                    <Route path="/demand">
+                    <Route path='/demand'>
                       <DemandCurveAnalyzer />
                     </Route>
-                    <Route path="/discounting">
+                    <Route path='/discounting'>
                       <DiscountingModelSelector />
                     </Route>
-                    <Route path="/signin">
+                    <Route path='/signin'>
                       <SignIn />
                     </Route>
-                    <Route path="/user/:id">
-                      {!user && <Redirect to="/signin" />}
+                    <Route path='/user/:id'>
+                      {!user && <Redirect to='/signin' />}
                       {user && <UserProfile />}
                     </Route>
-                    <Route path="/poster/:id">
-                      {!user && <Redirect to="/signin" />}
+                    <Route path='/poster/:id'>
+                      {!user && <Redirect to='/signin' />}
                       {user && <UserPoster />}
                     </Route>
-                    <Route path="/manage/:id">
-                      {!user && <Redirect to="/signin" />}
+                    <Route path='/manage/:id'>
+                      {!user && <Redirect to='/signin' />}
                       {user && <UserRecruitment />}
                     </Route>
-                    <Route path="/admin">
-                      {!user && <Redirect to="/signin" />}
+                    <Route path='/admin'>
+                      {!user && <Redirect to='/signin' />}
                       {user &&
                         !(systemAdministratorFlag || studentRecruitFlag || diversityReviewFlag) && (
-                          <Redirect to="/" />
+                          <Redirect to='/' />
                         )}
                       {user && systemAdministratorFlag && <SystemAdministration />}
                       {user &&

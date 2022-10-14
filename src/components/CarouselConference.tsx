@@ -20,11 +20,11 @@ export default function CarouselConference(): JSX.Element {
   return (
     <>
       <MDBCarousel showIndicators fade>
-        <MDBCarouselItem className="w-100 d-block" itemId={1} src={Symp1} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={2} src={Symp2} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={3} src={Symp3} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={4} src={Symp4} alt="..." />
-        <MDBCarouselItem className="w-100 d-block" itemId={5} src={Symp5} alt="..." />
+        <MDBCarouselItem className='w-100 d-block' itemId={1} src={Symp1} alt='...' />
+        <MDBCarouselItem className='w-100 d-block' itemId={2} src={Symp2} alt='...' />
+        <MDBCarouselItem className='w-100 d-block' itemId={3} src={Symp3} alt='...' />
+        <MDBCarouselItem className='w-100 d-block' itemId={4} src={Symp4} alt='...' />
+        <MDBCarouselItem className='w-100 d-block' itemId={5} src={Symp5} alt='...' />
       </MDBCarousel>
     </>
   );

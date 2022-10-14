@@ -24,7 +24,7 @@ describe('DiscountingModelSelector', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {
@@ -40,15 +40,15 @@ describe('DiscountingModelSelector', () => {
         { label: 'Drop if S > 1', value: 'Drop if S > 1' },
        */
 
-      await selectEvent.select(getByLabelText("Rachlin Behavior:"), "Drop if S > 1");
-      await selectEvent.select(getByLabelText("Rachlin Behavior:"), "Do Not Bound");
+      await selectEvent.select(getByLabelText('Rachlin Behavior:'), 'Drop if S > 1');
+      await selectEvent.select(getByLabelText('Rachlin Behavior:'), 'Do Not Bound');
 
-      expect(getAllByText("Load Example Data").length).toBe(1)
-      expect(getAllByText("Calculate").length).toBe(1)
+      expect(getAllByText('Load Example Data').length).toBe(1);
+      expect(getAllByText('Calculate').length).toBe(1);
 
-      getAllByText("Load Example Data").at(0)?.click()
+      getAllByText('Load Example Data').at(0)?.click();
 
-      getAllByText("Calculate").at(0)?.click()
-    })
+      getAllByText('Calculate').at(0)?.click();
+    });
   });
 });

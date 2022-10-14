@@ -48,42 +48,42 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
 
   return (
     <>
-      <MDBNavbar expand="sm md lg xl xxl" style={{ backgroundColor: '#7f007f' }}>
+      <MDBNavbar expand='sm md lg xl xxl' style={{ backgroundColor: '#7f007f' }}>
         <MDBContainer fluid>
-          <MDBNavbarBrand href="/" style={navbarTextStyle}>
+          <MDBNavbarBrand href='/' style={navbarTextStyle}>
             SQAB
           </MDBNavbarBrand>
 
           <MDBNavbarToggler
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation bar"
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle navigation bar'
             onClick={toggleView}
           >
-            <MDBIcon icon="bars" fas />
+            <MDBIcon icon='bars' fas />
           </MDBNavbarToggler>
 
           <MDBCollapse navbar show={showBasic}>
-            <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
+            <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
               <MDBNavbarItem>
                 <MDBDropdown style={navbarTextStyle}>
-                  <MDBDropdownToggle tag="a" className="nav-link mr-2">
+                  <MDBDropdownToggle tag='a' className='nav-link mr-2'>
                     Conference
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
-                    <MDBDropdownItem link href="/conference">
+                    <MDBDropdownItem link href='/conference'>
                       Annual Conference
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/tutorials/-1">
+                    <MDBDropdownItem link href='/tutorials/-1'>
                       Recorded Tutorials
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/registration">
+                    <MDBDropdownItem link href='/registration'>
                       Registration
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/submission">
+                    <MDBDropdownItem link href='/submission'>
                       Submissions
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/records">
+                    <MDBDropdownItem link href='/records'>
                       Programs and Newsletters
                     </MDBDropdownItem>
                   </MDBDropdownMenu>
@@ -92,23 +92,23 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
 
               <MDBNavbarItem>
                 <MDBDropdown style={navbarTextStyle}>
-                  <MDBDropdownToggle tag="a" className="nav-link mr-2">
+                  <MDBDropdownToggle tag='a' className='nav-link mr-2'>
                     Resources
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
-                    <MDBDropdownItem link href="/demand">
+                    <MDBDropdownItem link href='/demand'>
                       Demand Curve Analyzer
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/discounting">
+                    <MDBDropdownItem link href='/discounting'>
                       Discounting Model Selector
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/pmax">
+                    <MDBDropdownItem link href='/pmax'>
                       Exact Solution P<sub>MAX</sub>
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/resources">
+                    <MDBDropdownItem link href='/resources'>
                       Resource Links
                     </MDBDropdownItem>
-                    <MDBDropdownItem link href="/behavioralprocesses">
+                    <MDBDropdownItem link href='/behavioralprocesses'>
                       Behavioral Processes Issues
                     </MDBDropdownItem>
                   </MDBDropdownMenu>
@@ -118,9 +118,9 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
               <MDBNavbarItem>
                 <MDBNavbarLink
                   active
-                  aria-current="page"
-                  href="/executiveboard"
-                  className="mr-2"
+                  aria-current='page'
+                  href='/executiveboard'
+                  className='mr-2'
                   style={navbarTextStyle}
                 >
                   Leadership
@@ -130,9 +130,9 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
               <MDBNavbarItem>
                 <MDBNavbarLink
                   active
-                  aria-current="page"
-                  href="/recruitment"
-                  className="mr-2"
+                  aria-current='page'
+                  href='/recruitment'
+                  className='mr-2'
                   style={navbarTextStyle}
                 >
                   Recruitment
@@ -142,12 +142,12 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
               <MDBNavbarItem>
                 <MDBNavbarLink
                   active
-                  aria-current="page"
-                  href="#!"
-                  classID="open-modal-header-2"
+                  aria-current='page'
+                  href='#!'
+                  classID='open-modal-header-2'
                   onClick={() => openModal2()}
-                  aria-label="Open listserv modal"
-                  className="mr-2"
+                  aria-label='Open listserv modal'
+                  className='mr-2'
                   style={navbarTextStyle}
                 >
                   Listserv
@@ -157,12 +157,12 @@ export function Navbar({ toggleView, showBasic, openModal, openModal2 }: Navbar)
               <MDBNavbarItem>
                 <MDBNavbarLink
                   active
-                  aria-current="page"
-                  href="#!"
-                  classID="open-modal-header-1"
+                  aria-current='page'
+                  href='#!'
+                  classID='open-modal-header-1'
                   onClick={() => openModal()}
-                  aria-label="Open privacy modal"
-                  className="mr-2"
+                  aria-label='Open privacy modal'
+                  className='mr-2'
                   style={navbarTextStyle}
                 >
                   Privacy

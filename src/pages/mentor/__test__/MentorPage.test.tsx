@@ -25,13 +25,13 @@ jest.mock('../../../firebase/hooks/useFirebaseDocument', () => {
   mockUseFirebaseDocumentTyped = jest.fn();
 
   return {
-    ...jest.requireActual("../../../firebase/hooks/useFirebaseDocument"),
+    ...jest.requireActual('../../../firebase/hooks/useFirebaseDocument'),
     useFirebaseDocumentTyped: mockUseFirebaseDocumentTyped.mockReturnValue({
       document: null,
-      documentError: null
-    })
-  }
-})
+      documentError: null,
+    }),
+  };
+});
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -67,8 +67,8 @@ describe('MentorPage', () => {
         Approved: false,
         id: mockId,
       } as RecruitmentAd,
-      documentError: null
-    })
+      documentError: null,
+    });
 
     const wrapper = mount(<MentorPage />);
 

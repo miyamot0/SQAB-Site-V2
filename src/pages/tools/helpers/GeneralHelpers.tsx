@@ -28,5 +28,7 @@ export function isValidNumber(num: string): boolean {
 }
 
 export function round(num: number, precision: number) {
-  return Number(Math.floor(parseFloat(num.toString() + "e+" + precision.toString())) + "e-" + precision);
-} 
+  return Number(
+    Math.floor(parseFloat(num.toString() + 'e+' + precision.toString())) + 'e-' + precision,
+  );
+}

@@ -14,8 +14,8 @@ import AceLogo from './../../assets/img/BACB-ACE-475x325.webp';
 export default function AnnualConference(): JSX.Element {
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Annual Conference</MDBCardTitle>
@@ -34,13 +34,13 @@ export default function AnnualConference(): JSX.Element {
       </MDBRow>
 
       <MDBRow
-        className="d-flex justify-content-center"
+        className='d-flex justify-content-center'
         style={{
           paddingTop: '20px',
           paddingBottom: '20px',
         }}
       >
-        <img src={AceLogo} alt="ACE logo"></img>
+        <img src={AceLogo} alt='ACE logo'></img>
       </MDBRow>
     </>
   );

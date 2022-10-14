@@ -35,13 +35,13 @@ export function NavbarDropdownAdmin({
   logout,
 }: NavbarDropdownAdmin) {
   return (
-    <MDBNavbarItem className="ml-auto">
+    <MDBNavbarItem className='ml-auto'>
       {authIsReady && !user && (
         <MDBNavbarLink
           active
-          aria-current="page"
-          href="/signin"
-          className="mr-2"
+          aria-current='page'
+          href='/signin'
+          className='mr-2'
           style={navbarTextStyle}
         >
           Log In
@@ -62,9 +62,9 @@ export function NavbarDropdownAdmin({
       {authIsReady && user && logoutPending === true && (
         <MDBNavbarLink
           active
-          aria-current="page"
-          href="#!"
-          className="mr-2"
+          aria-current='page'
+          href='#!'
+          className='mr-2'
           style={navbarTextStyle}
         >
           Logging Out

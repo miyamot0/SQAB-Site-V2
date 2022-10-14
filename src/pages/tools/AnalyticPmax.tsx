@@ -93,21 +93,21 @@ export default function AnalyticPmax(): JSX.Element {
       <PmaxHeading />
 
       <MDBRow center>
-        <MDBCol sm="8">
-          <hr className="additional-margin" />
+        <MDBCol sm='8'>
+          <hr className='additional-margin' />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="4">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='4'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>
                 P<sub>MAX</sub> Calculator
               </MDBCardTitle>
-              <MDBCardText style={CardBodyTextStyle} className="toolsDescription">
+              <MDBCardText style={CardBodyTextStyle} className='toolsDescription'>
                 This calculator evaluates models of operant demand (see{' '}
-                <a href="https://psycnet.apa.org/doi/10.1037/0033-295X.115.1.186">
+                <a href='https://psycnet.apa.org/doi/10.1037/0033-295X.115.1.186'>
                   Hursh &#38; Silberberg, 2008
                 </a>
                 ) to determine a point where one log-unit increase in price corresponds to a one
@@ -129,14 +129,14 @@ export default function AnalyticPmax(): JSX.Element {
                 <sub>MAX</sub>.
               </MDBCardText>
 
-              <label style={{ width: '100%', margin: '15px 0' }} htmlFor="framework-field">
+              <label style={{ width: '100%', margin: '15px 0' }} htmlFor='framework-field'>
                 Select Implementation of Framework:
               </label>
               <Select
                 name={'framework-field'}
                 inputId={'framework-field'}
                 options={ModelOptions}
-                onChange={(option) => {
+                onChange={option => {
                   if (option) {
                     setModelOption(option);
                     clearConsumptionData({
@@ -148,7 +148,7 @@ export default function AnalyticPmax(): JSX.Element {
                 }}
                 value={modelOption}
                 styles={{
-                  menu: (base) => ({
+                  menu: base => ({
                     ...base,
                     width: 'max-content',
                     minWidth: '100%',
@@ -165,9 +165,9 @@ export default function AnalyticPmax(): JSX.Element {
                   width: '100%',
                   marginBottom: '15px',
                 }}
-                tag="a"
-                href="#!"
-                className="button-fit-card"
+                tag='a'
+                href='#!'
+                className='button-fit-card'
                 disabled={runningCalculation}
                 onClick={() =>
                   loadExampleData({
@@ -194,9 +194,9 @@ export default function AnalyticPmax(): JSX.Element {
                   width: '100%',
                   marginTop: '25px',
                 }}
-                tag="a"
-                href="#!"
-                className="button-fit-card"
+                tag='a'
+                href='#!'
+                className='button-fit-card'
                 disabled={runningCalculation}
                 onClick={() => {
                   if (

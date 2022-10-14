@@ -21,10 +21,7 @@ export interface UserDashboardLayout {
  * @param param0
  * @returns
  */
-export function UserDashboardLayout({
-  sysAdminFlag,
-  userDocuments,
-}: UserDashboardLayout) {
+export function UserDashboardLayout({ sysAdminFlag, userDocuments }: UserDashboardLayout) {
   if (!userDocuments || sysAdminFlag === false) {
     return <></>;
   }
@@ -32,7 +29,7 @@ export function UserDashboardLayout({
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',

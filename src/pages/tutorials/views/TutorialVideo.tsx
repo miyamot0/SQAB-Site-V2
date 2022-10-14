@@ -6,80 +6,71 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react";
+import React from 'react';
 import tutorialJson from './../../../assets/json/tutorials.json';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from "mdb-react-ui-kit";
-import IframeResizer from "iframe-resizer-react";
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import IframeResizer from 'iframe-resizer-react';
 
 export interface TutorialVideo {
-    id: string,
-    showDirectory: boolean
+  id: string;
+  showDirectory: boolean;
 }
 
 export interface VideoInformation {
-    Index: number;
-    Title: string;
-    Summary: string;
-    Video: string;
+  Index: number;
+  Title: string;
+  Summary: string;
+  Video: string;
 }
 
 function isNumeric(str: string) {
-    return !isNaN(parseFloat(str))
+  return !isNaN(parseFloat(str));
 }
 
 export function TutorialVideo({ id, showDirectory }: TutorialVideo) {
+  if (showDirectory === true || isNumeric(id) === false || parseInt(id) < -1 || parseInt(id) > 77) {
+    return <div className='blank-div-video'></div>;
+  } else {
+    const videoInfo: VideoInformation = tutorialJson.Tutorials[parseInt(id)];
+    const prevVideoId: number | null = parseInt(id) > 0 ? parseInt(id) + 1 : null;
+    const nextVideoId: number | null =
+      parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
 
-    if (showDirectory === true || isNumeric(id) === false || (parseInt(id) < -1 || parseInt(id) > 77)) {
-        return <div className="blank-div-video"></div>
-    } else {
-        const videoInfo: VideoInformation = tutorialJson.Tutorials[parseInt(id)];
-        const prevVideoId: number | null = parseInt(id) > 0 ? parseInt(id) + 1 : null;
-        const nextVideoId: number | null =
-            parseInt(id) >= 0 && parseInt(id) < 77 ? parseInt(id) + 1 : null;
+    return (
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
+          <MDBCard>
+            <MDBCardBody>
+              <MDBCardTitle>{videoInfo.Title}</MDBCardTitle>
 
-        return <MDBRow center className="row-eq-height">
-            <MDBCol sm="8">
-                <MDBCard>
-                    <MDBCardBody>
-                        <MDBCardTitle>{videoInfo.Title}</MDBCardTitle>
+              {videoInfo.Summary}
 
-                        {videoInfo.Summary}
+              <IframeResizer
+                src={videoInfo.Video}
+                title={videoInfo.Title}
+                style={{
+                  minWidth: '100%',
+                  minHeight: '800px',
+                  marginTop: '20px',
+                }}
+                allowFullScreen
+              />
 
-                        <IframeResizer
-                            src={videoInfo.Video}
-                            title={videoInfo.Title}
-                            style={{
-                                minWidth: '100%',
-                                minHeight: '800px',
-                                marginTop: '20px',
-                            }}
-                            allowFullScreen
-                        />
+              {prevVideoId && (
+                <MDBBtn noRipple className='float-left' tag='a' href={`/tutorials/${prevVideoId}`}>
+                  Previous Video
+                </MDBBtn>
+              )}
 
-                        {prevVideoId && (
-                            <MDBBtn
-                                noRipple
-                                className="float-left"
-                                tag="a"
-                                href={`/tutorials/${prevVideoId}`}
-                            >
-                                Previous Video
-                            </MDBBtn>
-                        )}
-
-                        {nextVideoId && (
-                            <MDBBtn
-                                noRipple
-                                className="float-right"
-                                tag="a"
-                                href={`/tutorials/${nextVideoId}`}
-                            >
-                                Next Video
-                            </MDBBtn>
-                        )}
-                    </MDBCardBody>
-                </MDBCard>
-            </MDBCol>
-        </MDBRow>;
-    }
+              {nextVideoId && (
+                <MDBBtn noRipple className='float-right' tag='a' href={`/tutorials/${nextVideoId}`}>
+                  Next Video
+                </MDBBtn>
+              )}
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+      </MDBRow>
+    );
+  }
 }

@@ -20,7 +20,7 @@ describe('NavbarModalPrivacy', () => {
   beforeAll(() => {
     // remember the jsdom alert
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    window.alert = () => { }; // provide an empty implementation for window.alert
+    window.alert = () => {}; // provide an empty implementation for window.alert
   });
 
   afterAll(() => {

@@ -15,7 +15,7 @@ import { RecruitmentAd } from '../../../firebase/types/RecordTypes';
 import './../styles/Recruitment.css';
 
 export interface RecruitmentTable {
-  documents: RecruitmentAd[] | null
+  documents: RecruitmentAd[] | null;
 }
 
 export default function RecruitmentTable({ documents }: RecruitmentTable): JSX.Element {
@@ -24,19 +24,19 @@ export default function RecruitmentTable({ documents }: RecruitmentTable): JSX.E
       <MDBTable responsive>
         <MDBTableHead>
           <tr>
-            <th className="recruitment-table-th" scope="col">
+            <th className='recruitment-table-th' scope='col'>
               Mentor
             </th>
-            <th className="recruitment-table-th" scope="col">
+            <th className='recruitment-table-th' scope='col'>
               Institution
             </th>
-            <th className="recruitment-table-th" scope="col">
+            <th className='recruitment-table-th' scope='col'>
               Contact Information
             </th>
-            <th className="recruitment-table-th" scope="col">
+            <th className='recruitment-table-th' scope='col'>
               Summary of Mentory and Lab
             </th>
-            <th className="recruitment-table-th" scope="col">
+            <th className='recruitment-table-th' scope='col'>
               Application Deadline
             </th>
           </tr>
@@ -44,32 +44,32 @@ export default function RecruitmentTable({ documents }: RecruitmentTable): JSX.E
         <MDBTableBody>
           {documents
             ? documents
-              .filter((ad) => ad.Approved)
-              .sort((a, b) => {
-                return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
-                  moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
-                )
-                  ? 1
-                  : -1;
-              })
-              .map((recr, index) => {
-                return (
-                  <tr key={`${recr.Contact}-${index}`} className="recruitment-table-tr">
-                    <td>{recr.Mentor}</td>
-                    <td>{recr.Institution}</td>
-                    <td>
-                      {' '}
-                      <a className="fw-normal mb-1" href={`mailto:${recr.Contact}`}>
-                        {recr.Contact}
-                      </a>
-                    </td>
-                    <td>
-                      <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
-                    </td>
-                    <td>{recr.Cycle}</td>
-                  </tr>
-                );
-              })
+                .filter(ad => ad.Approved)
+                .sort((a, b) => {
+                  return moment(new Date(a.Cycle), 'DD/MM/YYYY HH:mm:ss').isAfter(
+                    moment(new Date(b.Cycle), 'DD/MM/YYYY HH:mm:ss'),
+                  )
+                    ? 1
+                    : -1;
+                })
+                .map((recr, index) => {
+                  return (
+                    <tr key={`${recr.Contact}-${index}`} className='recruitment-table-tr'>
+                      <td>{recr.Mentor}</td>
+                      <td>{recr.Institution}</td>
+                      <td>
+                        {' '}
+                        <a className='fw-normal mb-1' href={`mailto:${recr.Contact}`}>
+                          {recr.Contact}
+                        </a>
+                      </td>
+                      <td>
+                        <a href={`/recruitment/${recr.id}`}>Lab & Mentor Details</a>
+                      </td>
+                      <td>{recr.Cycle}</td>
+                    </tr>
+                  );
+                })
             : null}
         </MDBTableBody>
       </MDBTable>

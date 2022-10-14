@@ -52,7 +52,7 @@ export function DiversityDashboardLayout({
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',

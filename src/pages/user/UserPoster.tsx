@@ -26,23 +26,23 @@ export default function UserPoster() {
   if (authIsReady === true && document) {
     return (
       <div>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="8">
+        <MDBRow center className='row-eq-height'>
+          <MDBCol sm='8'>
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Poster Details</MDBCardTitle>
                 <form>
                   <label>
                     <span>Submitting Author (Edit in Profile):</span>
-                    <input required type="text" disabled value={document.name}></input>
+                    <input required type='text' disabled value={document.name}></input>
                   </label>
                   <label>
                     <span>Corresponding Email (Edit in Profile):</span>
-                    <input required type="text" disabled value={document.email}></input>
+                    <input required type='text' disabled value={document.email}></input>
                   </label>
                   <label>
                     <span>Poster Title:</span>
-                    <input required type="text" disabled value={document.title}></input>
+                    <input required type='text' disabled value={document.title}></input>
                   </label>
                   <label>
                     <span>Poster Abstract:</span>
@@ -56,7 +56,7 @@ export default function UserPoster() {
                     <span>Potential Student Presenter:</span>
                     <input
                       required
-                      type="text"
+                      type='text'
                       disabled
                       value={document.presenter.toString()}
                     ></input>
@@ -65,7 +65,7 @@ export default function UserPoster() {
                     <span>Status of Review:</span>
                     <input
                       required
-                      type="text"
+                      type='text'
                       disabled
                       value={document.reviewed ? 'Scored' : 'Under Review'}
                     ></input>
@@ -82,8 +82,8 @@ export default function UserPoster() {
   } else {
     return (
       <div>
-        <MDBRow center className="row-eq-height">
-          <MDBCol sm="8">
+        <MDBRow center className='row-eq-height'>
+          <MDBCol sm='8'>
             <MDBCard>
               <MDBCardBody>
                 <MDBCardTitle>Poster Details</MDBCardTitle>

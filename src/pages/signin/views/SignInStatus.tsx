@@ -6,18 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import firebase from "firebase";
-import React from "react";
+import firebase from 'firebase';
+import React from 'react';
 
 export interface SignInStatus {
-    user: firebase.User | null;
-    authIsReady: boolean;
+  user: firebase.User | null;
+  authIsReady: boolean;
 }
 
 export function SignInStatus({ user, authIsReady }: SignInStatus) {
-    if (user && authIsReady) {
-        return <>Authenticated</>;
-    } else {
-        return <>Not authenticated</>;
-    }
+  if (user && authIsReady) {
+    return <>Authenticated</>;
+  } else {
+    return <>Not authenticated</>;
+  }
 }

@@ -53,7 +53,7 @@ export function useFirebaseLogin(): FirebaseLogin {
    */
   function handleResult(result: firebase.auth.UserCredential) {
     if (result.user && dispatch) {
-      result.user.getIdTokenResult().then((res) => {
+      result.user.getIdTokenResult().then(res => {
         dispatch({
           type: AuthorizationStates.READY,
           ...preFlightObject(result.user, res),

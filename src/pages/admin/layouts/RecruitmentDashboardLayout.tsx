@@ -19,14 +19,14 @@ export function RecruitmentDashboardLayout({
   sysAdminFlag,
   recruitmentReviewFlag,
 }: RecruitmentDashboardLayout) {
-  if ((sysAdminFlag === false && recruitmentReviewFlag === false)) {
+  if (sysAdminFlag === false && recruitmentReviewFlag === false) {
     return <></>;
   }
 
   return (
     <>
       <MDBRow center>
-        <MDBCol sm="8">
+        <MDBCol sm='8'>
           <h4
             style={{
               textAlign: 'center',
