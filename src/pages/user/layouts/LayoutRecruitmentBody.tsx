@@ -50,7 +50,7 @@ export function LayoutRecruitmentBody({
                 </label>
                 <label>
                   <span>Institution:</span>
-                  <input required type="text" disabled value={state.Institution}></input>
+                  <input required type="text" disabled value={state.userInstitution}></input>
                 </label>
                 <label>
                   <span>Position Title:</span>

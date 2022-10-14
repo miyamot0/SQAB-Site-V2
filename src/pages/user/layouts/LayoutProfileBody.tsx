@@ -105,8 +105,7 @@ export function LayoutProfileBody({
             <MDBCardBody>
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
               <MDBCardText>
-              The SQAB Executive Board and Diversity, Equity, and Inclusion (DEI) Subcommittee is interested in characterizing and understanding the needs of our membership. One initiative has been to collect profile information from SQAB members and attendees. Please complete your profile. In the near future, both recruitment and poster
-                submissions will link directly to your profile. This will help with timely
+                The SQAB Executive Board and Diversity, Equity, and Inclusion (DEI) Subcommittee is interested in characterizing and understanding the needs of our membership. One initiative has been to collect profile information from SQAB members and attendees. Please complete your profile. <strong>Recruitment and poster submissions link directly to your profile and need to be completed before those can be submitted</strong>. This will help with timely
                 communication as well as inform on-going DEI initiatives. Indicating a preference
                 not to answer will in no way affect the functionality of the site or your account.{' '}
                 <br />

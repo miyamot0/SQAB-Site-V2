@@ -57,7 +57,7 @@ export async function handleEditRecruitmentSubmit(
     Contact: state.userEmail,
     Cycle: state.Cycle,
     Description: state.Description,
-    Institution: state.Institution,
+    Institution: state.userInstitution,
     LabLink: state.LabLink,
     Link: state.Link,
     Mentor: state.userName,
