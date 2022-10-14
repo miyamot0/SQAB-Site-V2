@@ -7,11 +7,21 @@
  */
 
 import React, { useState } from 'react';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardText,
+  MDBCardTitle,
+  MDBCol,
+  MDBRow,
+} from 'mdb-react-ui-kit';
 import { FirestoreState } from '../../../firebase/interfaces/FirebaseInterfaces';
 import { RecruitmentEditAction } from '../functionality/UserRecruitmentFunctionality';
 import { handleEditRecruitmentSubmit } from '../helpers/RecruitmentHelpers';
 import { EditRecruitmentState } from '../../recruitment/types/RecruitmentTypes';
+
+import '../styles/UserFieldStyles.css';
 
 export interface LayoutRecruitmentBody {
   state: EditRecruitmentState;
@@ -34,30 +44,35 @@ export function LayoutRecruitmentBody({
 
   return (
     <div>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Recruitment Details</MDBCardTitle>
+              <MDBCardText>
+                Please complete all of the fields below before submitting your ad. As a reminder,
+                your name, email, and institution are all pulled from your profile.{' '}
+                <strong>You cannot edit those fields here and must do so in your profile.</strong>
+              </MDBCardText>
               <form>
-                <label>
-                  <span>Name:</span>
-                  <input required type="text" disabled value={state.userName}></input>
+                <label className='noselect'>
+                  <span>Name (Pulled from Profile):</span>
+                  <input required type='text' disabled value={state.userName}></input>
                 </label>
-                <label>
-                  <span>Email:</span>
-                  <input required type="text" disabled value={state.userEmail}></input>
+                <label className='noselect'>
+                  <span>Email (Pulled from Profile):</span>
+                  <input required type='text' disabled value={state.userEmail}></input>
                 </label>
-                <label>
-                  <span>Institution:</span>
-                  <input required type="text" disabled value={state.userInstitution}></input>
+                <label className='noselect'>
+                  <span>Institution (Pulled from Profile):</span>
+                  <input required type='text' disabled value={state.userInstitution}></input>
                 </label>
                 <label>
                   <span>Position Title:</span>
                   <input
                     required
-                    type="text"
-                    onChange={(e) =>
+                    type='text'
+                    onChange={e =>
                       dispatch({
                         type: RecruitmentEditAction.EditPosition,
                         payload: e.target.value,
@@ -70,7 +85,7 @@ export function LayoutRecruitmentBody({
                 <label>
                   <span>Mentor Biography:</span>
                   <textarea
-                    onChange={(e) =>
+                    onChange={e =>
                       dispatch({
                         type: RecruitmentEditAction.EditMentorBio,
                         payload: e.target.value,
@@ -83,7 +98,7 @@ export function LayoutRecruitmentBody({
                 <label>
                   <span>Position Description:</span>
                   <textarea
-                    onChange={(e) =>
+                    onChange={e =>
                       dispatch({
                         type: RecruitmentEditAction.EditDescription,
                         payload: e.target.value,
@@ -96,8 +111,8 @@ export function LayoutRecruitmentBody({
                   <span>Application Deadline:</span>
                   <input
                     required
-                    type="date"
-                    onChange={(e) =>
+                    type='date'
+                    onChange={e =>
                       dispatch({ type: RecruitmentEditAction.EditDate, payload: e.target.value })
                     }
                     value={state.Cycle}
@@ -107,8 +122,8 @@ export function LayoutRecruitmentBody({
                   <span>Link to Lab Webpage:</span>
                   <input
                     required
-                    type="text"
-                    onChange={(e) =>
+                    type='text'
+                    onChange={e =>
                       dispatch({ type: RecruitmentEditAction.EditLabLink, payload: e.target.value })
                     }
                     value={state.LabLink}
@@ -118,8 +133,8 @@ export function LayoutRecruitmentBody({
                   <span>Link to Application:</span>
                   <input
                     required
-                    type="text"
-                    onChange={(e) =>
+                    type='text'
+                    onChange={e =>
                       dispatch({ type: RecruitmentEditAction.EditLink, payload: e.target.value })
                     }
                     value={state.Link}
@@ -132,9 +147,9 @@ export function LayoutRecruitmentBody({
                     width: '100%',
                     marginBottom: '25px',
                   }}
-                  tag="a"
-                  href="#!"
-                  className="button-fit-card"
+                  tag='a'
+                  href='#!'
+                  className='button-fit-card'
                   onClick={async () => {
                     if (
                       state.userName.length === 0 ||
@@ -161,7 +176,7 @@ export function LayoutRecruitmentBody({
                   Save Application
                 </MDBBtn>
 
-                {formError && <p className="error">{formError}</p>}
+                {formError && <p className='error'>{formError}</p>}
               </form>
             </MDBCardBody>
           </MDBCard>

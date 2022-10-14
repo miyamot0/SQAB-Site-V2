@@ -25,24 +25,32 @@ export default function Recruitment(): JSX.Element {
 
   return (
     <>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="8">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='8'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Current and Upcoming Graduate Student Opportunities</MDBCardTitle>
-              <MDBCardText className="recruitment-card-body">
+              <MDBCardText className='recruitment-card-body'>
                 For those registered with the site and interested in posting a recruitment
                 opportunity, you should be able to propose an ad by using a link in the upper right
                 area of the navigation bar (i.e., Manage Recruitment). If you do not see this
                 button, email the current student representative, Tadd Schneider (
-                <a href="mailto:tadd@ku.edu">tadd@ku.edu</a>). After you complete your profile and
-                provide the details of the recruitment opportunity, you will have to contact the
-                student representative and request a review. The student representative will approve
-                your ad before it goes live on the site.{' '}
+                <a href='mailto:tadd@ku.edu'>tadd@ku.edu</a>).
+                <br />
+                <br />
+                <strong>
+                  To begin the process of submitting an ad, you must first complete your SQAB
+                  profile. You may edit your profile by clicking the link in the upper right area of
+                  the navigation bar (i.e., Manage Profile).
+                </strong>{' '}
+                After you complete your profile fully, and supply the details of the recruitment
+                opportunity, you will have to contact the student representative and request a
+                review. Your ad will not display immediately after you complete your application.
+                The student representative will need to approve your ad before it goes live on the
+                site.{' '}
               </MDBCardText>
 
               <RecruitmentTable documents={documents} />
-
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

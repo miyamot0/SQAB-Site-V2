@@ -44,7 +44,7 @@ export interface LayoutProfileBody {
   id: string;
   history: any;
   updateDocument: any;
-  response: FirestoreState,
+  response: FirestoreState;
   dispatch: (value: ProfileActions) => void;
 }
 
@@ -61,7 +61,6 @@ export function LayoutProfileBody({
   response,
   dispatch,
 }: LayoutProfileBody): JSX.Element {
-
   /** handleEditFormSubmit
    *
    * Submission event for student edit form
@@ -90,7 +89,7 @@ export function LayoutProfileBody({
       await updateProfileCallback(state, id, updateDocument, response, history);
 
       if (!response.error) {
-        history.push('/')
+        history.push('/');
       }
 
       return;
@@ -99,19 +98,29 @@ export function LayoutProfileBody({
 
   return (
     <div>
-      <MDBRow center className="row-eq-height">
-        <MDBCol sm="5">
+      <MDBRow center className='row-eq-height'>
+        <MDBCol sm='5'>
           <MDBCard>
             <MDBCardBody>
               <MDBCardTitle>Edit Profile Information</MDBCardTitle>
               <MDBCardText>
-                The SQAB Executive Board and Diversity, Equity, and Inclusion (DEI) Subcommittee is interested in characterizing and understanding the needs of our membership. One initiative has been to collect profile information from SQAB members and attendees. Please complete your profile. <strong>Recruitment and poster submissions link directly to your profile and need to be completed before those can be submitted</strong>. This will help with timely
-                communication as well as inform on-going DEI initiatives. Indicating a preference
-                not to answer will in no way affect the functionality of the site or your account.{' '}
+                The SQAB Executive Board and Diversity, Equity, and Inclusion (DEI) Subcommittee is
+                interested in characterizing and understanding the needs of our membership. One
+                initiative has been to collect profile information from SQAB members and attendees.
+                Please complete your profile.{' '}
+                <strong>
+                  Recruitment and poster submissions link directly to your profile and need to be
+                  completed before those can be submitted
+                </strong>
+                . This will help with timely communication as well as inform on-going DEI
+                initiatives. Indicating a preference not to answer will in no way affect the
+                functionality of the site or your account. <br />
                 <br />
-                <br />
-                SQAB values the privacy of your profile information. Any personal information provided here is carefully handled. The system administrator has access restricted to the daily functioning of the site. Only a single member of SQAB, the one tasked with quantifying DEI information, will have
-                access to data in aggregate form (i.e., no personally-identifiable information).
+                SQAB values the privacy of your profile information. Any personal information
+                provided here is carefully handled. The system administrator has access restricted
+                to the daily functioning of the site. Only a single member of SQAB, the one tasked
+                with quantifying DEI information, will have access to data in aggregate form (i.e.,
+                no personally-identifiable information).
               </MDBCardText>
 
               <form onSubmit={handleEditFormSubmit} id={'user-profile-form'}>
@@ -139,7 +148,7 @@ export function LayoutProfileBody({
                 {state.phoneAuthed === true && (
                   <label>
                     <span>Phone on Record (Only for Phone Login):</span>
-                    <input type="text" disabled value={state.userPhone}></input>
+                    <input type='text' disabled value={state.userPhone}></input>
                   </label>
                 )}
 
@@ -202,9 +211,9 @@ export function LayoutProfileBody({
                     marginBottom: '25px',
                     marginTop: '25px',
                   }}
-                  tag="button"
-                  type="submit"
-                  className="button-fit-card"
+                  tag='button'
+                  type='submit'
+                  className='button-fit-card'
                 >
                   Save Profile Information
                 </MDBBtn>

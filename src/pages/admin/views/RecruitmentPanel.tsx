@@ -57,16 +57,16 @@ export function RecruitmentPanel() {
   useEffect(() => {
     if (documents) {
       const preRow = documents
-        .filter((recr) => {
-          return !(
-            recr.Bio.trim().length > 0 &&
-            recr.Contact.trim().length > 0 &&
-            recr.Cycle.trim().length > 0 &&
-            recr.Mentor.trim().length > 0 &&
-            recr.Position.trim().length > 0 &&
-            recr.Name.trim().length > 0
-          );
-        })
+        //.filter((recr) => {
+        //  return !(
+        //    recr.Bio.trim().length > 0 &&
+        //    recr.Contact.trim().length > 0 &&
+        //    recr.Cycle.trim().length > 0 &&
+        //    recr.Mentor.trim().length > 0 &&
+        //    recr.Position.trim().length > 0 &&
+        //    recr.Name.trim().length > 0
+        //  );
+        //})
         .sort((a, b) => {
           if (!a.Cycle || a.Cycle.trim().length === 0) {
             return 1;
@@ -97,9 +97,8 @@ export function RecruitmentPanel() {
                 style={{
                   width: '100%',
                 }}
-                className={`button-fit-card ${
-                  userItem.Approved ? 'button-color-override-red' : 'button-color-override-green'
-                }`}
+                className={`button-fit-card ${userItem.Approved ? 'button-color-override-red' : 'button-color-override-green'
+                  }`}
                 onClick={() => toggleRecruitmentStatus(userItem)}
               >
                 {userItem.Approved ? 'Revoke Approval' : 'Approve'}

@@ -9,7 +9,11 @@
 import { waitFor } from "@testing-library/react";
 import { act, renderHook } from "@testing-library/react-hooks";
 import { useReducer } from "react";
-import { InitialRecruitmentState, RecruitmentEditAction, RecruitmentEditReducer } from "../UserRecruitmentFunctionality";
+import {
+    InitialRecruitmentState,
+    RecruitmentEditAction,
+    RecruitmentEditReducer,
+} from "../UserRecruitmentFunctionality";
 
 //const waitForComponentToPaint = async (wrapper) => {
 //    await act(async () => {
@@ -36,41 +40,46 @@ describe("UserRecruitmentFunctionality", () => {
 
         const [, dispatch] = result.current;
 
-
         await act(async () => {
-            dispatch({ type: RecruitmentEditAction.EditPosition, payload: '1', });
+            dispatch({ type: RecruitmentEditAction.EditPosition, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].Position).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.EditMentorBio, payload: '1', });
+                expect(result.current[0].Position).toBe("1");
+            });
+            dispatch({ type: RecruitmentEditAction.EditMentorBio, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].Bio).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.EditDescription, payload: '1', });
+                expect(result.current[0].Bio).toBe("1");
+            });
+            dispatch({ type: RecruitmentEditAction.EditDescription, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].Description).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.EditLink, payload: '1', });
+                expect(result.current[0].Description).toBe("1");
+            });
+            dispatch({ type: RecruitmentEditAction.EditLink, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].Link).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.EditDate, payload: '1', });
+                expect(result.current[0].Link).toBe("1");
+            });
+            dispatch({ type: RecruitmentEditAction.EditDate, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].Cycle).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.EditLabLink, payload: '1', });
+                expect(result.current[0].Cycle).toBe("1");
+            });
+            dispatch({ type: RecruitmentEditAction.EditLabLink, payload: "1" });
             await waitFor(() => {
-                expect(result.current[0].LabLink).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.LoadUser, payload: { Position: '1' }, });
+                expect(result.current[0].LabLink).toBe("1");
+            });
+            dispatch({
+                type: RecruitmentEditAction.LoadUser,
+                payload: { Position: "1" },
+            });
             await waitFor(() => {
-                expect(result.current[0].Position).toBe('1')
-            })
-            dispatch({ type: RecruitmentEditAction.LoadRecruitment, payload: { Position: '1' }, });
+                expect(result.current[0].Position).toBe("1");
+            });
+            dispatch({
+                type: RecruitmentEditAction.LoadRecruitment,
+                payload: { Position: "1" },
+            });
             await waitFor(() => {
-                expect(result.current[0].Position).toBe('1')
-            })
-            dispatch({ type: 999, payload: '', });
-        })
+                expect(result.current[0].Position).toBe("1");
+            });
+            dispatch({ type: 999, payload: "" });
+        });
     });
 });

@@ -1,11 +1,13 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.formatOnPaste": false,
+  "editor.formatOnPaste": true,
   "prettier.htmlWhitespaceSensitivity": "strict",
   "prettier.jsxSingleQuote": true,
   "prettier.singleAttributePerLine": true,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "all",
-  "prettier.useEditorConfig": false
+  "prettier.useEditorConfig": false,
+  "eslint.format.enable": true,
+  "javascript.format.insertSpaceAfterConstructor": true
 }
