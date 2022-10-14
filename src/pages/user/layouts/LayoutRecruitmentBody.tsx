@@ -158,7 +158,7 @@ export function LayoutRecruitmentBody({
                     }
                   }}
                 >
-                  Edit Profile
+                  Save Application
                 </MDBBtn>
 
                 {formError && <p className="error">{formError}</p>}
